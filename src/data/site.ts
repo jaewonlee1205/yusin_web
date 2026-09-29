@@ -84,6 +84,13 @@ export const nav: NavItem[] = [
   { href: "/contact", label: "문의하기" },
 ];
 
+/**
+ * 헤더 오른쪽 CTA 버튼.
+ * 데스크톱 메뉴에서는 이 버튼과 목적지가 겹치는 항목을 감춘다 — 바로 옆에 같은 곳으로
+ * 가는 링크가 둘 있으면 중복이다. 모바일 메뉴와 푸터에는 그대로 남는다.
+ */
+export const headerCta = { href: "/contact", label: "견적 문의" };
+
 /** 회사소개 그룹의 하위 탭. SubNav가 쓴다. */
 export const companyTabs: NavChild[] =
   nav.find((item) => item.href === "/company")?.children ?? [];

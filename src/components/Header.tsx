@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import Container from "./Container";
 import { ListPanel, ProductPanel } from "./NavPanel";
 import { products } from "@/data/products";
-import { nav, site, type NavChild } from "@/data/site";
+import { headerCta, nav, site, type NavChild } from "@/data/site";
 
 /** 마우스가 메뉴를 스쳐 지날 때 깜빡이지 않도록 닫기를 약간 늦춘다. */
 const CLOSE_DELAY = 140;
@@ -19,9 +19,20 @@ export default function Header() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   /** 모바일 아코디언에서 펼쳐진 항목 */
   const [expanded, setExpanded] = useState<string | null>(null);
+  /** 조금이라도 내리면 본문 위에 떠 있는 느낌을 주려고 그림자를 더한다 */
+  const [scrolled, setScrolled] = useState(false);
 
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const headerRef = useRef<HTMLElement>(null);
+
+  /**
+   * 데스크톱 메뉴. 오른쪽 CTA 버튼과 같은 곳으로 가는 항목은 뺀다.
+   * 모바일 메뉴와 푸터는 nav 전체를 그대로 쓴다.
+   */
+  const desktopNav = useMemo(
+    () => nav.filter((item) => item.href !== headerCta.href),
+    []
+  );
 
   /** 모바일에서는 제품 패널도 단순 목록으로 펼친다. */
   const productChildren = useMemo<NavChild[]>(
@@ -53,6 +64,13 @@ export default function Header() {
   }, [pathname]);
 
   useEffect(() => () => cancelClose(), [cancelClose]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Escape로 닫고, 헤더 밖을 누르면 드롭다운을 닫는다.
   useEffect(() => {
@@ -86,7 +104,9 @@ export default function Header() {
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 z-50 border-b border-line bg-white/95 backdrop-blur"
+      className={`sticky top-0 z-50 border-b border-line bg-white/95 backdrop-blur transition-shadow duration-300 ${
+        scrolled ? "shadow-lg shadow-ink/[0.07]" : ""
+      }`}
     >
       <Container>
         <div className="flex h-16 items-center justify-between gap-4 sm:h-20">
@@ -106,7 +126,7 @@ export default function Header() {
             aria-label="주요 메뉴"
             className="hidden items-center gap-0.5 lg:flex"
           >
-            {nav.map((item) => {
+            {desktopNav.map((item) => {
               const active = isActive(item.href);
               const hasPanel = item.panel === "products" || !!item.children;
               const open = openMenu === item.href;
@@ -186,15 +206,16 @@ export default function Header() {
           <div className="hidden items-center gap-4 lg:flex">
             <a
               href={`tel:${site.tel.replace(/-/g, "")}`}
-              className="text-sm font-semibold tabular-nums text-navy"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold tabular-nums text-navy transition-colors hover:text-brand"
             >
+              <PhoneIcon />
               {site.tel}
             </a>
             <Link
-              href="/contact"
+              href={headerCta.href}
               className="rounded bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
             >
-              견적 문의
+              {headerCta.label}
             </Link>
           </div>
 
@@ -328,6 +349,26 @@ function Chevron({ open }: { open: boolean }) {
       className={`shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
     >
       <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
+/** 전화번호 앞 수화기. 번호만 읽히도록 스크린리더에서는 숨긴다. */
+function PhoneIcon() {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="shrink-0"
+    >
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z" />
     </svg>
   );
 }
