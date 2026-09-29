@@ -146,33 +146,25 @@ export default function CompanyPage() {
       {/* 회사 개요 */}
       <Section tone="surface" eyebrow="OVERVIEW" title="회사 개요">
         {/*
-          라벨은 왼쪽 고정 폭(sm:w-24), 값은 그 오른쪽. 한 칸 안의 구조가
-          늘 같아야 훑을 수 있다.
+          한 줄에 한 항목. 라벨을 왼쪽 고정 폭(sm:w-28)에 두는 게 이 표의
+          핵심이다 — 값이 전부 같은 x 에서 시작해 눈이 아래로만 내려간다.
 
-          예전에 한 번 6열 격자를 썼다가 되돌린 적이 있는데, 그때는 라벨을 값
-          *위에* 얹고 칸 선도 없어서 값 시작점이 칸마다 제각각(실측 4종류)이었다.
-          라벨을 왼쪽에 두고 gap-px 로 칸 선을 그으면 그 문제가 없다.
+          폭이 남는 게 아까워 값 길이에 맞춰 칸을 나눈 적이 있는데(6열 격자),
+          그러면 값 시작점이 행마다 달라져(실측 4종류) 훑기가 어려워진다.
+          빈칸보다 정렬선이 중요하다.
 
-          칸 선은 gap-px + bg-line + 흰 셀로 낸다. 보유 설비 페이지의 설비
-          요약 표와 같은 방식이다.
-
-          색은 두 가지 일을 나눠 맡는다 — 칸 선이 칸과 칸을 가르고, 네이비
-          라벨이 한 칸 안에서 라벨과 값을 가른다. 라벨을 검정으로 두면 칸 안의
-          구분이 크기 차이(13 vs 15px)에만 기대게 된다.
-          (네이비는 설비 대수·본문 링크에 이미 쓰는 강조색이다)
-
-          격자는 lg 부터다. 그 아래에서 6열을 깔면 라벨 칸이 셀을 다 먹어
-          768px 기준 1/3 칸의 값 공간이 45px 밖에 안 남는다.
+          라벨은 값보다 작게 두되 네이비로 눈에 걸리게 한다. 처음엔 라벨이
+          굵은 검정이고 값이 흐려 위계가 뒤집혀 있었는데, 그걸 고치면서 라벨을
+          너무 눌러 이번엔 훑을 기준선이 없어졌다. 크기로 위계를 두고 색으로
+          두 열을 가른다. (네이비는 설비 대수·본문 링크에 이미 쓰는 강조색이다)
         */}
-        <dl className="grid gap-px overflow-hidden rounded-lg border border-line bg-line lg:grid-cols-6">
+        <dl className="overflow-hidden rounded-lg border border-line bg-white">
           {overview.map((row) => (
             <div
               key={row.label}
-              className={`bg-white px-6 py-3.5 sm:flex sm:items-baseline sm:gap-6 ${
-                OVERVIEW_SPAN[row.span]
-              }`}
+              className="border-b border-line px-6 py-3.5 last:border-b-0 sm:flex sm:items-baseline sm:gap-6"
             >
-              <dt className="text-[13px] font-bold tracking-[0.1em] text-navy sm:w-24 sm:shrink-0">
+              <dt className="text-[13px] font-bold tracking-[0.1em] text-navy sm:w-28 sm:shrink-0">
                 {row.label}
               </dt>
               {/* tabular-nums: 대표번호와 팩스가 위아래로 붙어 있어 자릿수를
@@ -206,16 +198,3 @@ export default function CompanyPage() {
     </>
   );
 }
-
-/**
- * overview 의 span 값을 그리드 클래스로 옮긴다.
- *
- * `lg:col-span-${row.span}` 처럼 붙여 쓰면 안 된다 — Tailwind 는 소스에 적힌
- * 문자열을 그대로 훑어 클래스를 만들기 때문에, 조합해 만든 이름은 CSS 에
- * 나오지 않는다.
- */
-const OVERVIEW_SPAN = {
-  2: "lg:col-span-2",
-  4: "lg:col-span-4",
-  6: "lg:col-span-6",
-} as const;
