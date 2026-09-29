@@ -68,32 +68,45 @@ export const overview: {
    * 푸터·헤더·문의하기·오시는 길도 전부 같은 규칙이다.
    */
   href?: string;
+  /**
+   * 1024px 이상에서 6열 격자 중 차지할 칸 수. 값 길이에 맞춰 준다.
+   * 한 줄의 합이 6이 되게 맞춘다. (4+2 / 2+4 / 2+2+2 / 6 / 6)
+   *
+   * 반반(3+3)으로 나누면 안 된다 — "대표"는 글자폭 50px, "소재지"는 388px 이라
+   * 한쪽은 텅 비고 한쪽은 두 줄로 꺾인다. 값 길이에 맞춰 주면 둘 다 한 줄에
+   * 들어가고, 세로선도 1/3 · 2/3 두 자리로 줄줄이 맞는다.
+   */
+  span: 2 | 4 | 6;
 }[] = [
   // 원문은 "유신 F.A 시스템 (YUSIN F.A SYSTEM)" 한 줄이었다. 사실은 그대로 두고
   // 한글/영문만 나눠 담는다 — 영문을 작게 붙이려는 것이다.
-  { label: "회사명", value: site.name, sub: site.nameEn },
-  { label: "설립연도", value: "1992년 6월 6일" },
-  { label: "대표", value: "이 준 희" },
-  { label: "소재지", value: site.address.road },
+  { label: "회사명", value: site.name, sub: site.nameEn, span: 4 },
+  { label: "설립연도", value: "1992년 6월 6일", span: 2 },
+  { label: "대표", value: "이 준 희", span: 2 },
+  { label: "소재지", value: site.address.road, span: 4 },
   {
     label: "대표번호",
     value: site.tel,
     href: `tel:${site.tel.replace(/-/g, "")}`,
+    span: 2,
   },
-  { label: "팩스", value: site.fax },
+  { label: "팩스", value: site.fax, span: 2 },
   {
     label: "이메일",
     value: site.email,
     href: `mailto:${site.email}`,
+    span: 2,
   },
   {
     label: "주 사업",
     value:
       "파츠피더(부품 자동정렬 공급기) 설계·제작, 전자제품 제조기계 설치·정비",
+    span: 6,
   },
   {
     label: "제작 품목",
     value: "볼피더, 직진피더, 호퍼피더, 방음커버, 컨트롤러, 전용기",
+    span: 6,
   },
 ];
 
