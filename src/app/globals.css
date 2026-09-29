@@ -63,6 +63,113 @@ body {
   }
 }
 
+/*
+  ── 애니메이션 ─────────────────────────────────────────────
+  전부 아래 prefers-reduced-motion 블록에서 꺼진다.
+*/
+
+/* 히어로 요소가 아래에서 올라오며 나타난다. 지연은 인라인 style로 준다. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  opacity: 0;
+  animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* 3D 렌더는 살짝 확대되며 들어온다 */
+@keyframes rise-zoom {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise-zoom {
+  opacity: 0;
+  animation: rise-zoom 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* 배경 질감이 아주 느리게 확대된다. 움직임을 의식하지 못할 정도로 느리게. */
+@keyframes drift {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+.drift {
+  animation: drift 24s ease-out forwards;
+}
+
+/* SCROLL 표시의 세로선이 위에서 아래로 흘러내린다 */
+@keyframes cue {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  45% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  55% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+
+.cue-line {
+  animation: cue 2s ease-in-out infinite;
+}
+
+/*
+  스크롤 리빌 — Reveal 컴포넌트가 화면에 들어올 때 is-visible을 붙인다.
+  JS가 막히면 영영 안 보이므로 layout.tsx의 <noscript>에서 되돌린다.
+*/
+.reveal {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/*
+  하위 페이지 배너·문의 CTA에 까는 미세한 기술 그리드.
+  이미지 없이 CSS만 쓰므로 어느 해상도에서도 또렷하다.
+*/
+.tech-grid {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.5) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.5) 1px, transparent 1px);
+  background-size: 64px 64px;
+  /* 가운데는 진하고 가장자리로 갈수록 사라지게 */
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black, transparent);
+}
+
 /* 키보드 포커스는 브랜드 컬러로 확실히 보이게 */
 :where(a, button, input, textarea, select, summary):focus-visible {
   outline: 2px solid var(--color-brand);
@@ -78,6 +185,19 @@ body {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /* 움직임 없이도 내용은 반드시 보여야 한다 */
+  .rise,
+  .rise-zoom,
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .drift {
+    animation: none !important;
   }
 }

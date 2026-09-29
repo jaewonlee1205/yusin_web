@@ -18,9 +18,15 @@ export default function PageHero({
 }) {
   return (
     <div className="relative overflow-hidden bg-navy-deep">
+      {/* 이미지 대신 CSS로 그린 미세한 기술 그리드. 어느 해상도에서도 또렷하고
+          내려받을 파일이 없다. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[url('/images/blueprint-bg.webp')] bg-cover bg-center opacity-[0.06]"
+        className="tech-grid pointer-events-none absolute inset-0 opacity-[0.07]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-navy-deep via-navy-deep/85 to-navy/60"
       />
       <div
         aria-hidden="true"

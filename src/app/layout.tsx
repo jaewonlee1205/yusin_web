@@ -44,15 +44,20 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ko" className={`${notoSansKr.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
-        {/* 모든 페이지 상단 배너의 CSS 배경이라 LCP로 잡힌다.
-            CSS 안에 있으면 브라우저가 늦게 발견하므로 문서에서 미리 알린다.
+{/* 홈 히어로 배경 질감이 CSS 안에 있어 브라우저가 늦게 발견한다.
+            문서에서 미리 알려 LCP를 앞당긴다.
             (React가 이 link 태그를 <head>로 끌어올린다) */}
         <link
           rel="preload"
           as="image"
-          href="/images/blueprint-bg.webp"
+          href="/images/hero-bg.webp"
           fetchPriority="high"
         />
+        {/* 스크롤 리빌은 opacity:0 에서 시작한다. JS가 막히면 내용이 영영
+            안 보이므로 되돌려 준다. */}
+        <noscript>
+          <style>{`.reveal{opacity:1;transform:none}`}</style>
+        </noscript>
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded focus:bg-brand focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"

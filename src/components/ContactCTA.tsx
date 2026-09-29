@@ -8,7 +8,7 @@ export default function ContactCTA() {
     <section className="relative overflow-hidden bg-navy">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[url('/images/blueprint-bg.webp')] bg-cover bg-center opacity-[0.07]"
+        className="tech-grid pointer-events-none absolute inset-0 opacity-[0.09]"
       />
       <Container className="relative py-14 sm:py-20">
         <div className="flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between">

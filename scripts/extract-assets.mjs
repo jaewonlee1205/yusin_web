@@ -28,9 +28,17 @@ const PLAN = [
   { src: "image12.png", out: "hero-unit.webp", kind: "cutout", max: 1200 },
   // 설계 도면. 회사소개 '보유 설비'에서는 도면으로 읽히도록 큰 판을 쓴다.
   { src: "image18.png", out: "blueprint.webp", max: 1280 },
-  // 같은 도면의 배경용 축소판. 6~7% 투명도로 깔리므로 디테일이 필요 없고,
-  // 히어로 배경이라 LCP에 직접 잡힌다 — 용량을 최대한 줄인다.
-  { src: "image18.png", out: "blueprint-bg.webp", max: 900, quality: 45 },
+  // 홈 히어로 배경 질감. 스테인리스 볼피더 클로즈업을 블러 처리해 깐다.
+  // 원본이 756x567이지만 블러를 먹여 어둡게 덮을 것이라 해상도가 문제되지 않고,
+  // 오히려 파일이 20KB 아래로 떨어진다.
+  {
+    src: "image9.jpeg",
+    out: "hero-bg.webp",
+    cover: { width: 1600, height: 900 },
+    blur: 6,
+    modulate: { saturation: 0.45, brightness: 0.8 },
+    quality: 52,
+  },
 
   // --- 제품 ---
   { src: "image8.jpeg", out: "products/bowl-feeder-01.webp", max: 1200 },
@@ -110,7 +118,10 @@ async function main() {
     if (item.rotate) buf = await sharp(buf).rotate(item.rotate).toBuffer();
 
     let pipe = sharp(buf);
-    if (item.max) {
+    if (item.cover) {
+      // 배경용 — 지정 비율로 꽉 채워 자른다 (확대 허용)
+      pipe = pipe.resize({ ...item.cover, fit: "cover", position: "centre" });
+    } else if (item.max) {
       pipe = pipe.resize({
         width: item.max,
         height: item.max,
@@ -118,6 +129,8 @@ async function main() {
         withoutEnlargement: true,
       });
     }
+    if (item.blur) pipe = pipe.blur(item.blur);
+    if (item.modulate) pipe = pipe.modulate(item.modulate);
 
     const dest = path.join(OUT, item.out);
     await mkdir(path.dirname(dest), { recursive: true });

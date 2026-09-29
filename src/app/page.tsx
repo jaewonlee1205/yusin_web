@@ -6,6 +6,9 @@ import ProductCard from "@/components/ProductCard";
 import Section from "@/components/Section";
 import { process, strengths } from "@/data/company";
 import ClientGrid from "@/components/ClientGrid";
+import Reveal from "@/components/Reveal";
+import ScrollCue from "@/components/ScrollCue";
+import StatCounter from "@/components/StatCounter";
 import { featuredClients, totalClients } from "@/data/clients";
 import { feederDefinition, products } from "@/data/products";
 import { site } from "@/data/site";
@@ -13,11 +16,12 @@ import { videos } from "@/data/videos";
 
 const YEARS = new Date().getFullYear() - 1992;
 
+/** count=false 인 값은 세어 올리지 않는다 — 연도가 굴러가면 어색하다. */
 const STATS = [
-  { value: "1992", unit: "년 설립", note: "30년 넘게 한 분야" },
-  { value: `${YEARS}`, unit: "년 제작 경력", note: "설계부터 튜닝까지" },
-  { value: String(totalClients), unit: "개사", note: "주요 거래처" },
-  { value: String(products.length), unit: "종 제품", note: "피더 전 라인업" },
+  { value: 1992, count: false, unit: "년 설립", note: "30년 넘게 한 분야" },
+  { value: YEARS, count: true, unit: "년 제작 경력", note: "설계부터 튜닝까지" },
+  { value: totalClients, count: true, unit: "개사", note: "주요 거래처" },
+  { value: products.length, count: true, unit: "종 제품", note: "피더 전 라인업" },
 ];
 
 export default function Home() {
@@ -26,34 +30,62 @@ export default function Home() {
       {/* 1. Hero — 헤더를 뺀 한 화면에 지표 줄까지 전부 들어가야 한다.
           화면이 낮아지면 패딩·글자·이미지가 clamp()로 같이 줄어든다. */}
       <section className="hero-screen relative flex flex-col overflow-hidden bg-navy-deep">
+        {/* 배경 1 — 네이비 그라데이션 바닥 */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[url('/images/blueprint-bg.webp')] bg-cover bg-center opacity-[0.07]"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-br from-navy-deep via-navy-deep to-navy"
+        />
+        {/* 배경 2 — 볼피더 클로즈업을 블러 처리한 질감. 아주 느리게 확대된다. */}
+        <div
+          aria-hidden="true"
+          className="drift pointer-events-none absolute inset-0 bg-[url('/images/hero-bg.webp')] bg-cover bg-center opacity-[0.38]"
+        />
+        {/* 배경 3 — 글자가 읽히도록 덮는 네이비 오버레이 + 가장자리 비네트 */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-r from-navy-deep via-navy-deep/75 to-transparent"
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-40 top-1/2 h-[520px] w-[520px] -translate-y-1/2 rounded-full bg-navy/50 blur-3xl"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_45%,transparent_45%,rgba(6,38,92,0.72)_100%)]"
+        />
+        {/* 배경 4 — 3D 렌더 뒤를 살짝 띄우는 글로우 */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-32 top-1/2 h-[560px] w-[560px] -translate-y-1/2 rounded-full bg-navy/45 blur-3xl"
         />
 
         <Container className="relative flex flex-1 items-center py-[clamp(1.5rem,4vh,3.5rem)]">
           <div className="grid w-full items-center gap-[clamp(1.5rem,3.5vh,3.5rem)] lg:grid-cols-[1.1fr_1fr]">
             <div>
-              <p className="text-[clamp(0.625rem,1.1vh,0.75rem)] font-bold tracking-[0.25em] text-brand-light">
+              <p
+                className="rise text-[clamp(0.625rem,1.1vh,0.75rem)] font-bold tracking-[0.25em] text-brand-light"
+                style={{ animationDelay: "60ms" }}
+              >
                 SINCE 1992 · FEEDING AUTOMATION SYSTEM
               </p>
-              <h1 className="mt-[clamp(0.75rem,2vh,1.25rem)] text-[clamp(1.6rem,4.4vh,3.4rem)] font-bold leading-[1.25] tracking-tight text-white">
+              <h1
+                className="rise mt-[clamp(0.75rem,2vh,1.25rem)] text-[clamp(1.6rem,4.4vh,3.4rem)] font-bold leading-[1.25] tracking-tight text-white"
+                style={{ animationDelay: "140ms" }}
+              >
                 부품 자동정렬 공급기,
                 <br />
                 <span className="text-brand-light">설계부터 튜닝까지</span> 직접
                 만듭니다
               </h1>
-              <p className="mt-[clamp(0.75rem,2vh,1.5rem)] max-w-xl text-[clamp(0.875rem,1.9vh,1.125rem)] leading-relaxed text-white/75">
+              <p
+                className="rise mt-[clamp(0.75rem,2vh,1.5rem)] max-w-xl text-[clamp(0.875rem,1.9vh,1.125rem)] leading-relaxed text-white/75"
+                style={{ animationDelay: "220ms" }}
+              >
                 유신 F.A 시스템은 1992년부터 볼피더·직진피더·호퍼피더를 제작해
                 왔습니다. 공급할 부품을 보내 주시면 형상을 분석해 그 부품만을
                 위한 피더를 설계합니다.
               </p>
 
-              <div className="mt-[clamp(1.25rem,3vh,2.25rem)] flex flex-row gap-3">
+              <div
+                className="rise mt-[clamp(1.25rem,3vh,2.25rem)] flex flex-row gap-3"
+                style={{ animationDelay: "300ms" }}
+              >
                 <Link
                   href="/products"
                   className="rounded bg-brand px-7 py-3.5 text-center text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
@@ -70,8 +102,11 @@ export default function Home() {
             </div>
 
             {/* 폰에서는 문구·버튼·지표를 한 화면에 넣을 자리가 없어 도면을 감춘다.
-                배경의 설계 도면은 그대로 남는다. */}
-            <div className="hidden justify-center sm:flex">
+                배경 질감은 그대로 남는다. */}
+            <div
+              className="rise-zoom hidden justify-center sm:flex"
+              style={{ animationDelay: "380ms" }}
+            >
               <Image
                 src="/images/hero-unit.webp"
                 alt="파츠피더 구동부(진동기) 3D 도면"
@@ -82,21 +117,26 @@ export default function Home() {
               />
             </div>
           </div>
+
+          <ScrollCue />
         </Container>
 
         {/* 2. 지표 스트립 — 섹션 맨 아래에 붙어 항상 첫 화면 안에 보인다 */}
-        <div className="relative border-t border-white/10 bg-black/20">
+        <div className="relative border-t border-white/10 bg-black/25 backdrop-blur-[2px]">
           <Container>
             <dl className="grid grid-cols-2 divide-white/10 sm:grid-cols-4 sm:divide-x">
-              {STATS.map((s) => (
+              {STATS.map((s, i) => (
                 <div
                   key={s.unit}
-                  className="px-1 py-[clamp(0.75rem,2.2vh,1.75rem)] sm:px-6 sm:text-center"
+                  className="rise px-1 py-[clamp(0.75rem,2.2vh,1.75rem)] sm:px-6 sm:text-center"
+                  style={{ animationDelay: `${460 + i * 70}ms` }}
                 >
                   <dd className="order-first">
-                    <span className="text-[clamp(1.375rem,3.2vh,2.25rem)] font-bold tabular-nums text-white">
-                      {s.value}
-                    </span>
+                    <StatCounter
+                      value={s.value}
+                      count={s.count}
+                      className="text-[clamp(1.375rem,3.2vh,2.25rem)] font-bold tabular-nums text-white"
+                    />
                     <span className="ml-1 text-sm font-medium text-white/60">
                       {s.unit}
                     </span>
@@ -114,7 +154,7 @@ export default function Home() {
       {/* 3. 피더란 / 회사 개요 요약 */}
       <Section eyebrow="WHAT IS THE FEEDER" title={feederDefinition.title}>
         <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-line bg-surface">
+          <Reveal className="relative aspect-[4/3] overflow-hidden rounded-lg border border-line bg-surface">
             <Image
               src="/images/products/bowl-feeder-01.webp"
               alt="구리 부품을 정렬해 배출하고 있는 볼피더"
@@ -122,8 +162,8 @@ export default function Home() {
               sizes="(max-width: 1024px) 100vw, 45vw"
               className="object-cover"
             />
-          </div>
-          <div>
+          </Reveal>
+          <Reveal delay={120}>
             <p className="text-base leading-relaxed text-ink-soft sm:text-lg">
               {feederDefinition.body}
             </p>
@@ -152,7 +192,7 @@ export default function Home() {
                 <path d="m12 5 7 7-7 7" />
               </svg>
             </Link>
-          </div>
+          </Reveal>
         </div>
       </Section>
 
@@ -164,8 +204,10 @@ export default function Home() {
         lead="피더 본체부터 이송·보충·제어·방음·표면처리까지, 라인 구성에 필요한 요소를 모두 직접 제작합니다."
       >
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product) => (
-            <ProductCard key={product.slug} product={product} />
+          {products.map((product, i) => (
+            <Reveal key={product.slug} delay={i * 70}>
+              <ProductCard product={product} />
+            </Reveal>
           ))}
         </div>
       </Section>
@@ -178,7 +220,7 @@ export default function Home() {
       >
         <div className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">
           {strengths.map((s, i) => (
-            <div key={s.title} className="bg-white p-7 sm:p-9">
+            <Reveal key={s.title} delay={i * 80} className="bg-white p-7 sm:p-9">
               <span className="text-sm font-bold tabular-nums text-brand">
                 {String(i + 1).padStart(2, "0")}
               </span>
@@ -186,7 +228,7 @@ export default function Home() {
               <p className="mt-3 text-sm leading-relaxed text-ink-soft">
                 {s.body}
               </p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </Section>
@@ -199,8 +241,8 @@ export default function Home() {
         lead="부품 샘플 한 점에서 시작합니다. 아래 네 단계를 거쳐 현장에서 도는 피더가 됩니다."
       >
         <ol className="grid gap-px overflow-hidden rounded-lg bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
-          {process.map((p) => (
-            <li key={p.step} className="bg-navy-deep p-7 sm:p-8">
+          {process.map((p, i) => (
+            <Reveal as="li" key={p.step} delay={i * 80} className="bg-navy-deep p-7 sm:p-8">
               <span className="text-3xl font-bold tabular-nums text-brand-light">
                 {p.step}
               </span>
@@ -208,7 +250,7 @@ export default function Home() {
               <p className="mt-3 text-sm leading-relaxed text-white/65">
                 {p.body}
               </p>
-            </li>
+            </Reveal>
           ))}
         </ol>
       </Section>
@@ -249,7 +291,9 @@ export default function Home() {
         title="주요 거래처"
         lead={`전기·전자부품부터 제약, 화장품 용기까지 ${totalClients}개사에 납품해 왔습니다.`}
       >
-        <ClientGrid names={featuredClients} />
+        <Reveal>
+          <ClientGrid names={featuredClients} />
+        </Reveal>
         <Link
           href="/clients"
           className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-navy underline underline-offset-4 hover:text-brand"
