@@ -48,18 +48,17 @@ export type NavItem = {
   /** 드롭다운으로 펼칠 하위 메뉴 */
   children?: NavChild[];
   /**
-   * 하위 메뉴를 어떻게 그릴지.
-   *  - "list"  : 단순 목록 (기본)
-   *  - "products" : 제품 썸네일 패널 (src/data/products.ts를 직접 읽는다)
+   * 하위 항목을 src/data/products.ts에서 가져온다는 표시. 제품을 추가하면
+   * 메뉴도 따라 늘어난다. 생략하면 위 children을 그대로 쓴다.
+   * 그리는 모양은 어느 쪽이든 같다 (ListPanel 하나뿐이다).
    */
-  panel?: "list" | "products";
+  childrenFrom?: "products";
 };
 
 export const nav: NavItem[] = [
   {
     href: "/company",
     label: "회사소개",
-    panel: "list",
     children: [
       // 메뉴는 스캔하는 곳이라 항목마다 한 낱말만 둔다. 부모가 이미 "회사소개"라
       // 첫 항목까지 같은 이름이면 어색해서, 페이지 안에 실제로 있는 것을 부른다.
@@ -69,7 +68,7 @@ export const nav: NavItem[] = [
       { href: "/company/facility", label: "보유 설비" },
     ],
   },
-  { href: "/products", label: "제품", panel: "products" },
+  { href: "/products", label: "제품", childrenFrom: "products" },
   { href: "/clients", label: "납품실적" },
   { href: "/location", label: "오시는 길" },
   { href: "/contact", label: "문의하기" },

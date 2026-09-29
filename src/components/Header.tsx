@@ -5,9 +5,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Container from "./Container";
-import { ListPanel, ProductPanel } from "./NavPanel";
+import { ListPanel } from "./NavPanel";
 import { products } from "@/data/products";
-import { headerCta, nav, site, type NavChild } from "@/data/site";
+import {
+  headerCta,
+  nav,
+  site,
+  type NavChild,
+  type NavItem,
+} from "@/data/site";
 
 /** 마우스가 메뉴를 스쳐 지날 때 깜빡이지 않도록 닫기를 약간 늦춘다. */
 const CLOSE_DELAY = 140;
@@ -34,16 +40,29 @@ export default function Header() {
     []
   );
 
-  /** 모바일에서는 제품 패널도 단순 목록으로 펼친다. */
+  /**
+   * 제품 메뉴의 하위 항목. products.ts에서 만들어 데스크톱·모바일이 같이 쓴다.
+   *
+   * 맨 앞 "제품 전체"는 회사소개의 "인사말"과 같은 자리 — 부모 페이지로 가는 칸이다.
+   * 데스크톱에서 "제품"은 링크가 아니라 여닫는 버튼이라, 이 줄이 없으면
+   * /products 로 갈 길이 헤더에서 사라진다.
+   */
   const productChildren = useMemo<NavChild[]>(
     () => [
+      { href: "/products", label: "제품 전체" },
       ...products.map((p) => ({
         href: `/products/${p.slug}`,
         label: p.name,
       })),
-      { href: "/products", label: "제품 전체 보기" },
     ],
     []
+  );
+
+  /** 드롭다운에 넣을 항목. 제품만 products.ts에서 오고 나머지는 nav가 들고 있다. */
+  const childrenFor = useCallback(
+    (item: NavItem): NavChild[] =>
+      item.childrenFrom === "products" ? productChildren : (item.children ?? []),
+    [productChildren]
   );
 
   const cancelClose = useCallback(() => {
@@ -138,7 +157,8 @@ export default function Header() {
           >
             {desktopNav.map((item) => {
               const active = isActive(item.href);
-              const hasPanel = item.panel === "products" || !!item.children;
+              const hasPanel =
+                item.childrenFrom === "products" || !!item.children;
               const open = openMenu === item.href;
               const panelId = `menu-${item.href.replace(/\//g, "")}`;
 
@@ -192,19 +212,13 @@ export default function Header() {
                   {open && (
                     <div
                       id={panelId}
-                      className={`absolute left-1/2 top-full z-50 -translate-x-1/2 pt-2 ${
-                        item.panel === "products" ? "w-[30rem]" : "w-56"
-                      }`}
+                      className="absolute left-1/2 top-full z-50 w-56 -translate-x-1/2 pt-2"
                     >
                       <div className="overflow-hidden rounded-lg border border-line bg-white shadow-xl shadow-ink/10">
-                        {item.panel === "products" ? (
-                          <ProductPanel onNavigate={() => setOpenMenu(null)} />
-                        ) : (
-                          <ListPanel
-                            items={item.children ?? []}
-                            onNavigate={() => setOpenMenu(null)}
-                          />
-                        )}
+                        <ListPanel
+                          items={childrenFor(item)}
+                          onNavigate={() => setOpenMenu(null)}
+                        />
                       </div>
                     </div>
                   )}
@@ -275,13 +289,10 @@ export default function Header() {
           <Container width="wide" className="py-2">
             <nav aria-label="모바일 메뉴" className="flex flex-col">
               {nav.map((item) => {
-                const children =
-                  item.panel === "products"
-                    ? productChildren
-                    : (item.children ?? null);
+                const children = childrenFor(item);
                 const isOpen = expanded === item.href;
 
-                if (!children) {
+                if (children.length === 0) {
                   return (
                     <Link
                       key={item.href}
