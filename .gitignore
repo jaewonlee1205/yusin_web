@@ -34,6 +34,10 @@ yarn-error.log*
 .env*
 # 설정 방법을 알려 주는 예시 파일은 커밋한다
 !.env.local.example
+# 다른 PC에서 이어서 작업할 수 있도록 실제 설정 파일도 커밋한다.
+# NEXT_PUBLIC_* 값은 어차피 브라우저 번들에 그대로 들어가므로 비밀이 아니다.
+# 나중에 진짜 비밀값을 넣게 되면 이 줄을 지우고 저장소에서도 빼야 한다.
+!.env.local
 
 # vercel
 .vercel
