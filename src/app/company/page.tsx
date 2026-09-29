@@ -146,38 +146,28 @@ export default function CompanyPage() {
       {/* 회사 개요 */}
       <Section tone="surface" eyebrow="OVERVIEW" title="회사 개요">
         {/*
-          격자를 dl 자체에 건다. 안에 격자용 div 를 한 겹 더 두면 dt/dd 가
-          dl 의 손자가 되어 HTML 이 깨진다 — dt/dd 를 감싸는 div 는 dl 의
-          직계 자식이어야 한다.
+          한 줄에 한 항목. 라벨을 왼쪽 고정 폭(sm:w-28)에 두는 게 이 표의
+          핵심이다 — 값이 전부 같은 x 에서 시작해 눈이 아래로만 내려간다.
 
-          gap-px + bg-line + 흰 셀로 칸 사이 선을 낸다. 보유 설비 페이지의
-          설비 요약 표와 같은 방식이다.
+          폭이 남는 게 아까워 값 길이에 맞춰 칸을 나눈 적이 있는데(6열 격자),
+          그러면 값 시작점이 행마다 달라져(실측 4종류) 훑기가 어려워진다.
+          빈칸보다 정렬선이 중요하다.
 
-          값 길이가 제각각이라 한 틀에 넣으면 폭이 남는다. 6열 격자를 깔고
-          값 길이에 맞춰 칸 수를 나눠 준다 (아래 OVERVIEW_SPAN 참고).
+          라벨을 값보다 작고 흐리게 둔다. 원래는 반대였는데, 정작 읽을 값이
+          약하고 라벨만 굵어 위계가 뒤집혀 있었다.
         */}
-        <dl className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-6">
+        <dl className="overflow-hidden rounded-lg border border-line bg-white">
           {overview.map((row) => (
             <div
               key={row.label}
-              // 좌우 여백을 lg 부터 넓힌다. 640~1023px 구간은 칸이 좁아지는데
-              // 여기서 px-8 을 쓰면 전화번호가 칸 폭에 2px 차로 닿는다.
-              className={`bg-white px-6 py-6 lg:px-8 ${OVERVIEW_SPAN[row.span]}`}
+              className="border-b border-line px-6 py-3.5 last:border-b-0 sm:flex sm:items-baseline sm:gap-6"
             >
-              {/* 라벨을 값보다 작고 흐리게 둔다. 원래는 반대였는데, 정작
-                  읽을 값이 약하고 라벨만 굵어 위계가 뒤집혀 있었다. */}
-              <dt className="text-xs font-bold tracking-[0.15em] text-muted">
+              <dt className="text-xs font-bold tracking-[0.1em] text-muted sm:w-28 sm:shrink-0">
                 {row.label}
               </dt>
-              <dd
-                className={
-                  row.span === 2
-                    ? // tabular-nums: 대표번호와 팩스가 나란히 서므로 자릿수를
-                      // 맞춘다. 한글 값에는 아무 영향이 없다.
-                      "mt-2.5 text-lg font-bold leading-snug tabular-nums text-ink"
-                    : "mt-2.5 text-base leading-[1.75] text-ink"
-                }
-              >
+              {/* tabular-nums: 대표번호와 팩스가 위아래로 붙어 있어 자릿수를
+                  맞춰야 한다. 한글 값에는 아무 영향이 없다. */}
+              <dd className="mt-1.5 text-[15px] leading-relaxed tabular-nums text-ink sm:mt-0 sm:flex-1">
                 {/* 전화·이메일은 눌러서 걸고 보낼 수 있게 한다. 팩스는 걸 수
                     없어 href 가 없다 — 푸터·헤더·문의하기·오시는 길과 같은 규칙. */}
                 {row.href ? (
@@ -190,9 +180,9 @@ export default function CompanyPage() {
                 ) : (
                   row.value
                 )}
-                {/* 영문 상호는 링크 밖에 둔다 */}
+                {/* 영문 상호는 링크 밖에, 같은 줄에 붙인다 */}
                 {row.sub && (
-                  <span className="mt-1 block text-xs font-medium tracking-[0.08em] text-muted">
+                  <span className="ml-2.5 text-xs font-medium tracking-[0.08em] text-muted">
                     {row.sub}
                   </span>
                 )}
@@ -206,16 +196,3 @@ export default function CompanyPage() {
     </>
   );
 }
-
-/**
- * overview 의 span 값을 그리드 클래스로 옮긴다.
- *
- * `sm:col-span-${row.span}` 처럼 붙여 쓰면 안 된다 — Tailwind 는 소스에 적힌
- * 문자열을 그대로 훑어 클래스를 만들기 때문에, 조합해 만든 이름은 CSS 에
- * 나오지 않는다.
- */
-const OVERVIEW_SPAN = {
-  2: "sm:col-span-2",
-  3: "sm:col-span-3",
-  6: "sm:col-span-6",
-} as const;
