@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
@@ -29,10 +28,10 @@ export default function CompanyPage() {
       {/* 회사 소개글 */}
       <Section eyebrow="ABOUT" title={intro.title}>
         {/*
-          왼쪽 글 · 오른쪽 사진. 사진이 글보다 크므로 items-center 로 글을
-          세로 가운데에 맞춘다.
+          왼쪽 소개글 · 오른쪽 경영이념 패널. 둘 다 글이라 윗변을 맞춰
+          나란히 시작하게 한다(items-start).
         */}
-        <div className="grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:items-center lg:gap-16">
+        <div className="grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:items-start lg:gap-16">
           <div>
             {intro.paragraphs.map((paragraph, index) => (
               <p
@@ -49,17 +48,29 @@ export default function CompanyPage() {
             ))}
           </div>
 
-          {/* 홈 제품 격자에 안 쓰인 유일한 볼피더 실물 사진.
-              원본이 756x567 이라 이보다 크게 쓰면 흐려진다. */}
-          <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-line bg-surface">
-            <Image
-              src="/images/products/bowl-feeder-02.webp"
-              alt="스테인리스 볼피더 본체. 나선형 트랙을 따라 금속 부품이 정렬되어 올라가고, 트랙 옆으로 선별용 에어 노즐이 늘어서 있다."
-              fill
-              sizes="(min-width: 1024px) 32rem, 100vw"
-              className="object-cover"
-            />
-          </div>
+          {/* 경영이념. 라벨을 한글로 둔 것은 의도다 — 섹션 eyebrow 가 이미
+              영문(ABOUT)이라 패널 안에 MANAGEMENT PHILOSOPHY 를 또 두면
+              한 섹션에 영문 라벨이 둘이 된다. */}
+          <aside className="rounded-lg bg-navy-deep p-7 sm:p-8">
+            <p className="text-xs font-bold tracking-[0.2em] text-brand-light">
+              경영이념
+            </p>
+            <p className="mt-3 text-xl font-bold leading-snug text-white sm:text-2xl">
+              {philosophyMotto}
+            </p>
+            <dl className="mt-6 space-y-5 border-t border-white/15 pt-6">
+              {philosophy.map((item) => (
+                <div key={item.title}>
+                  <dt className="text-sm font-bold text-brand-light">
+                    {item.title}
+                  </dt>
+                  <dd className="mt-1.5 text-sm leading-[1.8] text-white/75">
+                    {item.body}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </aside>
         </div>
       </Section>
 
@@ -80,32 +91,9 @@ export default function CompanyPage() {
             </div>
           ))}
         </dl>
-      </Section>
 
-      {/* 경영이념 — 조직도 페이지보다 회사 개요 바로 밑이 어울린다.
-          다음 페이지 카드를 이 뒤로 보내, 배경이 회색 → 네이비 → 흰색 → 네이비로
-          번갈아 네이비 두 블록이 맞닿지 않는다. */}
-      <Section
-        tone="navy"
-        eyebrow="MANAGEMENT PHILOSOPHY"
-        title={philosophyMotto}
-        lead="사회복지와 연구개발, 두 갈래로 지켜 온 경영이념입니다."
-      >
-        <div className="grid gap-px overflow-hidden rounded-lg bg-white/10 sm:grid-cols-2">
-          {philosophy.map((p) => (
-            <div key={p.title} className="bg-navy-deep p-8 sm:p-10">
-              <h3 className="text-xl font-bold text-brand-light">{p.title}</h3>
-              <p className="mt-4 text-sm leading-[1.9] text-white/70">
-                {p.body}
-              </p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      {/* 회사소개 그룹의 나머지 두 페이지로 가는 길 */}
-      <Section>
-        <div className="grid gap-4 sm:grid-cols-2">
+        {/* 회사소개 그룹의 나머지 두 페이지로 가는 길 */}
+        <div className="mt-8 grid gap-4 sm:grid-cols-2">
           <NextCard
             href="/company/vision"
             label="조직도"
