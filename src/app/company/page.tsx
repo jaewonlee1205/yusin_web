@@ -9,7 +9,7 @@ import { companyTabs, yearsInBusiness } from "@/data/site";
 
 export const metadata: Metadata = {
   title: "회사소개",
-  description: `1992년부터 ${yearsInBusiness}년, 파츠피더 한 분야만 만들어 온 유신 F.A 시스템입니다. 대표 인사말과 회사 개요, 사명 有信의 뜻을 담았습니다.`,
+  description: `1992년 설립 이후 ${yearsInBusiness}년간 파츠피더 한 분야만 만들어 온 유신 F.A 시스템입니다. 대표 인사말과 회사 개요, 사명 有信의 뜻을 담았습니다.`,
 };
 
 export default function CompanyPage() {
@@ -19,7 +19,7 @@ export default function CompanyPage() {
         eyebrow="COMPANY"
         title="회사소개"
         // 有信 해석은 아래 본문 카드가 맡는다. 배너에서 같은 말을 또 하지 않는다.
-        lead={`1992년부터 ${yearsInBusiness}년, 파츠피더 한 분야만 만들어 왔습니다. 어떤 회사이고 무엇을 갖췄는지 정리했습니다.`}
+        lead={`1992년 설립 이후 ${yearsInBusiness}년간, 파츠피더 한 분야만 만들어 온 회사입니다.`}
       />
       <SubNav items={companyTabs} />
 
