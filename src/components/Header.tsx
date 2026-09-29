@@ -141,13 +141,17 @@ export default function Header() {
             className="shrink-0 lg:justify-self-start"
             aria-label={`${site.name} 홈으로`}
           >
+            {/* lg(1024~1280px)에서 h-8 을 유지하는 것은 의도다. 이 구간은 메뉴가
+                쓸 수 있는 폭이 가장 빠듯한데, 로고가 h-9(자연 폭 279px)이면
+                메뉴에 밀려 폭만 266px로 줄어든다 — 높이는 고정이라 로고가
+                찌그러진다. xl 부터 키운다. (lg:h-9 로 되돌리지 말 것) */}
             <Image
               src="/images/logo.png"
               alt={site.name}
               width={403}
               height={52}
               priority
-              className="h-7 w-auto sm:h-8 lg:h-9"
+              className="h-7 w-auto sm:h-8 xl:h-9"
             />
           </Link>
 

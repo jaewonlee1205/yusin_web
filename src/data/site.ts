@@ -70,7 +70,7 @@ export const nav: NavItem[] = [
   },
   { href: "/products", label: "제품", childrenFrom: "products" },
   { href: "/clients", label: "납품실적" },
-  { href: "/videos", label: "영상" },
+  { href: "/videos", label: "영상자료" },
   { href: "/location", label: "오시는 길" },
   { href: "/contact", label: "문의하기" },
 ];

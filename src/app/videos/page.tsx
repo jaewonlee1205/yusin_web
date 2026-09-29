@@ -6,7 +6,7 @@ import VideoEmbed from "@/components/VideoEmbed";
 import { videoChannelUrl, videos } from "@/data/videos";
 
 export const metadata: Metadata = {
-  title: "제품 영상",
+  title: "영상자료",
   description:
     "유신 F.A 시스템이 제작한 볼피더가 실제로 부품을 정렬해 내보내는 모습입니다. 소형 부품부터 금속 부품, 커넥터까지 기종별 구동 영상을 모았습니다.",
 };
@@ -16,7 +16,7 @@ export default function VideosPage() {
     <>
       <PageHero
         eyebrow="VIDEO"
-        title="제품 영상"
+        title="영상자료"
         lead="사진으로는 전해지지 않는 것 — 부품이 실제로 정렬되어 나가는 속도와 움직임입니다."
       />
 
