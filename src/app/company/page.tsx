@@ -26,26 +26,40 @@ export default function CompanyPage() {
       />
 
       {/* 회사 소개글 */}
-      <Section eyebrow="ABOUT" title={intro.title}>
-        {/*
-          왼쪽 소개글 · 오른쪽 경영이념 패널. 둘 다 글이라 윗변을 맞춰
-          나란히 시작하게 한다(items-start).
-        */}
-        <div className="grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:items-start lg:gap-16">
+      {/*
+        Section 에 eyebrow·title 을 넘기지 않고 직접 그린다. Section 은 제목을
+        children 위의 별도 블록(mb-10 sm:mb-14)에 그리는데, 그러면 오른쪽 패널이
+        제목보다 106px 아래에서 시작한다. 제목을 그리드 안으로 넣어야 패널 윗변이
+        제목과 맞는다.
+
+        eyebrow·h2 클래스는 src/components/Section.tsx 에서 그대로 옮겨 온 것이다.
+        거기 타이포가 바뀌면 이 페이지도 같이 고쳐야 한다.
+      */}
+      <Section>
+        <p className="mb-3 text-xs font-bold tracking-[0.2em] text-brand">
+          ABOUT
+        </p>
+        <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:items-start lg:gap-16">
           <div>
-            {intro.paragraphs.map((paragraph, index) => (
-              <p
-                key={paragraph.slice(0, 20)}
-                className={
-                  // 첫 문단만 키워 소개글이 어디서 시작하는지 잡아 준다.
-                  index === 0
-                    ? "text-lg leading-[1.85] text-ink sm:text-xl"
-                    : "mt-5 text-base leading-[1.9] text-ink-soft"
-                }
-              >
-                {paragraph}
-              </p>
-            ))}
+            <h2 className="text-2xl font-bold leading-snug tracking-tight text-ink sm:text-4xl">
+              {intro.title}
+            </h2>
+            {/* 제목 아래 여백은 Section 의 헤더 아래 여백과 같은 값으로 맞춘다 */}
+            <div className="mt-10 sm:mt-14">
+              {intro.paragraphs.map((paragraph, index) => (
+                <p
+                  key={paragraph.slice(0, 20)}
+                  className={
+                    // 첫 문단만 키워 소개글이 어디서 시작하는지 잡아 준다.
+                    index === 0
+                      ? "text-lg leading-[1.85] text-ink sm:text-xl"
+                      : "mt-5 text-base leading-[1.9] text-ink-soft"
+                  }
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
           </div>
 
           {/* 경영이념. 라벨을 한글로 둔 것은 의도다 — 섹션 eyebrow 가 이미
