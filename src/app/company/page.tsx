@@ -1,10 +1,28 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
-import { intro, meaning, overview } from "@/data/company";
+import { equipmentTotals, intro, meaning, overview } from "@/data/company";
+import { totalClients } from "@/data/clients";
 import { yearsInBusiness } from "@/data/site";
+
+/**
+ * 회사를 증명하는 숫자. 홈 통계와 값은 겹치지만 StatCounter(세어 올리는
+ * 애니메이션)는 쓰지 않는다 — client 컴포넌트라 이 페이지가 다시 client
+ * 경계를 갖게 된다. 여기서는 정적으로 찍는다.
+ */
+const FIGURES = [
+  { value: "1992", unit: "년", note: "설립" },
+  { value: String(yearsInBusiness), unit: "년", note: "제작 경력" },
+  { value: String(totalClients), unit: "개사", note: "주요 거래처" },
+  {
+    value: String(equipmentTotals.units),
+    unit: "대",
+    note: `보유 설비 ${equipmentTotals.kinds}종`,
+  },
+];
 
 export const metadata: Metadata = {
   title: "회사소개",
@@ -24,38 +42,79 @@ export default function CompanyPage() {
       {/* 회사 소개글 */}
       <Section eyebrow="ABOUT" title={intro.title}>
         {/*
-          한 단으로 쌓는다. 예전에는 오른쪽에 有信 카드를 세워 뒀는데, 카드가
-          본문보다 228px 짧아 그 아래가 뚫려 보였다. 한 단이라고 컨테이너 폭을
-          다 쓰면 한 줄이 70자를 넘어 눈이 다음 줄을 못 찾으므로 읽기 좋은
-          폭으로 묶고, 남는 오른쪽은 여백으로 둔다.
+          왼쪽 글 · 오른쪽 사진. 예전에는 오른쪽에 有信 카드를 세워 뒀는데
+          카드가 글보다 228px 짧아 그 아래가 뚫려 보였다. 사진은 반대로 글보다
+          크므로 items-center 로 글을 세로 가운데에 맞춘다.
         */}
-        <div className="max-w-3xl">
-          {intro.paragraphs.map((paragraph, index) => (
-            <p
-              key={paragraph.slice(0, 20)}
-              className={
-                // 첫 문단만 키워 소개글이 어디서 시작하는지 잡아 준다.
-                index === 0
-                  ? "text-lg leading-[1.85] text-ink sm:text-xl"
-                  : "mt-5 text-base leading-[1.9] text-ink-soft"
-              }
-            >
-              {paragraph}
-            </p>
-          ))}
+        <div className="grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:items-center lg:gap-16">
+          <div>
+            {intro.paragraphs.map((paragraph, index) => (
+              <p
+                key={paragraph.slice(0, 20)}
+                className={
+                  // 첫 문단만 키워 소개글이 어디서 시작하는지 잡아 준다.
+                  index === 0
+                    ? "text-lg leading-[1.85] text-ink sm:text-xl"
+                    : "mt-5 text-base leading-[1.9] text-ink-soft"
+                }
+              >
+                {paragraph}
+              </p>
+            ))}
+          </div>
+
+          {/* 홈 제품 격자에 안 쓰인 유일한 볼피더 실물 사진.
+              원본이 756x567 이라 이보다 크게 쓰면 흐려진다. */}
+          <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-line bg-surface">
+            <Image
+              src="/images/products/bowl-feeder-02.webp"
+              alt="스테인리스 볼피더 본체. 나선형 트랙을 따라 금속 부품이 정렬되어 올라가고, 트랙 옆으로 선별용 에어 노즐이 늘어서 있다."
+              fill
+              sizes="(min-width: 1024px) 32rem, 100vw"
+              className="object-cover"
+            />
+          </div>
         </div>
 
-        {/* 사명 풀이 — 본문과 같은 폭으로 꽉 채운 가로 블록 */}
-        <div className="mt-12 rounded-lg border border-line bg-surface p-8 sm:mt-16 sm:p-10">
-          <div className="grid gap-5 sm:grid-cols-[auto_1fr] sm:items-baseline sm:gap-10">
-            <p className="text-5xl font-bold leading-none text-navy sm:text-6xl">
+        {/* 회사를 증명하는 숫자. 머리카락 굵기 구분선은 보유 설비 페이지와 같은 방식이다. */}
+        <dl className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:mt-16 sm:grid-cols-4">
+          {FIGURES.map((figure) => (
+            // flex-col-reverse: 화면에는 숫자가 위, 설명이 아래로 보이지만
+            // DOM 순서는 dt(설명) -> dd(숫자) 라 읽어 주는 순서가 자연스럽다.
+            // ("설립, 1992년") sr-only 로 라벨을 덧대면 같은 말을 두 번 듣게 된다.
+            <div
+              key={figure.note}
+              className="flex flex-col-reverse bg-white px-5 py-7 sm:px-6"
+            >
+              <dt className="mt-2 text-sm font-medium text-ink-soft">
+                {figure.note}
+              </dt>
+              <dd>
+                <span className="text-3xl font-bold tabular-nums text-navy sm:text-4xl">
+                  {figure.value}
+                </span>
+                <span className="ml-1 text-sm text-muted">{figure.unit}</span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+
+        {/* 사명 풀이. 회사 소개의 마무리라 네이비로 무게를 준다.
+            질감은 상단 배너·하단 CTA 와 같은 tech-grid 를 쓴다. */}
+        <div className="relative mt-6 overflow-hidden rounded-lg bg-navy-deep p-8 sm:p-10">
+          <div
+            aria-hidden="true"
+            className="tech-grid pointer-events-none absolute inset-0 opacity-[0.08]"
+          />
+          <div className="relative grid gap-5 sm:grid-cols-[auto_1fr] sm:items-baseline sm:gap-10">
+            <p className="text-5xl font-bold leading-none text-brand-light sm:text-6xl">
               {meaning.hanja}
             </p>
             <div>
-              <p className="text-lg font-bold text-ink sm:text-xl">
+              <p className="text-lg font-bold text-white sm:text-xl">
                 {meaning.headline}
               </p>
-              <p className="mt-3 max-w-3xl text-base leading-[1.9] text-ink-soft">
+              <p className="mt-3 max-w-3xl text-base leading-[1.9] text-white/75">
                 {meaning.body}
               </p>
             </div>
