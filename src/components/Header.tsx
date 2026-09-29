@@ -43,13 +43,14 @@ export default function Header() {
   /**
    * 제품 메뉴의 하위 항목. products.ts에서 만들어 데스크톱·모바일이 같이 쓴다.
    *
-   * 맨 앞 "제품 전체"는 회사소개의 "인사말"과 같은 자리 — 부모 페이지로 가는 칸이다.
+   * 맨 앞 "전체"는 회사소개의 "인사말"과 같은 자리 — 부모 페이지로 가는 칸이다.
+   * 부모 메뉴가 이미 "제품"이라 라벨에서 그 말을 반복하지 않는다.
    * 데스크톱에서 "제품"은 링크가 아니라 여닫는 버튼이라, 이 줄이 없으면
    * /products 로 갈 길이 헤더에서 사라진다.
    */
   const productChildren = useMemo<NavChild[]>(
     () => [
-      { href: "/products", label: "제품 전체" },
+      { href: "/products", label: "전체" },
       ...products.map((p) => ({
         href: `/products/${p.slug}`,
         label: p.name,
