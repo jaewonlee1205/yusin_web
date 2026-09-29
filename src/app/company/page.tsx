@@ -4,29 +4,12 @@ import Link from "next/link";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
-import { equipmentTotals, intro, meaning, overview } from "@/data/company";
-import { totalClients } from "@/data/clients";
+import { intro, meaning, overview } from "@/data/company";
 import { yearsInBusiness } from "@/data/site";
-
-/**
- * 회사를 증명하는 숫자. 홈 통계와 값은 겹치지만 StatCounter(세어 올리는
- * 애니메이션)는 쓰지 않는다 — client 컴포넌트라 이 페이지가 다시 client
- * 경계를 갖게 된다. 여기서는 정적으로 찍는다.
- */
-const FIGURES = [
-  { value: "1992", unit: "년", note: "설립" },
-  { value: String(yearsInBusiness), unit: "년", note: "제작 경력" },
-  { value: String(totalClients), unit: "개사", note: "주요 거래처" },
-  {
-    value: String(equipmentTotals.units),
-    unit: "대",
-    note: `보유 설비 ${equipmentTotals.kinds}종`,
-  },
-];
 
 export const metadata: Metadata = {
   title: "회사소개",
-  description: `1992년 설립 이후 ${yearsInBusiness}년간 파츠피더 한 분야만 만들어 온 유신 F.A 시스템입니다. 대표 인사말과 회사 개요, 사명 有信의 뜻을 담았습니다.`,
+  description: `1992년 설립 이후 ${yearsInBusiness}년간 파츠피더 한 분야만 만들어 온 유신 F.A 시스템입니다. 회사 소개와 개요, 사명 有信의 뜻을 담았습니다.`,
 };
 
 export default function CompanyPage() {
@@ -76,32 +59,9 @@ export default function CompanyPage() {
           </div>
         </div>
 
-        {/* 회사를 증명하는 숫자. 머리카락 굵기 구분선은 보유 설비 페이지와 같은 방식이다. */}
-        <dl className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:mt-16 sm:grid-cols-4">
-          {FIGURES.map((figure) => (
-            // flex-col-reverse: 화면에는 숫자가 위, 설명이 아래로 보이지만
-            // DOM 순서는 dt(설명) -> dd(숫자) 라 읽어 주는 순서가 자연스럽다.
-            // ("설립, 1992년") sr-only 로 라벨을 덧대면 같은 말을 두 번 듣게 된다.
-            <div
-              key={figure.note}
-              className="flex flex-col-reverse bg-white px-5 py-7 sm:px-6"
-            >
-              <dt className="mt-2 text-sm font-medium text-ink-soft">
-                {figure.note}
-              </dt>
-              <dd>
-                <span className="text-3xl font-bold tabular-nums text-navy sm:text-4xl">
-                  {figure.value}
-                </span>
-                <span className="ml-1 text-sm text-muted">{figure.unit}</span>
-              </dd>
-            </div>
-          ))}
-        </dl>
-
         {/* 사명 풀이. 회사 소개의 마무리라 네이비로 무게를 준다.
             질감은 상단 배너·하단 CTA 와 같은 tech-grid 를 쓴다. */}
-        <div className="relative mt-6 overflow-hidden rounded-lg bg-navy-deep p-8 sm:p-10">
+        <div className="relative mt-12 overflow-hidden rounded-lg bg-navy-deep p-8 sm:mt-16 sm:p-10">
           <div
             aria-hidden="true"
             className="tech-grid pointer-events-none absolute inset-0 opacity-[0.08]"
