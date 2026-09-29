@@ -39,7 +39,10 @@ export default function CompanyPage() {
         <p className="mb-3 text-xs font-bold tracking-[0.2em] text-brand">
           ABOUT
         </p>
-        <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:items-start lg:gap-16">
+        {/* items-start 를 쓰지 않는다. 그리드 기본값(stretch)이라야 패널이 칸
+            높이를 채워 아랫변까지 본문 끝과 맞는다. 윗변은 행이 제목에서
+            시작하므로 stretch 로도 그대로 맞는다. */}
+        <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
           <div>
             <h2 className="text-2xl font-bold leading-snug tracking-tight text-ink sm:text-4xl">
               {intro.title}
