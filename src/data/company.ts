@@ -9,6 +9,8 @@
  *     (타사 소개서에서 복사된 흔적으로 보여 회사명에 맞게 고쳤다)
  */
 
+import { yearsInBusiness } from "./site";
+
 export const greeting = {
   title: "변화에 앞서가는 기업, 유신",
   signature: "유신 F.A 시스템 대표이사  이 준 희",
@@ -180,6 +182,6 @@ export const strengths: { title: string; body: string }[] = [
   },
   {
     title: "1992년부터 쌓은 제작 데이터",
-    body: "30년 넘게 축적한 부품별 볼 형상·지그 사례를 바탕으로 시행착오를 줄입니다.",
+    body: `${yearsInBusiness}년 동안 축적한 부품별 볼 형상·지그 사례를 바탕으로 시행착오를 줄입니다.`,
   },
 ];

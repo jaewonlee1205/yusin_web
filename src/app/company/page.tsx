@@ -5,12 +5,11 @@ import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
 import SubNav from "@/components/SubNav";
 import { greeting, meaning, overview } from "@/data/company";
-import { companyTabs } from "@/data/site";
+import { companyTabs, yearsInBusiness } from "@/data/site";
 
 export const metadata: Metadata = {
   title: "회사소개",
-  description:
-    "1992년 설립된 유신 F.A 시스템의 인사말과 회사 개요입니다. 신의가 있는, 신뢰가 있는 — 사명 그대로 30년을 지켜 왔습니다.",
+  description: `1992년부터 ${yearsInBusiness}년, 파츠피더 한 분야만 만들어 온 유신 F.A 시스템입니다. 대표 인사말과 회사 개요, 사명 有信의 뜻을 담았습니다.`,
 };
 
 export default function CompanyPage() {
@@ -19,7 +18,8 @@ export default function CompanyPage() {
       <PageHero
         eyebrow="COMPANY"
         title="회사소개"
-        lead="신의가 있는, 신뢰가 있는. 사명 그대로 30년을 지켜 온 기업입니다."
+        // 有信 해석은 아래 본문 카드가 맡는다. 배너에서 같은 말을 또 하지 않는다.
+        lead={`1992년부터 ${yearsInBusiness}년, 파츠피더 한 분야만 만들어 왔습니다. 어떤 회사이고 무엇을 갖췄는지 정리했습니다.`}
       />
       <SubNav items={companyTabs} />
 

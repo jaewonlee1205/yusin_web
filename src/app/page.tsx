@@ -11,16 +11,24 @@ import ScrollCue from "@/components/ScrollCue";
 import StatCounter from "@/components/StatCounter";
 import { featuredClients, totalClients } from "@/data/clients";
 import { feederDefinition, products } from "@/data/products";
-import { site } from "@/data/site";
+import { site, yearsInBusiness } from "@/data/site";
 import VideoEmbed from "@/components/VideoEmbed";
 import { featuredVideos } from "@/data/videos";
 
-const YEARS = new Date().getFullYear() - 1992;
-
 /** count=false 인 값은 세어 올리지 않는다 — 연도가 굴러가면 어색하다. */
 const STATS = [
-  { value: 1992, count: false, unit: "년 설립", note: "30년 넘게 한 분야" },
-  { value: YEARS, count: true, unit: "년 제작 경력", note: "설계부터 튜닝까지" },
+  {
+    value: 1992,
+    count: false,
+    unit: "년 설립",
+    note: `${yearsInBusiness}년째 한 분야`,
+  },
+  {
+    value: yearsInBusiness,
+    count: true,
+    unit: "년 제작 경력",
+    note: "설계부터 튜닝까지",
+  },
   { value: totalClients, count: true, unit: "개사", note: "주요 거래처" },
   { value: products.length, count: true, unit: "종 제품", note: "피더 전 라인업" },
 ];
@@ -79,9 +87,9 @@ export default function Home() {
                 className="rise mt-[clamp(0.75rem,2vh,1.5rem)] max-w-xl text-[clamp(0.875rem,1.9vh,1.125rem)] leading-relaxed text-white/75"
                 style={{ animationDelay: "220ms" }}
               >
-                볼피더·직진피더·호퍼피더를 30년 넘게 만들어 왔습니다. 부품
-                샘플을 보내 주시면 형상을 분석해 그 부품만을 위한 피더를
-                설계합니다.
+                볼피더·직진피더·호퍼피더를 {yearsInBusiness}년째 만들고
+                있습니다. 부품 샘플을 보내 주시면 형상을 분석해 그 부품만을
+                위한 피더를 설계합니다.
               </p>
 
               <div
@@ -171,9 +179,9 @@ export default function Home() {
               {feederDefinition.body}
             </p>
             <p className="mt-5 text-base leading-relaxed text-ink-soft sm:text-lg">
-              유신 F.A 시스템은 이 피더를 30년 넘게 만들어 온 회사입니다. 볼
-              형상 설계, 정렬 지그 가공, 진동 튜닝, 조립과 현장 설치까지 한
-              공장 안에서 끝냅니다.
+              유신 F.A 시스템은 이 피더를 {yearsInBusiness}년째 만들어 온
+              회사입니다. 볼 형상 설계, 정렬 지그 가공, 진동 튜닝, 조립과 현장
+              설치까지 한 공장 안에서 끝냅니다.
             </p>
             <Link
               href="/company"

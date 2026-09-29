@@ -40,6 +40,15 @@ export const site = {
   },
 } as const;
 
+/**
+ * 설립 후 햇수. "30년"처럼 글에 박아 두면 해가 갈수록 회사를 깎아 말하게 된다.
+ * (1992년 설립인데 본문은 30년이라 적혀 있었다 — 홈 통계는 계산값이라 34였다)
+ *
+ * 정적 배포라 빌드 시점에 값이 굳는다. 해가 바뀌면 다시 빌드해야 따라온다.
+ */
+export const yearsInBusiness =
+  new Date().getFullYear() - Number(site.founded.slice(0, 4));
+
 export type NavChild = { href: string; label: string };
 
 export type NavItem = {
