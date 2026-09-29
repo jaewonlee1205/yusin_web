@@ -1,0 +1,44 @@
+import Container from "./Container";
+
+/**
+ * 하위 페이지 공통 상단 배너. 설계 도면을 옅게 깔아 제조업 톤을 잡는다.
+ *
+ * 리드 문구 길이가 페이지마다 달라 배너 높이가 들쭉날쭉하면, 메뉴를 옮겨 다닐 때
+ * 화면이 들썩인다. 그래서 배너 높이를 고정하고 내용을 세로 가운데로 맞춘다.
+ * 리드에는 두 줄 자리를 미리 비워 두어 한 줄짜리 문구여도 아래 여백이 같다.
+ */
+export default function PageHero({
+  eyebrow,
+  title,
+  lead,
+}: {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+}) {
+  return (
+    <div className="relative overflow-hidden bg-navy-deep">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[url('/images/blueprint-bg.webp')] bg-cover bg-center opacity-[0.06]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-brand"
+      />
+      <Container className="relative flex min-h-[13.5rem] flex-col justify-center py-12 sm:min-h-[19rem] sm:py-16">
+        <p className="text-xs font-bold tracking-[0.2em] text-brand-light">
+          {eyebrow}
+        </p>
+        <h1 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-5xl">
+          {title}
+        </h1>
+        {lead && (
+          <p className="mt-5 min-h-[3.25rem] max-w-2xl text-base leading-relaxed text-white/70 sm:min-h-[3.5rem] sm:text-lg">
+            {lead}
+          </p>
+        )}
+      </Container>
+    </div>
+  );
+}

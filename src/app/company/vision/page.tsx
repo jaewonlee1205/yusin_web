@@ -1,0 +1,50 @@
+import type { Metadata } from "next";
+import ContactCTA from "@/components/ContactCTA";
+import OrgChart from "@/components/OrgChart";
+import PageHero from "@/components/PageHero";
+import Section from "@/components/Section";
+import SubNav from "@/components/SubNav";
+import { philosophy, philosophyMotto } from "@/data/company";
+import { companyTabs } from "@/data/site";
+
+export const metadata: Metadata = {
+  title: "조직 · 경영이념",
+  description:
+    "설계·가공·튜닝·조립을 모두 사내에 둔 유신 F.A 시스템의 조직 구성과, 사회복지·연구개발 두 갈래의 경영이념입니다.",
+};
+
+export default function VisionPage() {
+  return (
+    <>
+      <PageHero
+        eyebrow="ORGANIZATION & VISION"
+        title="조직 · 경영이념"
+        lead="설계부터 튜닝까지 한 공장 안에서 끝내는 구성, 그리고 그 안에서 지키려는 것."
+      />
+      <SubNav items={companyTabs} />
+
+      <Section
+        eyebrow="ORGANIZATION"
+        title="조직도"
+        lead="설계·가공·튜닝·조립을 모두 사내에 두어 외주 없이 제작이 끝납니다. 문제가 생겨도 공정 사이에서 책임이 떠다니지 않습니다."
+      >
+        <OrgChart />
+      </Section>
+
+      <Section tone="navy" eyebrow="MOTTO & VISION" title={philosophyMotto}>
+        <div className="grid gap-px overflow-hidden rounded-lg bg-white/10 sm:grid-cols-2">
+          {philosophy.map((p) => (
+            <div key={p.title} className="bg-navy-deep p-8 sm:p-10">
+              <h3 className="text-xl font-bold text-brand-light">{p.title}</h3>
+              <p className="mt-4 text-sm leading-[1.9] text-white/70">
+                {p.body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <ContactCTA />
+    </>
+  );
+}
