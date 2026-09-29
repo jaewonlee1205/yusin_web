@@ -3,9 +3,7 @@ import ContactCTA from "@/components/ContactCTA";
 import OrgChart from "@/components/OrgChart";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
-import SubNav from "@/components/SubNav";
 import { philosophy, philosophyMotto } from "@/data/company";
-import { companyTabs } from "@/data/site";
 
 export const metadata: Metadata = {
   title: "조직도",
@@ -21,7 +19,6 @@ export default function VisionPage() {
         title="조직도"
         lead="설계부터 튜닝까지 한 공장 안에서 끝내는 구성, 그리고 그 안에서 지키려는 것."
       />
-      <SubNav items={companyTabs} />
 
       {/* 상단 배너 h1이 이미 "조직도"다. 섹션에 같은 제목과 eyebrow를 또 달면
           같은 말을 세 번 하는 셈이라, 설명 한 줄만 남기고 바로 조직도를 보여 준다. */}

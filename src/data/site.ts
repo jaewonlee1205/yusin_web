@@ -90,7 +90,3 @@ export const nav: NavItem[] = [
  * 가는 링크가 둘 있으면 중복이다. 모바일 메뉴와 푸터에는 그대로 남는다.
  */
 export const headerCta = { href: "/contact", label: "견적 문의" };
-
-/** 회사소개 그룹의 하위 탭. SubNav가 쓴다. */
-export const companyTabs: NavChild[] =
-  nav.find((item) => item.href === "/company")?.children ?? [];

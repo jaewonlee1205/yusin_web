@@ -3,9 +3,8 @@ import Link from "next/link";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
-import SubNav from "@/components/SubNav";
 import { greeting, meaning, overview } from "@/data/company";
-import { companyTabs, yearsInBusiness } from "@/data/site";
+import { yearsInBusiness } from "@/data/site";
 
 export const metadata: Metadata = {
   title: "회사소개",
@@ -21,7 +20,6 @@ export default function CompanyPage() {
         // 有信 해석은 아래 본문 카드가 맡는다. 배너에서 같은 말을 또 하지 않는다.
         lead={`1992년 설립 이후 ${yearsInBusiness}년간, 파츠피더 한 분야만 만들어 온 회사입니다.`}
       />
-      <SubNav items={companyTabs} />
 
       {/* 인사말 */}
       <Section eyebrow="GREETING" title={greeting.title}>

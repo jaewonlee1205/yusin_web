@@ -3,14 +3,12 @@ import Image from "next/image";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
-import SubNav from "@/components/SubNav";
 import {
   EQUIPMENT_GROUPS,
   equipmentByGroup,
   equipmentTotals,
   process,
 } from "@/data/company";
-import { companyTabs } from "@/data/site";
 
 export const metadata: Metadata = {
   title: "보유 설비",
@@ -25,7 +23,6 @@ export default function FacilityPage() {
         title="보유 설비"
         lead={`밀링·선반·용접기 등 ${equipmentTotals.kinds}종 ${equipmentTotals.units}대. 도면이 나오면 그다음은 전부 이 공장 안에서 진행됩니다.`}
       />
-      <SubNav items={companyTabs} />
 
       {/* 설비 요약 */}
       <div className="border-b border-line bg-surface">
