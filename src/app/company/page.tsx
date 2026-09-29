@@ -3,7 +3,7 @@ import Link from "next/link";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
-import { greeting, meaning, overview } from "@/data/company";
+import { intro, meaning, overview } from "@/data/company";
 import { yearsInBusiness } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -21,8 +21,8 @@ export default function CompanyPage() {
         lead={`1992년 설립 이후 ${yearsInBusiness}년간, 파츠피더 한 분야만 만들어 온 회사입니다.`}
       />
 
-      {/* 인사말 */}
-      <Section eyebrow="GREETING" title={greeting.title}>
+      {/* 회사 소개글 */}
+      <Section eyebrow="ABOUT" title={intro.title}>
         {/*
           한 단으로 쌓는다. 예전에는 오른쪽에 有信 카드를 세워 뒀는데, 카드가
           본문보다 228px 짧아 그 아래가 뚫려 보였다. 한 단이라고 컨테이너 폭을
@@ -30,11 +30,11 @@ export default function CompanyPage() {
           폭으로 묶고, 남는 오른쪽은 여백으로 둔다.
         */}
         <div className="max-w-3xl">
-          {greeting.paragraphs.map((paragraph, index) => (
+          {intro.paragraphs.map((paragraph, index) => (
             <p
               key={paragraph.slice(0, 20)}
               className={
-                // 첫 문단만 키워 인사말이 어디서 시작하는지 잡아 준다.
+                // 첫 문단만 키워 소개글이 어디서 시작하는지 잡아 준다.
                 index === 0
                   ? "text-lg leading-[1.85] text-ink sm:text-xl"
                   : "mt-5 text-base leading-[1.9] text-ink-soft"
@@ -43,9 +43,6 @@ export default function CompanyPage() {
               {paragraph}
             </p>
           ))}
-          <p className="mt-10 border-t border-line pt-6 text-base font-bold text-ink">
-            {greeting.signature}
-          </p>
         </div>
 
         {/* 사명 풀이 — 본문과 같은 폭으로 꽉 채운 가로 블록 */}
