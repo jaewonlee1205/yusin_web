@@ -23,30 +23,46 @@ export default function CompanyPage() {
 
       {/* 인사말 */}
       <Section eyebrow="GREETING" title={greeting.title}>
-        <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
-          <div className="space-y-5">
-            {greeting.paragraphs.map((p) => (
-              <p
-                key={p.slice(0, 20)}
-                className="text-base leading-[1.9] text-ink-soft"
-              >
-                {p}
-              </p>
-            ))}
-            <p className="pt-4 text-base font-bold text-ink">
-              {greeting.signature}
+        {/*
+          한 단으로 쌓는다. 예전에는 오른쪽에 有信 카드를 세워 뒀는데, 카드가
+          본문보다 228px 짧아 그 아래가 뚫려 보였다. 한 단이라고 컨테이너 폭을
+          다 쓰면 한 줄이 70자를 넘어 눈이 다음 줄을 못 찾으므로 읽기 좋은
+          폭으로 묶고, 남는 오른쪽은 여백으로 둔다.
+        */}
+        <div className="max-w-3xl">
+          {greeting.paragraphs.map((paragraph, index) => (
+            <p
+              key={paragraph.slice(0, 20)}
+              className={
+                // 첫 문단만 키워 인사말이 어디서 시작하는지 잡아 준다.
+                index === 0
+                  ? "text-lg leading-[1.85] text-ink sm:text-xl"
+                  : "mt-5 text-base leading-[1.9] text-ink-soft"
+              }
+            >
+              {paragraph}
             </p>
-          </div>
+          ))}
+          <p className="mt-10 border-t border-line pt-6 text-base font-bold text-ink">
+            {greeting.signature}
+          </p>
+        </div>
 
-          <aside className="self-start rounded-lg border border-line bg-surface p-8">
-            <p className="text-5xl font-bold leading-none text-navy">
+        {/* 사명 풀이 — 본문과 같은 폭으로 꽉 채운 가로 블록 */}
+        <div className="mt-12 rounded-lg border border-line bg-surface p-8 sm:mt-16 sm:p-10">
+          <div className="grid gap-5 sm:grid-cols-[auto_1fr] sm:items-baseline sm:gap-10">
+            <p className="text-5xl font-bold leading-none text-navy sm:text-6xl">
               {meaning.hanja}
             </p>
-            <p className="mt-5 text-lg font-bold text-ink">{meaning.headline}</p>
-            <p className="mt-4 text-sm leading-relaxed text-ink-soft">
-              {meaning.body}
-            </p>
-          </aside>
+            <div>
+              <p className="text-lg font-bold text-ink sm:text-xl">
+                {meaning.headline}
+              </p>
+              <p className="mt-3 max-w-3xl text-base leading-[1.9] text-ink-soft">
+                {meaning.body}
+              </p>
+            </div>
+          </div>
         </div>
       </Section>
 
