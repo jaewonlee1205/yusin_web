@@ -23,8 +23,9 @@ const STATS = [
 export default function Home() {
   return (
     <>
-      {/* 1. Hero */}
-      <section className="relative overflow-hidden bg-navy-deep">
+      {/* 1. Hero — 헤더를 뺀 한 화면에 지표 줄까지 전부 들어가야 한다.
+          화면이 낮아지면 패딩·글자·이미지가 clamp()로 같이 줄어든다. */}
+      <section className="hero-screen relative flex flex-col overflow-hidden bg-navy-deep">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[url('/images/blueprint-bg.webp')] bg-cover bg-center opacity-[0.07]"
@@ -33,25 +34,26 @@ export default function Home() {
           aria-hidden="true"
           className="pointer-events-none absolute -right-40 top-1/2 h-[520px] w-[520px] -translate-y-1/2 rounded-full bg-navy/50 blur-3xl"
         />
-        <Container className="relative">
-          <div className="grid items-center gap-10 py-16 sm:py-24 lg:grid-cols-[1.1fr_1fr] lg:gap-14 lg:py-28">
+
+        <Container className="relative flex flex-1 items-center py-[clamp(1.5rem,4vh,3.5rem)]">
+          <div className="grid w-full items-center gap-[clamp(1.5rem,3.5vh,3.5rem)] lg:grid-cols-[1.1fr_1fr]">
             <div>
-              <p className="text-xs font-bold tracking-[0.25em] text-brand-light">
+              <p className="text-[clamp(0.625rem,1.1vh,0.75rem)] font-bold tracking-[0.25em] text-brand-light">
                 SINCE 1992 · FEEDING AUTOMATION SYSTEM
               </p>
-              <h1 className="mt-5 text-3xl font-bold leading-[1.25] tracking-tight text-white sm:text-5xl lg:text-[3.4rem]">
+              <h1 className="mt-[clamp(0.75rem,2vh,1.25rem)] text-[clamp(1.6rem,4.4vh,3.4rem)] font-bold leading-[1.25] tracking-tight text-white">
                 부품 자동정렬 공급기,
                 <br />
                 <span className="text-brand-light">설계부터 튜닝까지</span> 직접
                 만듭니다
               </h1>
-              <p className="mt-6 max-w-xl text-base leading-relaxed text-white/75 sm:text-lg">
+              <p className="mt-[clamp(0.75rem,2vh,1.5rem)] max-w-xl text-[clamp(0.875rem,1.9vh,1.125rem)] leading-relaxed text-white/75">
                 유신 F.A 시스템은 1992년부터 볼피더·직진피더·호퍼피더를 제작해
                 왔습니다. 공급할 부품을 보내 주시면 형상을 분석해 그 부품만을
                 위한 피더를 설계합니다.
               </p>
 
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-[clamp(1.25rem,3vh,2.25rem)] flex flex-row gap-3">
                 <Link
                   href="/products"
                   className="rounded bg-brand px-7 py-3.5 text-center text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
@@ -67,37 +69,41 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+            {/* 폰에서는 문구·버튼·지표를 한 화면에 넣을 자리가 없어 도면을 감춘다.
+                배경의 설계 도면은 그대로 남는다. */}
+            <div className="hidden justify-center sm:flex">
               <Image
                 src="/images/hero-unit.webp"
                 alt="파츠피더 구동부(진동기) 3D 도면"
                 width={659}
                 height={672}
                 priority
-                className="h-auto w-full drop-shadow-2xl"
+                className="h-auto max-h-[min(30svh,340px)] w-auto object-contain drop-shadow-2xl lg:max-h-[min(42svh,460px)]"
               />
             </div>
           </div>
         </Container>
 
-        {/* 2. 지표 스트립 */}
+        {/* 2. 지표 스트립 — 섹션 맨 아래에 붙어 항상 첫 화면 안에 보인다 */}
         <div className="relative border-t border-white/10 bg-black/20">
           <Container>
             <dl className="grid grid-cols-2 divide-white/10 sm:grid-cols-4 sm:divide-x">
               {STATS.map((s) => (
-                <div key={s.unit} className="px-1 py-7 sm:px-6 sm:text-center">
-                  <dt className="sr-only">{s.note}</dt>
-                  <dd>
-                    <span className="text-3xl font-bold tabular-nums text-white sm:text-4xl">
+                <div
+                  key={s.unit}
+                  className="px-1 py-[clamp(0.75rem,2.2vh,1.75rem)] sm:px-6 sm:text-center"
+                >
+                  <dd className="order-first">
+                    <span className="text-[clamp(1.375rem,3.2vh,2.25rem)] font-bold tabular-nums text-white">
                       {s.value}
                     </span>
                     <span className="ml-1 text-sm font-medium text-white/60">
                       {s.unit}
                     </span>
-                    <span className="mt-1.5 block text-xs text-white/45">
-                      {s.note}
-                    </span>
                   </dd>
+                  <dt className="mt-1 text-[clamp(0.625rem,1.3vh,0.75rem)] text-white/45">
+                    {s.note}
+                  </dt>
                 </div>
               ))}
             </dl>

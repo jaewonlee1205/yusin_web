@@ -45,6 +45,24 @@ body {
   overflow-wrap: break-word;
 }
 
+/*
+  홈 히어로를 헤더 아래 한 화면에 딱 맞춘다.
+  svh(작은 뷰포트 높이)를 쓰면 모바일에서 주소창이 접혔다 펴져도 높이가 튀지 않는다.
+  svh를 모르는 브라우저는 앞줄의 vh로 떨어진다.
+  min-height라서 내용이 넘치면 잘리지 않고 늘어난다 — 안전한 실패 방향이다.
+*/
+.hero-screen {
+  --header-h: calc(4rem + 1px); /* 헤더 h-16 + border-b 1px */
+  min-height: calc(100vh - var(--header-h));
+  min-height: calc(100svh - var(--header-h));
+}
+
+@media (min-width: 640px) {
+  .hero-screen {
+    --header-h: calc(5rem + 1px); /* 헤더 sm:h-20 + border-b 1px */
+  }
+}
+
 /* 키보드 포커스는 브랜드 컬러로 확실히 보이게 */
 :where(a, button, input, textarea, select, summary):focus-visible {
   outline: 2px solid var(--color-brand);
