@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Nanum_Brush_Script } from "next/font/google";
-import Link from "next/link";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
@@ -161,7 +160,9 @@ export default function CompanyPage() {
           {overview.map((row) => (
             <div
               key={row.label}
-              className={`bg-white px-6 py-6 sm:px-8 ${OVERVIEW_SPAN[row.span]}`}
+              // 좌우 여백을 lg 부터 넓힌다. 640~1023px 구간은 칸이 좁아지는데
+              // 여기서 px-8 을 쓰면 전화번호가 칸 폭에 2px 차로 닿는다.
+              className={`bg-white px-6 py-6 lg:px-8 ${OVERVIEW_SPAN[row.span]}`}
             >
               {/* 라벨을 값보다 작고 흐리게 둔다. 원래는 반대였는데, 정작
                   읽을 값이 약하고 라벨만 굵어 위계가 뒤집혀 있었다. */}
@@ -171,11 +172,25 @@ export default function CompanyPage() {
               <dd
                 className={
                   row.span === 2
-                    ? "mt-2.5 text-lg font-bold leading-snug text-ink"
+                    ? // tabular-nums: 대표번호와 팩스가 나란히 서므로 자릿수를
+                      // 맞춘다. 한글 값에는 아무 영향이 없다.
+                      "mt-2.5 text-lg font-bold leading-snug tabular-nums text-ink"
                     : "mt-2.5 text-base leading-[1.75] text-ink"
                 }
               >
-                {row.value}
+                {/* 전화·이메일은 눌러서 걸고 보낼 수 있게 한다. 팩스는 걸 수
+                    없어 href 가 없다 — 푸터·헤더·문의하기·오시는 길과 같은 규칙. */}
+                {row.href ? (
+                  <a
+                    href={row.href}
+                    className="transition-colors hover:text-brand"
+                  >
+                    {row.value}
+                  </a>
+                ) : (
+                  row.value
+                )}
+                {/* 영문 상호는 링크 밖에 둔다 */}
                 {row.sub && (
                   <span className="mt-1 block text-xs font-medium tracking-[0.08em] text-muted">
                     {row.sub}
@@ -185,20 +200,6 @@ export default function CompanyPage() {
             </div>
           ))}
         </dl>
-
-        {/* 회사소개 그룹의 나머지 두 페이지로 가는 길 */}
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
-          <NextCard
-            href="/company/vision"
-            label="조직도"
-            desc="설계부·가공부·튜닝부·조립부를 모두 자체 보유한 조직 구성."
-          />
-          <NextCard
-            href="/company/facility"
-            label="보유 설비"
-            desc="밀링·선반·용접기 등 21종 55대. 특수 형상도 외주 없이 직접 가공합니다."
-          />
-        </div>
       </Section>
 
       <ContactCTA />
@@ -218,42 +219,3 @@ const OVERVIEW_SPAN = {
   3: "sm:col-span-3",
   6: "sm:col-span-6",
 } as const;
-
-function NextCard({
-  href,
-  label,
-  desc,
-}: {
-  href: string;
-  label: string;
-  desc: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="group flex flex-col rounded-lg border border-line bg-white p-6 transition-colors hover:border-navy/30"
-    >
-      <span className="flex items-center justify-between gap-3">
-        <span className="text-base font-bold text-ink group-hover:text-brand">
-          {label}
-        </span>
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-          className="shrink-0 text-muted transition-transform group-hover:translate-x-1 group-hover:text-brand"
-        >
-          <path d="M5 12h14" />
-          <path d="m12 5 7 7-7 7" />
-        </svg>
-      </span>
-      <span className="mt-2 text-sm leading-relaxed text-ink-soft">{desc}</span>
-    </Link>
-  );
-}

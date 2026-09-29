@@ -60,6 +60,11 @@ export const overview: {
   /** 한글 상호 아래에 작게 붙일 영문 표기 */
   sub?: string;
   /**
+   * 값 자체가 동작을 갖는 항목(전화·이메일). 팩스는 걸 수 없어 비운다.
+   * 푸터·헤더·문의하기·오시는 길도 전부 같은 규칙이다.
+   */
+  href?: string;
+  /**
    * 6열 격자에서 차지할 칸 수. 값 길이에 맞춰 폭을 준다.
    *   2 = 1/3   짧은 값 셋을 한 줄에 세운다
    *   3 = 절반
@@ -86,6 +91,21 @@ export const overview: {
     span: 3,
   },
   { label: "소재지", value: site.address.road, span: 3 },
+  // 연락처는 site.ts 한 곳에서 온다 — 헤더·푸터·문의하기·오시는 길과 같은 값이라
+  // 번호가 바뀌면 site.ts 만 고치면 다섯 곳이 함께 바뀐다.
+  {
+    label: "대표번호",
+    value: site.tel,
+    href: `tel:${site.tel.replace(/-/g, "")}`,
+    span: 2,
+  },
+  { label: "팩스", value: site.fax, span: 2 },
+  {
+    label: "이메일",
+    value: site.email,
+    href: `mailto:${site.email}`,
+    span: 2,
+  },
 ];
 
 /** 조직도. 대표 아래 공장장이 4개 생산 부서를, 영업마케팅부는 대표 직속. */
