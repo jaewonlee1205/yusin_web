@@ -12,7 +12,8 @@ import StatCounter from "@/components/StatCounter";
 import { featuredClients, totalClients } from "@/data/clients";
 import { feederDefinition, products } from "@/data/products";
 import { site } from "@/data/site";
-import { videos } from "@/data/videos";
+import VideoEmbed from "@/components/VideoEmbed";
+import { featuredVideos } from "@/data/videos";
 
 const YEARS = new Date().getFullYear() - 1992;
 
@@ -257,33 +258,47 @@ export default function Home() {
         </ol>
       </Section>
 
-      {/* 7. 제품 영상 — videos.ts가 비어 있으면 통째로 렌더하지 않는다 */}
-      {videos.length > 0 && (
+      {/* 7. 제품 영상 — videos.ts가 비어 있으면 통째로 렌더하지 않는다.
+             여기는 맛보기 두 편만 걸고 나머지는 /videos 에서 본다. */}
+      {featuredVideos.length > 0 && (
         <Section
           tone="surface"
           eyebrow="VIDEO"
           title="제품 영상"
           lead="실제 현장에서 부품이 정렬되어 나오는 모습입니다."
         >
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {videos.map((v) => (
-              <figure key={v.id}>
-                <div className="relative aspect-video overflow-hidden rounded-lg border border-line bg-black">
-                  <iframe
-                    src={`https://www.youtube-nocookie.com/embed/${v.id}`}
-                    title={v.title}
-                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    loading="lazy"
-                    className="absolute inset-0 h-full w-full"
-                  />
-                </div>
-                <figcaption className="mt-3 text-sm font-medium text-ink-soft">
-                  {v.title}
-                </figcaption>
-              </figure>
+          <ul className="grid gap-6 sm:grid-cols-2 sm:gap-8">
+            {featuredVideos.map((v) => (
+              <li key={v.id}>
+                <figure>
+                  <VideoEmbed video={v} />
+                  <figcaption className="mt-3 text-sm font-bold text-ink">
+                    {v.title}
+                  </figcaption>
+                </figure>
+              </li>
             ))}
-          </div>
+          </ul>
+          <Link
+            href="/videos"
+            className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-navy underline underline-offset-4 hover:text-brand"
+          >
+            영상 전체 보기
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </Link>
         </Section>
       )}
 

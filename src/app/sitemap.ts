@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/company/facility",
     "/products",
     "/clients",
+    "/videos",
     "/location",
     "/contact",
   ];

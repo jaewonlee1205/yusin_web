@@ -169,7 +169,7 @@ export default function Header() {
                     key={item.href}
                     href={item.href}
                     aria-current={active ? "page" : undefined}
-                    className={`rounded px-3 py-2 text-[15px] font-medium transition-colors xl:px-4 ${
+                    className={`rounded px-2 py-2 text-[15px] font-medium transition-colors xl:px-4 ${
                       active ? "text-brand" : "text-ink-soft hover:text-ink"
                     }`}
                   >
@@ -202,7 +202,7 @@ export default function Header() {
                     aria-expanded={open}
                     aria-controls={panelId}
                     onClick={() => setOpenMenu(open ? null : item.href)}
-                    className={`flex items-center gap-1.5 rounded px-3 py-2 text-[15px] font-medium transition-colors xl:px-4 ${
+                    className={`flex items-center gap-1.5 rounded px-2 py-2 text-[15px] font-medium transition-colors xl:px-4 ${
                       active ? "text-brand" : "text-ink-soft hover:text-ink"
                     }`}
                   >
