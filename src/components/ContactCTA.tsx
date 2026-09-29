@@ -26,13 +26,28 @@ export default function ContactCTA() {
           <div className="flex w-full shrink-0 flex-col gap-3 sm:w-auto sm:flex-row">
             <Link
               href="/contact"
-              className="rounded bg-brand px-7 py-3.5 text-center text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+              className="group inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-6 py-4 text-[15px] font-semibold text-white transition-colors hover:bg-brand-dark sm:px-8"
             >
               온라인 문의하기
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+                className="shrink-0 transition-transform group-hover:translate-x-1"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
             </Link>
             <a
               href={`tel:${site.tel.replace(/-/g, "")}`}
-              className="rounded border border-white/30 px-7 py-3.5 text-center text-sm font-semibold text-white transition-colors hover:bg-white/10"
+              className="inline-flex items-center justify-center rounded-lg border border-white/45 px-6 py-4 text-[15px] font-semibold text-white transition-colors hover:border-white/70 hover:bg-white/10 sm:px-8"
             >
               전화 {site.tel}
             </a>

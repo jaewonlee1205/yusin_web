@@ -70,16 +70,17 @@ export default function Home() {
               >
                 부품 자동정렬 공급기,
                 <br />
-                <span className="text-brand-light">설계부터 튜닝까지</span> 직접
-                만듭니다
+                <span className="text-brand-light">설계부터 튜닝까지</span>{" "}
+                {/* 좁은 칼럼에서 "직접 / 만듭니다"로 끊기지 않게 묶어 둔다 */}
+                <span className="whitespace-nowrap">직접 만듭니다</span>
               </h1>
               <p
                 className="rise mt-[clamp(0.75rem,2vh,1.5rem)] max-w-xl text-[clamp(0.875rem,1.9vh,1.125rem)] leading-relaxed text-white/75"
                 style={{ animationDelay: "220ms" }}
               >
-                유신 F.A 시스템은 1992년부터 볼피더·직진피더·호퍼피더를 제작해
-                왔습니다. 공급할 부품을 보내 주시면 형상을 분석해 그 부품만을
-                위한 피더를 설계합니다.
+                볼피더·직진피더·호퍼피더를 30년 넘게 만들어 왔습니다. 부품
+                샘플을 보내 주시면 형상을 분석해 그 부품만을 위한 피더를
+                설계합니다.
               </p>
 
               <div
@@ -88,13 +89,14 @@ export default function Home() {
               >
                 <Link
                   href="/products"
-                  className="rounded bg-brand px-7 py-3.5 text-center text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+                  className="group inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-6 py-4 text-[15px] font-semibold text-white transition-colors hover:bg-brand-dark sm:px-8"
                 >
                   제품 살펴보기
+                  <ArrowRight />
                 </Link>
                 <Link
                   href="/contact"
-                  className="rounded border border-white/30 px-7 py-3.5 text-center text-sm font-semibold text-white transition-colors hover:bg-white/10"
+                  className="inline-flex items-center justify-center rounded-lg border border-white/45 px-6 py-4 text-[15px] font-semibold text-white transition-colors hover:border-white/70 hover:bg-white/10 sm:px-8"
                 >
                   견적 문의하기
                 </Link>
@@ -351,5 +353,26 @@ export default function Home() {
         }}
       />
     </>
+  );
+}
+
+/** CTA 버튼용 화살표. ProductCard·NavPanel과 같은 모양으로 맞췄다. */
+function ArrowRight() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="shrink-0 transition-transform group-hover:translate-x-1"
+    >
+      <path d="M5 12h14" />
+      <path d="m12 5 7 7-7 7" />
+    </svg>
   );
 }
