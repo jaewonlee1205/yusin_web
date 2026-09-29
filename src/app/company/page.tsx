@@ -153,8 +153,10 @@ export default function CompanyPage() {
           그러면 값 시작점이 행마다 달라져(실측 4종류) 훑기가 어려워진다.
           빈칸보다 정렬선이 중요하다.
 
-          라벨을 값보다 작고 흐리게 둔다. 원래는 반대였는데, 정작 읽을 값이
-          약하고 라벨만 굵어 위계가 뒤집혀 있었다.
+          라벨은 값보다 작게 두되 네이비로 눈에 걸리게 한다. 처음엔 라벨이
+          굵은 검정이고 값이 흐려 위계가 뒤집혀 있었는데, 그걸 고치면서 라벨을
+          너무 눌러 이번엔 훑을 기준선이 없어졌다. 크기로 위계를 두고 색으로
+          두 열을 가른다. (네이비는 설비 대수·본문 링크에 이미 쓰는 강조색이다)
         */}
         <dl className="overflow-hidden rounded-lg border border-line bg-white">
           {overview.map((row) => (
@@ -162,7 +164,7 @@ export default function CompanyPage() {
               key={row.label}
               className="border-b border-line px-6 py-3.5 last:border-b-0 sm:flex sm:items-baseline sm:gap-6"
             >
-              <dt className="text-xs font-bold tracking-[0.1em] text-muted sm:w-28 sm:shrink-0">
+              <dt className="text-[13px] font-bold tracking-[0.1em] text-navy sm:w-28 sm:shrink-0">
                 {row.label}
               </dt>
               {/* tabular-nums: 대표번호와 팩스가 위아래로 붙어 있어 자릿수를
