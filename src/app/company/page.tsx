@@ -4,12 +4,17 @@ import Link from "next/link";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
-import { intro, meaning, overview } from "@/data/company";
+import {
+  intro,
+  overview,
+  philosophy,
+  philosophyMotto,
+} from "@/data/company";
 import { yearsInBusiness } from "@/data/site";
 
 export const metadata: Metadata = {
   title: "회사소개",
-  description: `1992년 설립 이후 ${yearsInBusiness}년간 파츠피더 한 분야만 만들어 온 유신 F.A 시스템입니다. 회사 소개와 개요, 사명 有信의 뜻을 담았습니다.`,
+  description: `1992년 설립 이후 ${yearsInBusiness}년간 파츠피더 한 분야만 만들어 온 유신 F.A 시스템입니다. 회사 소개와 개요, 사회복지·연구개발 두 갈래의 경영이념을 담았습니다.`,
 };
 
 export default function CompanyPage() {
@@ -18,16 +23,14 @@ export default function CompanyPage() {
       <PageHero
         eyebrow="COMPANY"
         title="회사소개"
-        // 有信 해석은 아래 본문 카드가 맡는다. 배너에서 같은 말을 또 하지 않는다.
         lead={`1992년 설립 이후 ${yearsInBusiness}년간, 파츠피더 한 분야만 만들어 온 회사입니다.`}
       />
 
       {/* 회사 소개글 */}
       <Section eyebrow="ABOUT" title={intro.title}>
         {/*
-          왼쪽 글 · 오른쪽 사진. 예전에는 오른쪽에 有信 카드를 세워 뒀는데
-          카드가 글보다 228px 짧아 그 아래가 뚫려 보였다. 사진은 반대로 글보다
-          크므로 items-center 로 글을 세로 가운데에 맞춘다.
+          왼쪽 글 · 오른쪽 사진. 사진이 글보다 크므로 items-center 로 글을
+          세로 가운데에 맞춘다.
         */}
         <div className="grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:items-center lg:gap-16">
           <div>
@@ -58,28 +61,6 @@ export default function CompanyPage() {
             />
           </div>
         </div>
-
-        {/* 사명 풀이. 회사 소개의 마무리라 네이비로 무게를 준다.
-            질감은 상단 배너·하단 CTA 와 같은 tech-grid 를 쓴다. */}
-        <div className="relative mt-12 overflow-hidden rounded-lg bg-navy-deep p-8 sm:mt-16 sm:p-10">
-          <div
-            aria-hidden="true"
-            className="tech-grid pointer-events-none absolute inset-0 opacity-[0.08]"
-          />
-          <div className="relative grid gap-5 sm:grid-cols-[auto_1fr] sm:items-baseline sm:gap-10">
-            <p className="text-5xl font-bold leading-none text-brand-light sm:text-6xl">
-              {meaning.hanja}
-            </p>
-            <div>
-              <p className="text-lg font-bold text-white sm:text-xl">
-                {meaning.headline}
-              </p>
-              <p className="mt-3 max-w-3xl text-base leading-[1.9] text-white/75">
-                {meaning.body}
-              </p>
-            </div>
-          </div>
-        </div>
       </Section>
 
       {/* 회사 개요 */}
@@ -99,12 +80,36 @@ export default function CompanyPage() {
             </div>
           ))}
         </dl>
+      </Section>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+      {/* 경영이념 — 조직도 페이지보다 회사 개요 바로 밑이 어울린다.
+          다음 페이지 카드를 이 뒤로 보내, 배경이 회색 → 네이비 → 흰색 → 네이비로
+          번갈아 네이비 두 블록이 맞닿지 않는다. */}
+      <Section
+        tone="navy"
+        eyebrow="MANAGEMENT PHILOSOPHY"
+        title={philosophyMotto}
+        lead="사회복지와 연구개발, 두 갈래로 지켜 온 경영이념입니다."
+      >
+        <div className="grid gap-px overflow-hidden rounded-lg bg-white/10 sm:grid-cols-2">
+          {philosophy.map((p) => (
+            <div key={p.title} className="bg-navy-deep p-8 sm:p-10">
+              <h3 className="text-xl font-bold text-brand-light">{p.title}</h3>
+              <p className="mt-4 text-sm leading-[1.9] text-white/70">
+                {p.body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* 회사소개 그룹의 나머지 두 페이지로 가는 길 */}
+      <Section>
+        <div className="grid gap-4 sm:grid-cols-2">
           <NextCard
             href="/company/vision"
             label="조직도"
-            desc="설계·가공·튜닝·조립을 모두 사내에 둔 조직 구성과, 회사가 지키려는 두 가지 방향."
+            desc="설계부·가공부·튜닝부·조립부를 모두 자체 보유한 조직 구성."
           />
           <NextCard
             href="/company/facility"
