@@ -40,7 +40,7 @@ export const site = {
   },
 } as const;
 
-export type NavChild = { href: string; label: string; desc?: string };
+export type NavChild = { href: string; label: string };
 
 export type NavItem = {
   href: string;
@@ -61,21 +61,11 @@ export const nav: NavItem[] = [
     label: "회사소개",
     panel: "list",
     children: [
-      {
-        href: "/company",
-        label: "회사소개",
-        desc: "인사말 · 회사 개요 · 사명",
-      },
-      {
-        href: "/company/vision",
-        label: "조직 · 경영이념",
-        desc: "조직도 · 사회복지 · 연구개발",
-      },
-      {
-        href: "/company/facility",
-        label: "보유 설비",
-        desc: "21종 55대 · 가공 도면 · 제작 공정",
-      },
+      // 부모 메뉴가 이미 "회사소개"라 첫 항목까지 같은 이름이면 어색하다.
+      // 실제 내용으로 부른다.
+      { href: "/company", label: "인사말 · 회사 개요" },
+      { href: "/company/vision", label: "조직도 · 경영이념" },
+      { href: "/company/facility", label: "보유 설비" },
     ],
   },
   { href: "/products", label: "제품", panel: "products" },

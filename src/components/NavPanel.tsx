@@ -77,9 +77,6 @@ export function ListPanel({
               </span>
               <Arrow />
             </span>
-            {item.desc && (
-              <span className="mt-1 block text-xs text-muted">{item.desc}</span>
-            )}
           </Link>
         </li>
       ))}

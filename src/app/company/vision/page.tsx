@@ -8,7 +8,7 @@ import { philosophy, philosophyMotto } from "@/data/company";
 import { companyTabs } from "@/data/site";
 
 export const metadata: Metadata = {
-  title: "조직 · 경영이념",
+  title: "조직도 · 경영이념",
   description:
     "설계·가공·튜닝·조립을 모두 사내에 둔 유신 F.A 시스템의 조직 구성과, 사회복지·연구개발 두 갈래의 경영이념입니다.",
 };
@@ -18,7 +18,7 @@ export default function VisionPage() {
     <>
       <PageHero
         eyebrow="ORGANIZATION & VISION"
-        title="조직 · 경영이념"
+        title="조직도 · 경영이념"
         lead="설계부터 튜닝까지 한 공장 안에서 끝내는 구성, 그리고 그 안에서 지키려는 것."
       />
       <SubNav items={companyTabs} />
