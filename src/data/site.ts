@@ -61,10 +61,11 @@ export const nav: NavItem[] = [
     label: "회사소개",
     panel: "list",
     children: [
-      // 부모 메뉴가 이미 "회사소개"라 첫 항목까지 같은 이름이면 어색하다.
-      // 실제 내용으로 부른다.
-      { href: "/company", label: "인사말 · 회사 개요" },
-      { href: "/company/vision", label: "조직도 · 경영이념" },
+      // 메뉴는 스캔하는 곳이라 항목마다 한 낱말만 둔다. 부모가 이미 "회사소개"라
+      // 첫 항목까지 같은 이름이면 어색해서, 페이지 안에 실제로 있는 것을 부른다.
+      // (회사 개요는 인사말과, 경영이념은 조직도와 같은 페이지에 있다.)
+      { href: "/company", label: "인사말" },
+      { href: "/company/vision", label: "조직도" },
       { href: "/company/facility", label: "보유 설비" },
     ],
   },

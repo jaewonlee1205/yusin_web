@@ -193,7 +193,7 @@ export default function Header() {
                     <div
                       id={panelId}
                       className={`absolute left-1/2 top-full z-50 -translate-x-1/2 pt-2 ${
-                        item.panel === "products" ? "w-[30rem]" : "w-64"
+                        item.panel === "products" ? "w-[30rem]" : "w-56"
                       }`}
                     >
                       <div className="overflow-hidden rounded-lg border border-line bg-white shadow-xl shadow-ink/10">

@@ -73,7 +73,7 @@ export default function CompanyPage() {
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           <NextCard
             href="/company/vision"
-            label="조직도 · 경영이념"
+            label="조직도"
             desc="설계·가공·튜닝·조립을 모두 사내에 둔 조직 구성과, 회사가 지키려는 두 가지 방향."
           />
           <NextCard
