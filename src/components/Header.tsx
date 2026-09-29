@@ -108,9 +108,19 @@ export default function Header() {
         scrolled ? "shadow-lg shadow-ink/[0.07]" : ""
       }`}
     >
-      <Container>
-        <div className="flex h-16 items-center justify-between gap-4 sm:h-20">
-          <Link href="/" className="shrink-0" aria-label={`${site.name} 홈으로`}>
+      <Container width="wide">
+        {/*
+          lg 이상에서는 3칸 그리드를 쓴다. justify-between 으로 두면 로고(279px)와
+          우측 그룹(225px)의 폭 차이만큼 메뉴가 한쪽으로 밀린다.
+          minmax(0,1fr) 이라야 양옆 칸이 정확히 같은 폭이 되어 메뉴가 화면 정중앙에 온다.
+          (그냥 1fr 은 칸의 최소 폭이 내용 크기라 다시 치우친다)
+        */}
+        <div className="flex h-16 items-center justify-between gap-4 sm:h-20 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
+          <Link
+            href="/"
+            className="shrink-0 lg:justify-self-start"
+            aria-label={`${site.name} 홈으로`}
+          >
             <Image
               src="/images/logo.png"
               alt={site.name}
@@ -138,7 +148,7 @@ export default function Header() {
                     key={item.href}
                     href={item.href}
                     aria-current={active ? "page" : undefined}
-                    className={`rounded px-4 py-2 text-[15px] font-medium transition-colors ${
+                    className={`rounded px-3 py-2 text-[15px] font-medium transition-colors xl:px-4 ${
                       active ? "text-brand" : "text-ink-soft hover:text-ink"
                     }`}
                   >
@@ -171,7 +181,7 @@ export default function Header() {
                     aria-expanded={open}
                     aria-controls={panelId}
                     onClick={() => setOpenMenu(open ? null : item.href)}
-                    className={`flex items-center gap-1.5 rounded px-4 py-2 text-[15px] font-medium transition-colors ${
+                    className={`flex items-center gap-1.5 rounded px-3 py-2 text-[15px] font-medium transition-colors xl:px-4 ${
                       active ? "text-brand" : "text-ink-soft hover:text-ink"
                     }`}
                   >
@@ -203,7 +213,7 @@ export default function Header() {
             })}
           </nav>
 
-          <div className="hidden items-center gap-4 lg:flex">
+          <div className="hidden items-center gap-6 lg:flex lg:justify-self-end">
             <a
               href={`tel:${site.tel.replace(/-/g, "")}`}
               className="inline-flex items-center gap-1.5 text-sm font-semibold tabular-nums text-navy transition-colors hover:text-brand"
@@ -262,7 +272,7 @@ export default function Header() {
           id="mobile-nav"
           className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line bg-white lg:hidden"
         >
-          <Container className="py-2">
+          <Container width="wide" className="py-2">
             <nav aria-label="모바일 메뉴" className="flex flex-col">
               {nav.map((item) => {
                 const children =
