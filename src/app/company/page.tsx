@@ -146,17 +146,41 @@ export default function CompanyPage() {
 
       {/* 회사 개요 */}
       <Section tone="surface" eyebrow="OVERVIEW" title="회사 개요">
-        <dl className="overflow-hidden rounded-lg border border-line bg-white">
+        {/*
+          격자를 dl 자체에 건다. 안에 격자용 div 를 한 겹 더 두면 dt/dd 가
+          dl 의 손자가 되어 HTML 이 깨진다 — dt/dd 를 감싸는 div 는 dl 의
+          직계 자식이어야 한다.
+
+          gap-px + bg-line + 흰 셀로 칸 사이 선을 낸다. 보유 설비 페이지의
+          설비 요약 표와 같은 방식이다.
+
+          값 길이가 제각각이라 한 틀에 넣으면 폭이 남는다. 6열 격자를 깔고
+          값 길이에 맞춰 칸 수를 나눠 준다 (아래 OVERVIEW_SPAN 참고).
+        */}
+        <dl className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-6">
           {overview.map((row) => (
             <div
               key={row.label}
-              className="flex flex-col border-b border-line last:border-0 sm:flex-row"
+              className={`bg-white px-6 py-6 sm:px-8 ${OVERVIEW_SPAN[row.span]}`}
             >
-              <dt className="bg-surface px-6 py-4 text-sm font-bold text-ink sm:w-44 sm:shrink-0">
+              {/* 라벨을 값보다 작고 흐리게 둔다. 원래는 반대였는데, 정작
+                  읽을 값이 약하고 라벨만 굵어 위계가 뒤집혀 있었다. */}
+              <dt className="text-xs font-bold tracking-[0.15em] text-muted">
                 {row.label}
               </dt>
-              <dd className="px-6 py-4 text-sm leading-relaxed text-ink-soft">
+              <dd
+                className={
+                  row.span === 2
+                    ? "mt-2.5 text-lg font-bold leading-snug text-ink"
+                    : "mt-2.5 text-base leading-[1.75] text-ink"
+                }
+              >
                 {row.value}
+                {row.sub && (
+                  <span className="mt-1 block text-xs font-medium tracking-[0.08em] text-muted">
+                    {row.sub}
+                  </span>
+                )}
               </dd>
             </div>
           ))}
@@ -181,6 +205,19 @@ export default function CompanyPage() {
     </>
   );
 }
+
+/**
+ * overview 의 span 값을 그리드 클래스로 옮긴다.
+ *
+ * `sm:col-span-${row.span}` 처럼 붙여 쓰면 안 된다 — Tailwind 는 소스에 적힌
+ * 문자열을 그대로 훑어 클래스를 만들기 때문에, 조합해 만든 이름은 CSS 에
+ * 나오지 않는다.
+ */
+const OVERVIEW_SPAN = {
+  2: "sm:col-span-2",
+  3: "sm:col-span-3",
+  6: "sm:col-span-6",
+} as const;
 
 function NextCard({
   href,

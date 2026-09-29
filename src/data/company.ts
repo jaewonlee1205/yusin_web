@@ -35,7 +35,7 @@
  *    제작품을 만드는 회사라는 색을 담았다. 원문은 git 이력에 있다.
  */
 
-import { yearsInBusiness } from "./site";
+import { site, yearsInBusiness } from "./site";
 
 /** 회사 소개글. /company 첫 섹션에 들어간다. */
 export const intro = {
@@ -46,23 +46,46 @@ export const intro = {
   ],
 };
 
-export const overview: { label: string; value: string }[] = [
-  { label: "회사명", value: "유신 F.A 시스템 (YUSIN F.A SYSTEM)" },
-  { label: "설립연도", value: "1992년 6월 6일" },
-  { label: "대표", value: "이 준 희" },
+/**
+ * 회사 개요. 값 길이가 제각각이라 한 가지 행 모양으로는 폭이 남는다.
+ * 짧은 셋(회사명·설립연도·대표)은 가로로 나란히 세우고, 긴 셋은 span 으로
+ * 폭을 나눈다 — 주 사업만 전폭, 제작 품목과 소재지는 반반.
+ *
+ * 회사명과 소재지는 site.ts 에 같은 값이 있어 거기서 가져온다. 주소는
+ * site.ts 의 도로명 주소가 확정되면 이 표도 같이 따라온다.
+ */
+export const overview: {
+  label: string;
+  value: string;
+  /** 한글 상호 아래에 작게 붙일 영문 표기 */
+  sub?: string;
+  /**
+   * 6열 격자에서 차지할 칸 수. 값 길이에 맞춰 폭을 준다.
+   *   2 = 1/3   짧은 값 셋을 한 줄에 세운다
+   *   3 = 절반
+   *   6 = 전폭
+   * 한 줄의 합이 6이 되게 맞춘다. (2+2+2 / 6 / 3+3)
+   */
+  span: 2 | 3 | 6;
+}[] = [
+  // 원문은 "유신 F.A 시스템 (YUSIN F.A SYSTEM)" 한 줄이었다. 사실은 그대로 두고
+  // 한글/영문만 나눠 담는다 — 좁은 칸에서 괄호째 줄바꿈되지 않게 하려는 것이다.
+  { label: "회사명", value: site.name, sub: site.nameEn, span: 2 },
+  { label: "설립연도", value: "1992년 6월 6일", span: 2 },
+  { label: "대표", value: "이 준 희", span: 2 },
   {
     label: "주 사업",
     value:
       "파츠피더(부품 자동정렬 공급기) 설계·제작, 전자제품 제조기계 설치·정비",
+    // 개요에서 가장 중요한 한 줄이라 전폭으로 둔다.
+    span: 6,
   },
   {
     label: "제작 품목",
     value: "볼피더, 직진피더, 호퍼피더, 방음커버, 컨트롤러, 전용기",
+    span: 3,
   },
-  {
-    label: "소재지",
-    value: "경기도 시흥시 정왕동 1288-2 동우디지털파크 A동 323~324호",
-  },
+  { label: "소재지", value: site.address.road, span: 3 },
 ];
 
 /** 조직도. 대표 아래 공장장이 4개 생산 부서를, 영업마케팅부는 대표 직속. */
