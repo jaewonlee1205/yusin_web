@@ -57,7 +57,7 @@ export default function Home() {
             drift(느린 확대)는 걸지 않는다 — 영상 자체가 움직여 겹치면 과하다. */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-[0.38]"
+          className="pointer-events-none absolute inset-0 opacity-[0.5]"
         >
           <Image
             src="/images/hero-poster.webp"
@@ -90,10 +90,22 @@ export default function Home() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_45%,transparent_45%,rgba(6,38,92,0.72)_100%)]"
         />
-        {/* 배경 4 — 3D 렌더 뒤를 살짝 띄우는 글로우 */}
+        {/* 배경 4 — 3D 도면 뒤에 까는 어두운 자리.
+
+            영상이 가장 잘 드러나는 지점이 하필 도면 자리다. 영상을 켠 화면과 끈
+            화면의 픽셀 차이를 격자로 재 보면 도면 뒤가 나머지보다 28% 더 드러난다.
+            볼 테두리의 큰 곡선과 도면의 원형 플레이트가 포개져 서로를 방해하므로
+            도면 뒤만 눌러 준다. 영상은 비어 있는 아래쪽·가장자리에서 보인다.
+
+            앞서 여기 있던 원형 글로우(-right-32)는 목적은 같았지만 중심이 화면
+            밖이라 정작 도면 뒤를 덮지 못했다.
+
+            왼쪽을 걷어내 영상을 보이게 하는 방향은 쓰지 않는다 — 거긴 글자 자리다.
+
+            도면은 sm 미만에서 숨으므로(아래 rise-zoom 블록) 스크림도 sm 부터 건다. */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-32 top-1/2 h-[560px] w-[560px] -translate-y-1/2 rounded-full bg-navy/45 blur-3xl"
+          className="pointer-events-none absolute inset-0 hidden bg-[radial-gradient(ellipse_34%_46%_at_70%_44%,rgba(6,38,92,0.95)_0%,rgba(6,38,92,0.65)_55%,transparent_80%)] sm:block"
         />
 
         <Container className="relative flex flex-1 items-center py-[clamp(1.5rem,4vh,3.5rem)]">
