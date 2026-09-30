@@ -4,7 +4,8 @@ import { organization } from "@/data/company";
  * 조직도.
  *
  * 대표 아래로 영업마케팅부와 공장장이 나란히 서고(둘 다 대표 직속이라 같은
- * 층이다), 공장장 아래에 네 개 제작 부서가 붙는다.
+ * 층이다), 각 아래에 팀이 붙는다. 두 갈래가 같은 모양이라 divisions 를 그냥
+ * 순회한다.
  *
  * 마크업은 중첩 목록 하나뿐이다 — 계층을 ul/li 로 그대로 표현하고, 화면 폭에
  * 따른 두 모양은 CSS 로만 만든다. 전에는 데스크톱용과 모바일용 박스를 따로
@@ -14,12 +15,12 @@ import { organization } from "@/data/company";
  *           위계가 무너진다 — 전에는 영업마케팅부가 공장장 위에 와서 마치
  *           상위 조직처럼 읽혔다.
  *   lg      대표 직속 두 칸을 같은 폭으로 나눠 대표가 정확히 그 가운데에
- *           오게 한다. 네 부서는 공장장 칸 안에서 2x2 로 놓는다 — 한 줄로
- *           펼치면 공장장 칸이 한없이 넓어져 대표가 오른쪽으로 밀리고,
- *           칸을 반씩 나누면 카드가 135px 까지 좁아져 역할 설명이 깨진다.
+ *           온다. 팀은 각 칸 안에서 2열로 놓는다 — 한 줄로 펼치면 공장장 칸이
+ *           한없이 넓어져 대표가 오른쪽으로 밀리고, 칸을 반씩 나누면 카드가
+ *           135px 까지 좁아져 역할 설명이 깨진다.
  */
 export default function OrgChart() {
-  const { head, direct, plant } = organization;
+  const { head, divisions } = organization;
 
   return (
     <div className="rounded-lg border border-line bg-surface p-6 sm:p-10">
@@ -28,35 +29,32 @@ export default function OrgChart() {
           <Node label={head} tone="brand" />
 
           <ul className={BRANCH}>
-            {direct.map((name) => (
-              <li key={name} className={`${BRANCH_ITEM} lg:flex lg:items-start lg:justify-center`}>
-                <Node label={name} tone="navy" />
+            {divisions.map((division) => (
+              <li
+                key={division.title}
+                className={`${BRANCH_ITEM} lg:flex lg:flex-col lg:items-center lg:justify-start`}
+              >
+                <Node label={division.title} tone="navy" />
+
+                {/* 갈래 -> 팀. lg 에서는 격자라 개별 연결선 대신 가운데로
+                    내려오는 세로선 하나로 묶는다. */}
+                <ul className={LEAF}>
+                  {division.teams.map((team) => (
+                    <li key={team.name} className={LEAF_ITEM}>
+                      {/* 팀은 이름만으로 부족해 하는 일을 함께 적는다 */}
+                      <div className="h-full rounded-lg border border-line bg-white p-4 sm:p-5 lg:text-center">
+                        <p className="text-base font-bold text-ink">
+                          {team.name}
+                        </p>
+                        <p className="mt-1.5 text-xs leading-relaxed text-muted">
+                          {team.role}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
               </li>
             ))}
-
-            <li
-              className={`${BRANCH_ITEM} lg:flex lg:flex-col lg:items-center lg:justify-start`}
-            >
-              <Node label={plant.title} tone="navy" />
-
-              {/* 공장장 -> 네 부서. lg 에서는 격자라 개별 연결선 대신
-                  가운데로 내려오는 세로선 하나로 묶는다. */}
-              <ul className={LEAF}>
-                {plant.teams.map((team) => (
-                  <li key={team.name} className={LEAF_ITEM}>
-                    {/* 부서는 이름만으로 부족해 하는 일을 함께 적는다 */}
-                    <div className="h-full rounded-lg border border-line bg-white p-4 sm:p-5 lg:text-center">
-                      <p className="text-base font-bold text-ink">
-                        {team.name}
-                      </p>
-                      <p className="mt-1.5 text-xs leading-relaxed text-muted">
-                        {team.role}
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </li>
           </ul>
         </li>
       </ul>
@@ -69,9 +67,19 @@ const INDENT = "mt-3 space-y-3 border-l border-line pl-5";
 /** 왼쪽 세로선에서 박스로 뻗는 짧은 가로선. 박스 첫 줄 높이에 맞춘다. */
 const TICK =
   "relative before:absolute before:left-[-20px] before:top-7 before:h-px before:w-5 before:bg-line";
+/** lg 에서 부모 아래로 내려오는 세로선. 목록 위쪽 빈 자리(pt)를 지난다. */
+const DROP =
+  "lg:relative lg:before:absolute lg:before:left-1/2 lg:before:top-0 lg:before:h-8 lg:before:w-px lg:before:bg-line";
 
-/** 대표 직속. lg 에서 두 칸을 같은 폭으로 나눈다. */
-const BRANCH = `${INDENT} lg:mt-0 lg:grid lg:w-full lg:grid-cols-2 lg:gap-x-6 lg:space-y-0 lg:border-l-0 lg:pl-0 lg:pt-8`;
+/**
+ * 대표 직속. lg 에서 두 칸을 같은 폭으로 나눈다.
+ *
+ * pt 가 64px 인 이유 — 위 32px 은 대표에서 내려오는 세로선 자리(DROP),
+ * 아래 32px 은 가로선에서 각 칸으로 내려가는 세로선 자리다. 그래야 대표
+ * 아래가 ㅗ 모양이 된다. 전에는 pt 가 32px 이라 가로선이 대표 아랫변에
+ * 딱 붙어 대표가 선에 얹힌 것처럼 보였다.
+ */
+const BRANCH = `${INDENT} ${DROP} lg:mt-0 lg:grid lg:w-full lg:grid-cols-2 lg:gap-x-6 lg:space-y-0 lg:border-l-0 lg:pl-0 lg:pt-16`;
 
 /**
  * 대표 직속 항목의 연결선.
@@ -84,10 +92,10 @@ const BRANCH_ITEM =
   "lg:first:after:left-1/2 lg:first:after:right-[-12px] " +
   "lg:last:after:left-[-12px] lg:last:after:right-1/2";
 
-/** 네 부서. lg 에서 2x2 격자이고, 위로 세로선 하나가 공장장까지 올라간다. */
-const LEAF = `${INDENT} lg:relative lg:mt-0 lg:grid lg:w-full lg:grid-cols-2 lg:gap-3 lg:space-y-0 lg:border-l-0 lg:pl-0 lg:pt-8 lg:before:absolute lg:before:left-1/2 lg:before:top-0 lg:before:h-8 lg:before:w-px lg:before:bg-line`;
+/** 팀 목록. lg 에서 2열 격자이고, 위로 세로선 하나가 갈래까지 올라간다. */
+const LEAF = `${INDENT} ${DROP} lg:mt-0 lg:grid lg:w-full lg:grid-cols-2 lg:gap-3 lg:space-y-0 lg:border-l-0 lg:pl-0 lg:pt-8`;
 
-/** 부서 항목 — lg 에서는 격자로 묶여 있어 개별 연결선이 필요 없다. */
+/** 팀 항목 — lg 에서는 격자로 묶여 있어 개별 연결선이 필요 없다. */
 const LEAF_ITEM = `${TICK} lg:before:hidden`;
 
 function Node({ label, tone }: { label: string; tone: "brand" | "navy" }) {
