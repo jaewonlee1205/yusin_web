@@ -146,8 +146,12 @@ export default function CompanyPage() {
       {/* 회사 개요 */}
       <Section tone="surface" eyebrow="OVERVIEW" title="회사 개요">
         {/*
-          한 줄에 한 항목. 라벨을 왼쪽 고정 폭(sm:w-28)에 두는 게 이 표의
-          핵심이다 — 값이 전부 같은 x 에서 시작해 눈이 아래로만 내려간다.
+          한 줄에 한 항목. 라벨을 왼쪽 고정 열(grid-cols-[7rem_1fr])에 두는 게
+          이 표의 핵심이다 — 값이 전부 같은 x 에서 시작해 눈이 아래로만 내려간다.
+
+          라벨과 값 사이 세로 구분선은 dt 의 border-r 이다. 다만 세로 패딩을
+          행이 아니라 dt/dd 가 들고 있어야 선이 행 끝까지 이어진다 — 행에
+          패딩이 남아 있으면 위아래 14px 씩 끊겨 점선처럼 보인다(실측 46%).
 
           폭이 남는 게 아까워 값 길이에 맞춰 칸을 나눈 적이 있는데(6열 격자),
           그러면 값 시작점이 행마다 달라져(실측 4종류) 훑기가 어려워진다.
@@ -162,14 +166,18 @@ export default function CompanyPage() {
           {overview.map((row) => (
             <div
               key={row.label}
-              className="border-b border-line px-6 py-3.5 last:border-b-0 sm:flex sm:items-baseline sm:gap-6"
+              className="border-b border-line px-6 last:border-b-0 sm:grid sm:grid-cols-[7rem_1fr]"
             >
-              <dt className="text-[13px] font-bold tracking-[0.1em] text-navy sm:w-28 sm:shrink-0">
+              {/* sm:leading-[1.875] — 13px x 1.875 = 24.375px 로, 값(15px x 1.625)의
+                  줄 상자와 같게 맞춘다. 격자는 baseline 정렬이 아니라 이렇게 해야
+                  라벨과 값의 밑줄이 맞는다(남는 차 1.8px).
+                  sm:w-28 을 쓰면 안 된다 — dt 폭이 고정돼 격자 열 설정을 덮어쓴다. */}
+              <dt className="pt-3.5 text-[13px] font-bold tracking-[0.1em] text-navy sm:border-r sm:border-line sm:py-3.5 sm:pr-6 sm:leading-[1.875]">
                 {row.label}
               </dt>
               {/* tabular-nums: 대표번호와 팩스가 위아래로 붙어 있어 자릿수를
                   맞춰야 한다. 한글 값에는 아무 영향이 없다. */}
-              <dd className="mt-1.5 text-[15px] leading-relaxed tabular-nums text-ink sm:mt-0 sm:flex-1">
+              <dd className="mt-1.5 pb-3.5 text-[15px] leading-relaxed tabular-nums text-ink sm:mt-0 sm:py-3.5 sm:pl-6">
                 {/* 전화·이메일은 눌러서 걸고 보낼 수 있게 한다. 팩스는 걸 수
                     없어 href 가 없다 — 푸터·헤더·문의하기·오시는 길과 같은 규칙. */}
                 {row.href ? (
