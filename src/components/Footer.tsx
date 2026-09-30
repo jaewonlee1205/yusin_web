@@ -57,12 +57,8 @@ const FOOTER_GROUPS: {
 const LINK =
   "inline-block py-1 text-sm text-ink-soft transition-colors hover:text-brand";
 
-/* 열 제목 위 짧은 브랜드 선. 묶음의 시작을 분명히 하고 로고의 빨강과
-   호응한다. 글자까지 brand 색으로 해 보니 제목이 링크보다 튀었다 —
-   푸터의 주인공은 링크라 색은 ink 로 두고 선으로만 준다.
-   자간 0.2em 은 Section.tsx 의 eyebrow 와 같은 값이다(푸터만 0.15em 이었다). */
-const HEADING =
-  "relative pt-3.5 text-xs font-bold tracking-[0.2em] text-ink before:absolute before:left-0 before:top-0 before:h-0.5 before:w-[18px] before:bg-brand before:content-['']";
+/* 자간 0.2em 은 Section.tsx 의 eyebrow 와 같은 값이다(푸터만 0.15em 이었다). */
+const HEADING = "text-xs font-bold tracking-[0.2em] text-ink";
 
 export default function Footer() {
   return (
