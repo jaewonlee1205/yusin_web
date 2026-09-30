@@ -15,12 +15,22 @@ import { site } from "@/data/site";
  * 주제별로 나누면서 회사소개 아래 중첩 목록(조직도·보유 설비)이 없어졌다.
  * 한 열에 10행을 세로로 쌓던 것을 여러 열로 나눌 수 없었던 이유가 그 중첩이었다.
  */
-const FOOTER_GROUPS: { title: string; links: { href: string; label: string }[] }[] =
+const FOOTER_GROUPS: {
+  title: string;
+  /**
+   * prefix 는 화면에서 감추고 글자에만 붙이는 앞말이다. 열 제목이 있어
+   * 화면에서는 "개요" 로 족하지만, 검색엔진과 스크린리더는 링크 하나만
+   * 떼어 읽는다. aria-label 로는 안 된다 — Lighthouse link-text 는
+   * 보이는 글자를 보기 때문에 sr-only 로 글자 자체를 온전하게 만든다.
+   */
+  links: { href: string; label: string; prefix?: string }[];
+}[] =
   [
     {
       title: "회사",
       links: [
-        { href: "/company", label: "회사 개요" },
+        // 열 제목이 이미 [회사]다. site.ts 의 드롭다운도 "개요" 라 표기가 맞는다.
+        { href: "/company", label: "개요", prefix: "회사 " },
         { href: "/company/vision", label: "조직도" },
         { href: "/company/facility", label: "보유 설비" },
         { href: "/clients", label: "납품실적" },
@@ -47,10 +57,9 @@ export default function Footer() {
       {/* 헤더와 같은 wide 폭이다. 푸터도 사이트 크롬인데 content(1152) 를
           쓰고 있어 헤더 로고와 64px 어긋나 있었다. 하단 CTA 도 같이 넓혔다. */}
       <Container width="wide" className="py-12 sm:py-16">
-        {/* lg 첫 열이 넓은 이유가 둘이다. (1) 로고가 sm:h-8 에서 248px 라
-            좁으면 preflight 의 img{max-width:100%} 에 눌린다. (2) 아래 소개문이
-            한 줄로 들어가야 한다 — 1.5fr 이면 열 343px 에 글자 337px 라
-            여유가 6px 뿐이고, 1.7fr 이면 373px 에 36px 여유가 생긴다. */}
+        {/* lg 첫 열 폭은 로고가 정한다 — sm:h-8 에서 248px 라 좁으면 preflight 의
+            img{max-width:100%} 에 눌린다. 기준은 lg 가 시작하는 1024px 다.
+            거기서 여유가 1.7fr 37px / 1.6fr 26px / 1.5fr 14px 라 1.7fr 로 둔다. */}
         <div className="grid grid-cols-2 gap-10 sm:gap-x-12 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)] lg:gap-10">
           <div className="col-span-2 sm:col-span-1">
             <Image
@@ -60,11 +69,12 @@ export default function Footer() {
               height={52}
               className="h-7 w-auto sm:h-8"
             />
-            {/* 제품 이름은 바로 옆 [제품] 열에 일곱 개가 이미 있고, 설립연도는
-                회사소개에 있다. 여기서는 무엇을·어떻게만 남긴다. site.description
-                과 같은 문장 틀을 쓰던 것도 이참에 덜어냈다. */}
-            <p className="mt-5 max-w-sm text-sm leading-relaxed text-ink-soft">
-              부품 자동정렬 공급기를 설계부터 튜닝까지 직접 만듭니다.
+            {/* 로고가 이미 FEEDING AUTOMATION SYSTEM 을 달고 있어 문장을 한 번
+                더 쓰지 않는다. 태그라인으로 끊었다. 제품 이름은 바로 옆 [제품] 열에
+                일곱 개가 있고, 설립연도는 회사소개에 있다.
+                ("부품 자동정렬 공급기"는 홈·제품·회사소개·메타 설명에 그대로 있다) */}
+            <p className="mt-5 text-sm leading-relaxed text-ink-soft">
+              파츠피더 설계 · 제작
             </p>
 
             {/* 대표번호는 푸터에서 가장 중요한 한 줄이라 브랜드 블록 바로 아래,
@@ -98,8 +108,10 @@ export default function Footer() {
                 </li>
               ))}
               <li>
+                {/* 화면에는 열 제목이 있어 "전체 보기" 로 족하지만, 링크만
+                    떼어 읽는 쪽에는 "제품" 을 붙여 준다. */}
                 <Link href="/products" className={LINK}>
-                  제품 전체 보기
+                  <span className="sr-only">제품 </span>전체 보기
                 </Link>
               </li>
             </ul>
@@ -114,6 +126,9 @@ export default function Footer() {
                 {group.links.map((link) => (
                   <li key={link.href}>
                     <Link href={link.href} className={LINK}>
+                      {link.prefix && (
+                        <span className="sr-only">{link.prefix}</span>
+                      )}
                       {link.label}
                     </Link>
                   </li>
