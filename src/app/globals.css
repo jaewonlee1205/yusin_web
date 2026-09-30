@@ -30,8 +30,16 @@
   color-scheme: light;
 }
 
+/*
+  scroll-behavior 는 주지 않는다. smooth 를 걸면 페이지를 옮길 때 Next 가
+  스크롤을 맨 위로 되돌리는 것까지 부드러워져, 아래에 있다가 링크를 누르면
+  화면이 천천히 올라온 뒤에야 새 페이지가 보인다. 목적지는 바로 위에서
+  시작해야 한다.
+
+  맨 위로 버튼(BackToTop)은 JS 에서 스스로 한 프레임씩 올리므로 이 값과
+  무관하게 부드럽다 — 페이지 이동은 즉시, 버튼은 애니메이션.
+*/
 html {
-  scroll-behavior: smooth;
   /* sticky 헤더 높이만큼 앵커 위치를 내린다 */
   scroll-padding-top: 5rem;
 }
@@ -259,9 +267,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
   *,
   *::before,
   *::after {

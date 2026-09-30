@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { ChevronUpIcon } from "./icons";
 
+/** 맨 위까지 올라가는 데 걸리는 시간(ms). */
+const DURATION = 450;
+
 /** 이만큼 내려가면 버튼을 띄운다. 한 화면쯤 지나 "꽤 내려왔다" 싶은 지점. */
 const SHOW_AFTER = 600;
 
@@ -31,7 +34,25 @@ export default function BackToTop() {
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
-    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+    if (reduce) {
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    // scrollTo({ behavior: "smooth" }) 를 쓰지 않고 직접 올린다.
+    // 그 한 줄은 부드러움이 브라우저 안에 있어 어떤 곡선으로 움직이는지
+    // 밖에서 확인할 길이 없고, 측정 환경에서는 옵션을 무시한 채 아예
+    // 움직이지 않았다. 직접 올리면 어디서나 같게 동작하고 곡선도 짚인다.
+    const start = window.scrollY;
+    const t0 = performance.now();
+    const step = (now: number) => {
+      const t = Math.min(1, (now - t0) / DURATION);
+      // easeOutCubic — 처음 빠르고 끝에서 부드럽게 멎는다
+      const eased = 1 - Math.pow(1 - t, 3);
+      window.scrollTo(0, Math.round(start * (1 - eased)));
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
   };
 
   return (
