@@ -30,7 +30,9 @@ export default function ContactCTA() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_90%_at_82%_30%,rgba(6,38,92,0.55),transparent_70%)]"
       />
-      <Container className="relative py-14 sm:py-20">
+      {/* 푸터와 같은 wide 폭이다 — 헤더·CTA·푸터가 한 줄로 서고,
+          그 사이 본문만 읽기 좋은 폭으로 안쪽에 들어간다. */}
+      <Container width="wide" className="relative py-14 sm:py-20">
         <div className="flex flex-col items-start gap-8 lg:flex-row lg:items-end lg:justify-between">
           <Reveal>
             <h2 className="text-2xl font-bold leading-snug text-white sm:text-3xl">

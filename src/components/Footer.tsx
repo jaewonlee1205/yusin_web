@@ -44,10 +44,14 @@ const HEADING = "text-xs font-bold tracking-[0.15em] text-ink";
 export default function Footer() {
   return (
     <footer className="mt-auto border-t border-line bg-surface">
-      <Container className="py-12 sm:py-16">
-        {/* lg 첫 열이 1.5fr 인 이유 — 로고가 sm:h-8 에서 248px 다. 1.35fr 면
-            1024px에서 칸이 241px 라 preflight 의 img{max-width:100%} 에 눌린다. */}
-        <div className="grid grid-cols-2 gap-10 sm:gap-x-12 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)] lg:gap-10">
+      {/* 헤더와 같은 wide 폭이다. 푸터도 사이트 크롬인데 content(1152) 를
+          쓰고 있어 헤더 로고와 64px 어긋나 있었다. 하단 CTA 도 같이 넓혔다. */}
+      <Container width="wide" className="py-12 sm:py-16">
+        {/* lg 첫 열이 넓은 이유가 둘이다. (1) 로고가 sm:h-8 에서 248px 라
+            좁으면 preflight 의 img{max-width:100%} 에 눌린다. (2) 아래 소개문이
+            한 줄로 들어가야 한다 — 1.5fr 이면 열 343px 에 글자 337px 라
+            여유가 6px 뿐이고, 1.7fr 이면 373px 에 36px 여유가 생긴다. */}
+        <div className="grid grid-cols-2 gap-10 sm:gap-x-12 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)] lg:gap-10">
           <div className="col-span-2 sm:col-span-1">
             <Image
               src="/images/logo.png"
@@ -56,9 +60,11 @@ export default function Footer() {
               height={52}
               className="h-7 w-auto sm:h-8"
             />
+            {/* 제품 이름은 바로 옆 [제품] 열에 일곱 개가 이미 있고, 설립연도는
+                회사소개에 있다. 여기서는 무엇을·어떻게만 남긴다. site.description
+                과 같은 문장 틀을 쓰던 것도 이참에 덜어냈다. */}
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-ink-soft">
-              1992년부터 볼피더·직진피더·호퍼피더를 설계부터 튜닝까지 직접
-              만들어 온 부품 자동정렬 공급기 전문 기업입니다.
+              부품 자동정렬 공급기를 설계부터 튜닝까지 직접 만듭니다.
             </p>
 
             {/* 대표번호는 푸터에서 가장 중요한 한 줄이라 브랜드 블록 바로 아래,
