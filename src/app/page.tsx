@@ -44,11 +44,43 @@ export default function Home() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-gradient-to-br from-navy-deep via-navy-deep to-navy"
         />
-        {/* 배경 2 — 볼피더 클로즈업을 블러 처리한 질감. 아주 느리게 확대된다. */}
+        {/* 배경 2 — 실제 피더가 도는 영상.
+
+            유튜브 iframe 을 쓰지 않는다. 홈은 외부 요청이 0건이고(그러려고
+            영상 페이지도 VideoEmbed 파사드를 둔다), iframe 을 배경에 박으면
+            열기만 해도 유튜브로 요청이 나가고 LCP 도 나빠진다. 자체 호스팅 mp4 다.
+
+            아래에 같은 장면 정지컷을 깔아 둔다 — 영상이 뜨기 전과 "움직임 줄이기"
+            설정에서 그대로 보이게 하려는 것이다(globals.css 의 .hero-video 참고).
+
+            opacity 는 바깥 한 겹에만 건다 — 두 겹에 걸면 어두워진다.
+            drift(느린 확대)는 걸지 않는다 — 영상 자체가 움직여 겹치면 과하다. */}
         <div
           aria-hidden="true"
-          className="drift pointer-events-none absolute inset-0 bg-[url('/images/hero-bg.webp')] bg-cover bg-center opacity-[0.38]"
-        />
+          className="pointer-events-none absolute inset-0 opacity-[0.38]"
+        >
+          <Image
+            src="/images/hero-poster.webp"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+          {/* muted 가 없으면 자동재생이 막히고, playsInline 이 없으면 모바일에서
+              전체화면으로 튄다. preload 는 metadata — 첫 화면 페인트를 안 막는다. */}
+          <video
+            className="hero-video absolute inset-0 h-full w-full object-cover"
+            poster="/images/hero-poster.webp"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+          >
+            <source src="/videos/hero.mp4" type="video/mp4" />
+          </video>
+        </div>
         {/* 배경 3 — 글자가 읽히도록 덮는 네이비 오버레이 + 가장자리 비네트 */}
         <div
           aria-hidden="true"

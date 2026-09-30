@@ -66,6 +66,28 @@ export const videos: Video[] = [
 ];
 ```
 
+### 홈 히어로 배경 영상 교체하기
+
+첫 화면 배경은 `public/videos/hero.mp4`(1280x720, 무음, 10초 루프, 약 1.4MB)입니다.
+그 위에 네이비 오버레이가 덮이고 불투명도는 0.38이라 화질을 많이 아낄 수 있습니다.
+
+원본 촬영본에서 아래 명령으로 만듭니다. 원본은 저장소에 두지 않습니다.
+
+```bash
+# 영상 (19초 지점부터 10초)
+ffmpeg -ss 19 -t 10 -i 원본.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 30 -preset slow -g 60 -movflags +faststart   -vf scale=1280:720 public/videos/hero.mp4
+
+# 포스터 (영상 첫 프레임). 영상이 뜨기 전과 '움직임 줄이기'에서 이게 보입니다.
+ffmpeg -ss 0 -i public/videos/hero.mp4 -frames:v 1   -c:v libwebp -quality 72 public/images/hero-poster.webp
+```
+
+- `-an` 무음 — 소리가 있으면 브라우저가 자동재생을 막습니다
+- `-movflags +faststart` — 메타데이터를 앞에 두어 받는 즉시 재생됩니다
+- **구간을 고를 때는 카메라가 멈춰 있는 곳을 고릅니다.** 배경이라 화면이
+  흔들리면 눈에 거슬립니다. 현재 구간은 원본 4개를 장면변화 점수로 재서
+  가장 조용한 10초를 고른 것입니다.
+- 포스터를 바꾸면 `src/app/layout.tsx`의 preload 경로도 같이 확인하세요.
+
 ### 제품 사진 교체하기
 
 `public/images/products/`에 같은 파일명으로 덮어쓰거나,
