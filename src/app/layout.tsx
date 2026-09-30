@@ -57,7 +57,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* 스크롤 리빌은 opacity:0 에서 시작한다. JS가 막히면 내용이 영영
             안 보이므로 되돌려 준다. */}
         <noscript>
-          <style>{`.reveal,.sign-ink{opacity:1;transform:none}`}</style>
+          <style>{`.reveal,.sign-ink,.org-node{opacity:1;transform:none}.org-drop::before,.org-span-l::after,.org-span-r::after{transform:none}`}</style>
         </noscript>
         <a
           href="#main"

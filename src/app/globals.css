@@ -176,6 +176,69 @@ body {
 }
 
 /*
+  조직도. 위에서 아래로 선이 그어지고 박스가 차례로 올라온다.
+  부모 Reveal 이 is-visible 을 받으면 시작한다 — 서명(.sign-ink)과 같은 방식이다.
+
+  노드마다 Reveal 을 씌우지 않는 이유: 가로선은 왼쪽 칸의 ::after 와 오른쪽
+  칸의 ::after 가 가운데에서 만나 하나로 보이는 것이라, 두 칸이 서로 다른
+  지연으로 움직이면 선이 끊겨 보인다.
+
+  순서는 인라인 --d(세로선·박스)와 --d2(가로선)로 넣는다.
+*/
+.org-node {
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition:
+    opacity 0.45s ease-out,
+    transform 0.45s ease-out;
+  transition-delay: var(--d, 0ms);
+}
+
+.reveal.is-visible .org-node {
+  opacity: 1;
+  transform: none;
+}
+
+/*
+  선은 lg 에서만 그린다. 그 아래에서는 ::before 가 세로선이 아니라 왼쪽
+  세로선에서 박스로 뻗는 가로 tick 이고, 부모 세로선은 border-l 이라
+  transform 이 먹지 않는다. 모바일은 박스만 차례로 올라온다.
+*/
+@media (min-width: 64rem) {
+  .org-drop::before {
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.35s ease-out;
+    transition-delay: var(--d, 0ms);
+  }
+
+  .reveal.is-visible .org-drop::before {
+    transform: scaleY(1);
+  }
+
+  /* 가운데에서 바깥으로 뻗어 나가게 — 왼쪽 칸은 오른쪽으로, 오른쪽 칸은 왼쪽으로 */
+  .org-span-l::after,
+  .org-span-r::after {
+    transform: scaleX(0);
+    transition: transform 0.35s ease-out;
+    transition-delay: var(--d2, 0ms);
+  }
+
+  .org-span-l::after {
+    transform-origin: left;
+  }
+
+  .org-span-r::after {
+    transform-origin: right;
+  }
+
+  .reveal.is-visible .org-span-l::after,
+  .reveal.is-visible .org-span-r::after {
+    transform: scaleX(1);
+  }
+}
+
+/*
   하위 페이지 배너·문의 CTA에 까는 미세한 기술 그리드.
   이미지 없이 CSS만 쓰므로 어느 해상도에서도 또렷하다.
 */
@@ -211,8 +274,15 @@ body {
   .rise,
   .rise-zoom,
   .reveal,
-  .sign-ink {
+  .sign-ink,
+  .org-node {
     opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .org-drop::before,
+  .org-span-l::after,
+  .org-span-r::after {
     transform: none !important;
   }
 
