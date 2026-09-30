@@ -55,8 +55,13 @@ export default function Footer() {
   return (
     <footer className="mt-auto border-t border-line bg-surface">
       {/* 헤더와 같은 wide 폭이다. 푸터도 사이트 크롬인데 content(1152) 를
-          쓰고 있어 헤더 로고와 64px 어긋나 있었다. 하단 CTA 도 같이 넓혔다. */}
-      <Container width="wide" className="py-12 sm:py-16">
+          쓰고 있어 헤더 로고와 64px 어긋나 있었다. 하단 CTA 도 같이 넓혔다.
+
+          위아래 패딩이 다르다(py-* 로 묶지 않는다). 위쪽은 본문과 푸터를
+          떼어 놓는 일을 하지만 아래쪽은 페이지 끝이라 할 일이 없다.
+          pb-8 이면 마지막 글자 밑동에서 34px — 참고한 ablelabsinc.com 의
+          35px 과 같다. 묶어 뒀을 때는 66px 로 그 두 배였다. */}
+      <Container width="wide" className="pb-8 pt-12 sm:pt-16">
         {/* lg 첫 열 폭은 로고가 정한다 — sm:h-8 에서 248px 라 좁으면 preflight 의
             img{max-width:100%} 에 눌린다. 기준은 lg 가 시작하는 1024px 다.
             거기서 여유가 1.7fr 37px / 1.6fr 26px / 1.5fr 14px 라 1.7fr 로 둔다. */}
@@ -69,12 +74,11 @@ export default function Footer() {
               height={52}
               className="h-7 w-auto sm:h-8"
             />
-            {/* 로고가 이미 FEEDING AUTOMATION SYSTEM 을 달고 있어 문장을 한 번
-                더 쓰지 않는다. 태그라인으로 끊었다. 제품 이름은 바로 옆 [제품] 열에
-                일곱 개가 있고, 설립연도는 회사소개에 있다.
-                ("부품 자동정렬 공급기"는 홈·제품·회사소개·메타 설명에 그대로 있다) */}
+            {/* 로고 영문(FEEDING AUTOMATION SYSTEM) 을 한국어로 받아 주는 자리라
+                문장이 아니라 명사구로 둔다. 제품 이름은 바로 옆 [제품] 열에 일곱
+                개가 있고, 설립연도는 회사소개에 있어 여기서는 뺐다. */}
             <p className="mt-5 text-sm leading-relaxed text-ink-soft">
-              파츠피더 설계 · 제작
+              부품 자동정렬 공급기 설계 · 제작
             </p>
 
             {/* 대표번호는 푸터에서 가장 중요한 한 줄이라 브랜드 블록 바로 아래,
