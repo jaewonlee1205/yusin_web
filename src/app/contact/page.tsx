@@ -3,7 +3,7 @@ import Link from "next/link";
 import Container from "@/components/Container";
 import InquiryForm from "@/components/InquiryForm";
 import PageHero from "@/components/PageHero";
-import { site } from "@/data/site";
+import { site, telHref } from "@/data/site";
 
 export const metadata: Metadata = {
   title: "문의하기",
@@ -42,7 +42,7 @@ export default function ContactPage() {
                   급한 건이라면 전화가 가장 빠릅니다.
                 </p>
                 <a
-                  href={`tel:${site.tel.replace(/-/g, "")}`}
+                  href={telHref(site.tel)}
                   className="mt-5 block rounded bg-navy px-6 py-4 text-center text-base font-bold tabular-nums text-white transition-colors hover:bg-navy-deep"
                 >
                   {site.tel}
@@ -54,6 +54,21 @@ export default function ContactPage() {
                   {site.email}
                 </a>
                 <dl className="mt-6 space-y-2 border-t border-line pt-5 text-sm text-muted">
+                  {/* 대표번호는 위 큰 버튼이 맡는다. 여기는 나머지 회선이다. */}
+                  <div className="flex gap-3">
+                    <dt className="w-12 shrink-0 text-ink-soft">전화</dt>
+                    <dd className="tabular-nums">
+                      {site.telExtra.map((number) => (
+                        <a
+                          key={number}
+                          href={telHref(number)}
+                          className="block transition-colors hover:text-brand"
+                        >
+                          {number}
+                        </a>
+                      ))}
+                    </dd>
+                  </div>
                   <div className="flex gap-3">
                     <dt className="w-12 shrink-0 text-ink-soft">팩스</dt>
                     <dd className="tabular-nums">{site.fax}</dd>

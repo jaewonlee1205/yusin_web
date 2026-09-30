@@ -35,7 +35,7 @@
  *    제작품을 만드는 회사라는 색을 담았다. 원문은 git 이력에 있다.
  */
 
-import { site, yearsInBusiness } from "./site";
+import { site, telHref, yearsInBusiness } from "./site";
 
 /** 회사 소개글. /company 첫 섹션에 들어간다. */
 export const intro = {
@@ -60,14 +60,17 @@ export const intro = {
  */
 export const overview: {
   label: string;
-  value: string;
+  /** 값이 여럿이면 배열이다 — 전화처럼 회선이 여러 개인 항목. */
+  value: string | string[];
   /** 한글 상호 옆에 작게 붙일 영문 표기 */
   sub?: string;
   /**
    * 값 자체가 동작을 갖는 항목(전화·이메일). 팩스는 걸 수 없어 비운다.
    * 푸터·헤더·문의하기·오시는 길도 전부 같은 규칙이다.
+   * href 를 직접 쓰지 않고 종류만 적는다 — 값이 배열이면 줄마다 링크가
+   * 달라지기 때문이다.
    */
-  href?: string;
+  link?: "tel" | "mailto";
 }[] = [
   // 원문은 "유신 F.A 시스템 (YUSIN F.A SYSTEM)" 한 줄이었다. 사실은 그대로 두고
   // 한글/영문만 나눠 담는다 — 영문을 작게 붙이려는 것이다.
@@ -75,17 +78,10 @@ export const overview: {
   { label: "설립연도", value: "1992년 6월 6일" },
   { label: "대표", value: "이 준 희" },
   { label: "소재지", value: site.address.road },
-  {
-    label: "대표번호",
-    value: site.tel,
-    href: `tel:${site.tel.replace(/-/g, "")}`,
-  },
+  // 대표번호를 맨 위에 두고 나머지 회선을 아래로 쌓는다.
+  { label: "대표번호", value: [site.tel, ...site.telExtra], link: "tel" },
   { label: "팩스", value: site.fax },
-  {
-    label: "이메일",
-    value: site.email,
-    href: `mailto:${site.email}`,
-  },
+  { label: "이메일", value: site.email, link: "mailto" },
   {
     label: "주 사업",
     value:

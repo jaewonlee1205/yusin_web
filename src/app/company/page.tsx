@@ -10,7 +10,7 @@ import {
   philosophy,
   philosophyMotto,
 } from "@/data/company";
-import { site, yearsInBusiness } from "@/data/site";
+import { site, telHref, yearsInBusiness } from "@/data/site";
 
 /**
  * 대표이사 서명 전용 붓글씨체. 이 페이지 서명 한 줄에서만 쓴다.
@@ -193,21 +193,31 @@ export default function CompanyPage() {
               <dd className="mt-1.5 pb-3.5 text-[15px] leading-relaxed tabular-nums text-ink sm:mt-0 sm:py-3.5 sm:pl-6">
                 {/* 전화·이메일은 눌러서 걸고 보낼 수 있게 한다. 팩스는 걸 수
                     없어 href 가 없다 — 푸터·헤더·문의하기·오시는 길과 같은 규칙. */}
-                {row.href ? (
-                  <a
-                    href={row.href}
-                    className="transition-colors hover:text-brand"
-                  >
-                    {row.value}
-                  </a>
-                ) : (
-                  row.value
-                )}
-                {/* 영문 상호는 링크 밖에, 같은 줄에 붙인다 */}
-                {row.sub && (
-                  <span className="ml-2.5 text-xs font-medium tracking-[0.08em] text-muted">
-                    {row.sub}
-                  </span>
+                {(Array.isArray(row.value) ? row.value : [row.value]).map(
+                  (value, vi) => (
+                    <span key={value} className="block">
+                      {row.link ? (
+                        <a
+                          href={
+                            row.link === "tel"
+                              ? telHref(value)
+                              : `mailto:${value}`
+                          }
+                          className="transition-colors hover:text-brand"
+                        >
+                          {value}
+                        </a>
+                      ) : (
+                        value
+                      )}
+                      {/* 영문 상호는 링크 밖에, 첫 줄에 붙인다 */}
+                      {vi === 0 && row.sub && (
+                        <span className="ml-2.5 text-xs font-medium tracking-[0.08em] text-muted">
+                          {row.sub}
+                        </span>
+                      )}
+                    </span>
+                  ),
                 )}
               </dd>
             </Reveal>

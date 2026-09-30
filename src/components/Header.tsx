@@ -11,6 +11,7 @@ import {
   headerCta,
   nav,
   site,
+  telHref,
   type NavChild,
   type NavItem,
 } from "@/data/site";
@@ -235,7 +236,7 @@ export default function Header() {
 
           <div className="hidden items-center gap-6 lg:flex lg:justify-self-end">
             <a
-              href={`tel:${site.tel.replace(/-/g, "")}`}
+              href={telHref(site.tel)}
               className="inline-flex items-center gap-1.5 text-sm font-semibold tabular-nums text-navy transition-colors hover:text-brand"
             >
               <PhoneIcon />
@@ -342,7 +343,7 @@ export default function Header() {
 
             <div className="my-5 flex flex-col gap-3">
               <a
-                href={`tel:${site.tel.replace(/-/g, "")}`}
+                href={telHref(site.tel)}
                 className="rounded border border-line py-3 text-center text-sm font-semibold text-navy"
               >
                 전화 {site.tel}

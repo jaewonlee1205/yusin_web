@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import ContactCTA from "@/components/ContactCTA";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
-import { site } from "@/data/site";
+import { site, telHref } from "@/data/site";
 
 export const metadata: Metadata = {
   title: "오시는 길",
@@ -19,11 +19,19 @@ const query = encodeURIComponent(site.address.jibun);
  */
 const MAP_SRC = `https://maps.google.com/maps?q=${query}&z=16&hl=ko&output=embed`;
 
-const CONTACT_ROWS = [
+/**
+ * 값이 여럿이면 배열이다 — 전화는 대표번호를 맨 위에 두고 나머지 회선을
+ * 아래로 쌓는다. 팩스는 걸 수 없어 link 가 없다(헤더·푸터·CTA와 같은 규칙).
+ */
+const CONTACT_ROWS: {
+  label: string;
+  value: string | string[];
+  link?: "tel" | "mailto";
+}[] = [
   { label: "주소", value: site.address.road },
-  { label: "전화", value: site.tel, href: `tel:${site.tel.replace(/-/g, "")}` },
+  { label: "전화", value: [site.tel, ...site.telExtra], link: "tel" },
   { label: "팩스", value: site.fax },
-  { label: "이메일", value: site.email, href: `mailto:${site.email}` },
+  { label: "이메일", value: site.email, link: "mailto" },
 ];
 
 export default function LocationPage() {
@@ -60,16 +68,27 @@ export default function LocationPage() {
                       {row.label}
                     </dt>
                     <dd className="px-5 py-4 text-sm leading-relaxed text-ink-soft">
-                      {row.href ? (
-                        <a
-                          href={row.href}
-                          className="transition-colors hover:text-brand"
-                        >
-                          {row.value}
-                        </a>
-                      ) : (
-                        row.value
-                      )}
+                      {(Array.isArray(row.value)
+                        ? row.value
+                        : [row.value]
+                      ).map((value) => (
+                        <span key={value} className="block tabular-nums">
+                          {row.link ? (
+                            <a
+                              href={
+                                row.link === "tel"
+                                  ? telHref(value)
+                                  : `mailto:${value}`
+                              }
+                              className="transition-colors hover:text-brand"
+                            >
+                              {value}
+                            </a>
+                          ) : (
+                            value
+                          )}
+                        </span>
+                      ))}
                     </dd>
                   </div>
                 ))}
@@ -101,7 +120,6 @@ export default function LocationPage() {
               </h2>
               <ul className="mt-4 space-y-2.5 text-sm text-ink-soft">
                 <li>{site.hours.weekday}</li>
-                <li className="text-muted">{site.hours.lunch}</li>
                 <li className="text-muted">{site.hours.holiday}</li>
               </ul>
 

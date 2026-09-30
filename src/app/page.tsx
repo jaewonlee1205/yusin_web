@@ -400,7 +400,7 @@ export default function Home() {
             logo: `${site.url}/images/logo.png`,
             foundingDate: site.founded,
             description: site.description,
-            telephone: site.tel,
+            telephone: [site.tel, ...site.telExtra],
             faxNumber: site.fax,
             email: site.email,
             address: {

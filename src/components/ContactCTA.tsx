@@ -2,7 +2,7 @@ import Link from "next/link";
 import Container from "./Container";
 import Reveal from "./Reveal";
 import { PhoneIcon } from "./icons";
-import { site } from "@/data/site";
+import { site, telHref } from "@/data/site";
 
 /**
  * 페이지 하단 공통 문의 유도 블록. /contact 를 뺀 9개 페이지가 쓴다.
@@ -73,7 +73,7 @@ export default function ContactCTA() {
               </Link>
               {/* 아이콘과 자릿수 정렬은 헤더 전화 링크와 같은 모양으로 맞춘다 */}
               <a
-                href={`tel:${site.tel.replace(/-/g, "")}`}
+                href={telHref(site.tel)}
                 className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/45 px-6 py-4 text-[15px] font-semibold tabular-nums text-white transition-colors hover:border-white/70 hover:bg-white/10 sm:px-8"
               >
                 <PhoneIcon />

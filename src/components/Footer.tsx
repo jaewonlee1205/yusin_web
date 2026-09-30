@@ -3,7 +3,7 @@ import Link from "next/link";
 import Container from "./Container";
 import { PhoneIcon } from "./icons";
 import { products } from "@/data/products";
-import { site } from "@/data/site";
+import { site, telHref } from "@/data/site";
 
 /**
  * 푸터 링크 묶음.
@@ -94,7 +94,7 @@ export default function Footer() {
                 시선이 처음 닿는 자리에 둔다. 팩스·이메일은 맨 아래 사업자정보
                 줄로 내렸다 — 성격이 다른 정보다. */}
             <a
-              href={`tel:${site.tel.replace(/-/g, "")}`}
+              href={telHref(site.tel)}
               className="mt-6 inline-flex items-center gap-2 text-lg font-bold tabular-nums text-ink transition-colors hover:text-brand"
             >
               <PhoneIcon className="h-[18px] w-[18px] shrink-0" />
