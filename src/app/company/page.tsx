@@ -181,11 +181,14 @@ export default function CompanyPage() {
               delay={i * 45}
               className="border-b border-line px-6 last:border-b-0 sm:grid sm:grid-cols-[7rem_1fr]"
             >
-              {/* sm:leading-[1.875] — 13px x 1.875 = 24.375px 로, 값(15px x 1.625)의
-                  줄 상자와 같게 맞춘다. 격자는 baseline 정렬이 아니라 이렇게 해야
-                  라벨과 값의 밑줄이 맞는다(남는 차 1.8px).
+              {/* items-center — 라벨을 칸 높이 가운데에 둔다. 대표번호처럼 값이
+                  여러 줄인 행에서 라벨이 맨 위에 붙어 보였다(중심이 37px 위).
+                  dt 박스는 격자 stretch 로 행 높이만큼 늘어난 채고 글자만 옮긴다 —
+                  오른쪽 구분선은 그대로 행을 다 덮는다.
+                  전에 쓰던 leading-[1.875](라벨 줄 상자를 값과 같게 만들어 밑줄을
+                  맞추던 값)는 뺐다. 가운데 정렬이 그 일을 더 정확히 한다(1px -> 0px).
                   sm:w-28 을 쓰면 안 된다 — dt 폭이 고정돼 격자 열 설정을 덮어쓴다. */}
-              <dt className="pt-3.5 text-[13px] font-bold tracking-[0.1em] text-navy sm:border-r sm:border-line sm:py-3.5 sm:pr-6 sm:leading-[1.875]">
+              <dt className="pt-3.5 text-[13px] font-bold tracking-[0.1em] text-navy sm:flex sm:items-center sm:border-r sm:border-line sm:py-3.5 sm:pr-6">
                 {row.label}
               </dt>
               {/* tabular-nums: 대표번호와 팩스가 위아래로 붙어 있어 자릿수를

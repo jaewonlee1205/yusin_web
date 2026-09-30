@@ -64,7 +64,9 @@ export default function LocationPage() {
                     key={row.label}
                     className="flex flex-col border-b border-line last:border-0 sm:flex-row"
                   >
-                    <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:w-28 sm:shrink-0">
+                    {/* 라벨은 칸 높이 가운데. 전화처럼 값이 여러 줄인 행에서
+                        맨 위에 붙어 보였다. bg-surface 칸은 그대로 행을 다 채운다. */}
+                    <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
                       {row.label}
                     </dt>
                     <dd className="px-5 py-4 text-sm leading-relaxed text-ink-soft">
