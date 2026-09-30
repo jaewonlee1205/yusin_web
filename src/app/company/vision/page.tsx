@@ -16,7 +16,7 @@ export default function VisionPage() {
       <PageHero
         eyebrow="ORGANIZATION"
         title="조직도"
-        lead="설계·가공·튜닝·조립을 모두 사내에 두어 외주 없이 제작이 끝납니다."
+        lead="부품 분석부터 진동 튜닝까지, 네 부서가 한 공장 안에서 이어집니다."
       />
 
       {/* 상단 배너 h1이 이미 "조직도"다. 섹션에 같은 제목과 eyebrow를 또 달면
