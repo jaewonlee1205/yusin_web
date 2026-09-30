@@ -158,6 +158,24 @@ body {
 }
 
 /*
+  대표이사 서명의 붓글씨. 인쇄체 이름이 먼저 뜨고 한 박자 뒤 들어온다 —
+  서명하는 순간처럼 보이게. 부모 Reveal 이 is-visible 을 받으면 시작한다.
+  JS 가 막힌 경우는 layout.tsx 의 <noscript> 가 되살린다.
+*/
+.sign-ink {
+  opacity: 0;
+  transform: translateY(0.3rem);
+  transition:
+    opacity 0.6s 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.is-visible .sign-ink {
+  opacity: 1;
+  transform: none;
+}
+
+/*
   하위 페이지 배너·문의 CTA에 까는 미세한 기술 그리드.
   이미지 없이 CSS만 쓰므로 어느 해상도에서도 또렷하다.
 */
@@ -192,7 +210,8 @@ body {
   /* 움직임 없이도 내용은 반드시 보여야 한다 */
   .rise,
   .rise-zoom,
-  .reveal {
+  .reveal,
+  .sign-ink {
     opacity: 1 !important;
     transform: none !important;
   }

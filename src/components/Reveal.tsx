@@ -20,7 +20,8 @@ export default function Reveal({
   children: ReactNode;
   delay?: number;
   className?: string;
-  as?: "div" | "li" | "section";
+  /** aside 는 경영이념 패널용 — 래퍼 div 를 덧대면 그리드 칸이 바뀐다 */
+  as?: "div" | "li" | "section" | "aside";
 }) {
   const ref = useRef<HTMLElement>(null);
   const [shown, setShown] = useState(false);

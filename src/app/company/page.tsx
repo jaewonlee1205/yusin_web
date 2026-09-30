@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nanum_Brush_Script } from "next/font/google";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
 import Section from "@/components/Section";
 import {
   intro,
@@ -59,14 +60,16 @@ export default function CompanyPage() {
         거기 타이포가 바뀌면 이 페이지도 같이 고쳐야 한다.
       */}
       <Section>
-        <p className="mb-3 text-xs font-bold tracking-[0.2em] text-brand">
-          ABOUT
-        </p>
+        <Reveal className="mb-3">
+          <p className="text-xs font-bold tracking-[0.2em] text-brand">ABOUT</p>
+        </Reveal>
         {/* items-start 를 쓰지 않는다. 그리드 기본값(stretch)이라야 패널이 칸
             높이를 채워 아랫변까지 본문 끝과 맞는다. 윗변은 행이 제목에서
             시작하므로 stretch 로도 그대로 맞는다. */}
         <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:gap-x-16">
-          <div>
+          {/* 그리드 칸이 곧 Reveal 이다 — 래퍼를 덧대면 칸이 하나 더 생겨
+              패널 아랫변 정렬이 깨진다. */}
+          <Reveal>
             <h2 className="text-2xl font-bold leading-snug tracking-tight text-ink sm:text-4xl">
               {intro.title}
             </h2>
@@ -86,7 +89,7 @@ export default function CompanyPage() {
                 </p>
               ))}
             </div>
-          </div>
+          </Reveal>
 
           {/*
             대표이사 서명. 그리드의 둘째 행에 두고 첫 칸에만 놓는다.
@@ -100,7 +103,10 @@ export default function CompanyPage() {
             오른쪽은 이름을 붓글씨 글꼴로 그린 장식이라 aria-hidden 을 건다 —
             안 걸면 스크린리더가 "이준희"를 두 번 읽는다.
           */}
-          <div className="flex items-baseline gap-4 border-t border-line pt-6 lg:col-start-1 lg:row-start-2">
+          <Reveal
+            delay={140}
+            className="flex items-baseline gap-4 border-t border-line pt-6 lg:col-start-1 lg:row-start-2"
+          >
             <span className="text-sm font-bold text-ink">
               대표이사 {site.ceo}
             </span>
@@ -111,16 +117,20 @@ export default function CompanyPage() {
                 합성 볼드를 그려 붓획이 뭉갠다. */}
             <span
               aria-hidden="true"
-              className={`${nanumBrush.className} text-4xl leading-none tracking-[0.2em] text-ink sm:text-5xl`}
+              className={`${nanumBrush.className} sign-ink text-4xl leading-none tracking-[0.2em] text-ink sm:text-5xl`}
             >
               {site.ceo}
             </span>
-          </div>
+          </Reveal>
 
           {/* 경영이념. 라벨을 한글로 둔 것은 의도다 — 섹션 eyebrow 가 이미
               영문(ABOUT)이라 패널 안에 MANAGEMENT PHILOSOPHY 를 또 두면
               한 섹션에 영문 라벨이 둘이 된다. */}
-          <aside className="rounded-lg bg-navy-deep p-7 sm:p-8 lg:col-start-2 lg:row-start-1">
+          <Reveal
+            as="aside"
+            delay={80}
+            className="rounded-lg bg-navy-deep p-7 sm:p-8 lg:col-start-2 lg:row-start-1"
+          >
             <p className="text-xs font-bold tracking-[0.2em] text-brand-light">
               경영이념
             </p>
@@ -139,7 +149,7 @@ export default function CompanyPage() {
                 </div>
               ))}
             </dl>
-          </aside>
+          </Reveal>
         </div>
       </Section>
 
@@ -163,9 +173,12 @@ export default function CompanyPage() {
           두 열을 가른다. (네이비는 설비 대수·본문 링크에 이미 쓰는 강조색이다)
         */}
         <dl className="overflow-hidden rounded-lg border border-line bg-white">
-          {overview.map((row) => (
-            <div
+          {/* 행 자체를 Reveal 로 만든다(as="div") — 래퍼가 끼면 dl > div > dt/dd
+              구조가 깨진다. 45ms 씩 밀어 표가 한 줄씩 채워지게 한다. */}
+          {overview.map((row, i) => (
+            <Reveal
               key={row.label}
+              delay={i * 45}
               className="border-b border-line px-6 last:border-b-0 sm:grid sm:grid-cols-[7rem_1fr]"
             >
               {/* sm:leading-[1.875] — 13px x 1.875 = 24.375px 로, 값(15px x 1.625)의
@@ -197,7 +210,7 @@ export default function CompanyPage() {
                   </span>
                 )}
               </dd>
-            </div>
+            </Reveal>
           ))}
         </dl>
       </Section>

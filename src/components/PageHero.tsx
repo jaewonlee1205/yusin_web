@@ -33,14 +33,26 @@ export default function PageHero({
         className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-brand"
       />
       <Container className="relative flex min-h-[13.5rem] flex-col justify-center py-12 sm:min-h-[19rem] sm:py-16">
-        <p className="text-xs font-bold tracking-[0.2em] text-brand-light">
+        {/* 홈 히어로와 같은 rise 스태거(60/140/220ms). CSS 애니메이션이라
+            JS 가 늘지 않고, opacity/transform 만 쓰므로 배너 높이도 그대로다.
+            움직임 줄이기 설정에서는 globals.css 가 통째로 끈다. */}
+        <p
+          className="rise text-xs font-bold tracking-[0.2em] text-brand-light"
+          style={{ animationDelay: "60ms" }}
+        >
           {eyebrow}
         </p>
-        <h1 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-5xl">
+        <h1
+          className="rise mt-3 text-3xl font-bold tracking-tight text-white sm:text-5xl"
+          style={{ animationDelay: "140ms" }}
+        >
           {title}
         </h1>
         {lead && (
-          <p className="mt-5 min-h-[3.25rem] max-w-2xl text-base leading-relaxed text-white/70 sm:min-h-[3.5rem] sm:text-lg">
+          <p
+            className="rise mt-5 min-h-[3.25rem] max-w-2xl text-base leading-relaxed text-white/70 sm:min-h-[3.5rem] sm:text-lg"
+            style={{ animationDelay: "220ms" }}
+          >
             {lead}
           </p>
         )}
