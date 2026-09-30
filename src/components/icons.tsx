@@ -5,6 +5,26 @@
  * 서버 컴포넌트인 ContactCTA 가 가져다 쓰기에 적절치 않아 여기로 옮겼다.
  * 이 파일은 순수 SVG 라 지시어가 없다 — 양쪽에서 쓸 수 있다.
  */
+/** 맨 위로 버튼의 화살표. 버튼에 aria-label 이 있어 아이콘은 숨긴다. */
+export function ChevronUpIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="m18 15-6-6-6 6" />
+    </svg>
+  );
+}
+
 /** 전화번호 앞 수화기. 번호만 읽히도록 스크린리더에서는 숨긴다. */
 export function PhoneIcon({ className = "shrink-0" }: { className?: string }) {
   return (

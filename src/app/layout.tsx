@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import Header from "@/components/Header";
+import BackToTop from "@/components/BackToTop";
 import Footer from "@/components/Footer";
 import { site } from "@/data/site";
 import "./globals.css";
@@ -70,6 +71,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <Footer />
+        <BackToTop />
       </body>
     </html>
   );

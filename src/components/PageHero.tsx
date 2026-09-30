@@ -33,26 +33,17 @@ export default function PageHero({
         className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-brand"
       />
       <Container className="relative flex min-h-[13.5rem] flex-col justify-center py-12 sm:min-h-[19rem] sm:py-16">
-        {/* 홈 히어로와 같은 rise 스태거(60/140/220ms). CSS 애니메이션이라
-            JS 가 늘지 않고, opacity/transform 만 쓰므로 배너 높이도 그대로다.
-            움직임 줄이기 설정에서는 globals.css 가 통째로 끈다. */}
-        <p
-          className="rise text-xs font-bold tracking-[0.2em] text-brand-light"
-          style={{ animationDelay: "60ms" }}
-        >
+        {/* 글자를 올리며 들여보내지 않는다. 메뉴를 옮겨 다닐 때마다 매번
+            기다리게 되기 때문이다 — 목적지는 이미 받아져 있으니 바로 보여 준다.
+            (홈 히어로는 첫 화면 연출이라 .rise 를 그대로 쓴다) */}
+        <p className="text-xs font-bold tracking-[0.2em] text-brand-light">
           {eyebrow}
         </p>
-        <h1
-          className="rise mt-3 text-3xl font-bold tracking-tight text-white sm:text-5xl"
-          style={{ animationDelay: "140ms" }}
-        >
+        <h1 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-5xl">
           {title}
         </h1>
         {lead && (
-          <p
-            className="rise mt-5 min-h-[3.25rem] max-w-2xl text-base leading-relaxed text-white/70 sm:min-h-[3.5rem] sm:text-lg"
-            style={{ animationDelay: "220ms" }}
-          >
+          <p className="mt-5 min-h-[3.25rem] max-w-2xl text-base leading-relaxed text-white/70 sm:min-h-[3.5rem] sm:text-lg">
             {lead}
           </p>
         )}
