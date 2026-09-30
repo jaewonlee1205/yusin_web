@@ -22,6 +22,7 @@ const FOOTER_GROUPS: {
    * 화면에서는 "개요" 로 족하지만, 검색엔진과 스크린리더는 링크 하나만
    * 떼어 읽는다. aria-label 로는 안 된다 — Lighthouse link-text 는
    * 보이는 글자를 보기 때문에 sr-only 로 글자 자체를 온전하게 만든다.
+   * 뒤에 공백을 붙이지 않는다 — 공백은 sr-only 밖에서 넣는다(아래 참고).
    */
   links: { href: string; label: string; prefix?: string }[];
 }[] =
@@ -30,7 +31,7 @@ const FOOTER_GROUPS: {
       title: "회사",
       links: [
         // 열 제목이 이미 [회사]다. site.ts 의 드롭다운도 "개요" 라 표기가 맞는다.
-        { href: "/company", label: "개요", prefix: "회사 " },
+        { href: "/company", label: "개요", prefix: "회사" },
         { href: "/company/vision", label: "조직도" },
         { href: "/company/facility", label: "보유 설비" },
         { href: "/clients", label: "납품실적" },
@@ -47,9 +48,21 @@ const FOOTER_GROUPS: {
   ];
 
 /* muted 를 본문 크기 글자에 쓰면 이 배경에서 대비가 4.51:1 로 AA(4.5)를
-   0.01 차로 넘는다. 여백이 없어 링크는 한 단계 진한 ink-soft 로 둔다. */
-const LINK = "text-sm text-ink-soft transition-colors hover:text-brand";
-const HEADING = "text-xs font-bold tracking-[0.15em] text-ink";
+   0.01 차로 넘는다. 여백이 없어 링크는 한 단계 진한 ink-soft 로 둔다.
+
+   py-1 은 장식이 아니다 — 글자만 두면 누를 수 있는 높이가 20px 라
+   WCAG 2.2 Target Size 기준(24px)에 못 미친다. 상하 4px 씩 붙여 28px 로
+   만들고, 늘어난 만큼 목록의 gap 을 10px -> 2px 로 줄여 간격은 그대로
+   보이게 한다. 글자 크기도 보이는 간격도 그대로고 손가락만 편해진다. */
+const LINK =
+  "inline-block py-1 text-sm text-ink-soft transition-colors hover:text-brand";
+
+/* 열 제목 위 짧은 브랜드 선. 묶음의 시작을 분명히 하고 로고의 빨강과
+   호응한다. 글자까지 brand 색으로 해 보니 제목이 링크보다 튀었다 —
+   푸터의 주인공은 링크라 색은 ink 로 두고 선으로만 준다.
+   자간 0.2em 은 Section.tsx 의 eyebrow 와 같은 값이다(푸터만 0.15em 이었다). */
+const HEADING =
+  "relative pt-3.5 text-xs font-bold tracking-[0.2em] text-ink before:absolute before:left-0 before:top-0 before:h-0.5 before:w-[18px] before:bg-brand before:content-['']";
 
 export default function Footer() {
   return (
@@ -91,7 +104,7 @@ export default function Footer() {
               <PhoneIcon className="h-[18px] w-[18px] shrink-0" />
               {site.tel}
             </a>
-            <p className="mt-2 text-xs leading-relaxed text-muted">
+            <p className="mt-2 text-xs leading-relaxed text-ink-soft">
               {site.hours.weekday} · {site.hours.holiday}
             </p>
           </div>
@@ -103,7 +116,7 @@ export default function Footer() {
             <h2 className={HEADING}>제품</h2>
             {/* max-content 2열 — 1fr 2열로 두면 둘째 열이 칸 오른쪽 끝까지
                 밀려 옆 [회사] 열에 붙어 보인다. */}
-            <ul className="mt-4 grid grid-cols-[max-content_max-content] gap-x-8 gap-y-2.5">
+            <ul className="mt-4 grid grid-cols-[max-content_max-content] gap-x-8 gap-y-0.5">
               {products.map((product) => (
                 <li key={product.slug}>
                   <Link href={`/products/${product.slug}`} className={LINK}>
@@ -113,9 +126,14 @@ export default function Footer() {
               ))}
               <li>
                 {/* 화면에는 열 제목이 있어 "전체 보기" 로 족하지만, 링크만
-                    떼어 읽는 쪽에는 "제품" 을 붙여 준다. */}
+                    떼어 읽는 쪽에는 "제품" 을 붙여 준다.
+                    공백은 sr-only 밖에 둔다 — 안에 넣으면 복사할 때
+                    "제품전체 보기" 로 붙는다. sr-only 는 absolute 라
+                    흐름에서 빠지고, 남은 공백은 줄 첫머리가 되어 CSS 가
+                    지운다(링크 폭 55px 그대로). */}
                 <Link href="/products" className={LINK}>
-                  <span className="sr-only">제품 </span>전체 보기
+                  <span className="sr-only">제품</span>{" "}
+                  전체 보기
                 </Link>
               </li>
             </ul>
@@ -126,12 +144,14 @@ export default function Footer() {
               <h2 className={HEADING}>{group.title}</h2>
               {/* space-y 와 grid gap 을 섞지 않는다 — grid 안에서는 margin 과
                   gap 이 둘 다 적용돼 간격이 두 배가 된다. */}
-              <ul className="mt-4 grid gap-y-2.5">
+              <ul className="mt-4 grid gap-y-0.5">
                 {group.links.map((link) => (
                   <li key={link.href}>
                     <Link href={link.href} className={LINK}>
                       {link.prefix && (
-                        <span className="sr-only">{link.prefix}</span>
+                        <>
+                          <span className="sr-only">{link.prefix}</span>{" "}
+                        </>
                       )}
                       {link.label}
                     </Link>
@@ -144,7 +164,7 @@ export default function Footer() {
 
         {/* 사업자정보. 상호·대표·주소·연락처·사업자등록번호가 관례상 한자리에
             모인다. 팩스는 걸 수 없어 링크가 아니다(헤더·CTA·문의하기와 같은 규칙). */}
-        <div className="mt-12 space-y-2 border-t border-line pt-6 text-xs leading-relaxed text-muted">
+        <div className="mt-12 space-y-2 border-t border-line pt-6 text-xs leading-relaxed text-ink-soft">
           <p>
             <Link
               href="/location"
