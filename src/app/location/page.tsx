@@ -37,10 +37,13 @@ const CONTACT_ROWS: {
 export default function LocationPage() {
   return (
     <>
+      {/* "시화공단 내에 위치해 있습니다" 는 바로 아래 주소를 한 번 더 말할
+          뿐이었다. 설계실과 공장이 한자리에 있다는 사실로 바꾸면, 와서 볼
+          것이 있다는 뜻이 된다. */}
       <PageHero
         eyebrow="LOCATION"
         title="오시는 길"
-        lead="시화공단 내에 위치해 있습니다. 방문 전 전화 주시면 안내해 드리겠습니다."
+        lead="시화공단에 설계실과 공장이 함께 있습니다. 방문 전 연락 바랍니다."
       />
 
       <div className="py-14 sm:py-20">

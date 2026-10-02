@@ -44,10 +44,13 @@ export const metadata: Metadata = {
 export default function CompanyPage() {
   return (
     <>
+      {/* 숫자는 yearsInBusiness 에서 뽑는다 — 해가 바뀌면 문구도 따라 바뀐다.
+          "한 분야만 만들어 온 회사" 를 "한 분야에만 집중해 온 전문 제조사" 로
+          바꿨다. 같은 사실이지만 거래처를 고르는 쪽이 찾는 말에 가깝다. */}
       <PageHero
         eyebrow="COMPANY"
         title="회사소개"
-        lead={`1992년 설립 이후 ${yearsInBusiness}년간, 파츠피더 한 분야만 만들어 온 회사입니다.`}
+        lead={`1992년부터 ${yearsInBusiness}년, 파츠피더 한 분야에만 집중해 온 전문 제조사입니다.`}
       />
 
       {/* 회사 소개글 */}

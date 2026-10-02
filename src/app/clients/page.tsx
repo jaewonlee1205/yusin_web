@@ -13,10 +13,13 @@ export const metadata: Metadata = {
 export default function ClientsPage() {
   return (
     <>
+      {/* 전에는 "언제나 저희 제품을 이용하여 주심에 깊은 감사를 드립니다" 였다.
+          회사 소개 PPT 의 인사말이 그대로 넘어온 것이라, 실적 페이지 배너가
+          실적 대신 인사를 하고 있었다. 숫자는 totalClients 에서 뽑는다. */}
       <PageHero
         eyebrow="CLIENTS"
         title="납품실적"
-        lead="언제나 저희 제품을 이용하여 주심에 깊은 감사를 드립니다."
+        lead={`${totalClients}개사의 생산 라인에서 유신이 만든 피더가 돌고 있습니다.`}
       />
 
       <Section

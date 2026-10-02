@@ -36,7 +36,12 @@ export function ChevronUpIcon({ className = "" }: { className?: string }) {
  * 색은 호출하는 쪽에서 준다. 고르는 원칙은 Footer.tsx 에 적어 뒀다.
  */
 
-/** 푸터 유튜브 채널 버튼 앞 마크. 글자가 "유튜브 채널" 이라 숨긴다. */
+/**
+ * 푸터 유튜브 채널 버튼의 마크.
+ *
+ * 버튼에서 글자를 뺐으므로(아이콘만 남겼다) 접근성 이름은 Footer.tsx 의
+ * aria-label 이 혼자 진다. aria-hidden 인 이 마크는 이름에 보태지 않는다.
+ */
 export function YoutubeIcon({ className = "shrink-0" }: { className?: string }) {
   return (
     <svg
@@ -52,13 +57,29 @@ export function YoutubeIcon({ className = "shrink-0" }: { className?: string }) 
   );
 }
 
-/** 푸터 네이버 플레이스 버튼 앞 마크. 글자가 "네이버 플레이스" 라 숨긴다. */
+/**
+ * 푸터 네이버 플레이스 버튼의 마크. 이름 사정은 YoutubeIcon 과 같다.
+ *
+ * viewBox 가 "0 0 24 24" 가 아니라 사방으로 3.4 만큼 넓다 — 광학 보정이다.
+ * 유튜브 마크는 납작한 둥근 사각형이라 상자 16px 안에서 실제 잉크가
+ * 16x11.27px 인데, N 은 24x24 를 꽉 채워 16x16px 이었다. 나란히 두면 높이가
+ * 1.42 배라 N 만 커 보인다.
+ *
+ * width/height 를 줄이는 손쉬운 방법은 못 쓴다. 버튼이 p-2(8px)+테두리 라
+ * 8+16+8+1.6 = 34 이고, 이 34x34 가 푸터 브랜드 열 150px 정렬의 전제다.
+ * 그래서 상자는 16 으로 두고 viewBox 만 넓혀 그림을 24/30.8 = 0.779 배로
+ * 줄인다. 잉크가 12.47x12.47px 이 되어 높이 비가 1.11 로 내려간다.
+ *
+ * 높이를 아주 같게(0.70) 맞추면 오히려 작아 보인다 — N 은 유튜브와 달리
+ * 가로도 함께 좁아지기 때문이다. 1.00/0.90/0.85/0.80/0.78/0.74/0.70 을 실제
+ * 버튼 모양으로 그려 놓고 고른 값이 0.78 이다.
+ */
 export function NaverIcon({ className = "shrink-0" }: { className?: string }) {
   return (
     <svg
       width="16"
       height="16"
-      viewBox="0 0 24 24"
+      viewBox="-3.4 -3.4 30.8 30.8"
       fill="currentColor"
       aria-hidden="true"
       className={className}

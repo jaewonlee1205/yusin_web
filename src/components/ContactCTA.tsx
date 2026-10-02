@@ -80,7 +80,9 @@ export default function ContactCTA() {
                 일정을 회신드립니다" 는 /contact 배너 lead 와 검색 설명에도
                 글자 그대로 있었다. 이 CTA 는 /contact 를 뺀 9개 페이지에
                 붙으므로, 여기서 보고 문의하기로 넘어간 사람이 같은 문장을 두
-                번 읽었다. 같은 뜻을 쉬운 말로 옮겨 그 겹침을 없앴다. */}
+                번 읽었다. 같은 뜻을 쉬운 말로 옮겨 그 겹침을 없앴다.
+                (/contact 배너 lead 는 그 뒤 다시 썼다 — 지금은 "부품 샘플이나
+                도면 한 장이면 됩니다" 로 시작해 이 문단과 겹치지 않는다.) */}
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/70 sm:text-base md:max-w-none">
               공급할 부품 하나만 보내 주시면 됩니다. 만들 수 있는지, 얼마나
               걸리는지 정리해 회신드립니다.

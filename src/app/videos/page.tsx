@@ -15,10 +15,18 @@ export const metadata: Metadata = {
 export default function VideosPage() {
   return (
     <>
+      {/* 전에는 "사진으로는 전해지지 않는 것 — 부품이 실제로 정렬되어 나가는
+          속도와 움직임입니다" 였다. 46자라 320px 에서 세 줄이 되어, 이 배너만
+          232 -> 258px 로 길었다.
+
+          320px 의 글상자는 264.8px 다(세로 스크롤막대 15.2px 가 먼저 빠지고
+          Container 의 px-5 가 양쪽 20px 씩 더 빠진다). 16px 글자로 두 줄에
+          들어가려면 36자 안쪽이어야 한다 — 42자짜리 안을 먼저 썼다가 여기서
+          다시 걸렸다. */}
       <PageHero
         eyebrow="VIDEO"
         title="영상자료"
-        lead="사진으로는 전해지지 않는 것 — 부품이 실제로 정렬되어 나가는 속도와 움직임입니다."
+        lead="사진으로는 알 수 없는 정렬 속도와 움직임을 영상으로 담았습니다."
       />
 
       <Section

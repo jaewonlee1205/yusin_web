@@ -30,12 +30,16 @@ export default function FacilityPage() {
           총계를 말하는 책임은 배너에 있다(아래 섹션 주석 참고). 그래서 숫자는
           남기고 equipmentTotals 에서 뽑는다.
 
+          뒷문장은 "도면이 나온 뒤로는 바깥으로 나가는 공정이 없습니다" 였다.
+          뜻은 같지만 한 번 더 새겨야 읽힌다 — 거래처가 실제로 쓰는 말인
+          "외주" 로 바꿨다.
+
           길이 주의 — 390px 에서 3줄이 되면 배너가 232 -> 258px 로 커져 다른
           페이지와 어긋난다. 이 문구는 390·768·1440 모두 2줄이다. */}
       <PageHero
         eyebrow="EQUIPMENT"
         title="보유 설비"
-        lead={`설비 ${equipmentTotals.kinds}종 ${equipmentTotals.units}대. 도면이 나온 뒤로는 바깥으로 나가는 공정이 없습니다.`}
+        lead={`설비 ${equipmentTotals.kinds}종 ${equipmentTotals.units}대. 가공부터 조립까지 외주 없이 끝냅니다.`}
       />
 
       {/* 공정별 설비 목록.

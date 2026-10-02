@@ -14,10 +14,13 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
+      {/* 전에는 55자라 320·360px 에서 세 줄이 되어, 이 배너만 232 -> 258px 로
+          길었다. 뜻은 그대로 두고 길이만 줄였다. 위 검색 설명은 그대로 둔다 —
+          거기서는 긴 문장이 불리하지 않다. */}
       <PageHero
         eyebrow="CONTACT"
         title="문의하기"
-        lead="부품 샘플이나 도면만 있으면 충분합니다. 형상을 분석해 제작 가능 여부와 예상 일정을 회신드립니다."
+        lead="부품 샘플이나 도면 한 장이면 됩니다. 제작 가능 여부와 일정을 회신드립니다."
       />
 
       <div className="py-14 sm:py-20">
