@@ -33,7 +33,10 @@ export default function ProductsPage() {
         lead="표준 기종을 고르는 것이 아니라, 부품에 맞춰 새로 설계합니다."
       />
 
-      <div className="py-16 sm:py-24">
+      {/* 회색 판 위에 흰 카드를 올린다. 흰 바탕에 흰 카드면 테두리 1px 말고는
+          경계가 없어 격자가 평평해 보였다. 홈 '제품 라인업' 섹션이 이미
+          tone="surface" 라, 같은 카드가 두 페이지에서 같아진다. */}
+      <div className="bg-surface py-16 sm:py-24">
         <Container>
           {/* 전에는 여기 피더 정의 박스("본래 음식을 준다는 뜻의 feed에서
               온 말로 …")와, 목록 아래 맺음말 문단("모든 제품은 공급할 부품에

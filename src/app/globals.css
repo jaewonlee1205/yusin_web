@@ -246,6 +246,20 @@ body {
   }
 }
 
+/* 제품 분류를 바꿀 때 격자가 짧게 덮어쓰며 들어온다. 즉시 갈아 끼우면 카드가
+   툭 바뀌어 눌린 게 먹혔는지 애매하다. 짧게 둔다 — 고르는 동작이 느려지면
+   오히려 손해다. */
+@keyframes grid-swap {
+  from {
+    opacity: 0;
+    transform: translateY(0.25rem);
+  }
+}
+
+.grid-swap {
+  animation: grid-swap 0.12s ease-out;
+}
+
 /*
   하위 페이지 배너·문의 CTA에 까는 미세한 기술 그리드.
   이미지 없이 CSS만 쓰므로 어느 해상도에서도 또렷하다.
@@ -291,7 +305,8 @@ body {
     transform: none !important;
   }
 
-  .drift {
+  .drift,
+  .grid-swap {
     animation: none !important;
   }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRef, useState } from "react";
 import ProductCard from "./ProductCard";
 import { CATEGORIES, products, type ProductCategory } from "@/data/products";
@@ -47,9 +48,9 @@ export default function ProductBrowser() {
    * 계산해도 값이 같고, 아직 문서가 길 때 올리는 것이라 깎이지 않는다.
    * 효과(useEffect)로 미루면 한 프레임 튀거나 SSR 경고가 붙는다.
    *
-   * 그리드가 아니라 결과 칸 윗변을 기준으로 삼는다 — 그래야 카운트 줄
-   * ("1개 제품")까지 보인다. lg 미만에서는 칩 줄도 이 칸 안에 있어 올라간
-   * 뒤 바로 다음 분류를 고를 수 있다.
+   * 그리드가 아니라 결과 칸 윗변을 기준으로 삼는다 — 그래야 도구 줄
+   * ("파츠피더 … 1개")까지 보인다. lg 미만에서는 칩 줄도 이 칸 안에 있어
+   * 올라간 뒤 바로 다음 분류를 고를 수 있다.
    *
    * 부드럽게 올리지 않는다. 내용이 이미 바뀐 자리를 바로잡는 동작이라
    * 즉시 옮기는 쪽이 자연스럽다(scrollToTop 의 애니메이션은 "맨 위로" 처럼
@@ -112,6 +113,46 @@ export default function ProductBrowser() {
             })}
           </ul>
         </nav>
+
+        {/* 사이드바는 354px 인데 격자는 1400px 가까이 된다. 붙어서 따라다니는
+            자리라, 스크롤 내내 왼쪽 아래가 비어 보였다. 그 자리를 전환으로
+            쓴다.
+
+            빨강 버튼을 쓰지 않는다 — 페이지 맨 아래 ContactCTA 가 이미 빨강
+            버튼이고, 한 화면에 같은 세기의 유도가 둘이면 둘 다 약해진다.
+            여기는 navy 글자 링크로 조용히 둔다.
+
+            문구는 배너 lead·ContactCTA·/contact lead 와 글자가 겹치지 않게
+            새로 썼다. 같은 말을 두 번 읽게 하지 않는다. */}
+        <div className="mt-4 rounded-lg border border-line bg-white p-5 shadow-sm">
+          <p className="text-sm font-bold leading-relaxed text-ink">
+            목록에 없는 부품인가요?
+          </p>
+          <p className="mt-2 text-[13px] leading-relaxed text-ink-soft">
+            여기 없는 형태도 만듭니다. 부품을 보고 설계부터 시작합니다.
+          </p>
+          <Link
+            href="/contact/"
+            className="group mt-3 inline-flex items-center gap-1.5 text-[13px] font-semibold text-navy"
+          >
+            제작 문의
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className="transition-transform group-hover:translate-x-1"
+            >
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </Link>
+        </div>
       </aside>
 
       {/* min-w-0 — 없으면 플렉스 항목의 최소 폭이 내용 크기라 그리드가
@@ -125,10 +166,16 @@ export default function ProductBrowser() {
             사라지므로 그걸로는 메울 수 없다. */}
         <h2 className="sr-only">제품 목록</h2>
 
-        {/* 좁은 화면용 칩 줄. 가로 스크롤이라 -mx-5 px-5 로 화면 끝까지 흘린다. */}
+        {/* 좁은 화면용 칩 줄. 가로 스크롤이라 -mx-5 px-5 로 화면 끝까지 흘린다.
+
+            스크롤막대를 숨긴다. 390px 에서 칩이 804px 라 429px 가 넘치는데,
+            윈도 크롬은 15px 짜리 가로 막대를 칩 바로 아래 그려 버린다 —
+            줄 높이 65px 중 15px 이 막대였다. 대신 오른쪽 끝을 흐리게 지워
+            "더 있다" 를 알린다. sm 부터는 칩이 줄바꿈되어 넘치지 않으므로
+            마스크를 끈다. */}
         <nav
           aria-label="제품 분류"
-          className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:px-0 lg:hidden"
+          className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-0.5 [mask-image:linear-gradient(to_right,#000_calc(100%-40px),transparent)] [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0 sm:[mask-image:none] lg:hidden [&::-webkit-scrollbar]:hidden"
         >
           {FILTERS.map((f) => {
             const active = f === filter;
@@ -157,13 +204,33 @@ export default function ProductBrowser() {
           })}
         </nav>
 
-        {/* 분류를 바꾸면 이 수가 따라 바뀌어, 눌린 게 먹혔다는 신호가 된다. */}
-        <p className="mb-5 mt-6 text-sm text-ink-soft lg:mt-0">
-          <span className="font-bold tabular-nums text-ink">{visible.length}</span>
-          개 제품
-        </p>
+        {/* 도구 줄. 높이를 45px 로 못 박아 아랫선이 사이드바 헤더("제품 분류")
+            아랫선과 같은 y 에 오게 한다 — 사이드바 카드 테두리 1px +
+            py-3.5(14+14) + text-xs 줄높이 16 = 45. 이 선이 없을 때는 첫 카드
+            윗변이 사이드바 카드 윗변보다 40px 아래라, 두 열의 윗부분이
+            어긋나 보였다.
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            왼쪽에 고른 분류를 적는다. 숫자만 있으면 지금 무엇을 보고 있는지
+            알 수 없고, 분류를 바꿔도 7 -> 1 처럼 수만 바뀐다. */}
+        <div className="mt-6 flex h-[45px] items-center justify-between border-b border-line lg:mt-0">
+          <p className="text-sm font-bold text-ink">
+            {filter === "전체" ? "전체 제품" : filter}
+          </p>
+          <p className="text-sm text-ink-soft">
+            <span className="font-bold tabular-nums text-ink">
+              {visible.length}
+            </span>
+            개
+          </p>
+        </div>
+
+        {/* key 를 분류로 두어 다시 그리게 하고 짧게 덮어쓴다(120ms).
+            Reveal 은 쓰지 않는다 — 거를 때마다 카드가 올라오면 고르는 동작이
+            느려진다. */}
+        <div
+          key={filter}
+          className="grid-swap mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {visible.map((product) => (
             <ProductCard key={product.slug} product={product} />
           ))}
