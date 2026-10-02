@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Container from "./Container";
-import { PhoneIcon, YoutubeIcon } from "./icons";
+import { NaverIcon, PhoneIcon, YoutubeIcon } from "./icons";
 import { products } from "@/data/products";
 import { site, telHref } from "@/data/site";
 
@@ -55,10 +55,19 @@ const FOOTER_GROUPS: {
    만들고, 늘어난 만큼 목록의 gap 을 10px -> 2px 로 줄여 간격은 그대로
    보이게 한다. 글자 크기도 보이는 간격도 그대로고 손가락만 편해진다.
 
-   세 열의 목록 링크 11개만 쓴다. 브랜드 열의 유튜브 링크는 한때 이 글자
-   모양을 같이 썼지만 지금은 테두리 버튼이라 따로 간다. */
+   세 열의 목록 링크 11개만 쓴다. 브랜드 열의 바깥 채널 링크는 한때 이 글자
+   모양을 같이 썼지만 지금은 테두리 버튼이라 따로 간다(CHANNEL_BUTTON). */
 const LINK =
   "inline-block py-1 text-sm text-ink-soft transition-colors hover:text-brand";
+
+/* 브랜드 열의 외부 채널 버튼(유튜브·네이버). /location 의 외부 지도 링크
+   두 개와 같은 어휘다(location/page.tsx) — 거기도 target="_blank" 외부
+   링크고, 같은 hover 를 ProductBrowser 도 쓴다. 다른 건 둘뿐이다.
+     - 패딩을 px-5 py-2.5 에서 좁혔다. 푸터는 밀도가 높은 자리다.
+     - bg-white 를 더했다. /location 은 흰 바탕 위라 배경이 필요 없지만
+       푸터는 bg-surface 라 흰 바탕이라야 버튼이 떠 보인다. */
+const CHANNEL_BUTTON =
+  "flex items-center gap-2 rounded border border-line bg-white px-3 py-1.5 text-sm font-semibold text-ink-soft transition-colors hover:border-navy/40 hover:text-ink";
 
 /* 자간 0.2em 은 Section.tsx 의 eyebrow 와 같은 값이다(푸터만 0.15em 이었다). */
 const HEADING = "text-xs font-bold tracking-[0.2em] text-ink";
@@ -86,36 +95,52 @@ export default function Footer() {
               height={52}
               className="h-7 w-auto sm:h-8"
             />
-            {/* 유튜브 채널. /videos 안에만 있던 링크를 여기로도 꺼냈다 —
-                영상이 회사를 보여 주는 자료라 모든 페이지에서 닿는 편이 낫다.
+            {/* 바깥 채널 두 개. 목록 링크가 아니라 테두리 버튼이다 — 옆 세
+                열은 [제품]·[회사]·[고객지원] 제목 아래 묶여 있는데 이것만
+                제목 없는 열에 혼자 서게 되어, 글자만 두면 어디에도 안 붙어
+                보였다.
 
-                목록 링크가 아니라 테두리 버튼이다. 옆 세 열은 [제품]·[회사]·
-                [고객지원] 제목 아래 묶여 있는데 이 링크만 제목 없는 열에 혼자
-                서게 되어, 글자만 두면 어디에도 안 붙어 보였다.
+                유튜브는 /videos 안에만 있던 링크를 꺼냈다(영상이 회사를
+                보여 주는 자료라 모든 페이지에서 닿는 편이 낫다). 네이버
+                플레이스는 블로그 리뷰 27건이 달려 있어 바깥에서 본 평이
+                된다 — 미등록 상태라는 단서는 site.ts 에 적어 뒀다.
 
-                모양은 /location 의 외부 지도 링크 두 개와 같은 어휘다
-                (rounded border border-line … hover:border-navy/40
-                hover:text-ink). 거기도 target="_blank" 외부 링크다. 다른 건
-                둘뿐이다 — 패딩을 px-5 py-2.5 에서 좁혔고(푸터는 밀도가 높다),
-                bg-white 를 더했다(/location 은 흰 바탕 위라 배경이 필요 없지만
-                푸터는 bg-surface 라 흰 바탕이라야 버튼이 떠 보인다).
+                ■ 마크 색 — 알아볼 수 있는 색으로 둔다.
+                  유튜브는 사이트 브랜드 레드(#d5261e)가 원색과 같은 계열이라
+                  그대로 쓴다. 팔레트도 지키고 알아보기도 한다.
+                  네이버 초록(#03C75A)은 사이트에 가까운 색이 없어 제 색을
+                  쓴다. 브랜드 레드로도 그려 봤는데 빨간 N 은 아무것도 뜻하지
+                  않았다. 초록은 흰 바탕 대비 2.4:1 로 비문자 기준(3:1)에
+                  못 미치지만, 아이콘이 aria-hidden 장식이고 뜻은 옆 글자가
+                  전부 전달하므로 WCAG 1.4.11 대상이 아니다.
 
-                아이콘만 text-brand 다. 유튜브 원색(#FF0000)이 아니라 사이트
-                브랜드 레드(#d5261e)를 쓴다 — 바로 위 로고의 YUSIN 빨강과
-                호응시키고 화면에 빨강이 둘 생기는 걸 막는다. 흰 바탕 대비
-                5.1:1 로 비문자 기준(3:1)을 넘는다.
-
-                flex w-fit 이다. inline-flex 로 두면 아래 전화번호와 한 줄에
-                나란히 선다(둘 다 inline 레벨이라 같은 줄 상자에 들어간다). */}
-            <a
-              href={site.youtube}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 flex w-fit items-center gap-2 rounded border border-line bg-white px-3 py-1.5 text-sm font-semibold text-ink-soft transition-colors hover:border-navy/40 hover:text-ink"
-            >
-              <YoutubeIcon className="shrink-0 text-brand" />
-              유튜브 채널
-            </a>
+                ■ 폭 — 유튜브 118 + 간격 8 + 네이버 144 = 270px 다.
+                  640~690 구간에서만 열이 256px 라 14px 모자라 두 줄이 되고,
+                  그만큼(41px) 이 열이 [제품] 열보다 길어진다. 라벨을 "네이버
+                  지도" 로 줄이면 242px 로 들어가지만 /location 의 "네이버
+                  지도에서 보기" 와 말이 겹치고 리뷰·업체정보가 있는 곳이라는
+                  뜻이 흐려진다. 패딩·간격을 줄여도 258px 라 모자란다.
+                  라벨을 택하고 두 줄을 받아들였다(320 에서는 어차피 두 줄이다). */}
+            <div className="mt-4 flex flex-wrap gap-2">
+              <a
+                href={site.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={CHANNEL_BUTTON}
+              >
+                <YoutubeIcon className="shrink-0 text-brand" />
+                유튜브 채널
+              </a>
+              <a
+                href={site.naverPlace}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={CHANNEL_BUTTON}
+              >
+                <NaverIcon className="shrink-0 text-[#03C75A]" />
+                네이버 플레이스
+              </a>
+            </div>
 
             {/* 대표번호는 푸터에서 가장 중요한 한 줄이다. 팩스·이메일은 맨
                 아래 사업자정보 줄로 내렸다 — 성격이 다른 정보다.
