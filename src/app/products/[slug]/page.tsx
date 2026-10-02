@@ -145,17 +145,35 @@ export default async function ProductDetailPage({
                   높이도 맞아떨어진다. 144 -> 187px 가 되면서 1280 이상에서
                   오른쪽 칸이 갤러리(468px)와 1px 차이가 된다 — 전에는 44px
                   모자라 아래가 비었다. */}
-              <div className="mt-6 rounded-lg border border-line bg-surface px-5 py-4">
+              <div className="mt-6">
                 <p className="text-xs font-bold tracking-[0.2em] text-muted">
                   주요 사양
                 </p>
-                <dl className="mt-1 grid grid-cols-[5rem_minmax(0,1fr)] gap-x-4">
+                {/* 아래 "제작 사양" 표와 같은 짜임이다 — gap-px + bg-line 격자선,
+                    dt bg-surface / dd bg-white, 테두리 + 둥근 모서리 +
+                    overflow-hidden.
+
+                    전에는 회색 카드 안에 border-t 만 둔 표였는데, 셀 좌우 패딩이
+                    0 이고 카드의 px-5 가 대신하는 구조라 선이 안쪽 20px 에서
+                    시작해 20px 전에 끝났다. 아래 표는 선이 테두리까지 닿는다 —
+                    그 차이 때문에 히어로 쪽만 표 같기도 하고 아닌 것 같기도
+                    했다. 테두리를 표 자신이 가지게 하면서 왼쪽 갤러리 이미지
+                    박스와도 좌우 끝.테두리색.모서리가 같아진다.
+
+                    크기만 아래 표보다 작다. 라벨 칸 6rem(아래는 9rem), 글자
+                    12/13px(14px), 패딩 px-4(px-5). 6rem 은 글상자 64px 로,
+                    가장 긴 라벨("거칠기 등급", 12px bold 약 58px)이 든다.
+
+                    높이는 그대로다. 행 52px x 3 + 선 2 = 158, 라벨 16 + 간격
+                    12 = 186px 라 1280 이상에서 오른쪽 칸과 갤러리 차가 -2px 로
+                    유지된다. */}
+                <dl className="mt-3 grid grid-cols-[6rem_minmax(0,1fr)] gap-px overflow-hidden rounded-lg border border-line bg-line">
                   {product.specs.slice(0, 3).map((spec) => (
                     <Fragment key={spec.label}>
-                      <dt className="border-t border-line py-3 text-xs font-bold tracking-wide text-muted">
+                      <dt className="bg-surface px-4 py-4 text-xs font-bold text-ink">
                         {spec.label}
                       </dt>
-                      <dd className="border-t border-line py-3 text-[13px] font-medium text-ink">
+                      <dd className="bg-white px-4 py-4 text-[13px] leading-relaxed text-ink-soft">
                         {spec.value}
                       </dd>
                     </Fragment>
@@ -163,11 +181,17 @@ export default async function ProductDetailPage({
                 </dl>
               </div>
 
-              {/* 버튼 둘. 보던 제품이 아니면 목록으로 돌아갈 길을 같이 둔다. */}
+              {/* 버튼 둘. 보던 제품이 아니면 목록으로 돌아갈 길을 같이 둔다.
+
+                  첫 버튼에만 sm:flex-1 을 준다. 전에는 둘 다 내용 크기라 줄이
+                  362px 에서 끝나 오른쪽 150px 가 비었는데, 위의 사양 표와
+                  갤러리는 끝까지 차 있어 그 줄만 짧아 보였다. 둘 다 flex-1 로
+                  하면 반반이 되어 CTA 위계가 사라지므로 한쪽만 늘린다.
+                  640 미만은 flex-col 이라 이미 전폭이다. */}
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/contact/"
-                  className="rounded bg-brand px-8 py-4 text-center text-[15px] font-semibold text-white transition-colors hover:bg-brand-dark"
+                  className="rounded bg-brand px-8 py-4 text-center text-[15px] font-semibold text-white transition-colors hover:bg-brand-dark sm:flex-1"
                 >
                   {product.name} 견적 문의
                 </Link>
