@@ -145,10 +145,10 @@ export type Product = {
    * 사진 카드로 그린다. ⚠️ 한 제품 안에서 섞으면 안 된다 — 파일 끝의 검사가
    * 빌드를 멈춘다.
    *
-   * 사진을 붙일 수 있는 것은 **부품군을 가리키는 분야**뿐이다. 지금은
-   * 볼피더만 그렇고(커넥터·체결부품·용기 …), 나머지는 "볼피더 구동부",
-   * "장시간 무인 운전 라인" 처럼 자리나 운전 형태를 가리켜 사진이 성립하지
-   * 않는다. 그런 제품은 문자열 그대로 둔다.
+   * 지금은 일곱 제품 20칸이 전부 사진이다. 자리나 운전 형태를 가리키는
+   * 분야("볼피더 구동부", "장시간 무인 운전 라인" …)도 **그 자리에 있는
+   * 부품·재료·공구를 찍은 사진**으로 옮겨 붙였다 — 기계 전경 사진은 쓰지
+   * 않는다(fetch 스크립트의 고르는 기준 참고).
    */
   applications: (string | ApplicationCase)[];
   /**
@@ -319,7 +319,20 @@ export const products: Product[] = [
       { label: "튜닝", value: "실제 부품으로 이송 속도와 자세를 맞춘 뒤 납품" },
     ],
     // "부품 정렬 자세 유지 구간" 을 뺐다 — 첫 항목이 이미 그 구간이다.
-    applications: ["볼피더 – 조립기 사이 부품 이송", "센서 검사 구간 통과 이송"],
+    applications: [
+      {
+        name: "볼피더 – 조립기 사이 부품 이송",
+        note: "앞 공정에서 잡아 놓은 부품 자세를 흐트러뜨리지 않고 보내야 합니다.",
+        src: "/images/applications/linear-transfer.webp",
+        alt: "같은 나사를 한 줄로 세워 늘어놓은 모습",
+      },
+      {
+        name: "센서 검사 구간 통과 이송",
+        note: "센서가 읽을 수 있게 부품 간격과 속도를 일정하게 유지해야 합니다.",
+        src: "/images/applications/linear-inspect.webp",
+        alt: "마이크로미터로 금속판 두께를 재는 모습",
+      },
+    ],
     // specs 의 "설치 = 볼피더 배출구 직결", "구동 = 전자석 진동기 + 전용 컨트롤러".
     related: ["bowl-feeder", "vibrator", "controller"],
     images: [
@@ -367,7 +380,26 @@ export const products: Product[] = [
       { label: "교체", value: "기존 피더의 진동부만 교체 가능" },
       { label: "튜닝", value: "실제 부품으로 이송 속도와 방향을 맞춘 뒤 납품" },
     ],
-    applications: ["볼피더 구동부", "직진피더 구동부", "기존 피더 진동부 교체"],
+    applications: [
+      {
+        name: "볼피더 구동부",
+        note: "볼 전체가 고르게 떨리도록 부착 위치와 기울기를 맞춰야 합니다.",
+        src: "/images/applications/vibrator-bowl.webp",
+        alt: "다발로 묶인 구리선 더미",
+      },
+      {
+        name: "직진피더 구동부",
+        note: "직선 구간은 부품을 앞으로만 밀어야 해 진동 방향이 더 예민합니다.",
+        src: "/images/applications/vibrator-linear.webp",
+        alt: "둥글게 감아 둔 강선 뭉치",
+      },
+      {
+        name: "기존 피더 진동부 교체",
+        note: "피더 본체는 두고 진동부만 바꿀 때 치수와 전압을 맞춰야 합니다.",
+        src: "/images/applications/vibrator-replace.webp",
+        alt: "검은 바닥에 놓인 크롬 소켓 공구 여러 개",
+      },
+    ],
     // specs 의 "적용 = 볼피더 하부, 직진피더 하부", "제어 = 파츠피더 컨트롤러 연결".
     related: ["bowl-feeder", "linear-feeder", "controller"],
     images: [
@@ -412,7 +444,20 @@ export const products: Product[] = [
       { label: "보충", value: "상부 커버를 열어 부품 투입" },
     ],
     // "야간 · 주말 연속 가동 설비" 를 뺐다 — 첫 항목과 같은 말이다.
-    applications: ["장시간 무인 운전 라인", "소형 부품 대량 공급 공정"],
+    applications: [
+      {
+        name: "장시간 무인 운전 라인",
+        note: "사람이 채우지 않아도 되도록 한 번에 담아 두는 양이 많아집니다.",
+        src: "/images/applications/hopper-unattended.webp",
+        alt: "가득 쌓여 있는 육각 머리 볼트",
+      },
+      {
+        name: "소형 부품 대량 공급 공정",
+        note: "작은 부품일수록 같은 부피에 개수가 많아져 보충이 잦아집니다.",
+        src: "/images/applications/hopper-bulk.webp",
+        alt: "칸칸이 나뉜 통에 가득 담긴 작은 부품들",
+      },
+    ],
     // specs 의 "배출 = 볼피더 직상부 투입 슈트", "연동 = 볼피더 레벨 센서 신호".
     related: ["bowl-feeder", "controller"],
     images: [
@@ -461,7 +506,20 @@ export const products: Product[] = [
     ],
     // "소음 규제 대응이 필요한 현장" 을 뺐다 — 남는 두 항목이 그 현장이고
     // lead 가 이미 규제를 말한다.
-    applications: ["금속 부품 취급 라인", "작업자 상주 구역 인접 설비"],
+    applications: [
+      {
+        name: "금속 부품 취급 라인",
+        note: "금속끼리 부딪히는 소리가 커서 소음이 가장 크게 나는 쪽입니다.",
+        src: "/images/applications/cover-metal.webp",
+        alt: "끝을 맞춰 쌓아 올린 금속 관 수천 개",
+      },
+      {
+        name: "작업자 상주 구역 인접 설비",
+        note: "사람이 하루 종일 옆에 있는 자리라 소음 기준이 더 엄격합니다.",
+        src: "/images/applications/cover-worker.webp",
+        alt: "공구를 걸어 둔 작업장 벽과 작업대",
+      },
+    ],
     // specs 의 "제작 = 볼피더 외경에 맞춰". 우레탄 코팅과 나란히 둔다 —
     // 소음을 줄이는 두 가지 방법이라 함께 검토하는 물건이다.
     related: ["bowl-feeder", "urethane-coating"],
@@ -511,9 +569,24 @@ export const products: Product[] = [
       { label: "조절 범위", value: "다이얼 무단 조절" },
     ],
     applications: [
-      "볼피더 속도 제어",
-      "직진피더 속도 제어",
-      "호퍼피더 자동 공급 제어",
+      {
+        name: "볼피더 속도 제어",
+        note: "부품이 밀리지도 끊기지도 않는 지점을 찾아 진동 세기를 맞춥니다.",
+        src: "/images/applications/controller-bowl.webp",
+        alt: "회전 노브와 계기가 달린 제어 패널",
+      },
+      {
+        name: "직진피더 속도 제어",
+        note: "앞뒤 공정 속도에 맞춰 따로 조절해야 중간에 부품이 쌓이지 않습니다.",
+        src: "/images/applications/controller-linear.webp",
+        alt: "전선이 물려 있는 단자대",
+      },
+      {
+        name: "호퍼피더 자동 공급 제어",
+        note: "볼피더가 보내는 잔량 신호를 받아 멈추고 다시 도는 동작을 맡습니다.",
+        src: "/images/applications/controller-hopper.webp",
+        alt: "전선이 연결된 릴레이 모듈",
+      },
     ],
     // 바로 위 적용 분야 세 줄이 가리키는 제품 그대로다.
     related: ["bowl-feeder", "linear-feeder", "hopper-feeder"],
@@ -563,9 +636,24 @@ export const products: Product[] = [
       { label: "선택", value: "무처리 / 코팅 중 선택" },
     ],
     applications: [
-      "도금 · 도장 부품",
-      "수지 · 세라믹 등 깨지기 쉬운 부품",
-      "소음 저감이 필요한 라인",
+      {
+        name: "도금 · 도장 부품",
+        note: "표면이 벗겨지면 다시 입혀야 해서 긁힘을 특히 조심해야 합니다.",
+        src: "/images/applications/urethane-plated.webp",
+        alt: "크롬으로 도금된 금속 부품이 쌓여 있는 모습",
+      },
+      {
+        name: "수지 · 세라믹 등 깨지기 쉬운 부품",
+        note: "부딪히면 깨지거나 흠이 남기 때문에 닿는 면을 부드럽게 합니다.",
+        src: "/images/applications/urethane-resin.webp",
+        alt: "같은 모양으로 사출된 흰 플라스틱 부품 더미",
+      },
+      {
+        name: "소음 저감이 필요한 라인",
+        note: "코팅층이 충격을 먹기 때문에 금속끼리 부딪히는 소리가 줄어듭니다.",
+        src: "/images/applications/urethane-noise.webp",
+        alt: "굴곡이 반복되는 흡음재 표면",
+      },
     ],
     // specs 의 "적용 부위 = 볼 내면, 트랙, 직진피더 슈트".
     related: ["bowl-feeder", "linear-feeder"],
