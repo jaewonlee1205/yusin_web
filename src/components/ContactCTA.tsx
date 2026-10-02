@@ -39,9 +39,20 @@ export default function ContactCTA() {
               공급할 부품을 보내 주시면
               <br className="hidden sm:block" /> 맞는 피더를 설계해 드립니다.
             </h2>
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base">
-              부품 샘플이나 도면, 필요한 공급 속도만 알려 주세요. 형상을 분석해
-              제작 가능 여부와 예상 일정을 회신드립니다.
+            {/* max-w-sm(384px)은 제목이 줄바꿈하는 폭(366px)과 거의 같다.
+                전에는 max-w-xl(576px)이라 제목보다 57% 넓었고, 그래서 본문
+                둘째 줄이 29%(175/576px)짜리 토막으로 남아 위는 길고 아래는
+                짧아 보였다. 폭을 맞추니 두 덩어리가 한 기둥으로 선다 —
+                1440·1024·768 에서 둘째 줄이 63%, 390 에서 57% 로 고르다.
+
+                문구도 바꿨다. 전에 쓰던 "형상을 분석해 제작 가능 여부와 예상
+                일정을 회신드립니다" 는 /contact 배너 lead 와 검색 설명에도
+                글자 그대로 있었다. 이 CTA 는 /contact 를 뺀 9개 페이지에
+                붙으므로, 여기서 보고 문의하기로 넘어간 사람이 같은 문장을 두
+                번 읽었다. 같은 뜻을 쉬운 말로 옮겨 그 겹침을 없앴다. */}
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/70 sm:text-base">
+              공급할 부품 하나만 보내 주시면 됩니다. 만들 수 있는지, 얼마나
+              걸리는지 정리해 회신드립니다.
             </p>
           </Reveal>
 
