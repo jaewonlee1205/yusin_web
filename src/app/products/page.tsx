@@ -53,14 +53,10 @@ export default function ProductsPage() {
             </p>
           </div>
 
+          {/* 맺음말 문단은 이 안에 있다. 분류 사이드바가 생기면서 본문이
+              오른쪽 칸으로 좁아졌는데, 제품에 대한 말이라 그리드와 같은
+              기둥에 서야 한다. */}
           <ProductBrowser />
-
-          <p className="mt-12 rounded-lg border border-line bg-surface px-6 py-5 text-sm leading-relaxed text-ink-soft">
-            모든 제품은 공급할 부품에 맞춰 제작합니다. 정해진 표준 기종을
-            고르는 방식이 아니라, 부품 샘플을 받아 형상을 분석한 뒤 볼 형상과
-            정렬 지그를 새로 설계합니다. 기종별 상세 사양이 필요하시면 문의해
-            주세요.
-          </p>
         </Container>
       </div>
 
