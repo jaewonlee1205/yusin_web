@@ -172,47 +172,62 @@ export default async function ProductDetailPage({
           개수는 제품마다 다르다 — 2~4개다. products.ts 의 features 주석에
           기준을 적어 뒀다(사양 표에 같은 내용이 있으면 특징에 적지 않는다). */}
       <Section tone="surface" size="compact" eyebrow="FEATURES" title="특징">
-        {/* 항목을 두 개씩 한 행에 놓는다. 전에는 한 항목이 한 행을 다 쓰고
-            [18rem_1fr] 로 제목과 본문을 좌우로 놓았는데, 1280 이상에서 본문
-            칸이 760px 가 되는 동안 글자는 484~596px 뿐이라 칸 안에서 164~276px
-            가 비었다(1024 에서는 617px 칸에 21~133px 라 자연스러웠다). 두 열로
-            나누면 칸이 556px(1024 는 453px)가 되어 글자가 칸을 채운다.
+        {/* 참고로 주신 ansanfa.com/sub03.html 의 "ANSANFA PRODUCT" 여섯 항목을
+            재서 옮겼다.
 
-            높이도 줄어든다. 긴 본문이 두 줄이 되지만 행 수가 절반이라
-            네 개짜리가 224px 다(전에는 네 행 232px).
+              .row 1187x417 flex wrap   항목 6개가 3열 x 2행
+              항목 396x149  배경.테두리.구분선 없음, 아래 여백 60px
+              [0] div.icon      36x42 @x12 y0  체크 글리프 36px rgb(66,139,202)
+              [1] h4.title     312x22 @x72 y0  18px/21.6px w700
+              [2] p.description 312x48 @x72 y37 14px/24px w400 (2줄)
 
-            번호와 제목의 어긋남은 그대로 0 이다. 둘이 같은 격자 행에 있고
-            글자 크기와 줄높이가 같아(17px) 윗변이 일치한다. 번호를 자기 열에
-            두므로 본문도 제목과 같은 열에서 시작해 번호 아래로 밀려들지
-            않는다.
+            거기서 가져온 것은 셋이다 — 마커가 번호가 아니라 체크라는 것,
+            구분선이 없고 간격만으로 나눈다는 것, 아이콘과 글 사이를 넉넉히
+            둔다는 것.
 
-            번호는 aria-hidden 이다. 순서는 ul/li 가 이미 전달한다.
-            tabular-nums 라 01~04 의 폭이 같아 제목 x 가 모든 행에서 같다.
-            레드는 두 글자에만 쓴다(globals.css 토큰 주석 — "레드는 면적을
-            좁게").
+            전에는 번호 "01"~"04" 였다. 특징은 순서가 뜻을 갖지 않는다 —
+            "이런 것을 합니다" 라 체크가 맞다.
 
-            구분선은 ul 상단 하나(전폭)와 항목마다 아래 하나(칸 폭)다. 2열에서
-            아래 선이 gap-x-10 에서 끊기는데, 그 끊김이 두 열임을 보여 준다. */}
-        <ul className="grid border-t border-line lg:grid-cols-2 lg:gap-x-10">
+            구분선을 걷었다. 2열에서 항목마다 border-b 를 주면 선이 gap-x-10
+            에서 끊겨 ul 상단의 전폭 선과 길이가 어긋났는데, 그 문제도 같이
+            사라진다. 대신 gap-y-8(32px)이 행을 나눈다(안산FA 는 60px 인데
+            우리 글자가 작아 32px 로 맞췄다).
+
+            아이콘은 20px 다. 안산FA 는 제목 18px 에 아이콘 36px(두 배)인데
+            그 비율이면 34px 체크가 되어 레드가 너무 넓어진다(globals.css 토큰
+            주석 — "레드는 면적을 좁게"). 20px 이면 제목의 1.2배이고 획이 얇아
+            면적이 작다. 원형 배경은 두지 않는다 — 안산FA 에 없고, 선을 걷은
+            자리에 또 도형을 넣으면 가벼움이 사라진다. mt-0.5 는 20px 아이콘과
+            23.4px 제목 줄의 시각 중심을 맞추는 값이다.
+
+            열은 둘이다. 안산FA 는 여섯 개라 3열이 딱 맞지만 우리는 제품마다
+            2~4개여서 3열이면 네 개가 3+1 로 어긋난다. 2열이면 칸이 556px
+            (1024 는 453px)라 본문이 한두 줄로 칸을 채운다.
+
+            아이콘은 aria-hidden 이다. 목록이라는 사실은 ul/li 가 전달한다. */}
+        <ul className="grid gap-y-8 lg:grid-cols-2 lg:gap-x-10">
           {product.features.map((f, i) => (
-            <Reveal
-              as="li"
-              key={f.title}
-              delay={i * 70}
-              className="border-b border-line py-4"
-            >
-              <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3">
-                <span
+            <Reveal as="li" key={f.title} delay={i * 70}>
+              <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3.5">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   aria-hidden="true"
-                  className="text-[17px] font-bold leading-snug tabular-nums text-brand"
+                  className="mt-0.5 shrink-0 text-brand"
                 >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
                 <div>
                   <p className="text-[17px] font-bold leading-snug text-ink">
                     {f.title}
                   </p>
-                  <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">
+                  <p className="mt-1.5 text-[15px] leading-relaxed text-ink-soft">
                     {f.body}
                   </p>
                 </div>
