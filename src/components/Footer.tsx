@@ -55,12 +55,10 @@ const FOOTER_GROUPS: {
    만들고, 늘어난 만큼 목록의 gap 을 10px -> 2px 로 줄여 간격은 그대로
    보이게 한다. 글자 크기도 보이는 간격도 그대로고 손가락만 편해진다.
 
-   display 만 떼어 둔다. 브랜드 열의 유튜브 링크는 같은 글자 모양을 쓰되
-   블록이어야 한다 — inline-block 이나 inline-flex 로 두면 바로 아래
-   전화번호(inline-flex)와 한 줄에 나란히 서 버린다. */
-const LINK_TEXT =
-  "py-1 text-sm text-ink-soft transition-colors hover:text-brand";
-const LINK = `inline-block ${LINK_TEXT}`;
+   세 열의 목록 링크 11개만 쓴다. 브랜드 열의 유튜브 링크는 한때 이 글자
+   모양을 같이 썼지만 지금은 테두리 버튼이라 따로 간다. */
+const LINK =
+  "inline-block py-1 text-sm text-ink-soft transition-colors hover:text-brand";
 
 /* 자간 0.2em 은 Section.tsx 의 eyebrow 와 같은 값이다(푸터만 0.15em 이었다). */
 const HEADING = "text-xs font-bold tracking-[0.2em] text-ink";
@@ -91,9 +89,21 @@ export default function Footer() {
             {/* 유튜브 채널. /videos 안에만 있던 링크를 여기로도 꺼냈다 —
                 영상이 회사를 보여 주는 자료라 모든 페이지에서 닿는 편이 낫다.
 
-                글자 모양은 옆 열의 링크들과 같다(LINK_TEXT). py-1 도 같은
-                이유로 가져간다 — 글자만 두면 누를 수 있는 높이가 20px 라
-                WCAG 2.2 Target Size(24px)에 못 미친다.
+                목록 링크가 아니라 테두리 버튼이다. 옆 세 열은 [제품]·[회사]·
+                [고객지원] 제목 아래 묶여 있는데 이 링크만 제목 없는 열에 혼자
+                서게 되어, 글자만 두면 어디에도 안 붙어 보였다.
+
+                모양은 /location 의 외부 지도 링크 두 개와 같은 어휘다
+                (rounded border border-line … hover:border-navy/40
+                hover:text-ink). 거기도 target="_blank" 외부 링크다. 다른 건
+                둘뿐이다 — 패딩을 px-5 py-2.5 에서 좁혔고(푸터는 밀도가 높다),
+                bg-white 를 더했다(/location 은 흰 바탕 위라 배경이 필요 없지만
+                푸터는 bg-surface 라 흰 바탕이라야 버튼이 떠 보인다).
+
+                아이콘만 text-brand 다. 유튜브 원색(#FF0000)이 아니라 사이트
+                브랜드 레드(#d5261e)를 쓴다 — 바로 위 로고의 YUSIN 빨강과
+                호응시키고 화면에 빨강이 둘 생기는 걸 막는다. 흰 바탕 대비
+                5.1:1 로 비문자 기준(3:1)을 넘는다.
 
                 flex w-fit 이다. inline-flex 로 두면 아래 전화번호와 한 줄에
                 나란히 선다(둘 다 inline 레벨이라 같은 줄 상자에 들어간다). */}
@@ -101,9 +111,9 @@ export default function Footer() {
               href={site.youtube}
               target="_blank"
               rel="noopener noreferrer"
-              className={`${LINK_TEXT} mt-4 flex w-fit items-center gap-2`}
+              className="mt-4 flex w-fit items-center gap-2 rounded border border-line bg-white px-3 py-1.5 text-sm font-semibold text-ink-soft transition-colors hover:border-navy/40 hover:text-ink"
             >
-              <YoutubeIcon />
+              <YoutubeIcon className="shrink-0 text-brand" />
               유튜브 채널
             </a>
 
@@ -116,12 +126,14 @@ export default function Footer() {
                 머리말·회사소개·검색 설명에 이미 있어 뺐다. 그때 이 열이 옆
                 열보다 37px 일찍 끝났는데, 유튜브 링크가 들어오면서 다시 찼다.
 
-                간격은 재서 골랐다. 로고+16 / 유튜브+20 이면 이 열이 152px 가
-                되어 [제품] 열 마지막 행(우레탄 코팅·전체 보기)과 2px 안에서
-                끝난다. 16/16 은 148px(-2px), 20/20 은 156px(+6px)이었다. */}
+                간격은 재서 골랐다. 32(로고) + 16 + 34(버튼) + 12 + 28 + 8 +
+                20 = 150px 로, [제품] 열 마지막 행(우레탄 코팅·전체 보기)과
+                오차 0px 다. 버튼이 글자 링크보다 6px 커진 만큼을 여기서 뺐다
+                (mt-5 -> mt-3). 버튼은 테두리가 스스로 경계를 만들어 주므로
+                간격이 좁아도 위에 붙어 보이지 않는다. */}
             <a
               href={telHref(site.tel)}
-              className="mt-5 inline-flex items-center gap-2 text-lg font-bold tabular-nums text-ink transition-colors hover:text-brand"
+              className="mt-3 inline-flex items-center gap-2 text-lg font-bold tabular-nums text-ink transition-colors hover:text-brand"
             >
               <PhoneIcon className="h-[18px] w-[18px] shrink-0" />
               {site.tel}
