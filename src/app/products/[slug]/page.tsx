@@ -146,6 +146,21 @@ export default async function ProductDetailPage({
           ))}
         </dl>
 
+        {/* 경쟁사(신창에프에이)는 표준 기종을 팔아 형식별 용량·전원·진동수·
+            중량 표가 있다. 유신은 부품에 맞춰 만드는 회사라 그 표가 나올 수
+            없다 — 숨기지 말고 여기서 말한다. 없는 수치를 지어 넣으면 고객이
+            그대로 믿고 발주하는 값이 되므로 하지 않는다.
+
+            뒷문장은 company.ts 의 process[0]("공급할 부품 샘플과 도면을 받아
+            형상·재질·무게·요구 공급 속도를 확인합니다")을 근거로 쓴다.
+            유신에서 기종별 수치를 받으면 이 문단을 지우고 위 표를 수치표로
+            바꾼다(README '받아야 할 자료' 7번). */}
+        <p className="mt-4 text-sm leading-relaxed text-muted">
+          볼 직경·시간당 처리 수량 같은 수치는 공급할 부품과 요구 속도에 따라
+          달라집니다. 부품 샘플과 도면을 보내 주시면 형상·재질·무게·요구 공급
+          속도를 확인해 산출된 사양으로 회신드립니다.
+        </p>
+
         <h3 className="mt-12 text-lg font-bold text-ink">적용 분야</h3>
         <ul className="mt-4 flex flex-wrap gap-2">
           {product.applications.map((a) => (

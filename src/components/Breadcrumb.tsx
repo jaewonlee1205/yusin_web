@@ -7,6 +7,12 @@ import Container from "./Container";
  * 전에는 배너 아래 회색 띠였는데, 배너와 따로 떠 보이고 48px 를 더 먹었다.
  * 네이비(헤더 아래 어두운 띠)로 올리면 헤더와 한 덩어리로 읽힌다.
  *
+ * 헤더와 함께 붙어 따라온다(sticky). 상세 페이지가 3000px 가 넘어, 내려가는
+ * 동안 지금 보는 제품이 뭔지 남겨 두는 값이 52px 보다 크다. top 값은 헤더
+ * 높이 그대로다 — Header.tsx 가 h-16 sm:h-20 에 border-b 1px 이라 재면
+ * 64.8 / 80.8px 이고, calc(4rem + 1px) 는 globals.css 의 .hero-screen 이
+ * 이미 쓰는 식이다. z-40 은 헤더(z-50)의 드롭다운이 위로 덮게 하려는 것이다.
+ *
  * 색은 눈대중이 아니라 바탕(navy-deep #06265c) 위 대비로 골랐다.
  *   white/60  6.08:1  링크      (AA 4.5 를 넉넉히 넘는다)
  *   white/90 12.02:1  현재 항목
@@ -22,7 +28,7 @@ export default function Breadcrumb({
   current: string;
 }) {
   return (
-    <div className="bg-navy-deep">
+    <div className="sticky top-[calc(4rem+1px)] z-40 bg-navy-deep sm:top-[calc(5rem+1px)]">
       <Container>
         <nav aria-label="현재 위치" className="py-4 text-[13px]">
           <ol className="flex flex-wrap items-center gap-2">
