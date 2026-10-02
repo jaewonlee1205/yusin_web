@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Nanum_Brush_Script } from "next/font/google";
+import Image from "next/image";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
@@ -70,8 +71,29 @@ export default function CompanyPage() {
           {/* 그리드 칸이 곧 Reveal 이다 — 래퍼를 덧대면 칸이 하나 더 생겨
               패널 아랫변 정렬이 깨진다. */}
           <Reveal>
+            {/* 마지막 낱말을 로고의 YUSIN 마크로 대신한다.
+
+                사이트에서 글 안에 이미지를 넣는 유일한 자리다 — 다른 Image 는
+                전부 블록 컨테이너의 직계 자식이고, 브랜드도 읽는 글에서는 한글
+                "유신" 으로만 쓴다(영문은 로고 이미지, 회사 개요 영문 부기,
+                WHY YUSIN eyebrow 세 군데뿐). 여기 한 곳만의 예외로 두고 다른
+                제목으로 번지지 않게 한다 — 번지면 한글 표기 규칙이 무너진다.
+
+                alt 를 비우지 않는다. 이미지가 글자를 대신하므로 비우면 제목이
+                "변화에 앞서가는 기업," 에서 끊겨 읽힌다.
+
+                h-[0.78em] 로 글자 크기에 매어 둔다 — 24px 제목에서 19px,
+                36px 에서 28px 로 따라 커진다. top 은 밑선을 맞추는 값이다
+                (마크에 기울기와 꼬리가 있어 그냥 두면 살짝 뜬다). */}
             <h2 className="text-2xl font-bold leading-snug tracking-tight text-ink sm:text-4xl">
-              {intro.title}
+              {intro.title.lead}{" "}
+              <Image
+                src="/images/logo-mark.png"
+                alt={intro.title.brand}
+                width={129}
+                height={32}
+                className="relative top-[0.06em] inline-block h-[0.78em] w-auto align-baseline"
+              />
             </h2>
             {/* 제목 아래 여백은 Section 의 헤더 아래 여백과 같은 값으로 맞춘다 */}
             <div className="mt-10 sm:mt-14">

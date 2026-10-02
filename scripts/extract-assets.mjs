@@ -292,9 +292,45 @@ async function repairLogo() {
   );
 }
 
+/**
+ * 로고에서 YUSIN 워드마크만 떼어 낸다. 회사소개 제목
+ * "변화에 앞서가는 기업, 유신" 의 마지막 낱말 자리에 글자 대신 들어간다.
+ *
+ * 좌표는 완성된 logo.png(403x52)를 열마다 잉크 스캔해 잡았다. 마크(x 0~128)와
+ * "유신 F.A SYSTEM"(x 146~402) 사이에 17px 빈 칸이 있어 경계가 또렷하다.
+ * 세로는 y 9~40. repairLogo() 가 손보는 태그라인(y 39~, x 386~)은 이 영역 밖이라
+ * 영향을 주고받지 않는다.
+ *
+ * repairLogo() 뒤에 돌려야 한다 — 완성된 파일에서 잘라야 이 좌표가 맞는다.
+ */
+const LOGO_MARK = { left: 0, top: 9, width: 129, height: 32 };
+
+async function extractLogoMark() {
+  const file = path.join(OUT, "logo.png");
+  const meta = await sharp(file).metadata();
+
+  // repairLogo() 와 같은 규칙 — 예상과 다르면 조용히 엉뚱한 데를 자르는 대신
+  // 건너뛰고 경고한다.
+  if (meta.width !== 403 || meta.height !== 52) {
+    console.warn(
+      `  ! 로고가 ${meta.width}x${meta.height} 입니다 (예상 403x52).\n` +
+        `    YUSIN 마크 추출을 건너뜁니다 — LOGO_MARK 좌표를 다시 잡으세요.`
+    );
+    return;
+  }
+
+  const mark = await sharp(file)
+    .extract(LOGO_MARK)
+    .png({ compressionLevel: 9 })
+    .toBuffer();
+  await writeFile(path.join(OUT, "logo-mark.png"), mark);
+  console.log("  logo mark -> images/logo-mark.png");
+}
+
 /** 로고 다듬기, 파비콘, OG 이미지를 만든다. */
 async function makeBrandMarks() {
   await repairLogo();
+  await extractLogoMark();
 
   // 로고 래스터가 400x52밖에 안 돼 아이콘으로 확대하면 뭉개진다.
   // 로고의 기울어진 서체를 따라 'Y'를 패스로 그려 선명한 아이콘을 만든다.
