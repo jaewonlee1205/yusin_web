@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
 import Section from "@/components/Section";
 import {
   EQUIPMENT_GROUPS,
@@ -48,16 +49,30 @@ export default function FacilityPage() {
           /company/vision 의 조직도 섹션과 /company 의 회사 개요 섹션이 같은
           이유로 lead 없이 eyebrow + title 만 둔다. */}
       <Section eyebrow="BY PROCESS" title="공정별 보유 설비">
-        {/* items-start: 항목 수가 다른 카드가 억지로 늘어나 빈 공간이 생기지 않게 한다 */}
-        <div className="grid items-start gap-6 lg:grid-cols-2">
-          {EQUIPMENT_GROUPS.map((group) => {
+        {/* 그룹마다 가로로 펼친 밴드를 쌓는다. 두 열 카드였을 때는 품목 수가
+            9/3/5/4 로 달라 같은 행의 높이가 245px 까지 어긋났다(절삭·가공 505 대
+            용접 260). items-start 를 빼서 늘려 봤더니 용접 카드 안에 274px 짜리
+            빈 공간이 생겨 더 나빴다 — /company/page.tsx:95 주석도 같은 이유로
+            stretch 를 피한다.
+
+            나란히 놓이는 칸이 없으면 높이가 어긋날 일 자체가 없다. 밴드가
+            세로로만 쌓이므로 간격도 저절로 균일하다.
+
+            그룹 순서는 바꾸지 않는다 — company.ts:174 주석대로 절삭→용접→연마
+            →운반이 실제 공정 흐름이고 조직도 가공부 칩과도 짝이 맞는다. */}
+        <div className="grid gap-4">
+          {EQUIPMENT_GROUPS.map((group, i) => {
             const items = equipmentByGroup(group.key);
             const units = items.reduce((sum, item) => sum + item.count, 0);
 
             return (
-              <div
+              // 80ms 는 이 사이트 카드 그리드의 관례다 — 홈 '강점' 과 제작
+              // 프로세스가 같은 값을 쓴다. Reveal 의 className 은 덮어쓰지 않고
+              // 덧붙으므로 밴드 자체를 Reveal 로 만들 수 있다(래퍼가 안 는다).
+              <Reveal
                 key={group.key}
-                className="flex flex-col rounded-lg border border-line p-6 sm:p-7"
+                delay={i * 80}
+                className="rounded-lg border border-line p-6 sm:p-7"
               >
                 {/* 아래 품목 행과 같은 틀(이름 왼쪽 / 수 오른쪽)이라 그룹 합계가
                     품목 대수와 한 열로 선다. 합계를 품목보다 약하게 둔다 —
@@ -73,11 +88,17 @@ export default function FacilityPage() {
                 <p className="mt-2 text-sm leading-relaxed text-muted">
                   {group.body}
                 </p>
-                <ul className="mt-5 border-t border-line">
+                {/* 가로 간격만 준다(gap-x). 세로 간격을 주면 행마다 긋는 밑줄
+                    사이가 벌어져 표처럼 안 보인다.
+
+                    열 수는 재서 정했다. 320px 에서 2열로 두면 한 칸이 107px 라
+                    여섯 행이 두 줄로 깨져, 639px 아래는 1열로 둔다. 가장 좁은
+                    안전 칸이 142px(390px 2열)이고 md 3열이 195px 라 여유가 있다. */}
+                <ul className="mt-5 grid grid-cols-1 gap-x-8 border-t border-line sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
                   {items.map((item) => (
                     <li
                       key={item.name}
-                      className="flex items-baseline justify-between gap-3 border-b border-line py-2.5"
+                      className="flex min-w-0 items-baseline justify-between gap-3 border-b border-line py-2.5"
                     >
                       <span className="text-sm text-ink-soft">{item.name}</span>
                       <span className="shrink-0 text-sm font-bold tabular-nums text-navy">
@@ -86,7 +107,7 @@ export default function FacilityPage() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </Reveal>
             );
           })}
         </div>
