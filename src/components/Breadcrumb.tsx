@@ -2,16 +2,13 @@ import Link from "next/link";
 import Container from "./Container";
 
 /**
- * 헤더 바로 아래 네이비 띠에 놓는 현재 위치 표시.
+ * 헤더 바로 아래 놓는 현재 위치 표시.
  *
  * 전에는 배너 아래 회색 띠였는데, 배너와 따로 떠 보이고 48px 를 더 먹었다.
- * 네이비(헤더 아래 어두운 띠)로 올리면 헤더와 한 덩어리로 읽힌다.
+ * 헤더 바로 밑으로 올려 한 덩어리로 읽히게 했다.
  *
- * 헤더와 함께 붙어 따라온다(sticky). 상세 페이지가 3000px 가 넘어, 내려가는
- * 동안 지금 보는 제품이 뭔지 남겨 두는 값이 52px 보다 크다. top 값은 헤더
- * 높이 그대로다 — Header.tsx 가 h-16 sm:h-20 에 border-b 1px 이라 재면
- * 64.8 / 80.8px 이고, calc(4rem + 1px) 는 globals.css 의 .hero-screen 이
- * 이미 쓰는 식이다. z-40 은 헤더(z-50)의 드롭다운이 위로 덮게 하려는 것이다.
+ * 따라 내려오게(sticky) 두지 않는다. 헤더(81px)와 합쳐 133px 를 늘 차지하는데,
+ * 그 자리를 내주고 본문을 넓게 쓰는 쪽이 낫다.
  *
  * 바탕과 아래 테두리는 Header.tsx 가 쓰는 값 그대로다(bg-white/95
  * backdrop-blur + border-b border-line). 헤더와 한 덩어리로 보이게 하려는
@@ -33,7 +30,7 @@ export default function Breadcrumb({
   current: string;
 }) {
   return (
-    <div className="sticky top-[calc(4rem+1px)] z-40 border-b border-line bg-white/95 backdrop-blur sm:top-[calc(5rem+1px)]">
+    <div className="border-b border-line bg-white/95 backdrop-blur">
       <Container>
         <nav aria-label="현재 위치" className="py-4 text-[13px]">
           <ol className="flex flex-wrap items-center gap-2">

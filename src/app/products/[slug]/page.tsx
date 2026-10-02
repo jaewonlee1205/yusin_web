@@ -126,21 +126,43 @@ export default async function ProductDetailPage({
           풀면 네 개를 한눈에 견준다. 왼쪽 2px 빨간 띠는 뺐다(분류 사이드바에서
           걷어낸 것과 같은 장식이고, 한 화면에 빨강이 네 번 반복됐다). */}
       <Section tone="surface" size="compact" eyebrow="FEATURES" title="특징">
-        {/* 칸 자체가 Reveal 이다. 바깥 ul 이 gap-px + bg-line 으로 칸 사이
-            선을 그리는 구조라, 래퍼를 한 겹 덧대면 그 선이 어긋난다
-            (홈 '유신의 강점' 과 같은 패턴이다). */}
-        <ul className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">
+        {/* 네모 카드를 쓰지 않는다. 전에는 gap-px + bg-line 2열 격자라 선으로
+            나뉜 네모 넷이었다. 참고한 ablelabsinc.com/notable96 에서 가져온
+            것은 왼쪽 48x48 타일이 만드는 리듬뿐이고, 카드는 비웠다 — 남는
+            것은 번호 타일과 가로 구분선이다.
+
+            열 수가 폭마다 다르다. 768 에서 3열을 쓰면 제목 칸이 200px 로
+            좁아져 가장 긴 제목("볼피더 외경에 맞춘 전용 제작", 16자)이 두
+            줄이 된다. 그래서 1024 부터만 3열이고, 제목 칸은 18rem(288px)
+            이다 — 거기서 28개 제목이 모두 한 줄이고 가장 긴 본문(80자)이
+            두 줄이다.
+
+            번호 타일은 흰색이다. 이 섹션이 tone="surface" 라 흰 타일이
+            또렷하게 뜬다. 레드는 숫자 글자에만 쓴다(globals.css 의 토큰
+            주석 — "레드는 면적을 좁게"). */}
+        <ul className="border-t border-line">
           {product.features.map((f, i) => (
             <Reveal
               as="li"
               key={f.title}
               delay={i * 70}
-              className="bg-white p-6 sm:p-7"
+              className="border-b border-line py-7 sm:py-8"
             >
-              <p className="text-base font-bold text-ink">{f.title}</p>
-              <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-                {f.body}
-              </p>
+              <div className="grid gap-x-10 gap-y-3 sm:grid-cols-[auto_minmax(0,1fr)] lg:grid-cols-[auto_minmax(0,18rem)_minmax(0,1fr)]">
+                {/* 순서는 ul/li 가 이미 전달한다. 눈으로만 읽는 번호다. */}
+                <span
+                  aria-hidden="true"
+                  className="flex h-12 w-12 items-center justify-center rounded-lg border border-line bg-white text-sm font-bold tabular-nums text-brand sm:row-span-2 lg:row-span-1"
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <p className="text-[17px] font-bold leading-snug text-ink">
+                  {f.title}
+                </p>
+                <p className="text-[15px] leading-relaxed text-ink-soft">
+                  {f.body}
+                </p>
+              </div>
             </Reveal>
           ))}
         </ul>
