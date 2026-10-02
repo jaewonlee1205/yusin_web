@@ -9,6 +9,13 @@ type Props = {
   lead?: string;
   /** 회색 배경 */
   tone?: "white" | "surface" | "navy";
+  /**
+   * 세로 여백.
+   *  - "default" : 홈·하위 페이지처럼 섹션이 한두 개인 곳
+   *  - "compact" : 제품 상세처럼 섹션이 연달아 셋 이상 오는 곳.
+   *    default 로 두면 섹션 사이가 192px 이라 중간이 휑해 보인다.
+   */
+  size?: "default" | "compact";
   id?: string;
   className?: string;
 };
@@ -19,6 +26,11 @@ const TONE = {
   navy: "bg-navy-deep text-white",
 } as const;
 
+const PAD = {
+  default: "py-16 sm:py-24",
+  compact: "py-12 sm:py-16",
+} as const;
+
 /** 홈·하위 페이지에서 반복되는 섹션 껍데기. 제목 블록의 간격을 한곳에서 관리한다. */
 export default function Section({
   children,
@@ -26,13 +38,14 @@ export default function Section({
   title,
   lead,
   tone = "white",
+  size = "default",
   id,
   className = "",
 }: Props) {
   const dark = tone === "navy";
 
   return (
-    <section id={id} className={`${TONE[tone]} py-16 sm:py-24 ${className}`}>
+    <section id={id} className={`${TONE[tone]} ${PAD[size]} ${className}`}>
       <Container>
         {(eyebrow || title || lead) && (
           <div className="mb-10 max-w-2xl sm:mb-14">
