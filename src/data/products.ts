@@ -135,13 +135,22 @@ export type Product = {
    */
   specs: { label: string; value: string }[];
   /**
-   * 적용 분야 칩. 개수를 제품마다 맞추지 않는다 — 지금 2~5개다.
+   * 적용 분야. 개수를 제품마다 맞추지 않는다 — 지금 2~5개다.
    *
    * ⚠️ 서로 다른 자리·다른 부품을 가리킬 때만 따로 적을 것. "장시간 무인
    *    운전 라인" 과 "야간·주말 연속 가동 설비" 처럼 같은 말을 둘로 쪼개
    *    숫자를 채우지 않는다.
+   *
+   * 두 가지 형태가 있다. 문자열이면 칩 한 개로 그리고, ApplicationCase 면
+   * 사진 카드로 그린다. ⚠️ 한 제품 안에서 섞으면 안 된다 — 파일 끝의 검사가
+   * 빌드를 멈춘다.
+   *
+   * 사진을 붙일 수 있는 것은 **부품군을 가리키는 분야**뿐이다. 지금은
+   * 볼피더만 그렇고(커넥터·체결부품·용기 …), 나머지는 "볼피더 구동부",
+   * "장시간 무인 운전 라인" 처럼 자리나 운전 형태를 가리켜 사진이 성립하지
+   * 않는다. 그런 제품은 문자열 그대로 둔다.
    */
-  applications: string[];
+  applications: (string | ApplicationCase)[];
   /**
    * 상세 페이지 아래 "다른 제품" 에 띄울 제품의 slug.
    *
@@ -154,6 +163,32 @@ export type Product = {
    */
   related: string[];
   images: { src: string; alt: string }[];
+};
+
+/**
+ * 사진 있는 적용 분야 한 칸.
+ *
+ * ⚠️ src 의 사진은 유신이 찍은 것이 아니라 어떤 부품인지 보여 주는 일반 산업
+ *    사진이다(scripts/fetch-application-photos.mjs 에 출처가 있다). 화면에도
+ *    "사진은 부품 종류를 보여 주는 예시입니다" 를 적어 둔다. 유신 실물 사진을
+ *    받으면 같은 이름으로 파일만 갈아 끼우면 되고 여기는 고칠 것이 없다.
+ */
+export type ApplicationCase = {
+  name: string;
+  /**
+   * 그 부품을 공급할 때 무엇이 까다로운지 한 줄.
+   *
+   * ⚠️ TODO — 부품군 일반의 성질만 적은 것이라 유신 측 확인 후 고칠 것.
+   *    어느 분야에 어떤 볼 형상·재질·표면 처리를 쓰는지는 데이터에 근거가
+   *    없으므로 쓰지 않았다. (videos.ts 의 제목과 같은 상태다)
+   *
+   * ⚠️ 길이. 가장 좁은 칸이 1280 이상의 5열이라 13px 로 두 줄이 되는 길이여야
+   *    한다. 다섯 칸의 줄 수가 다르면 격자 아랫변이 어긋난다.
+   */
+  note: string;
+  src: string;
+  /** 부품만 서술한다 — 유신 작업물로 읽히면 안 된다. */
+  alt: string;
 };
 
 /** 피더가 무엇인지 — PPT 5페이지 원문. */
@@ -202,12 +237,38 @@ export const products: Product[] = [
     ],
     // 다섯이다. clients.ts 의 clientIndustries 여섯 산업을 부품 이름으로 풀어
     // 썼다 — 실제 거래처가 그 분야라 지어낸 말이 아니다.
+    // 일곱 제품 가운데 분야가 부품군인 것은 볼피더뿐이라 여기만 사진을 둔다.
     applications: [
-      "커넥터 · 단자 등 전자부품",
-      "볼트 · 너트 · 나사 등 체결부품",
-      "제약 · 의료용 용기 부품",
-      "화장품 용기 캡 · 펌프 부품",
-      "가전 · 전기기기 조립 부품",
+      {
+        name: "커넥터 · 단자 등 전자부품",
+        note: "핀이 붙은 면이 정해져 있어 언제나 한 자세로만 세워 보내야 합니다.",
+        src: "/images/applications/connector.webp",
+        alt: "흰 바닥에 흩어져 있는 금속 커넥터 여러 개",
+      },
+      {
+        name: "볼트 · 너트 · 나사 등 체결부품",
+        note: "머리 쪽과 나사 쪽을 가려내 모두 같은 방향으로 눕혀 내보냅니다.",
+        src: "/images/applications/fastener.webp",
+        alt: "같은 규격의 나사가 가득 쌓여 있는 모습",
+      },
+      {
+        name: "제약 · 의료용 용기 부품",
+        note: "입구가 위를 향하게 세우고 유리끼리 부딪히지 않게 조심해 다룹니다.",
+        src: "/images/applications/vial.webp",
+        alt: "트레이에 가지런히 꽂혀 있는 투명 유리 바이알",
+      },
+      {
+        name: "화장품 용기 캡 · 펌프 부품",
+        note: "표면 흠집이 그대로 보이는 부품이라 닿는 면을 코팅으로 덮습니다.",
+        src: "/images/applications/cosmetic.webp",
+        alt: "검은 뚜껑이 끼워진 갈색 유리 용기 여러 개",
+      },
+      {
+        name: "가전 · 전기기기 조립 부품",
+        note: "모양이 제각각이라 부품마다 트랙과 선별 지그를 새로 설계해 넣습니다.",
+        src: "/images/applications/appliance.webp",
+        alt: "프레스로 찍어 낸 금속 링 부품이 쌓여 있는 모습",
+      },
     ],
     // specs 의 "옵션 = 방음커버, 호퍼피더, 직진피더 연결" 그대로다.
     related: ["linear-feeder", "hopper-feeder", "soundproof-cover"],
@@ -529,6 +590,15 @@ export const products: Product[] = [
  * 여기서 던지면 빌드가 멈춘다.
  */
 for (const p of products) {
+  // 한 제품의 applications 가 문자열과 객체로 섞이면 같은 목록에 칩과 사진
+  // 카드가 함께 나온다. 화면에서는 어긋난 격자로만 보여 알아채기 어렵다.
+  const withPhoto = p.applications.filter((a) => typeof a !== "string").length;
+  if (withPhoto !== 0 && withPhoto !== p.applications.length) {
+    throw new Error(
+      `products.ts: ${p.slug} 의 applications 에 칩과 사진 카드가 섞여 있다`
+    );
+  }
+
   for (const slug of p.related) {
     if (slug === p.slug) {
       throw new Error(`products.ts: ${p.slug} 의 related 가 자기 자신을 가리킨다`);

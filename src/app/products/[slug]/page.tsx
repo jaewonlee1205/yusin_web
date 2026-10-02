@@ -6,10 +6,16 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Container from "@/components/Container";
 import ContactCTA from "@/components/ContactCTA";
 import ProductGallery from "@/components/ProductGallery";
+import ApplicationCases from "@/components/ApplicationCases";
 import ProductCard from "@/components/ProductCard";
 import Reveal from "@/components/Reveal";
 import Section from "@/components/Section";
-import { getProduct, products, type Product } from "@/data/products";
+import {
+  getProduct,
+  products,
+  type ApplicationCase,
+  type Product,
+} from "@/data/products";
 
 export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
@@ -102,8 +108,15 @@ export default async function ProductDetailPage({
             <ProductGallery images={product.images} />
 
             <div className="lg:flex lg:flex-col">
-              {/* 분류 배지. 점 하나로 레드를 아주 좁게만 쓴다. */}
-              <p className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-bold tracking-[0.1em] text-ink-soft">
+              {/* 분류 배지. 점 하나로 레드를 아주 좁게만 쓴다.
+
+                  self-start 가 필요하다. 이 칸이 lg 에서 flex-col 이라 플렉스
+                  칸의 기본 align-items:stretch 가 걸리는데, 그러면 inline-flex
+                  짜리인 이 배지가 내용 폭(93px)이 아니라 칸 폭(1024 에서 440,
+                  1280 이상에서 512px)까지 늘어난다. 같은 칸의 다른 자식은
+                  블록이라 늘어나는 것이 맞고, 배지만 내용 크기로 둔다.
+                  lg 미만에서는 부모가 플렉스가 아니라 이 한 줄이 무시된다. */}
+              <p className="inline-flex self-start items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-bold tracking-[0.1em] text-ink-soft">
                 <span
                   aria-hidden="true"
                   className="h-1.5 w-1.5 rounded-full bg-brand"
@@ -382,27 +395,37 @@ export default async function ProductDetailPage({
         </Reveal>
 
         <h3 className="mt-12 text-lg font-bold text-ink">적용 분야</h3>
-        <Reveal>
-          {/* 칩에 레드 점을 붙인다. 위 히어로의 분류 배지가 이미
-              rounded-full + border-line + bg-surface + bg-brand 점이라,
-              같은 언어를 쓰면 한 페이지에서 칩이 한 가지 생김새로 읽힌다.
-              히어로 "주요 특징" 은 체크, 여기는 점 — 마커가 달라 둘이
-              섞이지 않는다. */}
-          <ul className="mt-4 flex flex-wrap gap-2">
-            {product.applications.map((a) => (
-              <li
-                key={a}
-                className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium text-ink-soft"
-              >
-                <span
-                  aria-hidden="true"
-                  className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
-                />
-                {a}
-              </li>
-            ))}
-          </ul>
-        </Reveal>
+        {/* 분야가 부품군을 가리키는 제품(지금은 볼피더뿐)은 사진 카드로,
+            "볼피더 구동부" 처럼 자리를 가리키는 나머지는 칩으로 그린다.
+            데이터가 둘을 구분한다 — products.ts 의 applications 참고.
+            한 제품 안에서 섞이면 그 파일 끝의 검사가 빌드를 멈춘다. */}
+        {typeof product.applications[0] === "string" ? (
+          <Reveal>
+            {/* 칩에 레드 점을 붙인다. 위 히어로의 분류 배지가 이미
+                rounded-full + border-line + bg-surface + bg-brand 점이라,
+                같은 언어를 쓰면 한 페이지에서 칩이 한 가지 생김새로 읽힌다.
+                히어로 "주요 특징" 은 체크, 여기는 점 — 마커가 달라 둘이
+                섞이지 않는다. */}
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {(product.applications as string[]).map((a) => (
+                <li
+                  key={a}
+                  className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium text-ink-soft"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+                  />
+                  {a}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        ) : (
+          <ApplicationCases
+            cases={product.applications as ApplicationCase[]}
+          />
+        )}
       </Section>
 
       {/* 목록 페이지와 똑같은 세로 카드다 — ProductCard 를 그대로 쓴다.
