@@ -5,8 +5,8 @@ import { notFound } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumb";
 import Container from "@/components/Container";
 import ContactCTA from "@/components/ContactCTA";
-import ProductCard from "@/components/ProductCard";
 import ProductGallery from "@/components/ProductGallery";
+import ProductRowCard from "@/components/ProductRowCard";
 import Reveal from "@/components/Reveal";
 import Section from "@/components/Section";
 import { getProduct, products, type Product } from "@/data/products";
@@ -109,65 +109,40 @@ export default async function ProductDetailPage({
                 {product.summary}
               </p>
 
-              {/* 주요 특징 — 전에는 여기에 lead 문단(3줄)이 있었다.
-                  그 문단이 사실은 목록을 산문으로 늘여 쓴 것이었다. 볼피더를
-                  보면 "소형부터 대형까지 … 계단형·단종형·접시형·원통형 …
-                  정렬 지그는 … 직접 설계·가공" 인데, 셋이 features 의
-                  "소형부터 대형까지" · "네 가지 기본 볼 형상" · "부품별 맞춤
-                  볼 설계" 와 같은 내용이다. 목록으로 바꿔도 잃는 정보가 없고
-                  데이터를 새로 만들 것도 없다.
+              {/* 주요 사양 — specs 앞 세 줄이다. 아래 사양 표는 slice(3) 로
+                  뒤 세 줄만 쓴다. 같은 줄이 두 번 나오지 않는다.
 
-                  참고로 받은 신창에프에이 LSP 호퍼피더의 "주요 특징" 박스를
-                  쟀다 — 568x208, 연한 회색 바탕, radius 12, padding 24,
-                  라벨 12px/700 tracking 2.4px, 항목마다 20x20 원형 마커 안에
-                  체크, 글자 16px. 그 짜임을 우리 토큰으로 옮겼다.
+                  전에는 이 자리에 features.title 을 넣었는데, 아래 FEATURES
+                  섹션의 제목 네 개와 글자까지 100% 같았다. 히어로는 "이 제품이
+                  무엇인가"(주요 내용)를, 아래는 "왜 좋은가"(특징)를 맡아야
+                  하므로 축을 사양으로 바꿨다.
 
-                  높이도 이쪽이 맞는다. 1440에서 오른쪽 칸이 363px 로 갤러리
-                  (468px)보다 105px 짧아 아래가 비어 있었는데, 문단(-107)을
-                  카드(+212)로 바꾸면 468px 로 맞는다.
+                  그 전에는 lead 문단(3줄)이었다. lead 는 데이터에 남아
+                  generateMetadata 의 검색 설명으로 쓰인다 — 화면에서만 빠졌다.
 
-                  체크 마커에 aria-hidden 을 건다. 안 걸면 읽는 기계에
-                  "체크" 가 항목마다 끼어든다 — 목록이라는 사실은 ul/li 가
-                  이미 전달한다.
+                  참고로 받은 신창에프에이 LSP 호퍼피더의 히어로 박스를 쟀다 —
+                  568x208, 연한 회색 바탕, radius 12, padding 24, 라벨 12px/700
+                  tracking 2.4px. 그 짜임을 우리 토큰으로 옮겼다.
 
-                  제목은 어느 폭에서나 한 줄이다. 15px 로 재면 가장 긴 것이
-                  135px("선별 · 방향 판별 지그")이고, 카드 글상자가 가장
-                  좁아지는 320px(193px)에서도 20개 전부 들어간다.
+                  값은 어느 폭에서나 한 줄이다. 13px 로 재면 앞 세 줄 21개의
+                  가장 긴 것이 246px("스테인리스, 알루미늄 (부품 특성에 따라
+                  선정)")이고, 값 칸이 가장 좁아지는 1024(308px)에도 들어간다.
+                  라벨은 가장 긴 것이 63px("거칠기 등급")라 5rem(80px)에 든다.
 
-                  lead 는 데이터에 남는다 — generateMetadata 의 검색 설명이
-                  쓴다. 화면에서 빠진 것뿐이다. */}
+                  dt/dd 는 dl 직계여야 한다(접근성 검사 dlitem). 묶는 div 대신
+                  Fragment 를 쓴다 — 아래 사양 표와 같은 이유다. */}
               <div className="mt-6 rounded-lg border border-line bg-surface p-5">
                 <p className="text-xs font-bold tracking-[0.2em] text-muted">
-                  주요 특징
+                  주요 사양
                 </p>
-                <ul className="mt-3 space-y-2">
-                  {product.features.map((f) => (
-                    <li
-                      key={f.title}
-                      className="flex items-center gap-3 text-[15px] text-ink"
-                    >
-                      <span
-                        aria-hidden="true"
-                        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand/10"
-                      >
-                        <svg
-                          width="11"
-                          height="11"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="3.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="text-brand"
-                        >
-                          <path d="M20 6 9 17l-5-5" />
-                        </svg>
-                      </span>
-                      {f.title}
-                    </li>
+                <dl className="mt-3 grid grid-cols-[5rem_minmax(0,1fr)] gap-x-3 gap-y-2 text-[13px]">
+                  {product.specs.slice(0, 3).map((spec) => (
+                    <Fragment key={spec.label}>
+                      <dt className="font-bold text-ink-soft">{spec.label}</dt>
+                      <dd className="text-ink">{spec.value}</dd>
+                    </Fragment>
                   ))}
-                </ul>
+                </dl>
               </div>
 
               {/* 버튼 둘. 보던 제품이 아니면 목록으로 돌아갈 길을 같이 둔다. */}
@@ -196,7 +171,18 @@ export default async function ProductDetailPage({
 
           개수는 제품마다 다르다 — 2~4개다. products.ts 의 features 주석에
           기준을 적어 뒀다(사양 표에 같은 내용이 있으면 특징에 적지 않는다). */}
-      <Section tone="surface" size="compact" eyebrow="FEATURES" title="특징">
+      {/* lead 를 한 줄 둔다. 없을 때는 Container 1152px 에 "FEATURES"(80px)
+          와 "특징"(64px) 만 있어 1072px 가 비었다. Section 의 제목 블록이
+          max-w-2xl(672px) 이고 lead 가 sm:text-lg(18px) 라 37자 안쪽이면
+          한 줄이다. 사양·다른 제품 섹션에는 더하지 않는다 — 셋 다 주면
+          세로가 135px 늘어난다. */}
+      <Section
+        tone="surface"
+        size="compact"
+        eyebrow="FEATURES"
+        title="특징"
+        lead="공급할 부품에 맞춰 설계하는 과정에서 생기는 차이입니다."
+      >
         {/* 번호를 제목과 같은 줄 안에 넣는다. 이 하나로 세 가지가 풀린다.
 
             1. 어긋남이 0 이다. 전에는 번호를 36x36 타일에 담아 자기 열에
@@ -267,12 +253,15 @@ export default async function ProductDetailPage({
               보충 · 지그 점검 시 개방)")이고 라벨은 68px("거칠기 등급")가
               최대였다. 한 행에 두 쌍이 들어간다.
 
-              라벨 칸 9rem(144px) — 68px 에 글상자 104px 로 여유가 있다.
-              전 값(176px)보다 좁혀 값 칸을 넓혔다: 1440에서 399px,
-              1024에서 327px 라 282px 가 두 폭 모두 한 줄이다.
+              앞 세 줄은 히어로 "주요 사양" 카드가 가져가므로 여기서는
+              slice(3) 으로 뒤 세 줄만 쓴다. 세 쌍이라 한 열(두 칸)이다 —
+              한때 여섯 줄을 두 쌍씩 놓아 네 칸으로 만들었는데, 세 쌍이 되면
+              마지막 한 쌍이 빈 칸을 둘 남긴다. 표 높이는 어느 쪽이든 세 행
+              168px 로 같다.
 
-              768~1023 은 두 칸(한 쌍)이다. 거기서 네 칸을 쓰면 값 칸이
-              206px 로 좁아져 282px 짜리가 두 줄이 된다. 640 미만은 dt/dd
+              라벨 칸 9rem(144px) — 가장 긴 라벨 68px("거칠기 등급")에 글상자
+              104px 로 여유가 있다. 남는 값 21개의 최대 폭이 282px 라 dd 칸
+              (1440 944px, 768 542px)에서 당연히 한 줄이다. 640 미만은 dt/dd
               세로 스택이다.
 
               격자선은 gap-px + bg-line 이다. 셀마다 border-b 를 주면 마지막
@@ -281,8 +270,8 @@ export default async function ProductDetailPage({
 
               dt/dd 는 격자 직계여야 한다(접근성 검사 dlitem). 그래서 묶는
               div 대신 Fragment 를 쓴다. */}
-          <dl className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-[9rem_minmax(0,1fr)] lg:grid-cols-[9rem_minmax(0,1fr)_9rem_minmax(0,1fr)]">
-            {product.specs.map((spec) => (
+          <dl className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-[9rem_minmax(0,1fr)]">
+            {product.specs.slice(3).map((spec) => (
               <Fragment key={spec.label}>
                 <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink">
                   {spec.label}
@@ -360,18 +349,19 @@ export default async function ProductDetailPage({
         </Reveal>
       </Section>
 
-      {/* 제품 목록과 같은 카드를 쓴다. 전에는 64px 썸네일 한 줄이라 목록
-          페이지와 생김새가 전혀 달랐다. */}
+      {/* 가로 카드다(ProductRowCard). 목록 페이지와 같은 세로 카드를 쓰다가
+          바꿨다 — 1440에서 347x437px 라 보조 목록인데 본문과 같은 무게였다.
+          누이면 347x96px 이고 섹션이 698 -> 357px 가 된다. */}
       <Section
         tone="surface"
         size="compact"
         eyebrow="OTHER PRODUCTS"
         title="다른 제품"
       >
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {related.map((p, i) => (
             <Reveal key={p.slug} delay={i * 70}>
-              <ProductCard product={p} />
+              <ProductRowCard product={p} />
             </Reveal>
           ))}
         </div>
