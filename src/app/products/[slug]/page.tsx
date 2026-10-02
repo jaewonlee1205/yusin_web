@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Fragment } from "react";
 import { notFound } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumb";
 import Container from "@/components/Container";
@@ -107,9 +108,67 @@ export default async function ProductDetailPage({
               <p className="mt-6 text-lg font-medium leading-relaxed text-ink">
                 {product.summary}
               </p>
-              <p className="mt-4 text-base leading-[1.9] text-ink-soft">
-                {product.lead}
-              </p>
+
+              {/* 주요 특징 — 전에는 여기에 lead 문단(3줄)이 있었다.
+                  그 문단이 사실은 목록을 산문으로 늘여 쓴 것이었다. 볼피더를
+                  보면 "소형부터 대형까지 … 계단형·단종형·접시형·원통형 …
+                  정렬 지그는 … 직접 설계·가공" 인데, 셋이 features 의
+                  "소형부터 대형까지" · "네 가지 기본 볼 형상" · "부품별 맞춤
+                  볼 설계" 와 같은 내용이다. 목록으로 바꿔도 잃는 정보가 없고
+                  데이터를 새로 만들 것도 없다.
+
+                  참고로 받은 신창에프에이 LSP 호퍼피더의 "주요 특징" 박스를
+                  쟀다 — 568x208, 연한 회색 바탕, radius 12, padding 24,
+                  라벨 12px/700 tracking 2.4px, 항목마다 20x20 원형 마커 안에
+                  체크, 글자 16px. 그 짜임을 우리 토큰으로 옮겼다.
+
+                  높이도 이쪽이 맞는다. 1440에서 오른쪽 칸이 363px 로 갤러리
+                  (468px)보다 105px 짧아 아래가 비어 있었는데, 문단(-107)을
+                  카드(+212)로 바꾸면 468px 로 맞는다.
+
+                  체크 마커에 aria-hidden 을 건다. 안 걸면 읽는 기계에
+                  "체크" 가 항목마다 끼어든다 — 목록이라는 사실은 ul/li 가
+                  이미 전달한다.
+
+                  제목은 어느 폭에서나 한 줄이다. 15px 로 재면 가장 긴 것이
+                  135px("선별 · 방향 판별 지그")이고, 카드 글상자가 가장
+                  좁아지는 320px(193px)에서도 20개 전부 들어간다.
+
+                  lead 는 데이터에 남는다 — generateMetadata 의 검색 설명이
+                  쓴다. 화면에서 빠진 것뿐이다. */}
+              <div className="mt-6 rounded-lg border border-line bg-surface p-5">
+                <p className="text-xs font-bold tracking-[0.2em] text-muted">
+                  주요 특징
+                </p>
+                <ul className="mt-3 space-y-2">
+                  {product.features.map((f) => (
+                    <li
+                      key={f.title}
+                      className="flex items-center gap-3 text-[15px] text-ink"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand/10"
+                      >
+                        <svg
+                          width="11"
+                          height="11"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="3.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="text-brand"
+                        >
+                          <path d="M20 6 9 17l-5-5" />
+                        </svg>
+                      </span>
+                      {f.title}
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
               {/* 버튼 둘. 보던 제품이 아니면 목록으로 돌아갈 길을 같이 둔다. */}
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -199,19 +258,39 @@ export default async function ProductDetailPage({
       <Section size="compact" eyebrow="SPECIFICATIONS" title="제작 사양">
         {/* 표와 그 아래 안내 문단은 한 덩어리로 읽히므로 한 겹으로 묶는다. */}
         <Reveal>
-          <dl className="overflow-hidden rounded-lg border border-line">
+          {/* 한 행에 두 쌍을 넣는다. 전에는 행마다 flex 였는데 dd 에 flex-1
+              이 없어 dd 가 내용 크기만큼만 차지했다 — 1088px 표에서 dt 176 +
+              dd 125px 를 쓰고 787px 가 빈 채, 값이 행마다 다른 곳(125~322px)
+              에서 끝나고 구분선만 끝까지 그어졌다.
+
+              42개 값을 전부 재니 가장 긴 것이 282px("경첩 · 잠금 구조 (부품
+              보충 · 지그 점검 시 개방)")이고 라벨은 68px("거칠기 등급")가
+              최대였다. 한 행에 두 쌍이 들어간다.
+
+              라벨 칸 9rem(144px) — 68px 에 글상자 104px 로 여유가 있다.
+              전 값(176px)보다 좁혀 값 칸을 넓혔다: 1440에서 399px,
+              1024에서 327px 라 282px 가 두 폭 모두 한 줄이다.
+
+              768~1023 은 두 칸(한 쌍)이다. 거기서 네 칸을 쓰면 값 칸이
+              206px 로 좁아져 282px 짜리가 두 줄이 된다. 640 미만은 dt/dd
+              세로 스택이다.
+
+              격자선은 gap-px + bg-line 이다. 셀마다 border-b 를 주면 마지막
+              행에서 바깥 테두리와 겹쳐 이중선이 되고, 그 "마지막 행" 이
+              폭마다 달라져 끌 수가 없다.
+
+              dt/dd 는 격자 직계여야 한다(접근성 검사 dlitem). 그래서 묶는
+              div 대신 Fragment 를 쓴다. */}
+          <dl className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-[9rem_minmax(0,1fr)] lg:grid-cols-[9rem_minmax(0,1fr)_9rem_minmax(0,1fr)]">
             {product.specs.map((spec) => (
-              <div
-                key={spec.label}
-                className="flex flex-col border-b border-line last:border-0 sm:flex-row"
-              >
-                <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:w-44 sm:shrink-0">
+              <Fragment key={spec.label}>
+                <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink">
                   {spec.label}
                 </dt>
-                <dd className="px-5 py-4 text-sm leading-relaxed text-ink-soft">
+                <dd className="bg-white px-5 py-4 text-sm leading-relaxed text-ink-soft">
                   {spec.value}
                 </dd>
-              </div>
+              </Fragment>
             ))}
           </dl>
 
@@ -225,24 +304,55 @@ export default async function ProductDetailPage({
             유신에서 기종별 수치를 받으면 이 문단을 지우고 위 표를 수치표로
             바꾼다(README '받아야 할 자료' 7번).
 
-            ⚠️ 한 줄을 넘기지 말 것. 칸이 1280 이상 1088px, 1024 945px,
-            768 704px 인데 14px 글자로 한 줄에 들어가려면 64자쯤이 한계다.
-            640 이하(576px)에서는 어차피 두 줄이 된다 — 거기서 한 줄로
-            넣으려면 39자까지 깎아야 해 뜻이 남지 않는다. */}
-          <p className="mt-4 text-sm leading-relaxed text-muted">
-            볼 직경·처리 수량 같은 수치는 부품과 요구 속도에 따라 다릅니다.
-            샘플과 도면을 보내 주시면 산출해 회신드립니다.
-          </p>
+            박스로 묶었다. 전에는 표 아래 회색 글자가 그냥 떠 있어 표의
+            일부인지 다음 이야기인지 안 읽혔다. 레드 강조선은 쓰지 않는다 —
+            주의 경고가 아니라 "수치는 견적 때 산출한다" 는 안내다.
+
+            ⚠️ 한 줄을 넘기지 말 것. 박스 글상자가 1280 이상 1020px,
+            1024 877px, 768 636px 다(패딩 40 + 아이콘·간격 28 을 뺀 값).
+            가장 좁은 768 에 들어가려면 636px 이 한계라 지금 문장이 그
+            기준으로 깎여 있다. 640 이하(508px)에서는 어차피 두 줄이 된다 —
+            거기서 한 줄로 넣으려면 뜻이 남지 않는다. */}
+          <div className="mt-4 flex items-start gap-3 rounded-lg bg-surface px-5 py-4">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className="mt-0.5 shrink-0 text-muted"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4M12 8h.01" />
+            </svg>
+            <p className="text-sm leading-relaxed text-muted">
+              볼 직경·처리 수량 같은 수치는 부품과 속도에 따라 다릅니다. 샘플과
+              도면을 주시면 산출해 회신드립니다.
+            </p>
+          </div>
         </Reveal>
 
         <h3 className="mt-12 text-lg font-bold text-ink">적용 분야</h3>
         <Reveal>
+          {/* 칩에 레드 점을 붙인다. 위 히어로의 분류 배지가 이미
+              rounded-full + border-line + bg-surface + bg-brand 점이라,
+              같은 언어를 쓰면 한 페이지에서 칩이 한 가지 생김새로 읽힌다.
+              히어로 "주요 특징" 은 체크, 여기는 점 — 마커가 달라 둘이
+              섞이지 않는다. */}
           <ul className="mt-4 flex flex-wrap gap-2">
             {product.applications.map((a) => (
               <li
                 key={a}
-                className="rounded-full border border-line bg-surface px-4 py-2 text-sm text-ink-soft"
+                className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium text-ink-soft"
               >
+                <span
+                  aria-hidden="true"
+                  className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+                />
                 {a}
               </li>
             ))}
