@@ -6,9 +6,13 @@ import Reveal from "./Reveal";
  * 사진 있는 적용 분야 격자. 지금은 볼피더만 쓴다.
  *
  * 분야 이름만 적힌 칩으로는 "어떤 부품을 공급하는가" 가 와닿지 않아 사진을
- * 붙였다. 사진은 유신이 찍은 것이 아니라 어떤 부품인지 보여 주는 일반 산업
- * 사진이라, 격자 아래에 그 사실을 한 줄 적어 둔다 — 납품 사례로 읽히면
- * 안 된다. (출처는 scripts/fetch-application-photos.mjs 에 있다)
+ * 붙였다.
+ *
+ * ⚠️ 사진은 유신이 찍은 것이 아니다. 어떤 부품·어떤 자리인지 보여 주는 바깥
+ *    산업 사진이고, 출처와 라이선스는 scripts/fetch-application-photos.mjs 에
+ *    적어 두었다. 유신 실물 사진을 받으면 같은 이름으로 파일만 갈아 끼우면
+ *    된다. (한때 격자 아래에 "실제 납품 사례가 아닙니다" 를 적어 두었는데
+ *    빼 달라고 하셔서 지웠다 — 사실 자체는 이 주석과 README 에 남는다)
  *
  * 열은 셋까지만 간다. 다섯 칸이라 1280 에서 다섯으로 나누면 한 줄에 딱
  * 들어가지만, 그때 카드가 205px 이고 글상자가 171px 뿐이라 분야 이름이
@@ -36,37 +40,33 @@ export default function ApplicationCases({
   cases: ApplicationCase[];
 }) {
   return (
-    <>
-      <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {cases.map((c, i) => (
-          <Reveal as="li" key={c.name} delay={i * 70}>
-            <div className="flex h-full flex-col overflow-hidden rounded-lg border border-line bg-white">
-              <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface">
-                <Image
-                  src={c.src}
-                  alt={c.alt}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover"
-                />
-              </div>
-              <div className="flex flex-1 flex-col border-t border-line p-4">
-                <p className="text-sm font-bold leading-snug text-ink">
-                  {c.name}
-                </p>
-                <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-ink-soft">
-                  {c.note}
-                </p>
-              </div>
+    <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {cases.map((c, i) => (
+        <Reveal as="li" key={c.name} delay={i * 70}>
+          <div className="flex h-full flex-col overflow-hidden rounded-lg border border-line bg-white">
+            <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface">
+              <Image
+                src={c.src}
+                alt={c.alt}
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                className="object-cover"
+              />
             </div>
-          </Reveal>
-        ))}
-      </ul>
-
-      {/* 사진의 출처를 밝힌다. 유신 실물 사진을 받으면 이 줄을 지운다. */}
-      <p className="mt-3 text-xs leading-relaxed text-muted">
-        사진은 부품 종류를 보여 주는 예시이며, 실제 납품 사례가 아닙니다.
-      </p>
-    </>
+            {/* 위아래 여백이 다르다. 이름 위는 한 줄(20px ≒ 이름 줄 높이
+                19.25px), 설명 아래는 두 줄(40px ≒ 설명 줄 높이 21.1px 의
+                두 배)이다. */}
+            <div className="flex flex-1 flex-col border-t border-line px-4 pt-5 pb-10">
+              <p className="text-sm font-bold leading-snug text-ink">
+                {c.name}
+              </p>
+              <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-ink-soft">
+                {c.note}
+              </p>
+            </div>
+          </div>
+        </Reveal>
+      ))}
+    </ul>
   );
 }
