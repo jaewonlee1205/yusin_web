@@ -88,20 +88,31 @@ export default function FacilityPage() {
                 <p className="mt-2 text-sm leading-relaxed text-muted">
                   {group.body}
                 </p>
-                {/* 가로 간격만 준다(gap-x). 세로 간격을 주면 행마다 긋는 밑줄
-                    사이가 벌어져 표처럼 안 보인다.
+                {/* 품목 하나를 칩 한 덩어리로 묶는다.
 
-                    열 수는 재서 정했다. 320px 에서 2열로 두면 한 칸이 107px 라
-                    여섯 행이 두 줄로 깨져, 639px 아래는 1열로 둔다. 가장 좁은
-                    안전 칸이 142px(390px 2열)이고 md 3열이 195px 라 여유가 있다. */}
-                <ul className="mt-5 grid grid-cols-1 gap-x-8 border-t border-line sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+                    전에는 격자 칸마다 justify-between 으로 대수를 오른쪽 끝에
+                    붙였는데, 그러면 이름 길이에 따라 이름과 숫자 사이가
+                    131~187px(8가지)로 벌어져 행마다 눈이 건너는 거리가 달라진다.
+                    같은 함정을 회사 개요표가 먼저 겪고 적어 뒀다
+                    (company/page.tsx:166 "값 시작점이 행마다 달라져 훑기가
+                    어려워진다"). 숫자를 이름 옆에 붙이면 건널 거리가 아예
+                    없어져 정렬선이 필요 없다.
+
+                    테두리는 두지 않는다. 채움만으로 덩어리가 서는데 선을 21개
+                    더하면 밴드 테두리와 경쟁한다. 대수도 굵게 하지 않는다 —
+                    굵은 네이비 숫자 21개가 한 화면에서 시선을 21군데로 끌었다.
+                    색(네이비)은 남긴다. 사이트에서 설비 대수에 쓰는 강조색이다.
+
+                    열 수를 정할 필요가 없다. flex-wrap 이 접어 주고, 가장 넓은
+                    칩이 136px 라 320px 에서도 한 줄에 들어간다. */}
+                <ul className="mt-5 flex flex-wrap gap-2 border-t border-line pt-5">
                   {items.map((item) => (
                     <li
                       key={item.name}
-                      className="flex min-w-0 items-baseline justify-between gap-3 border-b border-line py-2.5"
+                      className="inline-flex items-baseline gap-2 rounded bg-surface px-3 py-1.5"
                     >
                       <span className="text-sm text-ink-soft">{item.name}</span>
-                      <span className="shrink-0 text-sm font-bold tabular-nums text-navy">
+                      <span className="shrink-0 text-sm tabular-nums text-navy">
                         {item.count}대
                       </span>
                     </li>
