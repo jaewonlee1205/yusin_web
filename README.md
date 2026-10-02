@@ -34,7 +34,7 @@ npm run dev        # http://localhost:3000
 | `/` | 히어로 · 지표 · 피더 소개 · 제품 라인업 · 강점 · 제작 프로세스 · 제품 영상 · 거래처 · 문의 CTA |
 | `/company` | 인사말 · 회사 개요 · 사명(有信) |
 | `/company/vision` | 조직도 (대표 · 공장장 · 다섯 부서 · 부서별 담당 업무) |
-| `/company/facility` | 보유 설비 21종 55대 · 가공 도면 · 제작 공정 |
+| `/company/facility` | 보유 설비 21종 55대 (공정별 분류) |
 | `/products` | 제품 목록 (카테고리 필터) |
 | `/products/[slug]` | 제품 상세 7종 |
 | `/clients` | 주요 거래처 34개사 · 산업별 납품 분야 |
