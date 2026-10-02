@@ -16,9 +16,17 @@ import {
   type NavItem,
 } from "@/data/site";
 import { PhoneIcon } from "./icons";
+import { scrollToTop } from "@/lib/scrollToTop";
 
 /** 마우스가 메뉴를 스쳐 지날 때 깜빡이지 않도록 닫기를 약간 늦춘다. */
 const CLOSE_DELAY = 140;
+
+/**
+ * 같은 페이지를 가리키는지. trailingSlash: true 라 pathname 은 "/company/"
+ * 인데 nav 가 들고 있는 href 는 "/company" 라 그냥 비교하면 안 맞는다.
+ */
+const samePath = (a: string, b: string) =>
+  a.replace(/\/+$/, "") === b.replace(/\/+$/, "");
 
 export default function Header() {
   const pathname = usePathname();
@@ -45,10 +53,14 @@ export default function Header() {
   /**
    * 제품 메뉴의 하위 항목. products.ts에서 만들어 데스크톱·모바일이 같이 쓴다.
    *
-   * 맨 앞 "전체"는 회사소개의 "인사말"과 같은 자리 — 부모 페이지로 가는 칸이다.
-   * 부모 메뉴가 이미 "제품"이라 라벨에서 그 말을 반복하지 않는다.
-   * 데스크톱에서 "제품"은 링크가 아니라 여닫는 버튼이라, 이 줄이 없으면
-   * /products 로 갈 길이 헤더에서 사라진다.
+   * 맨 앞 "전체"는 회사소개의 "개요"와 같은 자리 — 펼친 목록 안에서 부모
+   * 페이지로 가는 칸이다. 부모 메뉴가 이미 "제품"이라 라벨에서 그 말을
+   * 반복하지 않는다.
+   *
+   * 전에는 이 줄이 보루였다. 데스크톱 "제품"이 링크가 아니라 여닫는 버튼이라
+   * 이 줄이 없으면 /products 로 갈 길이 헤더에서 사라졌다. 지금은 "제품"
+   * 자체가 링크라 그 역할은 끝났지만, 펼쳐 놓고 고르는 사람에게는 여전히
+   * 필요한 칸이라 남긴다(참고한 신창에프에이도 부모를 다시 가리키는 줄을 둔다).
    */
   const productChildren = useMemo<NavChild[]>(
     () => [
@@ -123,6 +135,21 @@ export default function Header() {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
+  /**
+   * 지금 보고 있는 페이지를 헤더에서 다시 누르면 맨 위로 올린다.
+   *
+   * 라우터는 같은 경로로 가라는 요청에 아무것도 하지 않는다. 그래서 홈에서
+   * 로고를 눌러도, /company 에서 회사소개를 눌러도 반응이 없었다. 다른
+   * 경로로 갈 때는 라우터가 알아서 맨 위로 보내 주므로 건드리지 않는다.
+   */
+  const onSameRouteClick = (e: React.MouseEvent, href: string) => {
+    if (!samePath(pathname, href)) return;
+    // 새 탭으로 열려는 클릭(Ctrl/Cmd 등)은 가로채지 않는다.
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    scrollToTop();
+  };
+
   return (
     <header
       ref={headerRef}
@@ -140,6 +167,7 @@ export default function Header() {
         <div className="flex h-16 items-center justify-between gap-4 sm:h-20 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
           <Link
             href="/"
+            onClick={(e) => onSameRouteClick(e, "/")}
             className="shrink-0 lg:justify-self-start"
             aria-label={`${site.name} 홈으로`}
           >
@@ -174,6 +202,7 @@ export default function Header() {
                   <Link
                     key={item.href}
                     href={item.href}
+                    onClick={(e) => onSameRouteClick(e, item.href)}
                     aria-current={active ? "page" : undefined}
                     className={`rounded px-2 py-2 text-[15px] font-medium transition-colors xl:px-4 ${
                       active ? "text-brand" : "text-ink-soft hover:text-ink"
@@ -203,18 +232,31 @@ export default function Header() {
                     }
                   }}
                 >
-                  <button
-                    type="button"
+                  {/* 버튼이 아니라 링크다. 전에는 여닫기 버튼이라 눌러도
+                      아무 데도 가지 않았다 — 하위 메뉴를 펼쳐 첫 줄을 다시
+                      눌러야 /company·/products 로 갈 수 있었다. 드롭다운은
+                      그대로 감싸는 div 의 호버·포커스로 연다.
+
+                      aria-controls 는 열렸을 때만 준다. 패널은 열릴 때만
+                      그려지는데 닫힌 동안에도 그 id 를 가리키고 있었다. */}
+                  <Link
+                    href={item.href}
+                    aria-current={active ? "page" : undefined}
                     aria-expanded={open}
-                    aria-controls={panelId}
-                    onClick={() => setOpenMenu(open ? null : item.href)}
+                    aria-controls={open ? panelId : undefined}
+                    onClick={(e) => {
+                      // 라우트가 바뀌면 useEffect 가 닫아 주지만, 같은
+                      // 경로를 누른 경우엔 안 바뀌어 열린 채 남는다.
+                      setOpenMenu(null);
+                      onSameRouteClick(e, item.href);
+                    }}
                     className={`flex items-center gap-1.5 rounded px-2 py-2 text-[15px] font-medium transition-colors xl:px-4 ${
                       active ? "text-brand" : "text-ink-soft hover:text-ink"
                     }`}
                   >
                     {item.label}
                     <Chevron open={open} />
-                  </button>
+                  </Link>
 
                   {open && (
                     <div
