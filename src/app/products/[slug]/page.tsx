@@ -138,49 +138,54 @@ export default async function ProductDetailPage({
           개수는 제품마다 다르다 — 2~4개다. products.ts 의 features 주석에
           기준을 적어 뒀다(사양 표에 같은 내용이 있으면 특징에 적지 않는다). */}
       <Section tone="surface" size="compact" eyebrow="FEATURES" title="특징">
-        {/* 네모 카드를 쓰지 않는다. 전에는 gap-px + bg-line 2열 격자라 선으로
-            나뉜 네모 넷이었다. 참고한 ablelabsinc.com/notable96 에서 가져온
-            것은 왼쪽 타일이 만드는 리듬뿐이고, 카드는 비웠다 — 남는 것은
-            번호 타일과 가로 구분선이다.
+        {/* 번호를 제목과 같은 줄 안에 넣는다. 이 하나로 세 가지가 풀린다.
 
-            열 수가 폭마다 다르다. 768 에서 3열을 쓰면 제목 칸이 200px 로
-            좁아져 긴 제목이 두 줄이 된다. 그래서 1024 부터만 3열이고, 제목
-            칸은 18rem(288px) 이다 — 거기서 20개 제목이 모두 한 줄이고 가장
-            긴 본문이 두 줄이다.
+            1. 어긋남이 0 이다. 전에는 번호를 36x36 타일에 담아 자기 열에
+               뒀는데, 타일 가운데 있는 숫자와 칸 맨 위에 붙는 제목이 1440에서
+               12.4px 어긋났다. items-baseline 으로 2.4px 까지 줄였지만 0 은
+               못 됐다 — baseline 은 글자 밑변을 맞추는 것이라 숫자(12px)와
+               제목(17px)의 크기가 다르면 시각적 중앙이 남는다. 지금은 둘이
+               한 줄 박스 안에 있고 글자 크기도 같아(둘 다 17px bold) 어긋날
+               방법이 없다. 다른 것은 색뿐이다.
 
-            items-baseline 이 없으면 안 된다. 기본값(stretch)이면 제목은 칸
-            맨 위에 붙고 숫자는 타일 가운데 있어 1440에서 숫자 중앙 56.0px,
-            제목 첫 줄 중앙 43.6px — 12.4px 어긋났다. baseline 은 숫자와 제목
-            글자의 밑변을 맞추므로 폭과 본문 줄 수에 관계없이 2.4px 안쪽이다.
-            items-center 는 쓸 수 없다 — 1440에서는 완벽하지만(0.1px) 640~1023
-            에서 타일이 row-span-2 로 두 행을 걸치는 탓에 타일이 제목+본문
-            블록 가운데로 내려가 본문 2줄 행에서 30.3px 어긋난다.
+            2. 한 행이 절반이 된다. 타일 36px 이 행 높이를 정했는데 글자는
+               24.4px 뿐이었다 — 타일 36 + py-5/6 = 85px. 이제 글자가 높이를
+               정해 24.4 + py-4 = 56.4px 다. 참고로 주신 신창에프에이 MLCC
+               호퍼피더는 한 항목이 26px 인데, 거기는 제목도 번호도 없이 한 줄
+               문장만 나열한다. 셋을 담고 56px 이면 그만큼이 정보 차이다.
 
-            타일은 36px 다. 48px 일 때는 타일이 행 높이를 정해 1440에서 한 행
-            112.8px 인데 글자는 24.8px 뿐이었다. 36px + py-5/6 으로 한 행
-            84.8px 이 된다. 32px 까지 줄이면 "01" 두 자에 여유가 없다.
+            3. 레드가 좁아진다. "01" 두 자가 17px 에서 22px 폭이라 36px 타일
+               보다 좁다(globals.css 토큰 주석 — "레드는 면적을 좁게").
 
-            번호 타일은 흰색이다. 이 섹션이 tone="surface" 라 흰 타일이
-            또렷하게 뜬다. 레드는 숫자 글자에만 쓴다(globals.css 의 토큰
-            주석 — "레드는 면적을 좁게"). */}
+            flex gap-3 으로 묶는다. 제목이 두 줄이 되어도 둘째 줄이 번호 아래로
+            들여써진다. 재 보니 "01 + 제목" 이 가장 긴 것이 185px 라 제목 칸
+            288px 은 물론 320px 글상자(264.8px)에서도 20개 전부 한 줄이다.
+
+            열은 둘이다. 번호 열이 없어졌으므로 1024 부터 [18rem_1fr] 2열이고
+            그 아래는 제목/본문 세로 스택이다. 1024 에서 본문 칸이 541 ->
+            617px 로 넓어져 20개 본문이 전부 한 줄이 된다(전에는 여섯이 두
+            줄이었다). lg:items-baseline 은 남긴다 — 17px 제목과 15px 본문의
+            첫 줄 밑변을 맞춘다. */}
         <ul className="border-t border-line">
           {product.features.map((f, i) => (
             <Reveal
               as="li"
               key={f.title}
               delay={i * 70}
-              className="border-b border-line py-5 sm:py-6"
+              className="border-b border-line py-4"
             >
-              <div className="grid items-baseline gap-x-10 gap-y-3 sm:grid-cols-[auto_minmax(0,1fr)] lg:grid-cols-[auto_minmax(0,18rem)_minmax(0,1fr)]">
-                {/* 순서는 ul/li 가 이미 전달한다. 눈으로만 읽는 번호다. */}
-                <span
-                  aria-hidden="true"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-white text-xs font-bold tabular-nums text-brand sm:row-span-2 lg:row-span-1"
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <p className="text-[17px] font-bold leading-snug text-ink">
-                  {f.title}
+              <div className="grid gap-y-2 lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:items-baseline lg:gap-x-10">
+                <p className="flex gap-3 text-[17px] font-bold leading-snug text-ink">
+                  {/* 순서는 ul/li 가 이미 전달한다. 눈으로만 읽는 번호다.
+                      tabular-nums 라 01~04 의 폭이 같아 제목이 어느 행에서나
+                      같은 x 에서 시작한다. */}
+                  <span
+                    aria-hidden="true"
+                    className="shrink-0 tabular-nums text-brand"
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span>{f.title}</span>
                 </p>
                 <p className="text-[15px] leading-relaxed text-ink-soft">
                   {f.body}
