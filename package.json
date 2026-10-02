@@ -8,7 +8,8 @@
     "start": "next start",
     "postbuild": "node scripts/fix-segment-prefetch.mjs",
     "assets": "node scripts/extract-assets.mjs",
-    "video-thumbs": "node scripts/fetch-video-thumbs.mjs"
+    "video-thumbs": "node scripts/fetch-video-thumbs.mjs",
+    "app-photos": "node scripts/fetch-application-photos.mjs"
   },
   "dependencies": {
     "next": "16.3.6",
