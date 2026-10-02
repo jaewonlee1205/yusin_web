@@ -84,10 +84,24 @@ export default async function ProductDetailPage({
       {/* 제품 히어로 — 사진과 "무엇인지", 그리고 문의 버튼까지 첫 화면에 */}
       <div className="py-12 sm:py-16">
         <Container>
-          <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">
+          {/* 오른쪽 칸을 왼쪽 사진에 줄 맞춘다.
+
+              lg:items-start 를 빼 오른쪽 칸이 왼쪽 높이까지 늘어나게 하고,
+              아래 사양 표 블록에 lg:mt-auto 를 줘 표와 버튼을 한 덩어리로
+              바닥에 붙인다. 그러면 1280 이상에서 표 바닥이 큰 사진 바닥과,
+              버튼 바닥이 썸네일 줄 바닥과 같은 선에서 끝난다.
+
+              왼쪽 높이는 두 가지다 — 사진이 여러 장이면 468px(사진 384 +
+              간격 12 + 썸네일 72), 한 장이면 썸네일 줄이 없어 384px 다
+              (ProductGallery 참고). 사진이 한 장인 셋(진동기.호퍼피더.
+              컨트롤러)은 오른쪽 칸이 438.6px 로 왼쪽보다 길어 mt-auto 가 0 이
+              된다 — 맞출 상대가 없으니 그대로 흐른다.
+
+              lg 미만은 한 칸으로 쌓이므로 flex 도 auto 마진도 일을 하지 않는다. */}
+          <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
             <ProductGallery images={product.images} />
 
-            <div>
+            <div className="lg:flex lg:flex-col">
               {/* 분류 배지. 점 하나로 레드를 아주 좁게만 쓴다. */}
               <p className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-bold tracking-[0.1em] text-ink-soft">
                 <span
@@ -135,7 +149,7 @@ export default async function ProductDetailPage({
 
                   dt/dd 는 dl 직계여야 한다(접근성 검사 dlitem). 묶는 div 대신
                   Fragment 를 쓴다 — 아래 사양 표와 같은 이유다. */}
-              <div className="mt-6">
+              <div className="mt-6 lg:mt-auto">
                 {/* 아래 "제작 사양" 표와 같은 짜임이다 — gap-px + bg-line 격자선,
                     dt bg-surface / dd bg-white, 테두리 + 둥근 모서리 +
                     overflow-hidden.
@@ -176,8 +190,13 @@ export default async function ProductDetailPage({
                   버튼에만 flex-1 을 줬더니 375 / 125px 로 한쪽이 과하게 커졌다.
                   반반이어도 줄은 그대로 끝까지 차고, CTA 위계는 크기가 아니라
                   색이 맡는다 — 채운 빨강 vs 테두리만 있는 네이비.
-                  640 미만은 flex-col 이라 이미 전폭이다. */}
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  640 미만은 flex-col 이라 이미 전폭이다.
+
+                  위 간격이 32 가 아니라 28px(mt-7)인 이유는 줄 맞춤이다. 칸
+                  바닥이 468, 버튼이 56.1px 이므로 28px 를 두면 표 바닥이
+                  468 - 56.1 - 28 = 383.9 로 떨어져 큰 사진 바닥(384)과 0.1px
+                  차이가 된다. 32px 면 379.9 로 4px 어긋난다. */}
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/contact/"
                   className="rounded bg-brand px-8 py-4 text-center text-[15px] font-semibold text-white transition-colors hover:bg-brand-dark sm:flex-1"
@@ -386,42 +405,52 @@ export default async function ProductDetailPage({
         </Reveal>
       </Section>
 
-      {/* 목록 페이지와 같은 세로 카드다 — ProductCard 에 compact 를 넘겨
-          사진 칸만 2:1 로 낮춘다. 가로 카드(352x98)와 전폭 한 줄 목록을 거쳐
-          여기로 돌아왔다: 사진이 80px 썸네일이거나 아예 없으면 어느 제품인지
-          글자로만 알아야 했다. 참고로 받은 신창에프에이 nsc-parts-feeder 의
-          "관련 제품" 도 사진 있는 3열 카드(389x424, 사진 4:3)다.
+      {/* 목록 페이지와 똑같은 세로 카드다 — ProductCard 를 그대로 쓴다.
+          가로 카드(352x98)와 전폭 한 줄 목록을 거쳐 여기로 돌아왔다: 사진이
+          80px 썸네일이거나 아예 없으면 어느 제품인지 글자로만 알아야 했다.
+          참고로 받은 신창에프에이 nsc-parts-feeder 의 "관련 제품" 도 사진
+          있는 3열 카드(389x424, 사진 4:3)다.
 
-          사진은 목록 페이지보다 작다. 기준인 /products 카드의 사진이 265x199px
-          인데, 이 격자는 1280 이상에서 카드 320px 에 2:1 칸 159px 다. 상세
-          페이지 Container 가 1088px 라 목록 페이지(1152px)보다 열이 좁고, 2:1
-          이라 높이가 한 번 더 줄어 어느 폭에서도 199px 를 넘지 않는다.
+          사진 칸은 4:3 이다. 한때 여기만 2:1 로 낮춰 카드를 작게 뒀는데,
+          원본이 모두 4:3 이라 318px 칸에 212px 로 그려지고 좌우에 53px 씩 흰
+          띠가 남았다. 띠를 없애는 방법은 칸을 원본 비율에 맞추는 것뿐이다 —
+          object-cover 는 세로를 33% 자르고, 4:3 이 아닌 두 장(진동기 0.98,
+          컨트롤러 1.06)은 45~51% 잘린다.
 
-          가로 간격이 두 값인 이유는 tagline 이다. 일곱 tagline 을 14px/1.625
-          로 1px 씩 재 보면 모두 두 줄인 글상자 폭이 213~307px 다(좁은 쪽
-          한계는 직진피더 37자, 넓은 쪽은 방음커버 32자). 좁으면 세 줄이 되고
-          넓으면 짧은 셋(방음커버.컨트롤러.우레탄)이 한 줄로 떨어져, 어느
-          쪽이든 카드마다 줄 수가 달라진다.
+          크기는 간격이 잡는다. 이 페이지는 /products 와 달리 왼쪽 분류
+          사이드바가 없어 격자가 Container 1088px 를 다 쓴다(목록 쪽은 848px 를
+          셋으로 나눠 카드가 267px 다). 간격 64px 이면 카드가 320px 가 되어
+          사진이 318x239 로 목록보다 20% 커지므로, xl 에서 144px 로 벌려 카드를
+          266.7px 에 맞춘다 — 사진 265x199 로 목록 카드와 치수가 같아진다.
 
-          그 창을 지키려면 간격이 폭마다 달라야 한다. lg 이상은 3열이라 간격을
-          64px 까지 벌려도 글상자가 222~270px 이고, sm.md 는 2열이라 64px 을
-          두면 640 에서 글상자가 199px 로 떨어져 세 제품이 세 줄이 됐다(직진
-          피더.진동기). 24px 로 좁히면 218px / 282px 가 되어 창 안에 든다 —
-          참고한 신창에프에이의 관련 제품 격자도 24px 였다. 세로는 gap-y-8 로
-          따로 둔다 — sm.md 는 2열이라 카드 셋이면 2행이 되는데 64px 은 너무
-          벌어진다.
+          간격이 세 단계인 이유는 tagline 이다. 일곱 tagline 을 14px/1.625 로
+          1px 씩 재 보면 모두 두 줄인 글상자 폭이 213~307px 인데(좁은 쪽 한계는
+          직진피더 37자, 넓은 쪽은 방음커버 32자), 폭마다 Container 가 달라
+          간격을 하나로 두면 어느 한쪽이 그 창을 벗어난다.
 
-          섹션은 515 -> 약 609px 로 늘어난다. 사진을 넣는 값이다. */}
-      <Section
-        tone="surface"
-        size="compact"
-        eyebrow="OTHER PRODUCTS"
-        title="다른 제품"
-      >
-        <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-16">
+            폭    열  Container  간격   카드  글상자
+            640   2      560      24    268    219
+            768   2      688      24    332    283
+            1024  3      944      64    272    222
+            1280  3     1088     144    267    217
+
+          1024 에서 144px 를 쓰면 카드가 218px 로 줄어 글상자가 169px(세 줄)가
+          되므로 lg 는 64px 그대로 두고 xl 에서만 벌린다. sm.md 에 64px 을 뒀을
+          때는 640 글상자가 199px 로 떨어져 직진피더.진동기가 세 줄이었다.
+          세로는 gap-y-8 로 따로 둔다 — sm.md 는 2열이라 카드 셋이면 2행이
+          되는데 64px 은 너무 벌어진다.
+
+          배경을 흰색으로 둔다(위 "제작 사양" 과 같다). /products 는 흰 카드를
+          일부러 회색 판에 올리는데(그 파일 주석: 흰 바탕에 흰 카드면 테두리
+          1px 말고는 경계가 없어 격자가 평평해 보였다), 거기는 일곱 장이 꽉 찬
+          격자고 여기는 두세 장이라 테두리와 그림자만으로도 카드가 선다.
+
+          섹션은 약 609 -> 648px 가 된다. */}
+      <Section size="compact" eyebrow="OTHER PRODUCTS" title="다른 제품">
+        <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-16 xl:gap-x-36">
           {related.map((p, i) => (
             <Reveal as="li" key={p.slug} delay={i * 70}>
-              <ProductCard product={p} compact />
+              <ProductCard product={p} />
             </Reveal>
           ))}
         </ul>
