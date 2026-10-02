@@ -111,16 +111,21 @@ export default function Home() {
         <Container className="relative flex flex-1 items-center py-[clamp(1.5rem,4vh,3.5rem)]">
           <div className="grid w-full items-center gap-[clamp(1.5rem,3.5vh,3.5rem)] lg:grid-cols-[1.1fr_1fr]">
             <div>
-              {/* 전에는 "SINCE 1992 · FEEDING AUTOMATION SYSTEM" 이었는데,
-                  스크롤 없이 보이는 범위에서 반복되는 말만 모아 놓은 줄이었다
-                  — 영문 태그라인은 바로 위 헤더 로고 아래줄에 그대로 찍혀
-                  있고, 1992 는 같은 화면 지표 띠의 "1992년 설립" 과 본문의
-                  "34년째" 가 이미 말한다. 상호로 바꾸면 적어도 제 몫은 한다. */}
+              {/* 로고의 F.A 가 무엇의 약자인지 풀어 주는 자리다.
+                  로고에는 "유신 F.A SYSTEM" 만 크게 보이고 그 아래 작은
+                  영문은 눈에 잘 안 들어온다.
+
+                  전에는 "SINCE 1992 · FEEDING AUTOMATION SYSTEM" 이었다.
+                  SINCE 1992 를 뺀 것은 같은 화면에서 세 겹으로 겹쳤기
+                  때문이다 — 지표 띠의 "1992년 설립", 본문의 "34년째",
+                  지표의 "34년 제작 경력". 덤으로 그 긴 문구(313px)가
+                  320·360 에서 두 줄로 깨지던 것도 없어졌다(이건 216px 라
+                  320 에서도 한 줄이다). */}
               <p
                 className="rise text-[clamp(0.625rem,1.1vh,0.75rem)] font-bold tracking-[0.25em] text-brand-light"
                 style={{ animationDelay: "60ms" }}
               >
-                {site.name}
+                {site.tagline}
               </p>
               <h1
                 className="rise mt-[clamp(0.75rem,2vh,1.25rem)] text-[clamp(1.6rem,4.4vh,3.4rem)] font-bold leading-[1.25] tracking-tight text-white"
