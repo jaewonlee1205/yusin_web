@@ -24,20 +24,31 @@ export type Product = {
   nameEn: string;
   category: ProductCategory;
   /**
-   * 카드에 들어가는 한 문장.
+   * 설명이 세 겹이다. 쓰이는 자리가 다르고 길이 제약도 달라 나눠 둔다.
+   * 짧은 것부터 tagline -> summary -> lead 순이다.
+   */
+
+  /**
+   * 카드 한 줄 설명(ProductCard).
    *
-   * ⚠️ 길이 주의 — 35자를 넘기지 말 것. 이 값은 두 곳에 쓰인다.
-   *   1) 제품 카드 요약. 가장 좁은 글상자가 217px(1280 이상 3열)와
-   *      219px(640~767 2열)인데, 14px 글자로 두 줄에 들어가려면 35자가
-   *      한계다. 넘기면 그 카드만 세 줄이 되어 격자가 들쭉날쭉해진다.
-   *   2) 제품 상세 페이지 배너 lead(products/[slug]/page.tsx). PageHero 는
-   *      lead 에 두 줄 자리만 비워 두므로, 세 줄이 되면 그 배너만
-   *      232 -> 258px 로 커져 다른 페이지와 어긋난다.
+   * ⚠️ 한 줄을 넘기지 말 것. 가장 좁은 글상자가 217px(1280 이상 3열)이고
+   *    그다음이 219px(640~767 2열)인데, 14px 한글은 글자당 약 11px 이라
+   *    18자쯤이 한계다. 실제로 nowrap 으로 재서 178~201px 에 들어오는
+   *    문구만 넣었다. 넘기면 그 카드만 두 줄이 되어 격자가 어긋난다.
    *
-   * 자세한 설명은 lead 와 features 가 맡는다. 여기서 다 말하려 하지 않는다.
+   * 말투는 체언 종결로 통일했다 — "...하는 피더 본체" 처럼 사양 라벨로
+   * 읽히게. 일곱 개가 같은 꼴이라 훑어 비교하기 쉽다.
+   */
+  tagline: string;
+  /**
+   * 제품 상세 페이지 배너 lead(products/[slug]/page.tsx).
+   *
+   * ⚠️ 640px 에서 한 줄에 들어가야 한다(글상자 560.8px, 18px 글자 기준
+   *    약 41자). 넘기면 그 배너만 29px 길어져 다른 페이지와 어긋난다.
+   *    PageHero 는 sm 부터 lead 에 한 줄 자리만 비워 둔다.
    */
   summary: string;
-  /** 상세 페이지 첫 문단 */
+  /** 상세 페이지 첫 문단 + 검색 설명(generateMetadata) */
   lead: string;
   features: { title: string; body: string }[];
   specs: { label: string; value: string }[];
@@ -57,6 +68,7 @@ export const products: Product[] = [
     name: "볼피더",
     nameEn: "Bowl Feeder",
     category: "파츠피더",
+    tagline: "부품을 정렬해 공급하는 피더 본체",
     summary:
       "흩어진 부품을 진동으로 끌어올려 한 방향으로 정렬해 내보냅니다.",
     lead: "볼피더는 소형에서부터 대형까지 다양한 기종이 있으며, 공급할 부품에 따라 계단형·단종형·접시형·원통형 등 여러 형태로 제작됩니다. 볼 내부의 정렬 지그는 부품 형상을 분석해 하나하나 직접 설계·가공합니다.",
@@ -108,6 +120,7 @@ export const products: Product[] = [
     name: "직진피더",
     nameEn: "Linear Feeder",
     category: "직진피더",
+    tagline: "볼피더와 설비를 잇는 직선 이송",
     summary:
       "볼피더에서 나온 부품을 다음 공정까지 곧게 이송합니다.",
     lead: "직진피더는 볼피더에서 나오는 부품들을 일정한 방향과 모양으로 나오게 하는 공급 장치입니다. 볼피더와 조립 설비 사이를 이어 주며, 부품 폭에 맞춘 슈트(chute)를 얹어 자세를 유지한 채 이송합니다.",
@@ -152,6 +165,7 @@ export const products: Product[] = [
     name: "진동기",
     nameEn: "Vibrator",
     category: "직진피더",
+    tagline: "피더 성능을 좌우하는 핵심 구동부",
     summary:
       "피더에 진동을 주는 구동부. 공급 성능을 좌우합니다.",
     lead: "진동기는 피더 자체에 진동을 줌으로써 부품이 움직이는 원동력이 되는 장치입니다. 판스프링의 각도와 매수, 전자석의 흡인력에 따라 이송 속도와 방향이 결정되므로, 부품마다 튜닝이 필요합니다.",
@@ -188,6 +202,7 @@ export const products: Product[] = [
     name: "호퍼피더",
     nameEn: "Hopper Feeder",
     category: "호퍼피더",
+    tagline: "무인 운전을 위한 부품 자동 보충",
     summary:
       "볼피더에 부품을 자동 보충해 작업자 없이 라인을 돌립니다.",
     lead: "호퍼피더는 많은 양의 부품들을 자동으로 볼피더에 공급해 주어 무인 자동 시스템을 가능하게 하며, 센서 제어를 통해 적당한 분량을 공급해 줍니다. 볼피더 안의 부품이 줄어들면 센서가 이를 감지해 필요한 만큼만 내려보냅니다.",
@@ -228,6 +243,7 @@ export const products: Product[] = [
     name: "방음커버",
     nameEn: "Sound Proof Cover",
     category: "방음커버",
+    tagline: "소음을 15~20dB 낮추는 흡음 커버",
     summary:
       "피더 소음을 약 15~20dB 낮춰 주는 흡음 커버입니다.",
     lead: "방음커버는 투명한 커버와 원통 커버로 구성되어 있고, 원통 커버 내벽에는 방음 흡음재가 부착되어 있기 때문에 소음을 약 15~20데시벨 정도 저감할 수 있습니다. 금속 부품을 다루는 라인일수록 효과가 큽니다.",
@@ -272,6 +288,7 @@ export const products: Product[] = [
     name: "컨트롤러",
     nameEn: "Parts Feeder Controller",
     category: "컨트롤러",
+    tagline: "볼피더·직진피더 전용 속도 제어기",
     summary:
       "볼피더와 직진피더의 진동 세기와 운전을 각각 조절합니다.",
     lead: "파츠피더 컨트롤러는 진동기에 공급되는 전압을 조절해 부품 이송 속도를 제어합니다. 볼피더와 직진피더의 속도를 따로 맞춰야 부품이 밀리거나 끊기지 않고 균일하게 공급됩니다.",
@@ -308,6 +325,7 @@ export const products: Product[] = [
     name: "우레탄 코팅",
     nameEn: "Urethane Coating",
     category: "표면처리",
+    tagline: "충격·진동·소음 저감 표면처리",
     summary:
       // 가운뎃점이 아니라 쉼표다. "진동·소음" 으로 쓰면 217px 에서 줄이
       // "…충격과 진동" / "·소음을 줄입니다" 로 끊겨 둘째 줄이 가운뎃점으로

@@ -99,10 +99,14 @@ export default function ProductCard({ product }: { product: Product }) {
         <p className="mt-0.5 text-xs font-medium uppercase tracking-wide text-muted">
           {product.nameEn}
         </p>
-        {/* flex-1 을 남겨 둔다. 아래 "상세보기" 줄이 빠졌어도 본문이 카드
+        {/* summary 가 아니라 tagline 이다. summary 는 상세 배너 lead 를
+            겸해 30자 안팎인데, 카드 글상자(가장 좁을 때 217px)에서는 두 줄이
+            된다. 카드에는 한 줄짜리 tagline 만 쓴다.
+
+            flex-1 을 남겨 둔다. 아래 "상세보기" 줄이 빠졌어도 본문이 카드
             높이를 끝까지 채워야 격자에서 아랫변이 가지런하다. */}
         <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-soft">
-          {product.summary}
+          {product.tagline}
         </p>
       </div>
     </Link>
