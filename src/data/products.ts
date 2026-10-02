@@ -69,9 +69,37 @@ export type Product = {
    * 검색 설명도 겸하므로 너무 줄이지는 말 것. 90~105자가 적당하다.
    */
   lead: string;
+  /**
+   * 특징. 개수를 제품마다 맞추지 않는다 — 지금 2~4개다.
+   *
+   * ⚠️ 아래 specs 에 같은 내용이 행으로 있으면 여기 적지 말 것.
+   *    한때 일곱 제품을 전부 4개로 채웠는데, 채운 여섯 개가 모두 사양 표에
+   *    이미 있는 말이어서 한 페이지에서 같은 내용을 두 번 읽게 됐다.
+   *    개수를 맞추려고 적는 특징은 특징이 아니다.
+   *
+   * 제목은 1024 이상에서 한 줄이어야 한다 — 제목 칸이 288px 라 16자까지다.
+   */
   features: { title: string; body: string }[];
   specs: { label: string; value: string }[];
+  /**
+   * 적용 분야 칩. 개수를 제품마다 맞추지 않는다 — 지금 2~5개다.
+   *
+   * ⚠️ 서로 다른 자리·다른 부품을 가리킬 때만 따로 적을 것. "장시간 무인
+   *    운전 라인" 과 "야간·주말 연속 가동 설비" 처럼 같은 말을 둘로 쪼개
+   *    숫자를 채우지 않는다.
+   */
   applications: string[];
+  /**
+   * 상세 페이지 아래 "다른 제품" 에 띄울 제품의 slug.
+   *
+   * ⚠️ 개수를 맞추지 않는다 — 실제로 함께 쓰는 것만 적는다(지금 2~3개).
+   *    전에는 목록을 돌려 가며 셋씩 뽑았는데(`[1,2,3].map`), 그러면 칸을
+   *    채우려고 관련 없는 제품도 끌어왔다.
+   *
+   * 근거는 그 제품 specs 에 적힌 연결 관계다. 파일 끝의 검사가 없는 slug 와
+   * 자기 자신을 빌드 때 잡는다.
+   */
+  related: string[];
   images: { src: string; alt: string }[];
 };
 
@@ -119,12 +147,17 @@ export const products: Product[] = [
       { label: "구동", value: "전자석 진동기 + 전용 컨트롤러" },
       { label: "옵션", value: "방음커버, 호퍼피더, 직진피더 연결" },
     ],
+    // 다섯이다. clients.ts 의 clientIndustries 여섯 산업을 부품 이름으로 풀어
+    // 썼다 — 실제 거래처가 그 분야라 지어낸 말이 아니다.
     applications: [
       "커넥터 · 단자 등 전자부품",
       "볼트 · 너트 · 나사 등 체결부품",
-      "제약 · 화장품 용기 캡",
+      "제약 · 의료용 용기 부품",
+      "화장품 용기 캡 · 펌프 부품",
       "가전 · 전기기기 조립 부품",
     ],
+    // specs 의 "옵션 = 방음커버, 호퍼피더, 직진피더 연결" 그대로다.
+    related: ["linear-feeder", "hopper-feeder", "soundproof-cover"],
     images: [
       {
         src: "/images/products/bowl-feeder-01.webp",
@@ -151,16 +184,8 @@ export const products: Product[] = [
         body: "이송하는 부품의 형상과 폭에 맞춰 슈트를 제작해, 이송 중 자세가 흐트러지지 않게 합니다.",
       },
       {
-        title: "세 가지 크기",
-        body: "소형·중형·대형으로 제작되며 볼피더 용량과 라인 길이에 맞춰 선정합니다.",
-      },
-      {
         title: "독립 진동 제어",
         body: "볼피더와 별도의 컨트롤러로 진동을 조절해, 후공정 속도에 맞춰 이송량을 맞춥니다.",
-      },
-      {
-        title: "슈트 교체로 부품 변경 대응",
-        body: "다루는 부품이 바뀌어도 본체는 그대로 두고 슈트만 새로 만들어 끼웁니다.",
       },
     ],
     specs: [
@@ -171,11 +196,10 @@ export const products: Product[] = [
       { label: "이송 방향", value: "볼피더 배출구 → 조립 설비 직선 이송" },
       { label: "튜닝", value: "실제 부품으로 이송 속도와 자세를 맞춘 뒤 납품" },
     ],
-    applications: [
-      "볼피더 – 조립기 사이 부품 이송",
-      "부품 정렬 자세 유지 구간",
-      "센서 검사 구간 통과 이송",
-    ],
+    // "부품 정렬 자세 유지 구간" 을 뺐다 — 첫 항목이 이미 그 구간이다.
+    applications: ["볼피더 – 조립기 사이 부품 이송", "센서 검사 구간 통과 이송"],
+    // specs 의 "설치 = 볼피더 배출구 직결", "구동 = 전자석 진동기 + 전용 컨트롤러".
+    related: ["bowl-feeder", "vibrator", "controller"],
     images: [
       {
         src: "/images/products/linear-feeder-01.webp",
@@ -204,14 +228,6 @@ export const products: Product[] = [
         title: "현장 튜닝 대응",
         body: "스프링 매수와 각도를 조정해 공급 속도를 맞춥니다. 튜닝 전담 부서가 직접 세팅합니다.",
       },
-      {
-        title: "볼피더 · 직진피더 공용",
-        body: "볼피더 하부와 직진피더 하부에 동일한 원리로 적용됩니다.",
-      },
-      {
-        title: "진동부만 교체",
-        body: "쓰던 피더의 본체는 그대로 두고 진동부만 바꿔 다는 방식으로도 씁니다. 볼피더·직진피더 모두 해당합니다.",
-      },
     ],
     specs: [
       { label: "방식", value: "전자석 + 판스프링 진동" },
@@ -222,6 +238,8 @@ export const products: Product[] = [
       { label: "튜닝", value: "실제 부품으로 이송 속도와 방향을 맞춘 뒤 납품" },
     ],
     applications: ["볼피더 구동부", "직진피더 구동부", "기존 피더 진동부 교체"],
+    // specs 의 "적용 = 볼피더 하부, 직진피더 하부", "제어 = 파츠피더 컨트롤러 연결".
+    related: ["bowl-feeder", "linear-feeder", "controller"],
     images: [
       {
         src: "/images/products/vibrator-01.webp",
@@ -250,10 +268,6 @@ export const products: Product[] = [
         title: "투명 상부 커버",
         body: "잔량을 눈으로 바로 확인할 수 있고, 손잡이로 커버를 열어 부품을 보충합니다.",
       },
-      {
-        title: "볼피더 직상부 투입 슈트",
-        body: "호퍼에서 나온 부품이 볼피더 안으로 바로 떨어지도록 투입 슈트를 함께 제작합니다.",
-      },
     ],
     specs: [
       { label: "적재 용량", value: "라인 소모량에 맞춰 제작" },
@@ -263,11 +277,10 @@ export const products: Product[] = [
       { label: "연동", value: "볼피더 레벨 센서 신호로 자동 기동 · 정지" },
       { label: "보충", value: "상부 커버를 열어 부품 투입" },
     ],
-    applications: [
-      "장시간 무인 운전 라인",
-      "소형 부품 대량 공급 공정",
-      "야간 · 주말 연속 가동 설비",
-    ],
+    // "야간 · 주말 연속 가동 설비" 를 뺐다 — 첫 항목과 같은 말이다.
+    applications: ["장시간 무인 운전 라인", "소형 부품 대량 공급 공정"],
+    // specs 의 "배출 = 볼피더 직상부 투입 슈트", "연동 = 볼피더 레벨 센서 신호".
+    related: ["bowl-feeder", "controller"],
     images: [
       {
         src: "/images/products/hopper-feeder-01.webp",
@@ -296,10 +309,6 @@ export const products: Product[] = [
         title: "개폐형 구조",
         body: "경첩과 잠금 구조로 되어 있어 부품 보충과 지그 점검 시 손쉽게 열 수 있습니다.",
       },
-      {
-        title: "볼피더 외경에 맞춘 전용 제작",
-        body: "표준 치수를 가져다 쓰지 않고, 씌울 볼피더의 외경에 맞춰 커버를 따로 만듭니다.",
-      },
     ],
     specs: [
       { label: "소음 저감", value: "약 15 ~ 20 dB" },
@@ -312,11 +321,12 @@ export const products: Product[] = [
       },
       { label: "효과", value: "금속 부품 취급 라인에서 특히 큼" },
     ],
-    applications: [
-      "금속 부품 취급 라인",
-      "작업자 상주 구역 인접 설비",
-      "소음 규제 대응이 필요한 현장",
-    ],
+    // "소음 규제 대응이 필요한 현장" 을 뺐다 — 남는 두 항목이 그 현장이고
+    // lead 가 이미 규제를 말한다.
+    applications: ["금속 부품 취급 라인", "작업자 상주 구역 인접 설비"],
+    // specs 의 "제작 = 볼피더 외경에 맞춰". 우레탄 코팅과 나란히 둔다 —
+    // 소음을 줄이는 두 가지 방법이라 함께 검토하는 물건이다.
+    related: ["bowl-feeder", "urethane-coating"],
     images: [
       {
         src: "/images/products/soundproof-cover-01.webp",
@@ -349,10 +359,6 @@ export const products: Product[] = [
         title: "센서 입력 연동",
         body: "호퍼피더 레벨 센서나 후공정 센서 신호를 받아 자동 기동·정지시킬 수 있습니다.",
       },
-      {
-        title: "일체형 · 별치형 선택",
-        body: "피더 본체에 붙여 한 몸으로 만들 수도, 조작반 쪽에 따로 둘 수도 있습니다.",
-      },
     ],
     specs: [
       { label: "제어 방식", value: "전압 조절식 진동 제어" },
@@ -367,6 +373,8 @@ export const products: Product[] = [
       "직진피더 속도 제어",
       "호퍼피더 자동 공급 제어",
     ],
+    // 바로 위 적용 분야 세 줄이 가리키는 제품 그대로다.
+    related: ["bowl-feeder", "linear-feeder", "hopper-feeder"],
     images: [
       {
         src: "/images/products/controller-01.webp",
@@ -399,10 +407,6 @@ export const products: Product[] = [
         title: "거칠기 조절 가공",
         body: "코팅 기술과 철분·플라스틱·세라믹 등을 이용해 표면 거칠기를 조절합니다. UN-1부터 UN-3까지 부품 용도에 맞는 등급을 선택할 수 있습니다.",
       },
-      {
-        title: "볼 내면 외 트랙 · 슈트에도",
-        body: "볼 내면뿐 아니라 트랙과 직진피더 슈트처럼 부품이 스치는 면이면 함께 입힙니다.",
-      },
     ],
     specs: [
       { label: "거칠기 등급", value: "UN-1 · UN-2 · UN-3" },
@@ -417,6 +421,8 @@ export const products: Product[] = [
       "수지 · 세라믹 등 깨지기 쉬운 부품",
       "소음 저감이 필요한 라인",
     ],
+    // specs 의 "적용 부위 = 볼 내면, 트랙, 직진피더 슈트".
+    related: ["bowl-feeder", "linear-feeder"],
     images: [
       {
         src: "/images/products/urethane-coating-01.webp",
@@ -429,6 +435,24 @@ export const products: Product[] = [
     ],
   },
 ];
+
+/**
+ * related 의 slug 를 빌드 때 한 번 검사한다.
+ *
+ * related 가 string[] 이라 타입은 오타를 못 잡고, 상세 페이지의 find 는 못
+ * 찾은 slug 를 조용히 건너뛴다 — 카드 한 장이 말없이 사라지는 게 가장 나쁘다.
+ * 여기서 던지면 빌드가 멈춘다.
+ */
+for (const p of products) {
+  for (const slug of p.related) {
+    if (slug === p.slug) {
+      throw new Error(`products.ts: ${p.slug} 의 related 가 자기 자신을 가리킨다`);
+    }
+    if (!products.some((q) => q.slug === slug)) {
+      throw new Error(`products.ts: ${p.slug} 의 related 에 없는 slug "${slug}"`);
+    }
+  }
+}
 
 export function getProduct(slug: string): Product | undefined {
   return products.find((p) => p.slug === slug);

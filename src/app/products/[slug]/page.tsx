@@ -8,7 +8,7 @@ import ProductCard from "@/components/ProductCard";
 import ProductGallery from "@/components/ProductGallery";
 import Reveal from "@/components/Reveal";
 import Section from "@/components/Section";
-import { getProduct, products } from "@/data/products";
+import { getProduct, products, type Product } from "@/data/products";
 
 export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
@@ -51,15 +51,24 @@ export default async function ProductDetailPage({
   const product = getProduct(slug);
   if (!product) notFound();
 
-  // 목록에서 현재 제품 다음부터 세 개를 돌려 가며 고른다.
+  // 아래 "다른 제품" 에 띄울 목록. 제품마다 개수가 다르다 — 지금 2~3개다.
   //
-  // 전에는 filter(…).slice(0, 3) 로 배열 앞에서 잘랐다. 일곱 페이지를 모두
-  // 열어 세어 보니 볼피더·직진피더·진동기가 각 6회, 호퍼피더 3회였고
-  // 방음커버·컨트롤러·우레탄 코팅은 21칸 중 한 번도 안 나왔다.
-  // 돌려 고르면 일곱 제품이 정확히 3회씩(21 ÷ 7) 나오고, 제품이 늘어도
-  // 손으로 관리할 목록이 생기지 않는다.
-  const here = products.findIndex((p) => p.slug === product.slug);
-  const related = [1, 2, 3].map((n) => products[(here + n) % products.length]);
+  // 전에는 목록을 돌려 가며 셋씩 뽑았다(products[(here + 1..3) % 7]). 일곱
+  // 제품이 정확히 3회씩 나와 분포는 고르지만, 칸을 채우려고 관련 없는 제품도
+  // 끌어왔다 — 우레탄 코팅 아래에 방음커버가 놓이는 식이다. 이제 products.ts
+  // 의 related 를 그대로 읽는다. 근거는 각 제품 specs 에 적힌 연결 관계다.
+  //
+  // 그래도 한 번도 안 나오는 제품은 없다. 18칸의 등장 횟수는 볼피더 6 ·
+  // 직진피더 4 · 컨트롤러 3 · 호퍼피더 2 · 진동기 1 · 방음커버 1 · 우레탄
+  // 코팅 1 이다. 볼피더가 여섯인 것은 나머지 여섯이 전부 볼피더에 붙는
+  // 물건이기 때문이라 숨길 일이 아니다(전에 고치려던 문제는 세 제품이 21칸
+  // 중 0회였던 것이다).
+  //
+  // slug 오타는 products.ts 끝의 검사가 빌드 때 잡는다. 여기서는 타입을
+  // 좁히려고 걸러 낸다.
+  const related = product.related
+    .map((slug) => getProduct(slug))
+    .filter((p): p is Product => p !== undefined);
 
   return (
     <>
@@ -122,20 +131,34 @@ export default async function ProductDetailPage({
         </Container>
       </div>
 
-      {/* 특징 — 전에는 오른쪽 512px 칸에 갇힌 세로 목록이었다. 전폭 2열로
-          풀면 네 개를 한눈에 견준다. 왼쪽 2px 빨간 띠는 뺐다(분류 사이드바에서
-          걷어낸 것과 같은 장식이고, 한 화면에 빨강이 네 번 반복됐다). */}
+      {/* 특징 — 전에는 오른쪽 512px 칸에 갇힌 세로 목록이었다. 전폭으로 풀면
+          한눈에 견준다. 왼쪽 2px 빨간 띠는 뺐다(분류 사이드바에서 걷어낸 것과
+          같은 장식이고, 한 화면에 빨강이 여러 번 반복됐다).
+
+          개수는 제품마다 다르다 — 2~4개다. products.ts 의 features 주석에
+          기준을 적어 뒀다(사양 표에 같은 내용이 있으면 특징에 적지 않는다). */}
       <Section tone="surface" size="compact" eyebrow="FEATURES" title="특징">
         {/* 네모 카드를 쓰지 않는다. 전에는 gap-px + bg-line 2열 격자라 선으로
             나뉜 네모 넷이었다. 참고한 ablelabsinc.com/notable96 에서 가져온
-            것은 왼쪽 48x48 타일이 만드는 리듬뿐이고, 카드는 비웠다 — 남는
-            것은 번호 타일과 가로 구분선이다.
+            것은 왼쪽 타일이 만드는 리듬뿐이고, 카드는 비웠다 — 남는 것은
+            번호 타일과 가로 구분선이다.
 
             열 수가 폭마다 다르다. 768 에서 3열을 쓰면 제목 칸이 200px 로
-            좁아져 가장 긴 제목("볼피더 외경에 맞춘 전용 제작", 16자)이 두
-            줄이 된다. 그래서 1024 부터만 3열이고, 제목 칸은 18rem(288px)
-            이다 — 거기서 28개 제목이 모두 한 줄이고 가장 긴 본문(80자)이
-            두 줄이다.
+            좁아져 긴 제목이 두 줄이 된다. 그래서 1024 부터만 3열이고, 제목
+            칸은 18rem(288px) 이다 — 거기서 20개 제목이 모두 한 줄이고 가장
+            긴 본문이 두 줄이다.
+
+            items-baseline 이 없으면 안 된다. 기본값(stretch)이면 제목은 칸
+            맨 위에 붙고 숫자는 타일 가운데 있어 1440에서 숫자 중앙 56.0px,
+            제목 첫 줄 중앙 43.6px — 12.4px 어긋났다. baseline 은 숫자와 제목
+            글자의 밑변을 맞추므로 폭과 본문 줄 수에 관계없이 2.4px 안쪽이다.
+            items-center 는 쓸 수 없다 — 1440에서는 완벽하지만(0.1px) 640~1023
+            에서 타일이 row-span-2 로 두 행을 걸치는 탓에 타일이 제목+본문
+            블록 가운데로 내려가 본문 2줄 행에서 30.3px 어긋난다.
+
+            타일은 36px 다. 48px 일 때는 타일이 행 높이를 정해 1440에서 한 행
+            112.8px 인데 글자는 24.8px 뿐이었다. 36px + py-5/6 으로 한 행
+            84.8px 이 된다. 32px 까지 줄이면 "01" 두 자에 여유가 없다.
 
             번호 타일은 흰색이다. 이 섹션이 tone="surface" 라 흰 타일이
             또렷하게 뜬다. 레드는 숫자 글자에만 쓴다(globals.css 의 토큰
@@ -146,13 +169,13 @@ export default async function ProductDetailPage({
               as="li"
               key={f.title}
               delay={i * 70}
-              className="border-b border-line py-7 sm:py-8"
+              className="border-b border-line py-5 sm:py-6"
             >
-              <div className="grid gap-x-10 gap-y-3 sm:grid-cols-[auto_minmax(0,1fr)] lg:grid-cols-[auto_minmax(0,18rem)_minmax(0,1fr)]">
+              <div className="grid items-baseline gap-x-10 gap-y-3 sm:grid-cols-[auto_minmax(0,1fr)] lg:grid-cols-[auto_minmax(0,18rem)_minmax(0,1fr)]">
                 {/* 순서는 ul/li 가 이미 전달한다. 눈으로만 읽는 번호다. */}
                 <span
                   aria-hidden="true"
-                  className="flex h-12 w-12 items-center justify-center rounded-lg border border-line bg-white text-sm font-bold tabular-nums text-brand sm:row-span-2 lg:row-span-1"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-white text-xs font-bold tabular-nums text-brand sm:row-span-2 lg:row-span-1"
                 >
                   {String(i + 1).padStart(2, "0")}
                 </span>
