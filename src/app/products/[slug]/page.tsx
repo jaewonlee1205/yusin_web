@@ -130,16 +130,34 @@ export default async function ProductDetailPage({
                   라벨은 가장 긴 것이 63px("거칠기 등급")라 5rem(80px)에 든다.
 
                   dt/dd 는 dl 직계여야 한다(접근성 검사 dlitem). 묶는 div 대신
-                  Fragment 를 쓴다 — 아래 사양 표와 같은 이유다. */}
-              <div className="mt-6 rounded-lg border border-line bg-surface p-5">
+                  Fragment 를 쓴다 — 아래 사양 표와 같은 이유다.
+
+                  가로선을 둬 표로 읽히게 했다. 전에는 라벨과 값이 같은 13px
+                  이고 굵기만 달라 위계가 약했고, 행 간격이 8px 뿐이라 세 사양이
+                  한 덩어리로 뭉쳤다. 선은 라벨 아래 하나와 사양 사이 둘, 모두
+                  셋이다 — 마지막 행 아래는 카드 테두리가 닫으므로 두지 않는다.
+                  세로선도 두지 않는다: 512px 카드에 격자선을 치면 답답하다.
+
+                  라벨을 12px muted 로 내리고 값을 w500 으로 올려 값이 주인공이
+                  되게 했다. 라벨이 위 "주요 사양" 과 같은 계열(작고 자간 있는
+                  글자)이 되어 카드 안 언어가 통일된다.
+
+                  높이도 맞아떨어진다. 144 -> 187px 가 되면서 1280 이상에서
+                  오른쪽 칸이 갤러리(468px)와 1px 차이가 된다 — 전에는 44px
+                  모자라 아래가 비었다. */}
+              <div className="mt-6 rounded-lg border border-line bg-surface px-5 py-4">
                 <p className="text-xs font-bold tracking-[0.2em] text-muted">
                   주요 사양
                 </p>
-                <dl className="mt-3 grid grid-cols-[5rem_minmax(0,1fr)] gap-x-3 gap-y-2 text-[13px]">
+                <dl className="mt-1 grid grid-cols-[5rem_minmax(0,1fr)] gap-x-4">
                   {product.specs.slice(0, 3).map((spec) => (
                     <Fragment key={spec.label}>
-                      <dt className="font-bold text-ink-soft">{spec.label}</dt>
-                      <dd className="text-ink">{spec.value}</dd>
+                      <dt className="border-t border-line py-3 text-xs font-bold tracking-wide text-muted">
+                        {spec.label}
+                      </dt>
+                      <dd className="border-t border-line py-3 text-[13px] font-medium text-ink">
+                        {spec.value}
+                      </dd>
                     </Fragment>
                   ))}
                 </dl>
@@ -179,7 +197,7 @@ export default async function ProductDetailPage({
         tone="surface"
         size="compact"
         eyebrow="FEATURES"
-        title="특징"
+        title="제품 특징"
         align="center"
       >
         {/* 참고로 주신 ansanfa.com/sub03.html 의 "ANSANFA PRODUCT" 여섯 항목을
