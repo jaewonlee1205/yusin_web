@@ -61,13 +61,26 @@ const FOOTER_GROUPS: {
 const LINK =
   "inline-block py-1 text-sm text-ink-soft transition-colors hover:text-brand";
 
-/* 브랜드 열의 외부 채널 버튼(유튜브·네이버). 테두리·배경·hover 는 /location
-   의 외부 지도 링크 두 개와 같은 어휘다(location/page.tsx) — 거기도
-   target="_blank" 외부 링크고, 같은 hover 를 ProductBrowser 도 쓴다.
-     - bg-white 를 더했다. /location 은 흰 바탕 위라 배경이 필요 없지만
-       푸터는 bg-surface 라 흰 바탕이라야 버튼이 떠 보인다.
-     - p-2 정사각이다. 아이콘 16 + 패딩 16 + 테두리 2 = 34px 로, 글자가 있던
-       시절 높이와 같다. 그래서 아래 정렬이 그대로 유지된다(전화번호 mt-3).
+/* 브랜드 열의 외부 채널 버튼(유튜브·네이버).
+
+   바탕을 두지 않는다. 푸터색(bg-surface)이 그대로 비치고 테두리만으로
+   경계를 만든다. 참고한 ablelabsinc.com 푸터의 소셜 버튼이 그 방식이다 —
+   배경 투명, 0.8px 테두리, 원형.
+
+   테두리 농도는 재서 골랐다. 그쪽은 어두운 푸터(#07131d)에 흰색 10% 를 써
+   배경과 대비 1.31:1 이다. 밝은 푸터에서 같은 세기를 내려면 어두운 색을
+   낮은 투명도로 깔아야 한다.
+
+     border-line(옛 값)  1.155:1  흰 바탕이 사라지면 너무 흐려 안 보인다
+     border-ink/10       1.22:1   조금 연하다
+     border-ink/15       1.35:1   <- 기준(1.31)과 거의 같다
+
+   p-2 정사각이라 아이콘 16 + 패딩 16 + 테두리 2 = 34px 다. rounded-full 은
+   모서리 반경만 바꾸므로 이 치수가 그대로고, 그래서 아래 정렬도 유지된다
+   (전화번호 mt-3, 브랜드 열 150px).
+
+   hover 는 테두리가 navy/40 으로 진해지는 것으로 읽힌다. 바탕이 없어도
+   반응이 보인다.
 
    ⚠ 글자가 없다. 그래서 두 링크의 접근성 이름은 전적으로 aria-label 이
      들고 있다 — 아이콘 <svg> 는 aria-hidden 이라 이름에 보태지 않는다.
@@ -75,7 +88,7 @@ const LINK =
      link-name 도 깨진다. 글자를 되살리든 라벨을 두든, 둘 중 하나는 반드시
      있어야 한다. */
 const CHANNEL_BUTTON =
-  "flex items-center justify-center rounded border border-line bg-white p-2 text-ink-soft transition-colors hover:border-navy/40 hover:text-ink";
+  "flex items-center justify-center rounded-full border border-ink/15 p-2 text-ink-soft transition-colors hover:border-navy/40 hover:text-ink";
 
 /* 자간 0.2em 은 Section.tsx 의 eyebrow 와 같은 값이다(푸터만 0.15em 이었다). */
 const HEADING = "text-xs font-bold tracking-[0.2em] text-ink";
