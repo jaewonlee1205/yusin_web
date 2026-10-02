@@ -16,6 +16,25 @@ type Props = {
    *    default 로 두면 섹션 사이가 192px 이라 중간이 휑해 보인다.
    */
   size?: "default" | "compact";
+  /**
+   * 제목 블록 정렬.
+   *
+   * "center" 는 정렬만 바꾸지 않는다 — eyebrow 를 알약 배지로 감싼다. 둘을 한
+   * prop 으로 묶은 이유는 가운데 정렬에서 12px 글자만 홀로 떠 있으면 약해
+   * 보이기 때문이다. 가운데 변형은 배지를 함께 가져야 균형이 맞는다.
+   *
+   * 참고한 ansanfa.com/sub03.html 의 .section-title 은 text-align:center 에
+   * 작은 라벨(13px) + 큰 제목(32px) + 설명(16px) 구조이고, 포인트는 크기가
+   * 아니라 색이었다("PRODUCT" 만 32px 그대로 파랑). 우리 제목은 "특징" 두
+   * 글자라 색을 쪼갤 수 없어 배지로 대신한다.
+   *
+   * ⚠️ 배지 바탕은 흰색이다. 처음에 bg-brand/5 를 깔았는데 bg-surface(246,247,
+   *    249) 위에 레드 5%% 가 섞여 배경이 (244,237,238)이 되고, 레드 글자 대비가
+   *    4.40:1 로 떨어져 Lighthouse color-contrast 가 미통과했다(접근성 96).
+   *    흰 바탕이면 5.09:1 이고, 회색 섹션 위에서 배지가 더 또렷하게 뜬다.
+   *    어두운 쪽은 바탕을 깔지 않는다 — navy 위 brand-light 대비를 그대로 쓴다.
+   */
+  align?: "left" | "center";
   id?: string;
   className?: string;
 };
@@ -39,25 +58,42 @@ export default function Section({
   lead,
   tone = "white",
   size = "default",
+  align = "left",
   id,
   className = "",
 }: Props) {
   const dark = tone === "navy";
+  const centered = align === "center";
 
   return (
     <section id={id} className={`${TONE[tone]} ${PAD[size]} ${className}`}>
       <Container>
         {(eyebrow || title || lead) && (
-          <div className="mb-10 max-w-2xl sm:mb-14">
-            {eyebrow && (
-              <p
-                className={`mb-3 text-xs font-bold tracking-[0.2em] ${
-                  dark ? "text-brand-light" : "text-brand"
-                }`}
-              >
-                {eyebrow}
-              </p>
-            )}
+          <div
+            className={`mb-10 max-w-2xl sm:mb-14 ${
+              centered ? "mx-auto text-center" : ""
+            }`}
+          >
+            {eyebrow &&
+              (centered ? (
+                <p
+                  className={`mb-4 inline-flex rounded-full border px-4 py-1.5 text-xs font-bold tracking-[0.2em] ${
+                    dark
+                      ? "border-brand-light/30 text-brand-light"
+                      : "border-brand/20 bg-white text-brand"
+                  }`}
+                >
+                  {eyebrow}
+                </p>
+              ) : (
+                <p
+                  className={`mb-3 text-xs font-bold tracking-[0.2em] ${
+                    dark ? "text-brand-light" : "text-brand"
+                  }`}
+                >
+                  {eyebrow}
+                </p>
+              ))}
             {title && (
               <h2
                 className={`text-2xl font-bold leading-snug tracking-tight sm:text-4xl ${

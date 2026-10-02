@@ -171,7 +171,17 @@ export default async function ProductDetailPage({
 
           개수는 제품마다 다르다 — 2~4개다. products.ts 의 features 주석에
           기준을 적어 뒀다(사양 표에 같은 내용이 있으면 특징에 적지 않는다). */}
-      <Section tone="surface" size="compact" eyebrow="FEATURES" title="특징">
+      {/* 제목만 가운데로 둔다. 참고한 안산FA 도 .section-title 이
+          text-align:center 이고 항목은 왼쪽이다. align="center" 는 eyebrow 를
+          알약 배지로도 바꾼다(Section 주석 참고). 사양·다른 제품 섹션은 왼쪽
+          그대로다 — 한 섹션만 가운데면 그 섹션이 강조된다. */}
+      <Section
+        tone="surface"
+        size="compact"
+        eyebrow="FEATURES"
+        title="특징"
+        align="center"
+      >
         {/* 참고로 주신 ansanfa.com/sub03.html 의 "ANSANFA PRODUCT" 여섯 항목을
             재서 옮겼다.
 
