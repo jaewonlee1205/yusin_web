@@ -16,17 +16,10 @@ import {
   type NavItem,
 } from "@/data/site";
 import { PhoneIcon } from "./icons";
-import { scrollToTop } from "@/lib/scrollToTop";
+import { handleSameRouteClick } from "@/lib/scrollToTop";
 
 /** 마우스가 메뉴를 스쳐 지날 때 깜빡이지 않도록 닫기를 약간 늦춘다. */
 const CLOSE_DELAY = 140;
-
-/**
- * 같은 페이지를 가리키는지. trailingSlash: true 라 pathname 은 "/company/"
- * 인데 nav 가 들고 있는 href 는 "/company" 라 그냥 비교하면 안 맞는다.
- */
-const samePath = (a: string, b: string) =>
-  a.replace(/\/+$/, "") === b.replace(/\/+$/, "");
 
 export default function Header() {
   const pathname = usePathname();
@@ -135,20 +128,10 @@ export default function Header() {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-  /**
-   * 지금 보고 있는 페이지를 헤더에서 다시 누르면 맨 위로 올린다.
-   *
-   * 라우터는 같은 경로로 가라는 요청에 아무것도 하지 않는다. 그래서 홈에서
-   * 로고를 눌러도, /company 에서 회사소개를 눌러도 반응이 없었다. 다른
-   * 경로로 갈 때는 라우터가 알아서 맨 위로 보내 주므로 건드리지 않는다.
-   */
-  const onSameRouteClick = (e: React.MouseEvent, href: string) => {
-    if (!samePath(pathname, href)) return;
-    // 새 탭으로 열려는 클릭(Ctrl/Cmd 등)은 가로채지 않는다.
-    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    e.preventDefault();
-    scrollToTop();
-  };
+  /* 지금 보고 있는 페이지를 헤더에서 다시 누르면 맨 위로 올린다. 푸터 로고
+     (HomeLogoLink)도 같은 함수를 쓴다 — 근거는 lib/scrollToTop.ts 에 있다. */
+  const onSameRouteClick = (e: React.MouseEvent, href: string) =>
+    handleSameRouteClick(e, pathname, href);
 
   return (
     <header

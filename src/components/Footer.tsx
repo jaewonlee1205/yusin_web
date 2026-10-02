@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Container from "./Container";
+import HomeLogoLink from "./HomeLogoLink";
 import { NaverIcon, PhoneIcon, YoutubeIcon } from "./icons";
 import { products } from "@/data/products";
 import { site, telHref } from "@/data/site";
@@ -95,13 +96,19 @@ export default function Footer() {
             거기서 여유가 1.7fr 37px / 1.6fr 26px / 1.5fr 14px 라 1.7fr 로 둔다. */}
         <div className="grid grid-cols-2 gap-10 sm:gap-x-12 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)] lg:gap-10">
           <div className="col-span-2 sm:col-span-1">
-            <Image
-              src="/images/logo.png"
-              alt={site.name}
-              width={403}
-              height={52}
-              className="h-7 w-auto sm:h-8"
-            />
+            {/* block w-fit 이다. inline-block 으로 두면 인라인 baseline
+                여백 때문에 이 열이 5px 늘어 [제품] 열과 맞춰 둔 0px 정렬이
+                깨지고, w-fit 없이 block 만 두면 링크가 열 전체 폭(1440 에서
+                373px)을 덮어 로고 오른쪽 빈 자리까지 눌린다. */}
+            <HomeLogoLink className="block w-fit" label={`${site.name} 홈으로`}>
+              <Image
+                src="/images/logo.png"
+                alt={site.name}
+                width={403}
+                height={52}
+                className="h-7 w-auto sm:h-8"
+              />
+            </HomeLogoLink>
             {/* 바깥 채널 두 개. 목록 링크가 아니라 테두리 버튼이다 — 옆 세
                 열은 [제품]·[회사]·[고객지원] 제목 아래 묶여 있는데 이것만
                 제목 없는 열에 혼자 서게 되어, 글자만 두면 어디에도 안 붙어

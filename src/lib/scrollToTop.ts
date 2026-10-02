@@ -32,3 +32,31 @@ export function scrollToTop() {
   };
   requestAnimationFrame(step);
 }
+
+/**
+ * 같은 페이지를 가리키는지. trailingSlash: true 라 pathname 은 "/company/"
+ * 인데 nav 가 들고 있는 href 는 "/company" 라 그냥 비교하면 안 맞는다.
+ */
+export const samePath = (a: string, b: string) =>
+  a.replace(/\/+$/, "") === b.replace(/\/+$/, "");
+
+/**
+ * 지금 보고 있는 페이지를 가리키는 링크를 눌렀을 때 맨 위로 올린다.
+ *
+ * 라우터는 같은 경로로 가라는 요청에 아무것도 하지 않는다. 그래서 홈에서
+ * 로고를 눌러도, /company 에서 회사소개를 눌러도 반응이 없었다. 다른
+ * 경로로 갈 때는 라우터가 알아서 맨 위로 보내 주므로 건드리지 않는다.
+ *
+ * 헤더(로고·1차 메뉴)와 푸터 로고(HomeLogoLink)가 함께 쓴다.
+ */
+export function handleSameRouteClick(
+  e: React.MouseEvent,
+  pathname: string,
+  href: string,
+) {
+  if (!samePath(pathname, href)) return;
+  // 새 탭으로 열려는 클릭(Ctrl/Cmd 등)은 가로채지 않는다.
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  e.preventDefault();
+  scrollToTop();
+}
