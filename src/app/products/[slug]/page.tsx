@@ -6,7 +6,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Container from "@/components/Container";
 import ContactCTA from "@/components/ContactCTA";
 import ProductGallery from "@/components/ProductGallery";
-import ProductRowCard from "@/components/ProductRowCard";
+import ProductCard from "@/components/ProductCard";
 import Reveal from "@/components/Reveal";
 import Section from "@/components/Section";
 import { getProduct, products, type Product } from "@/data/products";
@@ -109,8 +109,12 @@ export default async function ProductDetailPage({
                 {product.summary}
               </p>
 
-              {/* 주요 사양 — specs 앞 세 줄이다. 아래 사양 표는 slice(3) 로
-                  뒤 세 줄만 쓴다. 같은 줄이 두 번 나오지 않는다.
+              {/* 히어로 사양 표 — specs 앞 세 줄이다. 아래 사양 표는 slice(3)
+                  로 뒤 세 줄만 쓴다. 같은 줄이 두 번 나오지 않는다.
+
+                  "주요 사양" 라벨은 두지 않는다. 표가 아래 "제작 사양" 과 같은
+                  짜임(격자선 + 회색 라벨 칸)이 되면서 그 자체로 사양표로 읽혀,
+                  라벨은 같은 말을 한 번 더 하는 16px + 간격 12px 였다.
 
                   전에는 이 자리에 features.title 을 넣었는데, 아래 FEATURES
                   섹션의 제목 네 개와 글자까지 100% 같았다. 히어로는 "이 제품이
@@ -121,8 +125,8 @@ export default async function ProductDetailPage({
                   generateMetadata 의 검색 설명으로 쓰인다 — 화면에서만 빠졌다.
 
                   참고로 받은 신창에프에이 LSP 호퍼피더의 히어로 박스를 쟀다 —
-                  568x208, 연한 회색 바탕, radius 12, padding 24, 라벨 12px/700
-                  tracking 2.4px. 그 짜임을 우리 토큰으로 옮겼다.
+                  568x208 에 라벨 + 특징 네 줄이었다. 우리는 그 자리를 사양으로
+                  채우고 라벨 없이 표만 둔다.
 
                   값은 어느 폭에서나 한 줄이다. 13px 로 재면 앞 세 줄 21개의
                   가장 긴 것이 246px("스테인리스, 알루미늄 (부품 특성에 따라
@@ -130,25 +134,8 @@ export default async function ProductDetailPage({
                   라벨은 가장 긴 것이 63px("거칠기 등급")라 5rem(80px)에 든다.
 
                   dt/dd 는 dl 직계여야 한다(접근성 검사 dlitem). 묶는 div 대신
-                  Fragment 를 쓴다 — 아래 사양 표와 같은 이유다.
-
-                  가로선을 둬 표로 읽히게 했다. 전에는 라벨과 값이 같은 13px
-                  이고 굵기만 달라 위계가 약했고, 행 간격이 8px 뿐이라 세 사양이
-                  한 덩어리로 뭉쳤다. 선은 라벨 아래 하나와 사양 사이 둘, 모두
-                  셋이다 — 마지막 행 아래는 카드 테두리가 닫으므로 두지 않는다.
-                  세로선도 두지 않는다: 512px 카드에 격자선을 치면 답답하다.
-
-                  라벨을 12px muted 로 내리고 값을 w500 으로 올려 값이 주인공이
-                  되게 했다. 라벨이 위 "주요 사양" 과 같은 계열(작고 자간 있는
-                  글자)이 되어 카드 안 언어가 통일된다.
-
-                  높이도 맞아떨어진다. 144 -> 187px 가 되면서 1280 이상에서
-                  오른쪽 칸이 갤러리(468px)와 1px 차이가 된다 — 전에는 44px
-                  모자라 아래가 비었다. */}
+                  Fragment 를 쓴다 — 아래 사양 표와 같은 이유다. */}
               <div className="mt-6">
-                <p className="text-xs font-bold tracking-[0.2em] text-muted">
-                  주요 사양
-                </p>
                 {/* 아래 "제작 사양" 표와 같은 짜임이다 — gap-px + bg-line 격자선,
                     dt bg-surface / dd bg-white, 테두리 + 둥근 모서리 +
                     overflow-hidden.
@@ -164,10 +151,11 @@ export default async function ProductDetailPage({
                     12/13px(14px), 패딩 px-4(px-5). 6rem 은 글상자 64px 로,
                     가장 긴 라벨("거칠기 등급", 12px bold 약 58px)이 든다.
 
-                    높이는 그대로다. 행 52px x 3 + 선 2 = 158, 라벨 16 + 간격
-                    12 = 186px 라 1280 이상에서 오른쪽 칸과 갤러리 차가 -2px 로
-                    유지된다. */}
-                <dl className="mt-3 grid grid-cols-[6rem_minmax(0,1fr)] gap-px overflow-hidden rounded-lg border border-line bg-line">
+                    높이는 행 52px x 3 + 격자선 2 = 158px 다. 라벨을 걷으면서
+                    블록이 186 -> 158px 가 되어 1280 이상에서 오른쪽 칸이
+                    갤러리보다 그만큼 짧아진다 — 둘 다 같은 Container 안이라
+                    아래쪽 여백만 조금 생기고 어긋나 보이지는 않는다. */}
+                <dl className="grid grid-cols-[6rem_minmax(0,1fr)] gap-px overflow-hidden rounded-lg border border-line bg-line">
                   {product.specs.slice(0, 3).map((spec) => (
                     <Fragment key={spec.label}>
                       <dt className="bg-surface px-4 py-4 text-xs font-bold text-ink">
@@ -183,10 +171,11 @@ export default async function ProductDetailPage({
 
               {/* 버튼 둘. 보던 제품이 아니면 목록으로 돌아갈 길을 같이 둔다.
 
-                  첫 버튼에만 sm:flex-1 을 준다. 전에는 둘 다 내용 크기라 줄이
-                  362px 에서 끝나 오른쪽 150px 가 비었는데, 위의 사양 표와
-                  갤러리는 끝까지 차 있어 그 줄만 짧아 보였다. 둘 다 flex-1 로
-                  하면 반반이 되어 CTA 위계가 사라지므로 한쪽만 늘린다.
+                  둘 다 sm:flex-1 로 반반이다(각 250px). 전에는 둘 다 내용
+                  크기라 줄이 362px 에서 끝나 오른쪽 150px 가 비었고, 그래서 첫
+                  버튼에만 flex-1 을 줬더니 375 / 125px 로 한쪽이 과하게 커졌다.
+                  반반이어도 줄은 그대로 끝까지 차고, CTA 위계는 크기가 아니라
+                  색이 맡는다 — 채운 빨강 vs 테두리만 있는 네이비.
                   640 미만은 flex-col 이라 이미 전폭이다. */}
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
@@ -197,7 +186,7 @@ export default async function ProductDetailPage({
                 </Link>
                 <Link
                   href="/products/"
-                  className="rounded border border-navy/30 px-8 py-4 text-center text-[15px] font-semibold text-navy transition-colors hover:border-navy hover:bg-surface"
+                  className="rounded border border-navy/30 px-8 py-4 text-center text-[15px] font-semibold text-navy transition-colors hover:border-navy hover:bg-surface sm:flex-1"
                 >
                   제품 목록
                 </Link>
@@ -397,26 +386,42 @@ export default async function ProductDetailPage({
         </Reveal>
       </Section>
 
-      {/* 전폭 한 줄 목록이다(ProductRowCard). 목록 페이지와 같은 세로 카드
-          (347x437px)에서 가로 카드(352x98px)를 거쳐 여기까지 왔다. 가로 카드는
-          내용이 180px 에서 끝나 오른쪽 172px 가 비었고, 세 열이라 그 빈 띠가
-          세 번 반복됐다. 전폭 한 줄이면 요약 문구가 가로를 채우고 화살표가
-          오른쪽 끝을 닫는다.
+      {/* 목록 페이지와 같은 세로 카드다 — ProductCard 에 compact 를 넘겨
+          사진 칸만 2:1 로 낮춘다. 가로 카드(352x98)와 전폭 한 줄 목록을 거쳐
+          여기로 돌아왔다: 사진이 80px 썸네일이거나 아예 없으면 어느 제품인지
+          글자로만 알아야 했다. 참고로 받은 신창에프에이 nsc-parts-feeder 의
+          "관련 제품" 도 사진 있는 3열 카드(389x424, 사진 4:3)다.
 
-          테두리를 ul 하나에만 두고 divide-y 로 행을 나눈다. 행마다 테두리 +
-          간격 12px 로 두면 세 장이 336px 인데 한 덩어리면 254px 다. 세로로
-          쌓이므로 섹션은 359 -> 515px 로 늘어난다 — 오른쪽 여백을 없애는
-          대가다. */}
+          사진은 목록 페이지보다 작다. 기준인 /products 카드의 사진이 265x199px
+          인데, 이 격자는 1280 이상에서 카드 320px 에 2:1 칸 159px 다. 상세
+          페이지 Container 가 1088px 라 목록 페이지(1152px)보다 열이 좁고, 2:1
+          이라 높이가 한 번 더 줄어 어느 폭에서도 199px 를 넘지 않는다.
+
+          가로 간격이 두 값인 이유는 tagline 이다. 일곱 tagline 을 14px/1.625
+          로 1px 씩 재 보면 모두 두 줄인 글상자 폭이 213~307px 다(좁은 쪽
+          한계는 직진피더 37자, 넓은 쪽은 방음커버 32자). 좁으면 세 줄이 되고
+          넓으면 짧은 셋(방음커버.컨트롤러.우레탄)이 한 줄로 떨어져, 어느
+          쪽이든 카드마다 줄 수가 달라진다.
+
+          그 창을 지키려면 간격이 폭마다 달라야 한다. lg 이상은 3열이라 간격을
+          64px 까지 벌려도 글상자가 222~270px 이고, sm.md 는 2열이라 64px 을
+          두면 640 에서 글상자가 199px 로 떨어져 세 제품이 세 줄이 됐다(직진
+          피더.진동기). 24px 로 좁히면 218px / 282px 가 되어 창 안에 든다 —
+          참고한 신창에프에이의 관련 제품 격자도 24px 였다. 세로는 gap-y-8 로
+          따로 둔다 — sm.md 는 2열이라 카드 셋이면 2행이 되는데 64px 은 너무
+          벌어진다.
+
+          섹션은 515 -> 약 609px 로 늘어난다. 사진을 넣는 값이다. */}
       <Section
         tone="surface"
         size="compact"
         eyebrow="OTHER PRODUCTS"
         title="다른 제품"
       >
-        <ul className="divide-y divide-line overflow-hidden rounded-lg border border-line bg-white">
+        <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-16">
           {related.map((p, i) => (
             <Reveal as="li" key={p.slug} delay={i * 70}>
-              <ProductRowCard product={p} />
+              <ProductCard product={p} compact />
             </Reveal>
           ))}
         </ul>
