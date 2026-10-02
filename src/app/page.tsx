@@ -398,6 +398,8 @@ export default function Home() {
             alternateName: site.nameEn,
             url: site.url,
             logo: `${site.url}/images/logo.png`,
+            // 유튜브 채널을 이 회사 것으로 묶어 준다(sameAs 의 용도다).
+            sameAs: [site.youtube],
             foundingDate: site.founded,
             description: site.description,
             telephone: [site.tel, ...site.telExtra],

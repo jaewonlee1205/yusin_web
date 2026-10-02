@@ -33,6 +33,17 @@ export const site = {
   email: "jh1730jh@hanmail.net",
   businessNumber: "130-13-71640",
 
+  /**
+   * 회사 유튜브 채널. 푸터·영상자료 페이지·홈 JSON-LD 가 함께 쓴다.
+   *
+   * 핸들에 한글이 들어가 퍼센트 인코딩된 형태로 둔다(@유신F.A시스템-m9o8e).
+   * 전에는 videos.ts 에 @이재원-m9o8e 로 적혀 있었다 — 채널 이름을 개인명에서
+   * 회사명으로 바꾸기 전 주소다. 뒤의 -m9o8e 가 같아 옛 주소로도 같은 채널에
+   * 닿지만, 화면에 거는 주소는 회사 이름 쪽이라야 한다.
+   */
+  youtube:
+    "https://www.youtube.com/@%EC%9C%A0%EC%8B%A0F.A%EC%8B%9C%EC%8A%A4%ED%85%9C-m9o8e",
+
   address: {
     // TODO: 도로명 주소 확정 필요. 아래는 지번이다.
     road: "경기도 시흥시 정왕동 1288-2 동우디지털파크 A동 201호, 323~324호",

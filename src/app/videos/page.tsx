@@ -3,7 +3,8 @@ import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
 import VideoEmbed from "@/components/VideoEmbed";
-import { videoChannelUrl, videos } from "@/data/videos";
+import { site } from "@/data/site";
+import { videos } from "@/data/videos";
 
 export const metadata: Metadata = {
   title: "영상자료",
@@ -41,7 +42,7 @@ export default function VideosPage() {
         <p className="mt-10 text-sm text-ink-soft">
           영상은 유튜브에 올려 두었습니다.{" "}
           <a
-            href={videoChannelUrl}
+            href={site.youtube}
             target="_blank"
             rel="noopener noreferrer"
             className="font-semibold text-navy underline underline-offset-4 transition-colors hover:text-brand"

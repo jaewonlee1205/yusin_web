@@ -25,6 +25,27 @@ export function ChevronUpIcon({ className = "" }: { className?: string }) {
   );
 }
 
+/** 푸터 유튜브 채널 링크 앞 아이콘. 글자가 "유튜브 채널" 이라 아이콘은 숨긴다. */
+export function YoutubeIcon({ className = "shrink-0" }: { className?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
+      <path d="m10 15 5-3-5-3z" />
+    </svg>
+  );
+}
+
 /** 전화번호 앞 수화기. 번호만 읽히도록 스크린리더에서는 숨긴다. */
 export function PhoneIcon({ className = "shrink-0" }: { className?: string }) {
   return (

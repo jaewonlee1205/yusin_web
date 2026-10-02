@@ -24,5 +24,5 @@ export const videos: Video[] = [
 /** 홈에 맛보기로 띄울 두 개. 나머지는 /videos 에서 본다. */
 export const featuredVideos = videos.slice(0, 2);
 
-/** 영상이 올라오는 유튜브 채널. */
-export const videoChannelUrl = "https://www.youtube.com/@%EC%9D%B4%EC%9E%AC%EC%9B%90-m9o8e";
+/* 채널 주소는 site.ts 의 site.youtube 로 옮겼다 — 푸터가 모든 페이지에
+   걸게 되면서 영상 데이터가 아니라 회사 상수가 됐다. */

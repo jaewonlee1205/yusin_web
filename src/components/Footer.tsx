@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Container from "./Container";
-import { PhoneIcon } from "./icons";
+import { PhoneIcon, YoutubeIcon } from "./icons";
 import { products } from "@/data/products";
 import { site, telHref } from "@/data/site";
 
@@ -53,9 +53,14 @@ const FOOTER_GROUPS: {
    py-1 은 장식이 아니다 — 글자만 두면 누를 수 있는 높이가 20px 라
    WCAG 2.2 Target Size 기준(24px)에 못 미친다. 상하 4px 씩 붙여 28px 로
    만들고, 늘어난 만큼 목록의 gap 을 10px -> 2px 로 줄여 간격은 그대로
-   보이게 한다. 글자 크기도 보이는 간격도 그대로고 손가락만 편해진다. */
-const LINK =
-  "inline-block py-1 text-sm text-ink-soft transition-colors hover:text-brand";
+   보이게 한다. 글자 크기도 보이는 간격도 그대로고 손가락만 편해진다.
+
+   display 만 떼어 둔다. 브랜드 열의 유튜브 링크는 같은 글자 모양을 쓰되
+   블록이어야 한다 — inline-block 이나 inline-flex 로 두면 바로 아래
+   전화번호(inline-flex)와 한 줄에 나란히 서 버린다. */
+const LINK_TEXT =
+  "py-1 text-sm text-ink-soft transition-colors hover:text-brand";
+const LINK = `inline-block ${LINK_TEXT}`;
 
 /* 자간 0.2em 은 Section.tsx 의 eyebrow 와 같은 값이다(푸터만 0.15em 이었다). */
 const HEADING = "text-xs font-bold tracking-[0.2em] text-ink";
@@ -83,25 +88,40 @@ export default function Footer() {
               height={52}
               className="h-7 w-auto sm:h-8"
             />
-            {/* 대표번호는 푸터에서 가장 중요한 한 줄이라 로고 바로 아래,
-                시선이 처음 닿는 자리에 둔다. 팩스·이메일은 맨 아래 사업자정보
-                줄로 내렸다 — 성격이 다른 정보다.
+            {/* 유튜브 채널. /videos 안에만 있던 링크를 여기로도 꺼냈다 —
+                영상이 회사를 보여 주는 자료라 모든 페이지에서 닿는 편이 낫다.
 
-                전에는 둘 사이에 "부품 자동정렬 공급기 설계 · 제작" 이 있었다.
-                로고 영문(FEEDING AUTOMATION SYSTEM)을 한국어로 받아 주는
-                자리였는데, 같은 말이 홈 히어로·제품 머리말·회사소개·검색
-                설명에 이미 있어 뺐다. 푸터가 할 일은 길찾기·연락처·사업자
-                정보다.
+                글자 모양은 옆 열의 링크들과 같다(LINK_TEXT). py-1 도 같은
+                이유로 가져간다 — 글자만 두면 누를 수 있는 높이가 20px 라
+                WCAG 2.2 Target Size(24px)에 못 미친다.
 
-                그래서 이 열이 다른 열보다 37px 일찍 끝난다(행 높이는 이제
-                [제품] 열이 정한다). 그대로 둔다 — 로고 그림과 큰 전화번호는
-                옆 링크 목록과 줄 맞춰 읽는 대상이 아니라 바닥선이 눈에 안
-                띈다. 연락처를 열 바닥에 붙여(justify-between) 맞춰 봤더니
-                로고와 전화번호 사이가 24 -> 62px 로 벌어져, 바닥 차이보다
-                그 구멍이 훨씬 크게 보였다. */}
+                flex w-fit 이다. inline-flex 로 두면 아래 전화번호와 한 줄에
+                나란히 선다(둘 다 inline 레벨이라 같은 줄 상자에 들어간다). */}
+            <a
+              href={site.youtube}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${LINK_TEXT} mt-4 flex w-fit items-center gap-2`}
+            >
+              <YoutubeIcon />
+              유튜브 채널
+            </a>
+
+            {/* 대표번호는 푸터에서 가장 중요한 한 줄이다. 팩스·이메일은 맨
+                아래 사업자정보 줄로 내렸다 — 성격이 다른 정보다.
+
+                전에는 로고와 이 번호 사이에 "부품 자동정렬 공급기 설계 ·
+                제작" 이 있었다. 로고 영문(FEEDING AUTOMATION SYSTEM)을
+                한국어로 받아 주는 자리였는데, 같은 말이 홈 히어로·제품
+                머리말·회사소개·검색 설명에 이미 있어 뺐다. 그때 이 열이 옆
+                열보다 37px 일찍 끝났는데, 유튜브 링크가 들어오면서 다시 찼다.
+
+                간격은 재서 골랐다. 로고+16 / 유튜브+20 이면 이 열이 152px 가
+                되어 [제품] 열 마지막 행(우레탄 코팅·전체 보기)과 2px 안에서
+                끝난다. 16/16 은 148px(-2px), 20/20 은 156px(+6px)이었다. */}
             <a
               href={telHref(site.tel)}
-              className="mt-6 inline-flex items-center gap-2 text-lg font-bold tabular-nums text-ink transition-colors hover:text-brand"
+              className="mt-5 inline-flex items-center gap-2 text-lg font-bold tabular-nums text-ink transition-colors hover:text-brand"
             >
               <PhoneIcon className="h-[18px] w-[18px] shrink-0" />
               {site.tel}
