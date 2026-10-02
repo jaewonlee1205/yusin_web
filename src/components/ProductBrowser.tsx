@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ProductCard from "./ProductCard";
 import { CATEGORIES, products, type ProductCategory } from "@/data/products";
 
@@ -24,11 +24,47 @@ const FILTERS: Filter[] = ["전체", ...CATEGORIES];
 const countOf = (f: Filter) =>
   f === "전체" ? products.length : products.filter((p) => p.category === f).length;
 
+/** 사이드바가 붙는 높이(lg:top-24)와 같은 값. 헤더(81px)를 15px 띄운다. */
+const STICK_TOP = 96;
+
 export default function ProductBrowser() {
   const [filter, setFilter] = useState<Filter>("전체");
+  const resultRef = useRef<HTMLDivElement>(null);
 
   const visible =
     filter === "전체" ? products : products.filter((p) => p.category === filter);
+
+  /**
+   * 분류를 고른다. 고르기 전에 결과 영역을 화면 안으로 끌어올린다.
+   *
+   * 7개에서 1개로 줄면 문서가 900px 넘게 짧아지는데, 브라우저는 스크롤을
+   * 새 최대값까지 깎기만 하고 "결과를 보여 줘야 한다" 는 건 모른다. 맨 아래
+   * 까지 내려가 분류를 바꾸면 결과가 화면 위로 292px 벗어난 채 하단 CTA 만
+   * 보였다.
+   *
+   * setFilter 보다 먼저 옮기는 게 핵심이다. 결과 영역 윗변의 문서상 위치는
+   * 거르기로 변하지 않으므로(바뀌는 건 그 아래 그리드 높이뿐이다) 지금
+   * 계산해도 값이 같고, 아직 문서가 길 때 올리는 것이라 깎이지 않는다.
+   * 효과(useEffect)로 미루면 한 프레임 튀거나 SSR 경고가 붙는다.
+   *
+   * 그리드가 아니라 결과 칸 윗변을 기준으로 삼는다 — 그래야 카운트 줄
+   * ("1개 제품")까지 보인다. lg 미만에서는 칩 줄도 이 칸 안에 있어 올라간
+   * 뒤 바로 다음 분류를 고를 수 있다.
+   *
+   * 부드럽게 올리지 않는다. 내용이 이미 바뀐 자리를 바로잡는 동작이라
+   * 즉시 옮기는 쪽이 자연스럽다(scrollToTop 의 애니메이션은 "맨 위로" 처럼
+   * 사용자가 스스로 시킨 이동에만 쓴다).
+   */
+  const pick = (next: Filter) => {
+    const el = resultRef.current;
+    if (el) {
+      const top = el.getBoundingClientRect().top;
+      // 화면 위로 벗어났을 때만 건드린다. 맨 위에서 눌렀는데 화면이 튀면
+      // 더 나쁘다.
+      if (top < STICK_TOP) window.scrollTo(0, window.scrollY + top - STICK_TOP);
+    }
+    setFilter(next);
+  };
 
   return (
     /* lg:items-start 가 없으면 안 된다. 그리드/플렉스 기본값(stretch)이면
@@ -55,7 +91,7 @@ export default function ProductBrowser() {
                   <button
                     type="button"
                     aria-pressed={active}
-                    onClick={() => setFilter(f)}
+                    onClick={() => pick(f)}
                     className={`flex w-full items-center justify-between gap-2 border-l-2 px-5 py-3 text-left text-sm transition-colors ${
                       active
                         ? "border-brand bg-surface font-bold text-navy"
@@ -80,7 +116,15 @@ export default function ProductBrowser() {
 
       {/* min-w-0 — 없으면 플렉스 항목의 최소 폭이 내용 크기라 그리드가
           사이드바를 밀어낸다. */}
-      <div className="min-w-0 lg:flex-1">
+      <div ref={resultRef} className="min-w-0 lg:flex-1">
+        {/* 화면에는 카운트 줄("7개 제품")이 이 영역의 제목 노릇을 하지만
+            제목 태그는 아니다. 전에는 위에 있던 피더 정의 박스의 h2 가
+            h1(제품)과 카드의 h3 사이를 메웠는데, 그 박스를 빼면서 h1 -> h3
+            로 건너뛰어 heading-order 가 깨졌다(접근성 100 -> 98).
+            사이드바의 "제품 분류" 는 hidden lg:block 이라 좁은 화면에서
+            사라지므로 그걸로는 메울 수 없다. */}
+        <h2 className="sr-only">제품 목록</h2>
+
         {/* 좁은 화면용 칩 줄. 가로 스크롤이라 -mx-5 px-5 로 화면 끝까지 흘린다. */}
         <nav
           aria-label="제품 분류"
@@ -93,7 +137,7 @@ export default function ProductBrowser() {
                 key={f}
                 type="button"
                 aria-pressed={active}
-                onClick={() => setFilter(f)}
+                onClick={() => pick(f)}
                 className={`shrink-0 rounded-full border px-5 py-2.5 text-sm font-medium transition-colors ${
                   active
                     ? "border-navy bg-navy text-white"
@@ -124,14 +168,6 @@ export default function ProductBrowser() {
             <ProductCard key={product.slug} product={product} />
           ))}
         </div>
-
-        {/* 제품에 대한 말이라 그리드와 같은 기둥에 세운다. 전에는 페이지
-            맨 아래 전폭이었다. */}
-        <p className="mt-12 rounded-lg border border-line bg-surface px-6 py-5 text-sm leading-relaxed text-ink-soft">
-          모든 제품은 공급할 부품에 맞춰 제작합니다. 정해진 표준 기종을 고르는
-          방식이 아니라, 부품 샘플을 받아 형상을 분석한 뒤 볼 형상과 정렬 지그를
-          새로 설계합니다. 기종별 상세 사양이 필요하시면 문의해 주세요.
-        </p>
       </div>
     </div>
   );

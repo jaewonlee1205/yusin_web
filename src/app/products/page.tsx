@@ -3,7 +3,6 @@ import Container from "@/components/Container";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import ProductBrowser from "@/components/ProductBrowser";
-import { feederDefinition } from "@/data/products";
 
 export const metadata: Metadata = {
   title: "제품",
@@ -42,20 +41,11 @@ export default function ProductsPage() {
 
       <div className="py-16 sm:py-24">
         <Container>
-          {/* 피더가 뭔지 모르는 방문자를 위한 한 문단. 배너에 넣으면 문구가 길어
-              배너 높이가 다른 페이지와 어긋나서 본문 맨 위로 뺐다. */}
-          <div className="mb-10 rounded-lg border-l-2 border-brand bg-surface px-6 py-5 sm:mb-14">
-            <h2 className="text-sm font-bold tracking-[0.15em] text-ink">
-              {feederDefinition.title}
-            </h2>
-            <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-              {feederDefinition.body}
-            </p>
-          </div>
-
-          {/* 맺음말 문단은 이 안에 있다. 분류 사이드바가 생기면서 본문이
-              오른쪽 칸으로 좁아졌는데, 제품에 대한 말이라 그리드와 같은
-              기둥에 서야 한다. */}
+          {/* 전에는 여기 피더 정의 박스("본래 음식을 준다는 뜻의 feed에서
+              온 말로 …")와, 목록 아래 맺음말 문단("모든 제품은 공급할 부품에
+              맞춰 제작합니다 …")이 있었다. 둘 다 뺐다 — 이 페이지는 제품을
+              훑어 고르는 자리고, 피더가 뭔지는 홈의 WHAT IS THE FEEDER
+              섹션이 같은 데이터(feederDefinition)로 말한다. */}
           <ProductBrowser />
         </Container>
       </div>
