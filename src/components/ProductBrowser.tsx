@@ -129,7 +129,7 @@ export default function ProductBrowser() {
             목록에 없는 부품인가요?
           </p>
           <p className="mt-2 text-[13px] leading-relaxed text-ink-soft">
-            여기 없는 형태도 만듭니다. 부품을 보고 설계부터 시작합니다.
+            형태가 달라도 만듭니다. 샘플을 보고 정합니다.
           </p>
           <Link
             href="/contact/"
@@ -227,9 +227,13 @@ export default function ProductBrowser() {
         {/* key 를 분류로 두어 다시 그리게 하고 짧게 덮어쓴다(120ms).
             Reveal 은 쓰지 않는다 — 거를 때마다 카드가 올라오면 고르는 동작이
             느려진다. */}
+        {/* 1024~1279 는 2열이다. 여기서 3열을 쓰면 사이드바(208)+간격(32)을
+            뺀 자리에 끼여 카드가 219px, 요약 글상자가 169px 까지 줄어 어떤
+            문구도 두 줄에 안 들어갔다. 2열이면 카드 340px, 요약 290px 가
+            된다. 3열은 xl(1280)부터다. */}
         <div
           key={filter}
-          className="grid-swap mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          className="grid-swap mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
         >
           {visible.map((product) => (
             <ProductCard key={product.slug} product={product} />

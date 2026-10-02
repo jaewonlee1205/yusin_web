@@ -18,12 +18,15 @@ export async function generateMetadata({
   const product = getProduct(slug);
   if (!product) return {};
 
+  // 검색 설명은 summary 가 아니라 lead 에서 가져온다. summary 는 카드 두 줄에
+  // 맞춰 35자 이내로 묶여 있어 검색 결과 설명으로는 너무 짧다. lead 는
+  // 90~110자라 그 자리에 알맞다.
   return {
     title: `${product.name} (${product.nameEn})`,
-    description: product.summary,
+    description: product.lead,
     openGraph: {
       title: `${product.name} | 유신 F.A 시스템`,
-      description: product.summary,
+      description: product.lead,
       images: [{ url: product.images[0].src }],
     },
   };
