@@ -87,16 +87,23 @@ export default function ProductBrowser() {
               const active = f === filter;
               return (
                 <li key={f}>
-                  {/* 왼쪽 2px 띠로 선택을 표시한다. 글자를 들여쓰거나 배경만
-                      바꾸면 어느 줄이 켜졌는지 훑어서 안 보인다. */}
+                  {/* 선택은 글자로 표시한다 — navy 굵은 글자 + 오른쪽 개수도
+                      navy + 연한 배경(surface). 전에는 왼쪽에 2px 빨간 띠를
+                      더 붙였는데, 띠 없이도 첫 줄이든 가운데 줄이든 또렷하게
+                      읽혀 뺐다. 화면에서 빨강이 하나 줄어 헤더 CTA 와 카드
+                      라벨이 더 또렷해진다.
+
+                      띠를 걷으면서 정렬도 맞았다. border-l-2 가 있을 때는
+                      글자가 22px 에서 시작해 위 navy 헤더("제품 분류", px-5
+                      라 20px)와 2px 어긋나 있었다. 이제 두 x 가 같다. */}
                   <button
                     type="button"
                     aria-pressed={active}
                     onClick={() => pick(f)}
-                    className={`flex w-full items-center justify-between gap-2 border-l-2 px-5 py-3 text-left text-sm transition-colors ${
+                    className={`flex w-full items-center justify-between gap-2 px-5 py-3 text-left text-sm transition-colors ${
                       active
-                        ? "border-brand bg-surface font-bold text-navy"
-                        : "border-transparent font-medium text-ink-soft hover:bg-surface hover:text-ink"
+                        ? "bg-surface font-bold text-navy"
+                        : "font-medium text-ink-soft hover:bg-surface hover:text-ink"
                     }`}
                   >
                     {f}
