@@ -171,47 +171,29 @@ export default async function ProductDetailPage({
 
           개수는 제품마다 다르다 — 2~4개다. products.ts 의 features 주석에
           기준을 적어 뒀다(사양 표에 같은 내용이 있으면 특징에 적지 않는다). */}
-      {/* lead 를 한 줄 둔다. 없을 때는 Container 1152px 에 "FEATURES"(80px)
-          와 "특징"(64px) 만 있어 1072px 가 비었다. Section 의 제목 블록이
-          max-w-2xl(672px) 이고 lead 가 sm:text-lg(18px) 라 37자 안쪽이면
-          한 줄이다. 사양·다른 제품 섹션에는 더하지 않는다 — 셋 다 주면
-          세로가 135px 늘어난다. */}
-      <Section
-        tone="surface"
-        size="compact"
-        eyebrow="FEATURES"
-        title="특징"
-        lead="공급할 부품에 맞춰 설계하는 과정에서 생기는 차이입니다."
-      >
-        {/* 번호를 제목과 같은 줄 안에 넣는다. 이 하나로 세 가지가 풀린다.
+      <Section tone="surface" size="compact" eyebrow="FEATURES" title="특징">
+        {/* 항목을 두 개씩 한 행에 놓는다. 전에는 한 항목이 한 행을 다 쓰고
+            [18rem_1fr] 로 제목과 본문을 좌우로 놓았는데, 1280 이상에서 본문
+            칸이 760px 가 되는 동안 글자는 484~596px 뿐이라 칸 안에서 164~276px
+            가 비었다(1024 에서는 617px 칸에 21~133px 라 자연스러웠다). 두 열로
+            나누면 칸이 556px(1024 는 453px)가 되어 글자가 칸을 채운다.
 
-            1. 어긋남이 0 이다. 전에는 번호를 36x36 타일에 담아 자기 열에
-               뒀는데, 타일 가운데 있는 숫자와 칸 맨 위에 붙는 제목이 1440에서
-               12.4px 어긋났다. items-baseline 으로 2.4px 까지 줄였지만 0 은
-               못 됐다 — baseline 은 글자 밑변을 맞추는 것이라 숫자(12px)와
-               제목(17px)의 크기가 다르면 시각적 중앙이 남는다. 지금은 둘이
-               한 줄 박스 안에 있고 글자 크기도 같아(둘 다 17px bold) 어긋날
-               방법이 없다. 다른 것은 색뿐이다.
+            높이도 줄어든다. 긴 본문이 두 줄이 되지만 행 수가 절반이라
+            네 개짜리가 224px 다(전에는 네 행 232px).
 
-            2. 한 행이 절반이 된다. 타일 36px 이 행 높이를 정했는데 글자는
-               24.4px 뿐이었다 — 타일 36 + py-5/6 = 85px. 이제 글자가 높이를
-               정해 24.4 + py-4 = 56.4px 다. 참고로 주신 신창에프에이 MLCC
-               호퍼피더는 한 항목이 26px 인데, 거기는 제목도 번호도 없이 한 줄
-               문장만 나열한다. 셋을 담고 56px 이면 그만큼이 정보 차이다.
+            번호와 제목의 어긋남은 그대로 0 이다. 둘이 같은 격자 행에 있고
+            글자 크기와 줄높이가 같아(17px) 윗변이 일치한다. 번호를 자기 열에
+            두므로 본문도 제목과 같은 열에서 시작해 번호 아래로 밀려들지
+            않는다.
 
-            3. 레드가 좁아진다. "01" 두 자가 17px 에서 22px 폭이라 36px 타일
-               보다 좁다(globals.css 토큰 주석 — "레드는 면적을 좁게").
+            번호는 aria-hidden 이다. 순서는 ul/li 가 이미 전달한다.
+            tabular-nums 라 01~04 의 폭이 같아 제목 x 가 모든 행에서 같다.
+            레드는 두 글자에만 쓴다(globals.css 토큰 주석 — "레드는 면적을
+            좁게").
 
-            flex gap-3 으로 묶는다. 제목이 두 줄이 되어도 둘째 줄이 번호 아래로
-            들여써진다. 재 보니 "01 + 제목" 이 가장 긴 것이 185px 라 제목 칸
-            288px 은 물론 320px 글상자(264.8px)에서도 20개 전부 한 줄이다.
-
-            열은 둘이다. 번호 열이 없어졌으므로 1024 부터 [18rem_1fr] 2열이고
-            그 아래는 제목/본문 세로 스택이다. 1024 에서 본문 칸이 541 ->
-            617px 로 넓어져 20개 본문이 전부 한 줄이 된다(전에는 여섯이 두
-            줄이었다). lg:items-baseline 은 남긴다 — 17px 제목과 15px 본문의
-            첫 줄 밑변을 맞춘다. */}
-        <ul className="border-t border-line">
+            구분선은 ul 상단 하나(전폭)와 항목마다 아래 하나(칸 폭)다. 2열에서
+            아래 선이 gap-x-10 에서 끊기는데, 그 끊김이 두 열임을 보여 준다. */}
+        <ul className="grid border-t border-line lg:grid-cols-2 lg:gap-x-10">
           {product.features.map((f, i) => (
             <Reveal
               as="li"
@@ -219,22 +201,21 @@ export default async function ProductDetailPage({
               delay={i * 70}
               className="border-b border-line py-4"
             >
-              <div className="grid gap-y-2 lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:items-baseline lg:gap-x-10">
-                <p className="flex gap-3 text-[17px] font-bold leading-snug text-ink">
-                  {/* 순서는 ul/li 가 이미 전달한다. 눈으로만 읽는 번호다.
-                      tabular-nums 라 01~04 의 폭이 같아 제목이 어느 행에서나
-                      같은 x 에서 시작한다. */}
-                  <span
-                    aria-hidden="true"
-                    className="shrink-0 tabular-nums text-brand"
-                  >
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span>{f.title}</span>
-                </p>
-                <p className="text-[15px] leading-relaxed text-ink-soft">
-                  {f.body}
-                </p>
+              <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3">
+                <span
+                  aria-hidden="true"
+                  className="text-[17px] font-bold leading-snug tabular-nums text-brand"
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <p className="text-[17px] font-bold leading-snug text-ink">
+                    {f.title}
+                  </p>
+                  <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">
+                    {f.body}
+                  </p>
+                </div>
               </div>
             </Reveal>
           ))}
@@ -349,22 +330,29 @@ export default async function ProductDetailPage({
         </Reveal>
       </Section>
 
-      {/* 가로 카드다(ProductRowCard). 목록 페이지와 같은 세로 카드를 쓰다가
-          바꿨다 — 1440에서 347x437px 라 보조 목록인데 본문과 같은 무게였다.
-          누이면 347x96px 이고 섹션이 698 -> 357px 가 된다. */}
+      {/* 전폭 한 줄 목록이다(ProductRowCard). 목록 페이지와 같은 세로 카드
+          (347x437px)에서 가로 카드(352x98px)를 거쳐 여기까지 왔다. 가로 카드는
+          내용이 180px 에서 끝나 오른쪽 172px 가 비었고, 세 열이라 그 빈 띠가
+          세 번 반복됐다. 전폭 한 줄이면 요약 문구가 가로를 채우고 화살표가
+          오른쪽 끝을 닫는다.
+
+          테두리를 ul 하나에만 두고 divide-y 로 행을 나눈다. 행마다 테두리 +
+          간격 12px 로 두면 세 장이 336px 인데 한 덩어리면 254px 다. 세로로
+          쌓이므로 섹션은 359 -> 515px 로 늘어난다 — 오른쪽 여백을 없애는
+          대가다. */}
       <Section
         tone="surface"
         size="compact"
         eyebrow="OTHER PRODUCTS"
         title="다른 제품"
       >
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="divide-y divide-line overflow-hidden rounded-lg border border-line bg-white">
           {related.map((p, i) => (
-            <Reveal key={p.slug} delay={i * 70}>
+            <Reveal as="li" key={p.slug} delay={i * 70}>
               <ProductRowCard product={p} />
             </Reveal>
           ))}
-        </div>
+        </ul>
       </Section>
 
       <ContactCTA />
