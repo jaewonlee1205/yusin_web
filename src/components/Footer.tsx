@@ -60,14 +60,21 @@ const FOOTER_GROUPS: {
 const LINK =
   "inline-block py-1 text-sm text-ink-soft transition-colors hover:text-brand";
 
-/* 브랜드 열의 외부 채널 버튼(유튜브·네이버). /location 의 외부 지도 링크
-   두 개와 같은 어휘다(location/page.tsx) — 거기도 target="_blank" 외부
-   링크고, 같은 hover 를 ProductBrowser 도 쓴다. 다른 건 둘뿐이다.
-     - 패딩을 px-5 py-2.5 에서 좁혔다. 푸터는 밀도가 높은 자리다.
+/* 브랜드 열의 외부 채널 버튼(유튜브·네이버). 테두리·배경·hover 는 /location
+   의 외부 지도 링크 두 개와 같은 어휘다(location/page.tsx) — 거기도
+   target="_blank" 외부 링크고, 같은 hover 를 ProductBrowser 도 쓴다.
      - bg-white 를 더했다. /location 은 흰 바탕 위라 배경이 필요 없지만
-       푸터는 bg-surface 라 흰 바탕이라야 버튼이 떠 보인다. */
+       푸터는 bg-surface 라 흰 바탕이라야 버튼이 떠 보인다.
+     - p-2 정사각이다. 아이콘 16 + 패딩 16 + 테두리 2 = 34px 로, 글자가 있던
+       시절 높이와 같다. 그래서 아래 정렬이 그대로 유지된다(전화번호 mt-3).
+
+   ⚠ 글자가 없다. 그래서 두 링크의 접근성 이름은 전적으로 aria-label 이
+     들고 있다 — 아이콘 <svg> 는 aria-hidden 이라 이름에 보태지 않는다.
+     aria-label 을 지우면 스크린리더가 "링크" 라고만 읽고 Lighthouse
+     link-name 도 깨진다. 글자를 되살리든 라벨을 두든, 둘 중 하나는 반드시
+     있어야 한다. */
 const CHANNEL_BUTTON =
-  "flex items-center gap-2 rounded border border-line bg-white px-3 py-1.5 text-sm font-semibold text-ink-soft transition-colors hover:border-navy/40 hover:text-ink";
+  "flex items-center justify-center rounded border border-line bg-white p-2 text-ink-soft transition-colors hover:border-navy/40 hover:text-ink";
 
 /* 자간 0.2em 은 Section.tsx 의 eyebrow 와 같은 값이다(푸터만 0.15em 이었다). */
 const HEADING = "text-xs font-bold tracking-[0.2em] text-ink";
@@ -105,40 +112,47 @@ export default function Footer() {
                 플레이스는 블로그 리뷰 27건이 달려 있어 바깥에서 본 평이
                 된다 — 미등록 상태라는 단서는 site.ts 에 적어 뒀다.
 
+                ■ 마크만 두고 글자는 뺐다. 위에 로고가, 아래에 전화번호가
+                  글자로 서 있어 이 줄만 기호로 두면 셋이 또렷하게 나뉜다.
+                  이름은 aria-label 이 맡는다(CHANNEL_BUTTON 주석 참고).
+                  title 도 같이 단다 — 마크를 못 알아본 사람에게 풍선말이
+                  길이 된다. 접근성 이름은 aria-label 이 이기므로 두 번
+                  읽히지 않는다.
+
                 ■ 마크 색 — 알아볼 수 있는 색으로 둔다.
                   유튜브는 사이트 브랜드 레드(#d5261e)가 원색과 같은 계열이라
                   그대로 쓴다. 팔레트도 지키고 알아보기도 한다.
                   네이버 초록(#03C75A)은 사이트에 가까운 색이 없어 제 색을
                   쓴다. 브랜드 레드로도 그려 봤는데 빨간 N 은 아무것도 뜻하지
                   않았다. 초록은 흰 바탕 대비 2.4:1 로 비문자 기준(3:1)에
-                  못 미치지만, 아이콘이 aria-hidden 장식이고 뜻은 옆 글자가
-                  전부 전달하므로 WCAG 1.4.11 대상이 아니다.
+                  못 미치지만, 아이콘은 aria-hidden 장식이고 링크 이름은
+                  aria-label 이 따로 들고 있어 WCAG 1.4.11 대상이 아니다.
 
-                ■ 폭 — 유튜브 118 + 간격 8 + 네이버 144 = 270px 다.
-                  640~690 구간에서만 열이 256px 라 14px 모자라 두 줄이 되고,
-                  그만큼(41px) 이 열이 [제품] 열보다 길어진다. 라벨을 "네이버
-                  지도" 로 줄이면 242px 로 들어가지만 /location 의 "네이버
-                  지도에서 보기" 와 말이 겹치고 리뷰·업체정보가 있는 곳이라는
-                  뜻이 흐려진다. 패딩·간격을 줄여도 258px 라 모자란다.
-                  라벨을 택하고 두 줄을 받아들였다(320 에서는 어차피 두 줄이다). */}
+                ■ 폭 — 34px 버튼 둘에 간격 8px, 줄 폭 75px 다. 가장 좁은
+                  열(640 에서 256px)에도 넉넉해 어느 폭에서도 한 줄이다.
+                  글자가 있던 때는 270px 라 640~690 구간에서 두 줄로 내려가
+                  이 열이 [제품] 열보다 41px 길어졌는데, 그 문제가 같이
+                  없어졌다. */}
             <div className="mt-4 flex flex-wrap gap-2">
               <a
                 href={site.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="유튜브 채널"
+                title="유튜브 채널"
                 className={CHANNEL_BUTTON}
               >
                 <YoutubeIcon className="shrink-0 text-brand" />
-                유튜브 채널
               </a>
               <a
                 href={site.naverPlace}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="네이버 플레이스"
+                title="네이버 플레이스"
                 className={CHANNEL_BUTTON}
               >
                 <NaverIcon className="shrink-0 text-[#03C75A]" />
-                네이버 플레이스
               </a>
             </div>
 
