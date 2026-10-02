@@ -12,16 +12,31 @@ import {
 
 export const metadata: Metadata = {
   title: "보유 설비",
+  // 여기는 기계 이름을 남긴다. 배너 lead 에서는 뺐지만(아래 참고) 검색 결과에서
+  // "밀링" "선반" "연마기" "알곤 용접기" 는 실제로 찾는 말이라 키워드로 일한다.
+  // 화면과 검색이 각자 할 일이 달라서 다른 것이니 도로 맞추지 않는다.
   description: `밀링·선반·연마기·알곤 용접기 등 ${equipmentTotals.kinds}종 ${equipmentTotals.units}대. 유신 F.A 시스템은 볼 본체와 정렬 지그를 외주 없이 사내에서 직접 가공합니다.`,
 };
 
 export default function FacilityPage() {
   return (
     <>
+      {/* lead 에서 기계 이름 나열을 뺐다. 홈 '강점' 카드가 "밀링·선반·연마기·알곤
+          용접기 등 21종 55대" 로 거의 같은 말을 하고, 바로 아래 섹션이 품목 21개를
+          전부 이름으로 보여 준다 — 배너에서 미리 세 개를 꺼낼 이유가 없다.
+
+          뒷문장도 "한 공장 안에서" 를 쓰지 않는다. 그 말은 홈 본문·홈 강점 01·
+          조직도 검색 설명·이 페이지 검색 설명까지 네 곳이 이미 쓰고 있다.
+
+          총계를 말하는 책임은 배너에 있다(아래 섹션 주석 참고). 그래서 숫자는
+          남기고 equipmentTotals 에서 뽑는다.
+
+          길이 주의 — 390px 에서 3줄이 되면 배너가 232 -> 258px 로 커져 다른
+          페이지와 어긋난다. 이 문구는 390·768·1440 모두 2줄이다. */}
       <PageHero
         eyebrow="EQUIPMENT"
         title="보유 설비"
-        lead={`밀링·선반·용접기 등 ${equipmentTotals.kinds}종 ${equipmentTotals.units}대. 도면이 나오면 그다음은 전부 이 공장 안에서 진행됩니다.`}
+        lead={`설비 ${equipmentTotals.kinds}종 ${equipmentTotals.units}대. 도면이 나온 뒤로는 바깥으로 나가는 공정이 없습니다.`}
       />
 
       {/* 공정별 설비 목록.
