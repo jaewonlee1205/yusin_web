@@ -30,7 +30,7 @@ export default function ProductCard({ product }: { product: Product }) {
          카드(#ffffff)의 대비가 1.04 밖에 안 돼, 테두리만으로는 카드가 판에서
          떠 보이지 않는다. 포커스 링은 globals.css 가 a·button 전부에
          brand 색으로 이미 걸어 둔다 — 여기서 또 주지 않는다. */
-      className="group flex flex-col overflow-hidden rounded-lg border border-line bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:border-navy/30 hover:shadow-xl"
+      className="group flex flex-col overflow-hidden rounded-lg border border-line bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand/30 hover:shadow-xl"
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-white">
         <Image
@@ -38,39 +38,72 @@ export default function ProductCard({ product }: { product: Product }) {
           alt={cover.alt}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+          className="object-contain transition-transform duration-500 group-hover:scale-105"
         />
+
+        {/* 마우스를 올리면 사진 위로 떠오르는 "상세보기".
+            사진 칸은 aspect-[4/3] 로 높이가 고정이고 이 겹은 absolute 라
+            떠올라도 카드 높이가 1px 도 변하지 않는다. 참고한 신창에프에이는
+            영문명을 감췄다 펼치는 방식인데, 호버할 때마다 카드가 404 -> 420px
+            로 커져 같은 줄 카드 셋과 그 아래가 전부 밀린다. 자리를 사진 위로
+            옮겨 그 흔들림을 없앴다.
+
+            막은 navy-deep 65% 다. 눈대중이 아니라, 가장 밝은 사진(진동기 -
+            흰 배경 3D 도면) 위에서도 흰 글자가 읽히는 값을 대비로 구했다.
+            흰 바탕 기준 45%:2.73  55%:3.61  60%:4.18  65%:4.88  70%:5.71 이라,
+            AA(4.5:1)를 넘기는 첫 값이 65% 다. 어두운 사진 위에서는 더 높다.
+
+            pointer-events-none - 카드 전체가 이미 링크다. 이 겹이 클릭을
+            가로채면 안 된다.
+
+            aria-hidden 을 건다. 이 겹은 사진 칸 안에 있어 본문보다 앞서는데,
+            그대로 두면 링크 이름이 "상세보기 파츠피더 볼피더 ..." 로 읽혀
+            일곱 링크가 전부 같은 말로 시작한다. 보는 사람에게만 주는 신호라
+            이름에서 뺀다 - 링크 이름은 제품명과 요약이 맡는다.
+
+            터치 기기에서는 뜨지 않는다. Tailwind 가 hover: 를
+            @media (hover:hover) 로 감싸기 때문이다. 그래서 카드 아래 "상세보기"
+            줄을 지워도 정보는 잃지 않는다 - 분류.제품명.영문명.요약이
+            그대로 보이고, 카드 전체가 누르는 자리다. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 flex items-center justify-center bg-navy-deep/65 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        >
+          <span className="flex translate-y-1 items-center gap-1.5 text-sm font-bold text-white transition-transform duration-300 group-hover:translate-y-0">
+            상세보기
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </span>
+        </div>
       </div>
 
       <div className="flex flex-1 flex-col border-t border-line p-5 sm:p-6">
         <p className="text-xs font-bold tracking-[0.15em] text-brand">
           {product.category}
         </p>
-        <h3 className="mt-2 text-lg font-bold text-ink">{product.name}</h3>
+        <h3 className="mt-2 text-lg font-bold text-ink transition-colors duration-300 group-hover:text-brand">
+          {product.name}
+        </h3>
         <p className="mt-0.5 text-xs font-medium uppercase tracking-wide text-muted">
           {product.nameEn}
         </p>
+        {/* flex-1 을 남겨 둔다. 아래 "상세보기" 줄이 빠졌어도 본문이 카드
+            높이를 끝까지 채워야 격자에서 아랫변이 가지런하다. */}
         <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-soft">
           {product.summary}
         </p>
-        <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-navy">
-          상세보기
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-            className="transition-transform group-hover:translate-x-1"
-          >
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
-          </svg>
-        </span>
       </div>
     </Link>
   );
