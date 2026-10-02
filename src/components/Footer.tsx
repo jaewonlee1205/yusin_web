@@ -83,16 +83,22 @@ export default function Footer() {
               height={52}
               className="h-7 w-auto sm:h-8"
             />
-            {/* 로고 영문(FEEDING AUTOMATION SYSTEM) 을 한국어로 받아 주는 자리라
-                문장이 아니라 명사구로 둔다. 제품 이름은 바로 옆 [제품] 열에 일곱
-                개가 있고, 설립연도는 회사소개에 있어 여기서는 뺐다. */}
-            <p className="mt-5 text-sm leading-relaxed text-ink-soft">
-              부품 자동정렬 공급기 설계 · 제작
-            </p>
-
-            {/* 대표번호는 푸터에서 가장 중요한 한 줄이라 브랜드 블록 바로 아래,
+            {/* 대표번호는 푸터에서 가장 중요한 한 줄이라 로고 바로 아래,
                 시선이 처음 닿는 자리에 둔다. 팩스·이메일은 맨 아래 사업자정보
-                줄로 내렸다 — 성격이 다른 정보다. */}
+                줄로 내렸다 — 성격이 다른 정보다.
+
+                전에는 둘 사이에 "부품 자동정렬 공급기 설계 · 제작" 이 있었다.
+                로고 영문(FEEDING AUTOMATION SYSTEM)을 한국어로 받아 주는
+                자리였는데, 같은 말이 홈 히어로·제품 머리말·회사소개·검색
+                설명에 이미 있어 뺐다. 푸터가 할 일은 길찾기·연락처·사업자
+                정보다.
+
+                그래서 이 열이 다른 열보다 37px 일찍 끝난다(행 높이는 이제
+                [제품] 열이 정한다). 그대로 둔다 — 로고 그림과 큰 전화번호는
+                옆 링크 목록과 줄 맞춰 읽는 대상이 아니라 바닥선이 눈에 안
+                띈다. 연락처를 열 바닥에 붙여(justify-between) 맞춰 봤더니
+                로고와 전화번호 사이가 24 -> 62px 로 벌어져, 바닥 차이보다
+                그 구멍이 훨씬 크게 보였다. */}
             <a
               href={telHref(site.tel)}
               className="mt-6 inline-flex items-center gap-2 text-lg font-bold tabular-nums text-ink transition-colors hover:text-brand"
