@@ -272,7 +272,9 @@ export const strengths: { title: string; body: string }[] = [
   },
   {
     title: "20종 이상의 가공 설비",
-    body: "밀링·선반·연마기·알곤 용접기 등 21종 55대의 설비로 특수 형상도 직접 가공합니다.",
+    // 수치는 equipment 배열에서 뽑는다. 여기만 "21종 55대" 로 박아 두는 바람에
+    // 설비가 늘면 이 한 줄만 조용히 틀어지는 상태였다.
+    body: `밀링·선반·연마기·알곤 용접기 등 ${equipmentTotals.kinds}종 ${equipmentTotals.units}대의 설비로 특수 형상도 직접 가공합니다.`,
   },
   {
     title: "튜닝 전담 부서",

@@ -24,33 +24,12 @@ export default function FacilityPage() {
         lead={`밀링·선반·용접기 등 ${equipmentTotals.kinds}종 ${equipmentTotals.units}대. 도면이 나오면 그다음은 전부 이 공장 안에서 진행됩니다.`}
       />
 
-      {/* 설비 요약 */}
-      <div className="border-b border-line bg-surface">
-        <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
-          <dl className="grid grid-cols-2 gap-px bg-line sm:grid-cols-4">
-            {EQUIPMENT_GROUPS.map((group) => {
-              const items = equipmentByGroup(group.key);
-              const units = items.reduce((sum, item) => sum + item.count, 0);
-              return (
-                <div key={group.key} className="bg-surface px-1 py-7 sm:px-6">
-                  <dt className="text-sm font-bold text-ink">{group.title}</dt>
-                  <dd className="mt-2">
-                    <span className="text-3xl font-bold tabular-nums text-navy">
-                      {units}
-                    </span>
-                    <span className="ml-1 text-sm text-muted">대</span>
-                    <span className="ml-2 text-xs text-muted">
-                      {items.length}종
-                    </span>
-                  </dd>
-                </div>
-              );
-            })}
-          </dl>
-        </div>
-      </div>
+      {/* 공정별 설비 목록.
 
-      {/* 공정별 설비 목록 */}
+          배너 아래에 그룹별 합계만 보여 주는 요약 띠를 따로 두었다가 없앴다.
+          바로 이 섹션이 같은 네 그룹을 또 보여 줘서, 한 화면 안에 "절삭 · 가공 /
+          용접 / 연마 · 표면처리 / 운반 · 기타" 가 두 번 나왔다. 합계는 아래
+          카드 제목 줄로 옮겼고, 총계는 배너 lead 가 이미 말한다. */}
       <Section
         eyebrow="BY PROCESS"
         title="공정별 보유 설비"
@@ -58,30 +37,45 @@ export default function FacilityPage() {
       >
         {/* items-start: 항목 수가 다른 카드가 억지로 늘어나 빈 공간이 생기지 않게 한다 */}
         <div className="grid items-start gap-6 lg:grid-cols-2">
-          {EQUIPMENT_GROUPS.map((group) => (
-            <div
-              key={group.key}
-              className="flex flex-col rounded-lg border border-line p-6 sm:p-7"
-            >
-              <h3 className="text-lg font-bold text-ink">{group.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
-                {group.body}
-              </p>
-              <ul className="mt-5 border-t border-line">
-                {equipmentByGroup(group.key).map((item) => (
-                  <li
-                    key={item.name}
-                    className="flex items-baseline justify-between gap-3 border-b border-line py-2.5"
-                  >
-                    <span className="text-sm text-ink-soft">{item.name}</span>
-                    <span className="shrink-0 text-sm font-bold tabular-nums text-navy">
-                      {item.count}대
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {EQUIPMENT_GROUPS.map((group) => {
+            const items = equipmentByGroup(group.key);
+            const units = items.reduce((sum, item) => sum + item.count, 0);
+
+            return (
+              <div
+                key={group.key}
+                className="flex flex-col rounded-lg border border-line p-6 sm:p-7"
+              >
+                {/* 아래 품목 행과 같은 틀(이름 왼쪽 / 수 오른쪽)이라 그룹 합계가
+                    품목 대수와 한 열로 선다. 합계를 품목보다 약하게 둔다 —
+                    text-xs muted 대 text-sm bold navy. 합계가 개별 항목보다
+                    세 보이면 위계가 뒤집힌다.
+                    단위는 종 → 대 순서다. 배너 lead("21종 55대")와 맞춘다. */}
+                <div className="flex items-baseline justify-between gap-3">
+                  <h3 className="text-lg font-bold text-ink">{group.title}</h3>
+                  <span className="shrink-0 text-xs tabular-nums text-muted">
+                    {items.length}종 {units}대
+                  </span>
+                </div>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  {group.body}
+                </p>
+                <ul className="mt-5 border-t border-line">
+                  {items.map((item) => (
+                    <li
+                      key={item.name}
+                      className="flex items-baseline justify-between gap-3 border-b border-line py-2.5"
+                    >
+                      <span className="text-sm text-ink-soft">{item.name}</span>
+                      <span className="shrink-0 text-sm font-bold tabular-nums text-navy">
+                        {item.count}대
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
         </div>
       </Section>
 
