@@ -230,11 +230,14 @@ export default function Home() {
             />
           </Reveal>
           <Reveal delay={120}>
-            {/* 한때 첫 문단만 20px 로 키워 포인트를 줬다(회사 개요 인사말과
-                같은 쌍). 글자 크기만으로는 "글만 있는 칸" 이라는 인상이 바뀌지
-                않아, 포인트를 아래 박스 셋에 넘기고 두 문단은 본문 톤으로
-                되돌렸다. */}
-            <p className="text-base leading-relaxed text-ink-soft sm:text-lg">
+            {/* 첫 문단이 정의, 둘째가 회사 이야기다. 첫 문단만 ink +
+                semibold 로 올려 읽는 차례를 만든다.
+
+                한때 크기로만 포인트를 줬고(20px, 회사 개요 인사말과 같은 쌍)
+                그 뒤에는 포인트를 아래 박스 셋에 넘기고 둘 다 본문 톤으로
+                되돌렸는데, 그러니 이번엔 두 문단이 밋밋했다. 크기 대신
+                굵기다 — 크기를 더 키우면 바로 아래 박스와 다툰다. */}
+            <p className="text-[17px] font-semibold leading-relaxed text-ink sm:text-lg">
               {feederDefinition.body}
             </p>
             <p className="mt-4 text-base leading-[1.9] text-ink-soft">
@@ -326,11 +329,26 @@ export default function Home() {
               delay={i * 80}
               className="rounded-2xl bg-white p-7 shadow-card sm:p-8"
             >
-              <span className="text-3xl font-bold tabular-nums text-brand">
-                {p.step}
-              </span>
-              <h3 className="mt-4 text-base font-bold text-ink">{p.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-ink-soft">
+              {/* 숫자와 제목을 한 줄로 묶는다. 전에는 숫자가 3xl 로 혼자
+                  한 줄을 차지하고 그 아래 제목.본문이 모두 맨 글자였다 —
+                  흰 섹션 위 흰 카드라 카드 자체도 약해서, 칸 전체가 글자만
+                  있는 것처럼 보였다.
+
+                  숫자를 한 줄로 올려 번 자리를 본문 박스가 받는다. 숫자는
+                  제목과 나란히 서므로 3xl 에서 xl 로 줄인다. */}
+              <div className="flex items-baseline gap-2.5">
+                <span className="text-xl font-bold tabular-nums text-brand">
+                  {p.step}
+                </span>
+                <h3 className="text-base font-bold text-ink">{p.title}</h3>
+              </div>
+              {/* 본문을 회색 박스에 앉힌다. 피더 섹션의 박스 셋과 같은 언어다.
+
+                  ⚠️ 박스 패딩(좌우 32px)만큼 글상자가 좁아져 줄 수가 바뀐다.
+                     company.ts 의 process 네 body 는 폭마다 줄 수가 서로
+                     같아지도록 길이를 맞춰 둔 것이라, 패딩이나 글자 크기를
+                     건드리면 거기서 다시 맞춰야 한다. */}
+              <p className="mt-4 rounded-xl bg-surface px-4 py-3 text-sm leading-relaxed text-ink-soft">
                 {p.body}
               </p>
             </Reveal>
@@ -384,28 +402,33 @@ export default function Home() {
       <Section
         eyebrow="CLIENTS"
         title="주요 거래처"
+        action={
+          /* 격자 아래에 있던 것을 제목 줄로 올린다. 바로 위 VIDEO 섹션이
+             "영상 전체 보기" 를 같은 자리에 두는데 여기만 아래에 있어,
+             같은 성격의 두 섹션이 달라 보였다. */
+          <Link href="/clients" className={BTN}>
+            거래처 전체 보기
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className="shrink-0 transition-transform group-hover:translate-x-1"
+            >
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </Link>
+        }
       >
         <Reveal>
           <ClientGrid names={featuredClients} />
         </Reveal>
-        <Link href="/clients" className={`mt-8 ${BTN}`}>
-          거래처 전체 보기
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-            className="shrink-0 transition-transform group-hover:translate-x-1"
-          >
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
-          </svg>
-        </Link>
       </Section>
 
       {/* 8. 문의 CTA */}

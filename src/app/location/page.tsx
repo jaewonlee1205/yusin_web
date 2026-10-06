@@ -3,7 +3,6 @@ import ContactCTA from "@/components/ContactCTA";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
-import { KakaoIcon, NaverIcon } from "@/components/icons";
 import { site, telHref } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -51,31 +50,14 @@ const CONTACT_ROWS: {
  * 사진.리뷰.길찾기가 함께 나온다(푸터가 이미 이 주소를 쓴다). 카카오는
  * place id 가 없어 검색 질의 그대로다 — 둘 다 키는 필요 없다.
  *
- * chip/mark 는 버튼 앞 동그라미와 그 안 마크의 크기다. 색은 각 브랜드 원색을
- * 쓴다. 사이트 팔레트에 가까운 색이 없고, 앱 아이콘을 축소한 모양이라야
- * 한눈에 알아본다 — 푸터가 네이버 초록에 대해 내린 것과 같은 판단이다.
- * (아이콘은 aria-hidden 장식이고 링크 이름은 글자가 들고 있어 WCAG 1.4.11
- * 대상이 아니다. 자세한 근거는 Footer.tsx 주석에 있다.)
- *
- * mark 가 둘이 다른 이유: N 은 광학 보정 viewBox 때문에 상자 안에서 0.78 배로
- * 들어간다. 14px 상자에 잉크 10.9px, 말풍선은 13px 상자에 잉크 10.6px 라
- * 나란히 뒀을 때 둘이 같은 크기로 보인다.
+ * 한때 표 아래에 브랜드 마크(네이버 N, 카카오 말풍선)를 단 버튼 둘로 서 있었다.
+ * 그때 주석에 "N 도 말풍선도 지도를 가리키지 않으니 글자를 남긴다" 고 적어
+ * 뒀는데, 지금은 표의 "길찾기" 라벨이 그 뜻을 맡는다. 연락처가 전부 한 표로
+ * 모이면서 표 밖에 버튼만 둘 떠 있을 까닭도 없어졌다.
  */
 const MAP_APPS = [
-  {
-    label: "네이버 지도",
-    href: site.naverPlace,
-    Icon: NaverIcon,
-    chip: "bg-[#03C75A] text-white",
-    mark: "size-[14px]",
-  },
-  {
-    label: "카카오맵",
-    href: `https://map.kakao.com/?q=${query}`,
-    Icon: KakaoIcon,
-    chip: "bg-[#FEE500] text-[#191919]",
-    mark: "size-[13px]",
-  },
+  { label: "네이버 지도", href: site.naverPlace },
+  { label: "카카오맵", href: `https://map.kakao.com/?q=${query}` },
 ];
 
 export default function LocationPage() {
@@ -213,7 +195,7 @@ export default function LocationPage() {
 
                     CTA와 푸터에도 같은 값이 나오지만 그 둘은 모든 페이지에
                     깔리는 사이트 크롬이고, 여기서는 방문 시간이다. */}
-                <div className="flex flex-auto flex-col sm:flex-row">
+                <div className="flex flex-auto flex-col border-b border-line sm:flex-row">
                   <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
                     운영 시간
                   </dt>
@@ -226,55 +208,40 @@ export default function LocationPage() {
                     </span>
                   </dd>
                 </div>
-              </dl>
 
-              {/* 길찾기 — 밖으로 나가는 링크라 화살표를 붙인다.
+                {/* 길찾기 — 표 밖 버튼 둘이던 것을 마지막 행으로 들였다.
+                    전화 행의 추가 회선과 같은 꼴로 가운뎃점으로 잇는다.
 
-                  앞에 브랜드 마크를 둔다. 마크만 두고 글자를 빼는 길도
-                  있었지만(푸터 채널 버튼이 그렇다) 여기서는 "지도" 라는
-                  뜻이 마크에 없다 — N 도 말풍선도 지도를 가리키지 않는다.
-                  그래서 글자를 남기되 "에서 보기" 만 떼어 짧게 줄였다.
-                  title 은 그 뗀 말을 풍선말로 돌려준다.
-
-                  접근성 이름은 보이는 글자가 진다. svg 는 aria-hidden 이라
-                  이름에 보태지 않고, aria-label 도 두지 않는다 — 두면
-                  보이는 글자와 읽히는 이름이 갈라진다. */}
-              <div className="mt-5 flex flex-wrap gap-3">
-                {MAP_APPS.map((m) => (
-                  <a
-                    key={m.label}
-                    href={m.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title={`${m.label}에서 보기`}
-                    className="group inline-flex items-center gap-2 rounded-xl border border-line bg-white py-3 pl-3 pr-5 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand"
-                  >
-                    {/* 칩 색은 호버에 흔들리지 않는다 — 브랜드 마크라
-                        사이트 색으로 물들면 못 알아본다. */}
-                    <span
-                      className={`flex size-6 shrink-0 items-center justify-center rounded-full ${m.chip}`}
-                    >
-                      <m.Icon className={`shrink-0 ${m.mark}`} />
+                    밖으로 나가는 링크지만 화살표는 붙이지 않는다 — 표 안에서는
+                    값마다 아이콘이 붙으면 표가 아니라 버튼 묶음으로 보인다.
+                    주소.이메일 행도 같은 이유로 글자만 둔다. */}
+                <div className="flex flex-auto flex-col sm:flex-row">
+                  <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
+                    길찾기
+                  </dt>
+                  <dd className="px-5 py-4 text-sm leading-relaxed text-ink-soft sm:flex sm:items-center">
+                    {/* 한 겹 더 감싼다. dd 가 sm:flex 라 이 span 들이 그대로
+                        flex 아이템이 되면 가운뎃점 앞 공백이 잘린다
+                        ("네이버 지도· 카카오맵"). 바깥 span 하나만 아이템이
+                        되게 하면 안쪽은 보통 인라인 흐름이라 공백이 산다. */}
+                    <span>
+                      {MAP_APPS.map((m, i) => (
+                        <span key={m.label}>
+                          {i > 0 && " · "}
+                          <a
+                            href={m.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="transition-colors hover:text-brand"
+                          >
+                            {m.label}
+                          </a>
+                        </span>
+                      ))}
                     </span>
-                    {m.label}
-                    <svg
-                      width="13"
-                      height="13"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden="true"
-                      className="shrink-0 text-muted transition-colors group-hover:text-brand"
-                    >
-                      <path d="M7 17 17 7" />
-                      <path d="M8 7h9v9" />
-                    </svg>
-                  </a>
-                ))}
-              </div>
+                  </dd>
+                </div>
+              </dl>
             </Reveal>
           </div>
         </Container>

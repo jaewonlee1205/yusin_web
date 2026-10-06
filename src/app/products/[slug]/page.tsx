@@ -269,19 +269,27 @@ export default async function ProductDetailPage({
             아이콘은 20px 다. 안산FA 는 제목 18px 에 아이콘 36px(두 배)인데
             그 비율이면 34px 체크가 되어 레드가 너무 넓어진다(globals.css 토큰
             주석 — "레드는 면적을 좁게"). 20px 이면 제목의 1.2배이고 획이 얇아
-            면적이 작다. 원형 배경은 두지 않는다 — 안산FA 에 없고, 선을 걷은
-            자리에 또 도형을 넣으면 가벼움이 사라진다. mt-0.5 는 20px 아이콘과
-            23.4px 제목 줄의 시각 중심을 맞추는 값이다.
+            면적이 작다. 원형 배경은 두지 않는다 — 선을 걷은 자리에 또 도형을
+            넣으면 가벼움이 사라진다. mt-0.5 는 20px 아이콘과 23.4px 제목 줄의
+            시각 중심을 맞추는 값이다.
 
             열은 둘이다. 안산FA 는 여섯 개라 3열이 딱 맞지만 우리는 제품마다
             2~4개여서 3열이면 네 개가 3+1 로 어긋난다. 2열이면 칸이 556px
             (1024 는 453px)라 본문이 한두 줄로 칸을 채운다.
 
+            ⚠️ 흰 카드를 씌운 것은 나중의 판단이다. 안산FA 를 따라 배경도 선도
+               없이 간격만으로 나눴는데, 회색 섹션 위에 맨 글자 네 덩어리가
+               떠 있으니 글자만 있는 칸으로 읽혔다. 회색 바탕 위에서는 흰 카드가
+               또렷하다(흰 섹션 위라면 약했을 것이다 — 홈 PROCESS 가 그 경우다).
+
+               카드가 경계를 맡으므로 행 간격도 32px 에서 24px 로 줄였다. 선 없는
+               글 덩어리를 떼어 놓으려고 넓게 뒀던 값이다.
+
             아이콘은 aria-hidden 이다. 목록이라는 사실은 ul/li 가 전달한다. */}
-        <ul className="grid gap-y-8 lg:grid-cols-2 lg:gap-x-10">
+        <ul className="grid gap-6 lg:grid-cols-2">
           {product.features.map((f, i) => (
-            <Reveal as="li" key={f.title} delay={i * 70}>
-              <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3.5">
+            <Reveal as="li" key={f.title} delay={i * 70} className="h-full">
+              <div className="grid h-full grid-cols-[auto_minmax(0,1fr)] gap-x-3.5 rounded-2xl bg-white p-6 shadow-card">
                 <svg
                   width="20"
                   height="20"
