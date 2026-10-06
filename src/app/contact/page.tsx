@@ -56,7 +56,10 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <aside className="space-y-5 self-start">
+            {/* "이런 내용을 알려 주세요" 카드가 여기 있었다. 쓸 자리에서
+                멀어 읽히지 않아 문의 내용 입력란 바로 위로 옮겼다. 이제 이
+                칸에는 연락처 한 장만 선다. */}
+            <aside className="self-start">
               {/* 카드는 바탕색으로만 선다. 테두리와 바탕을 함께 쓰면 경계가
                   두 겹이 된다. */}
               <div className="rounded-2xl bg-surface p-7">
@@ -83,8 +86,12 @@ export default function ContactPage() {
                 </a>
                 <dl className="mt-6 space-y-2 border-t border-line pt-5 text-sm text-muted">
                   {/* 대표번호는 위 큰 버튼이 맡는다. 여기는 나머지 회선이다. */}
+                  {/* dt 와 dd 가 같은 세로 패딩을 갖는다. 전에는 전화 행의
+                      링크에만 py-1.5 가 있어(target-size 를 넓히려고 넣었다)
+                      "전화" 라는 라벨 글자와 번호 글자가 6px 어긋나 보였다.
+                      전화 행만 dd 에 패딩이 없다 — 안의 링크가 그 몫을 한다. */}
                   <div className="flex gap-3">
-                    <dt className="w-12 shrink-0 text-ink-soft">전화</dt>
+                    <dt className="w-12 shrink-0 py-1.5 text-ink-soft">전화</dt>
                     <dd className="tabular-nums">
                       {/* -mx-2 px-2 py-1.5 로 터치 영역을 넓힌다. 글자만
                           두면 103x20px 라 target-size(24px)에 못 미친다.
@@ -101,20 +108,20 @@ export default function ContactPage() {
                     </dd>
                   </div>
                   <div className="flex gap-3">
-                    <dt className="w-12 shrink-0 text-ink-soft">팩스</dt>
-                    <dd className="tabular-nums">{site.fax}</dd>
+                    <dt className="w-12 shrink-0 py-1.5 text-ink-soft">팩스</dt>
+                    <dd className="py-1.5 tabular-nums">{site.fax}</dd>
                   </div>
                   <div className="flex gap-3">
-                    <dt className="w-12 shrink-0 text-ink-soft">운영</dt>
-                    <dd>
+                    <dt className="w-12 shrink-0 py-1.5 text-ink-soft">운영</dt>
+                    <dd className="py-1.5">
                       {site.hours.weekday}
                       <br />
                       {site.hours.holiday}
                     </dd>
                   </div>
                   <div className="flex gap-3">
-                    <dt className="w-12 shrink-0 text-ink-soft">주소</dt>
-                    <dd className="leading-relaxed">
+                    <dt className="w-12 shrink-0 py-1.5 text-ink-soft">주소</dt>
+                    <dd className="py-1.5 leading-relaxed">
                       {site.address.road}
                       <Link
                         href="/location"
@@ -127,24 +134,6 @@ export default function ContactPage() {
                 </dl>
               </div>
 
-              <div className="rounded-2xl bg-surface p-7">
-                <h2 className="text-sm font-bold tracking-[0.15em] text-ink">
-                  이런 내용을 알려 주세요
-                </h2>
-                {/* 빨간 가운뎃점을 걷었다. 다섯 줄이 이미 목록으로 읽히는데
-                    기호가 앞에 서면 눈이 글자보다 점을 먼저 짚는다. */}
-                <ul className="mt-4 space-y-3.5 text-sm leading-relaxed text-ink-soft">
-                  {[
-                    "공급할 부품의 종류와 대략적인 크기",
-                    "시간당 필요한 공급 수량",
-                    "연결될 후공정 설비 (조립기, 검사기 등)",
-                    "설치 공간의 제약이나 소음 조건",
-                    "희망 납기",
-                  ].map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
             </aside>
           </div>
         </Container>
