@@ -52,7 +52,12 @@ export default function ProductsPage() {
               온 말로 …")와, 목록 아래 맺음말 문단("모든 제품은 공급할 부품에
               맞춰 제작합니다 …")이 있었다. 둘 다 뺐다 — 이 페이지는 제품을
               훑어 고르는 자리고, 피더가 뭔지는 홈의 WHAT IS THE FEEDER
-              섹션이 같은 데이터(feederDefinition)로 말한다. */}
+              섹션이 말한다는 판단이었다.
+
+              ⚠️ 그 섹션이 회사 소개(ABOUT US)로 바뀌면서 전제가 깨졌다. 지금은
+                 피더가 무엇인지 설명하는 자리가 사이트에 없다. 되살린다면
+                 여기가 가장 맞고, products.ts 의 feederDefinition 이 그대로
+                 남아 있다. */}
           <ProductBrowser />
         </Container>
       </div>

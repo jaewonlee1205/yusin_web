@@ -182,11 +182,15 @@ export default async function ProductDetailPage({
                        같은 줄에 서면서 값 칸이 그만큼 좁아지므로, 사양 글을
                        늘릴 때 1024 에서 다시 재야 한다.
 
-                    높이는 147px 다(행 47 x 3 + 간격 8 x 2). 격자 표이던 때
-                    161px 에서 줄었는데, 이 칸이 lg:mt-auto 로 아래 정렬이라
-                    표 바닥과 갤러리 사진 바닥의 줄 맞춤은 그대로다. */}
+                    높이는 198px 다(행 47 x 4 + 간격 8 x 3). 이 칸이
+                    lg:mt-auto 로 아래 정렬이라, 행이 늘어도 1280 이상에서는
+                    표 바닥과 갤러리 사진 바닥의 줄 맞춤이 그대로다(어긋남 0).
+
+                    ⚠️ 1024 에서만 표가 갤러리보다 길어진다(세 줄일 때 12px,
+                       네 줄이면 64px). 그 폭은 두 칸이 좁아 원래도 어긋나 있던
+                       자리다. */}
                 <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-y-2">
-                  {product.specs.slice(0, 3).map((spec) => (
+                  {product.specs.slice(0, 4).map((spec) => (
                     <Fragment key={spec.label}>
                       <dt className="flex items-center gap-2.5 whitespace-nowrap rounded-l-xl bg-surface py-3 pl-4 pr-2 text-[13px] font-bold text-ink">
                         <span

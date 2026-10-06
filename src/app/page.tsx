@@ -4,13 +4,13 @@ import Container from "@/components/Container";
 import ContactCTA from "@/components/ContactCTA";
 import ProductCard from "@/components/ProductCard";
 import Section from "@/components/Section";
-import { process } from "@/data/company";
+import { aboutPoints, process } from "@/data/company";
 import ClientGrid from "@/components/ClientGrid";
 import Reveal from "@/components/Reveal";
 import ScrollCue from "@/components/ScrollCue";
 import StatCounter from "@/components/StatCounter";
 import { featuredClients, totalClients } from "@/data/clients";
-import { feederDefinition, products } from "@/data/products";
+import { products } from "@/data/products";
 import { site, yearsInBusiness } from "@/data/site";
 import VideoCard from "@/components/VideoCard";
 import { featuredVideos } from "@/data/videos";
@@ -213,17 +213,25 @@ export default function Home() {
       </section>
 
       {/* 3. 피더란 / 회사 개요 요약 */}
-      {/* 제목 다음이 바로 영상이다.
+      {/* 회사를 말하는 자리다.
 
-          한동안 정의 한 문장(feederDefinition.body)이 사이에 있었다 — 처음엔
-          오른쪽 칸에서 박스 셋 위에, 그다음엔 여기 lead 자리에. 박스 셋이
-          같은 말을 셋으로 풀어 쓰고 있어 결국 걷었다.
+          한동안 여기가 "피더란 무엇인가" 였다(제목 "부품 자동정렬 공급기",
+          박스 셋이 피더가 하는 일). 그런데 홈에서 회사를 말하는 자리가 히어로
+          한 줄뿐이라, 이 자리를 회사 쪽으로 돌렸다.
+
+          ⚠️ 히어로와 겹치지 않게 각도를 잡는다. 히어로가 이미 "설계부터
+             튜닝까지 직접 만듭니다 / 34년째 만들고 있습니다" 를 말하므로,
+             여기서는 같은 주장을 되풀이하지 않고 그것이 가능한 까닭(부서.
+             설비.쌓인 사례)을 댄다. 제목도 박스 셋을 묶는 말이다.
+
+          제목 다음이 바로 영상이다. 한동안 정의 한 문장이 사이에 있었는데
+          박스 셋이 같은 말을 풀어 쓰고 있어 걷었다.
 
           lg:items-center — 영상(274px)이 오른쪽 덩어리(박스 셋 + 버튼, 235px)
           보다 길다. stretch 로 두면 오른쪽 내용이 위에 붙고 아래가 비는데,
           가운데로 맞추면 두 덩어리의 세로 중심이 포개진다. 1024 미만은 1열이라
           뜻이 없으므로 lg 부터다. */}
-      <Section eyebrow="WHAT IS THE FEEDER" title={feederDefinition.title}>
+      <Section eyebrow="ABOUT US" title="피더를 만드는 데 필요한 것">
         <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-16">
           {/* 정지 사진이던 자리다. 피더가 무엇인지는 "부품이 돌다가 한 줄로
               서서 나간다" 는 움직임 자체라, 멈춘 사진으로는 절반만 전해졌다.
@@ -267,14 +275,15 @@ export default function Home() {
             </video>
           </Reveal>
           <Reveal delay={120}>
-            {/* 피더가 해 주는 일 셋. 위 lead 한 문장을 풀어 쓴 것이라 겹치지
-                않는다(products.ts 주석 참고).
+            {/* 회사의 됨됨이 셋 — 부서.설비.쌓인 사례. 제목("피더를 만드는
+                데 필요한 것")이 묶는 말이고 이 셋이 그 내용이다.
 
-                bg-surface + 레드 점은 제품 상세의 적용 분야 칩과 같은 꼴이다 —
-                사이트에 이미 있는 언어라 새 모양을 더하지 않는다. 섹션이 흰
-                바탕이라 흰 카드는 묻히고, 회색 박스가 또렷하다. */}
+                bg-surface + 레드 점은 제품 상세의 사양 박스.적용 분야 칩과
+                같은 꼴이다 — 사이트에 이미 있는 언어라 새 모양을 더하지
+                않는다. 섹션이 흰 바탕이라 흰 카드는 묻히고, 회색 박스가
+                또렷하다. */}
             <ul className="space-y-2">
-              {feederDefinition.points.map((point) => (
+              {aboutPoints.map((point) => (
                 <li
                   key={point.label}
                   className="flex items-center gap-3 rounded-xl bg-surface px-4 py-3.5"
