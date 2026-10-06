@@ -32,32 +32,26 @@ const MAP_SRC = `https://maps.google.com/maps?q=${query}&z=16&hl=ko&output=embed
  *
  * 팩스는 걸 수 없어 link 가 없다(헤더·푸터·CTA와 같은 규칙).
  */
+/**
+ * 전화.운영 시간을 뺀 나머지 행. 그 둘은 값이 두 줄이라 아래에서 따로 그린다.
+ *
+ * ⚠️ 라벨이 "사업자등록번호" 가 아니라 "사업자번호" 인 것은 칸 폭 때문이다.
+ *    dt 가 sm:w-28(112px) 에 좌우 패딩 20px 씩이라 글이 쓸 수 있는 폭이
+ *    72px 인데, 14px bold 로 재면 "사업자등록번호" 가 90px 로 넘치고
+ *    "사업자번호" 는 64px 로 든다. 칸을 넓히면 값 칸이 좁아져 주소가 세 줄이
+ *    될 수 있어 라벨 쪽을 줄였다.
+ */
 const CONTACT_ROWS: {
   label: string;
   value: string;
   link?: "mailto";
+  /** 숫자 값은 자릿수를 고정해 세로로 가지런히 선다 */
+  nums?: true;
 }[] = [
   { label: "주소", value: site.address.road },
   { label: "팩스", value: site.fax },
   { label: "이메일", value: site.email, link: "mailto" },
-];
-
-/**
- * 지도 앱으로 나가는 길찾기 링크.
- *
- * 네이버는 플레이스(place id) 주소다. 전에는 카카오와 같은 주소 검색이었는데,
- * 그러면 지도에 지번만 찍힌다. site.naverPlace 는 상호가 등재된 업체 페이지라
- * 사진.리뷰.길찾기가 함께 나온다(푸터가 이미 이 주소를 쓴다). 카카오는
- * place id 가 없어 검색 질의 그대로다 — 둘 다 키는 필요 없다.
- *
- * 한때 표 아래에 브랜드 마크(네이버 N, 카카오 말풍선)를 단 버튼 둘로 서 있었다.
- * 그때 주석에 "N 도 말풍선도 지도를 가리키지 않으니 글자를 남긴다" 고 적어
- * 뒀는데, 지금은 표의 "길찾기" 라벨이 그 뜻을 맡는다. 연락처가 전부 한 표로
- * 모이면서 표 밖에 버튼만 둘 떠 있을 까닭도 없어졌다.
- */
-const MAP_APPS = [
-  { label: "네이버 지도", href: site.naverPlace },
-  { label: "카카오맵", href: `https://map.kakao.com/?q=${query}` },
+  { label: "사업자번호", value: site.businessNumber, nums: true },
 ];
 
 export default function LocationPage() {
@@ -171,7 +165,11 @@ export default function LocationPage() {
                     <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
                       {row.label}
                     </dt>
-                    <dd className="px-5 py-4 text-sm leading-relaxed text-ink-soft sm:flex sm:items-center">
+                    <dd
+                      className={`px-5 py-4 text-sm leading-relaxed text-ink-soft sm:flex sm:items-center ${
+                        row.nums ? "tabular-nums" : ""
+                      }`}
+                    >
                       {row.link ? (
                         <a
                           href={`mailto:${row.value}`}
@@ -190,12 +188,16 @@ export default function LocationPage() {
                     value 가 한 줄짜리라 평일/휴무 두 줄을 담을 수 없어
                     여기서 따로 그린다.
 
-                    표 맨 끝인 이유: 연락처(전화.주소.팩스.이메일)를 먼저
-                    읽고 "언제 가면 되나" 가 뒤따르는 순서가 자연스럽다.
+                    표 맨 끝인 이유: 연락처(전화.주소.팩스.이메일.사업자번호)를
+                    먼저 읽고 "언제 가면 되나" 가 뒤따르는 순서가 자연스럽다.
+
+                    한때 이 아래 "길찾기 | 네이버 지도 · 카카오맵" 행이 하나 더
+                    있었다. 표의 다른 행은 모두 값인데 거기만 나가는 링크 둘이라
+                    결이 달랐다. 지도앱으로 가는 길은 푸터에 남아 있다.
 
                     CTA와 푸터에도 같은 값이 나오지만 그 둘은 모든 페이지에
                     깔리는 사이트 크롬이고, 여기서는 방문 시간이다. */}
-                <div className="flex flex-auto flex-col border-b border-line sm:flex-row">
+                <div className="flex flex-auto flex-col sm:flex-row">
                   <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
                     운영 시간
                   </dt>
@@ -205,39 +207,6 @@ export default function LocationPage() {
                     </span>
                     <span className="mt-1.5 block text-sm leading-relaxed text-muted">
                       {site.hours.holiday}
-                    </span>
-                  </dd>
-                </div>
-
-                {/* 길찾기 — 표 밖 버튼 둘이던 것을 마지막 행으로 들였다.
-                    전화 행의 추가 회선과 같은 꼴로 가운뎃점으로 잇는다.
-
-                    밖으로 나가는 링크지만 화살표는 붙이지 않는다 — 표 안에서는
-                    값마다 아이콘이 붙으면 표가 아니라 버튼 묶음으로 보인다.
-                    주소.이메일 행도 같은 이유로 글자만 둔다. */}
-                <div className="flex flex-auto flex-col sm:flex-row">
-                  <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
-                    길찾기
-                  </dt>
-                  <dd className="px-5 py-4 text-sm leading-relaxed text-ink-soft sm:flex sm:items-center">
-                    {/* 한 겹 더 감싼다. dd 가 sm:flex 라 이 span 들이 그대로
-                        flex 아이템이 되면 가운뎃점 앞 공백이 잘린다
-                        ("네이버 지도· 카카오맵"). 바깥 span 하나만 아이템이
-                        되게 하면 안쪽은 보통 인라인 흐름이라 공백이 산다. */}
-                    <span>
-                      {MAP_APPS.map((m, i) => (
-                        <span key={m.label}>
-                          {i > 0 && " · "}
-                          <a
-                            href={m.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="transition-colors hover:text-brand"
-                          >
-                            {m.label}
-                          </a>
-                        </span>
-                      ))}
                     </span>
                   </dd>
                 </div>

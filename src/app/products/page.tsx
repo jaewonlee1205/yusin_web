@@ -29,7 +29,7 @@ export default function ProductsPage() {
           이 배너만 232 -> 258px 로 커진다. 이 문구는 320~1440 모두 두 줄 안이다. */}
       <PageHero
         eyebrow="PRODUCTS"
-        title="제품"
+        title="제품 라인업"
         lead="표준 기종을 고르는 것이 아니라, 부품에 맞춰 새로 설계합니다."
       />
 

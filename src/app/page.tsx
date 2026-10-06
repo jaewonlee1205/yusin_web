@@ -241,8 +241,10 @@ export default function Home() {
                 박스와 다툰다.
 
                 ⚠️ 이 문단은 1024 이상에서 한 줄이다 — products.ts 의
-                   feederDefinition.body 길이가 거기 맞춰져 있다. */}
-            <p className="text-[17px] font-semibold leading-relaxed text-ink sm:text-lg">
+                   feederDefinition.body 길이가 거기 맞춰져 있다. 20px 에서
+                   한 줄이 되도록 글을 줄인 것이라, 크기를 더 키우려면 글을
+                   또 줄여야 한다(1024 글상자 461px 가 병목). */}
+            <p className="text-lg font-semibold leading-relaxed text-ink sm:text-xl">
               {feederDefinition.body}
             </p>
             {/* 피더가 해 주는 일 셋. 한 문장이던 것을 쪼갠 것이라 위 본문과
@@ -342,19 +344,20 @@ export default function Home() {
                 </span>
                 <h3 className="text-base font-bold text-ink">{p.title}</h3>
               </div>
-              {/* 회색 박스 안에 점 목록 셋. 피더 섹션의 박스 셋과 같은
-                  읽기 방식이다 — 다만 칸이 좁아 점을 한 치수 작게 둔다.
+              {/* 점 목록 셋. 한때 박스 안이 긴 문장 하나였는데, 글상자가
+                  좁아 3~4줄로 눌려 읽혔다. 지금은 단계마다 할 일 셋이 한 줄씩
+                  선다.
 
-                  한때 박스 안이 긴 문장 하나였는데, 글상자가 좁아 3~4줄로
-                  눌려 읽혔다. 지금은 단계마다 할 일 셋이 한 줄씩 선다.
+                  회색 박스를 두르지 않는다. 한동안 피더 섹션의 박스 셋을 따라
+                  bg-surface 를 깔았는데, 거기는 흰 섹션 위에 바로 놓이는
+                  박스라 또렷했고 여기는 이미 흰 카드 안이라 면이 두 겹이 됐다.
 
                   ol > li 안의 ul 이다 — 단계 목록 안의 세부 목록이라 의미가
                   맞는다. 점은 장식이라 aria-hidden 이고, 목록이라는 사실은
                   ul/li 가 전한다.
 
-                  ⚠️ 항목 길이는 company.ts 의 process 주석을 따른다(1024 에서
-                     글 폭 114px, 한 줄). */}
-              <ul className="mt-4 flex flex-col gap-2 rounded-xl bg-surface px-4 py-3.5">
+                  ⚠️ 항목 길이는 company.ts 의 process 주석을 따른다. */}
+              <ul className="mt-4 flex flex-col gap-2">
                 {p.points.map((point) => (
                   <li key={point} className="flex items-center gap-2">
                     <span
