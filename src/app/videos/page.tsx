@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
 import Section from "@/components/Section";
-import VideoEmbed from "@/components/VideoEmbed";
+import VideoCard from "@/components/VideoCard";
+import { YoutubeIcon } from "@/components/icons";
 import { site } from "@/data/site";
 import { videos } from "@/data/videos";
 
@@ -41,30 +43,29 @@ export default function VideosPage() {
         title={`구동 영상 ${videos.length}편`}
         lead="부품의 형상이 다르면 트랙과 선별 지그도 달라집니다. 아래 영상은 서로 다른 부품을 다룬 사례입니다."
       >
+        {/* 적용 분야·다른 제품 격자와 같은 등장 방식이다. 전에는 영상만
+            Reveal 이 없어 스크롤하면 혼자 먼저 떠 있었다. */}
         <ul className="grid gap-6 sm:grid-cols-2 sm:gap-8">
-          {videos.map((video) => (
-            <li key={video.id}>
-              <figure>
-                <VideoEmbed video={video} />
-                <figcaption className="mt-3 text-sm font-bold text-ink">
-                  {video.title}
-                </figcaption>
-              </figure>
-            </li>
+          {videos.map((video, i) => (
+            <Reveal as="li" key={video.id} delay={i * 70}>
+              <VideoCard video={video} />
+            </Reveal>
           ))}
         </ul>
 
-        <p className="mt-10 text-sm text-ink-soft">
-          영상은 유튜브에 올려 두었습니다.{" "}
-          <a
-            href={site.youtube}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-semibold text-navy underline underline-offset-4 transition-colors hover:text-brand"
-          >
-            유튜브 채널에서 보기
-          </a>
-        </p>
+        {/* 전에는 본문과 같은 크기의 글씨 한 줄이라 눈에 걸리지 않았다.
+            채널에는 여기 넷 말고도 영상이 더 있을 수 있어, 다음 행동으로
+            제시할 만한 자리다. 버튼 모양으로 올리고 아이콘을 붙인다
+            (푸터가 쓰는 YoutubeIcon 과 같은 마크다). */}
+        <a
+          href={site.youtube}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-10 inline-flex items-center gap-2.5 rounded-lg border border-line bg-white px-5 py-3.5 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand"
+        >
+          <YoutubeIcon className="shrink-0 text-brand" />
+          유튜브 채널에서 더 보기
+        </a>
       </Section>
 
       <ContactCTA />

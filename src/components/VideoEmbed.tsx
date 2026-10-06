@@ -14,13 +14,19 @@ import type { Video } from "@/data/videos";
  *
  * 겉이 <button> 이라 키보드로도 재생된다. 자리는 aspect-video 로 미리 잡아
  * 두어 iframe 으로 바뀔 때 아래 내용이 밀리지 않는다.
+ *
+ * 이 컴포넌트는 VideoCard 안에서만 쓴다. 테두리.모서리.바탕(흰색)은 그쪽이
+ * 맡고 여기는 화면만 책임진다.
  */
 export default function VideoEmbed({ video }: { video: Video }) {
   const [playing, setPlaying] = useState(false);
   const watchUrl = `https://www.youtube.com/watch?v=${video.id}`;
 
+  // 테두리와 둥근 모서리는 감싸는 VideoCard 가 가진다 — 여기서도 주면 카드
+  // 안에 선이 두 겹으로 보인다. aspect-video 는 남긴다: 재생 전에 자리를 잡아
+  // 둬야 iframe 으로 바뀔 때 아래가 밀리지 않는다.
   return (
-    <div className="relative aspect-video overflow-hidden rounded-lg border border-line bg-black">
+    <div className="relative aspect-video overflow-hidden bg-black">
       {playing ? (
         <iframe
           // autoplay=1 — 누르는 동작 자체가 재생 의사라 한 번 더 누르게 하지 않는다.

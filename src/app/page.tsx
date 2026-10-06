@@ -12,7 +12,7 @@ import StatCounter from "@/components/StatCounter";
 import { featuredClients, totalClients } from "@/data/clients";
 import { feederDefinition, products } from "@/data/products";
 import { site, yearsInBusiness } from "@/data/site";
-import VideoEmbed from "@/components/VideoEmbed";
+import VideoCard from "@/components/VideoCard";
 import { featuredVideos } from "@/data/videos";
 
 /** count=false 인 값은 세어 올리지 않는다 — 연도가 굴러가면 어색하다. */
@@ -330,15 +330,10 @@ export default function Home() {
           lead="실제 현장에서 부품이 정렬되어 나오는 모습입니다."
         >
           <ul className="grid gap-6 sm:grid-cols-2 sm:gap-8">
-            {featuredVideos.map((v) => (
-              <li key={v.id}>
-                <figure>
-                  <VideoEmbed video={v} />
-                  <figcaption className="mt-3 text-sm font-bold text-ink">
-                    {v.title}
-                  </figcaption>
-                </figure>
-              </li>
+            {featuredVideos.map((v, i) => (
+              <Reveal as="li" key={v.id} delay={i * 70}>
+                <VideoCard video={v} />
+              </Reveal>
             ))}
           </ul>
           <Link
