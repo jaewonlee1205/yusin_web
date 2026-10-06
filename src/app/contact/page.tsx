@@ -41,32 +41,43 @@ export default function ContactPage() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
             <div>
-              <h2 className="text-lg font-bold text-ink">온라인 문의</h2>
-              <p className="mt-2 text-sm text-muted">
-                <span className="text-brand">*</span> 표시는 필수 항목입니다.
+              <h2 className="text-2xl font-bold tracking-tight text-ink">
+                온라인 문의
+              </h2>
+              {/* 전에는 "* 표시는 필수 항목입니다" 였다. 여섯 항목이 모두
+                  필수라 별이 가려 주는 것이 없었고, 빨간 점 여섯 개만
+                  남았다. 한 줄로 갈음한다 — required 속성은 그대로라
+                  브라우저 검증도 그대로 뜬다. */}
+              <p className="mt-2.5 text-sm text-muted">
+                모든 항목을 입력해 주세요.
               </p>
               <div className="mt-8">
                 <InquiryForm />
               </div>
             </div>
 
-            <aside className="space-y-6 self-start">
-              <div className="rounded-lg border border-line bg-surface p-7">
+            <aside className="space-y-5 self-start">
+              {/* 카드는 바탕색으로만 선다. 테두리와 바탕을 함께 쓰면 경계가
+                  두 겹이 된다. */}
+              <div className="rounded-2xl bg-surface p-7">
                 <h2 className="text-sm font-bold tracking-[0.15em] text-ink">
                   바로 연락하기
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-ink-soft">
                   급한 건이라면 전화가 가장 빠릅니다.
                 </p>
+                {/* 네이비로 꽉 채웠던 버튼을 흰 바탕으로 낮췄다. 폼의
+                    "문의 보내기" 와 둘 다 진하면 화면에서 둘이 겨룬다 —
+                    진한 주 버튼은 하나여야 한다. */}
                 <a
                   href={telHref(site.tel)}
-                  className="mt-5 block rounded bg-navy px-6 py-4 text-center text-base font-bold tabular-nums text-white transition-colors hover:bg-navy-deep"
+                  className="mt-5 flex h-14 items-center justify-center rounded-xl border border-line bg-white text-base font-bold tabular-nums text-navy transition-colors hover:border-navy/40"
                 >
                   {site.tel}
                 </a>
                 <a
                   href={`mailto:${site.email}`}
-                  className="mt-3 block rounded border border-line bg-white px-6 py-3.5 text-center text-sm font-semibold text-ink-soft transition-colors hover:text-brand"
+                  className="mt-2 block rounded-lg py-2.5 text-center text-sm font-semibold text-ink-soft transition-colors hover:text-brand"
                 >
                   {site.email}
                 </a>
@@ -75,11 +86,14 @@ export default function ContactPage() {
                   <div className="flex gap-3">
                     <dt className="w-12 shrink-0 text-ink-soft">전화</dt>
                     <dd className="tabular-nums">
+                      {/* -mx-2 px-2 py-1.5 로 터치 영역을 넓힌다. 글자만
+                          두면 103x20px 라 target-size(24px)에 못 미친다.
+                          음수 마진이라 글자 자리는 그대로다. */}
                       {site.telExtra.map((number) => (
                         <a
                           key={number}
                           href={telHref(number)}
-                          className="block transition-colors hover:text-brand"
+                          className="-mx-2 block rounded px-2 py-1.5 transition-colors hover:text-brand"
                         >
                           {number}
                         </a>
@@ -113,11 +127,13 @@ export default function ContactPage() {
                 </dl>
               </div>
 
-              <div className="rounded-lg border border-line p-7">
+              <div className="rounded-2xl bg-surface p-7">
                 <h2 className="text-sm font-bold tracking-[0.15em] text-ink">
                   이런 내용을 알려 주세요
                 </h2>
-                <ul className="mt-4 space-y-3 text-sm leading-relaxed text-ink-soft">
+                {/* 빨간 가운뎃점을 걷었다. 다섯 줄이 이미 목록으로 읽히는데
+                    기호가 앞에 서면 눈이 글자보다 점을 먼저 짚는다. */}
+                <ul className="mt-4 space-y-3.5 text-sm leading-relaxed text-ink-soft">
                   {[
                     "공급할 부품의 종류와 대략적인 크기",
                     "시간당 필요한 공급 수량",
@@ -125,12 +141,7 @@ export default function ContactPage() {
                     "설치 공간의 제약이나 소음 조건",
                     "희망 납기",
                   ].map((item) => (
-                    <li key={item} className="flex gap-3">
-                      <span aria-hidden="true" className="text-brand">
-                        ·
-                      </span>
-                      <span>{item}</span>
-                    </li>
+                    <li key={item}>{item}</li>
                   ))}
                 </ul>
               </div>
