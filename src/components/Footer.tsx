@@ -284,9 +284,12 @@ export default function Footer() {
               {site.email}
             </a>
           </p>
+          {/* 연도를 적지 않는다. 한때 new Date().getFullYear() 였는데,
+              정적 export 라 그 값이 빌드 시점에 굳는다 — 해가 바뀌어도 다시
+              빌드하기 전까지 옛 연도가 박혀 있었다. 저작권 표시에 연도가
+              없어도 효력은 같다. */}
           <p>
-            © {new Date().getFullYear()} {site.name} · 대표 {site.ceo} ·
-            사업자등록번호{" "}
+            © {site.name} · 대표 {site.ceo} · 사업자등록번호{" "}
             <span className="whitespace-nowrap tabular-nums">{site.businessNumber}</span>
           </p>
         </div>

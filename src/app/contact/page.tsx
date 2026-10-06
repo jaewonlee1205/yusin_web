@@ -3,6 +3,7 @@ import Container from "@/components/Container";
 import InquiryForm from "@/components/InquiryForm";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
+import { process } from "@/data/company";
 import { site, telHref } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -58,121 +59,93 @@ export default function ContactPage() {
                 멀어 읽히지 않아 문의 내용 입력란 바로 위로 옮겼다. 이제 이
                 칸에는 연락처 한 장만 선다. */}
             <Reveal as="aside" delay={180} className="self-start">
-              {/* 제목.버튼 둘.표가 이 박스 안에 든다. 박스는 바탕색으로만
-                  서고 테두리를 갖지 않는다 — 테두리를 가진 것은 안쪽 표
-                  하나뿐이라 경계가 두 겹이 되지 않는다.
+              {/* 한 박스 안에 두 구역이 선다 — 위는 도입 프로세스, 아래는
+                  문의처. 구분선 하나로 가른다.
 
-                  정체를 네 번 바꿨다. 회색 카드(p-7) -> 바탕 걷음(제목.버튼.
-                  표가 각자 떠 보였다) -> 테두리 네모 + 표가 폭을 꽉 채움.
-                  마지막 꼴은 박스의 아래 절반이 표로 바뀐 것처럼 읽혀서,
-                  표가 박스 안에 놓이도록 되돌렸다.
-
-                  지금은 회색 바탕 위에 흰 것이 셋 뜬다 — 전화 버튼.이메일
-                  버튼.표. 셋 다 1px line 테두리라 한 결이다. */}
+                  이 칸은 여러 번 바뀌었다. 회색 카드 -> 바탕 걷음 -> 테두리
+                  네모 -> 회색 박스 + 안에 연락처 표. 표에 있던 추가 회선.
+                  주소.팩스는 걷었다 — 셋 다 푸터와 오시는 길 표, 회사 개요
+                  표에 그대로 있고, 문의하러 온 사람에게 먼저 보일 것은
+                  "맡기면 어떻게 진행되는가" 다. */}
               <div className="rounded-2xl bg-surface p-6">
                 <h2 className="text-sm font-bold tracking-[0.08em] text-ink">
-                  바로 연락하기
+                  도입 프로세스
                 </h2>
-                {/* 네이비로 꽉 채웠던 버튼을 흰 바탕으로 낮췄다. 폼의
-                    "문의 보내기" 와 둘 다 진하면 화면에서 둘이 겨룬다 —
-                    진한 주 버튼은 하나여야 한다. */}
-                <a
-                  href={telHref(site.tel)}
-                  className="mt-5 flex h-14 items-center justify-center rounded-xl border border-line bg-white text-base font-bold tabular-nums text-navy transition-colors hover:border-navy/40"
-                >
-                  {site.tel}
-                </a>
-                {/* 이메일도 박스다. 맨 글자로 두니 바로 위 전화 버튼과 짝이
-                    안 맞았다. 다만 한 치수 낮춘다 — 전화 h-14 / 16px bold,
-                    여기 h-12 / 14px semibold. 진한 주 동선은 전화 하나다. */}
-                <a
-                  href={`mailto:${site.email}`}
-                  className="mt-2 flex h-12 items-center justify-center rounded-xl border border-line bg-white text-sm font-semibold text-ink-soft transition-colors hover:border-navy/40 hover:text-brand"
-                >
-                  {site.email}
-                </a>
-                {/* 오시는 길의 연락처 표와 같은 표다 — 패딩(px-4 py-3).
-                    라벨 폭(w-28).글자 크기가 모두 location/page.tsx 와 같은
-                    값이다. 한때 여기는 라벨과 값을 gap-3 으로 띄운 글 목록
-                    이었는데, 값이 여러 줄인 행에서 어디까지가 한 항목인지
-                    경계가 없어 읽기 불편했다.
 
-                    radius 가 rounded-xl(12px) 인 것은 바깥 박스
-                    (rounded-2xl, 16px)보다 한 치수 작아야 안에 들어간 것으로
-                    읽혀서다. 라벨 칸은 bg-surface 그대로 둔다 — 바깥 박스와
-                    같은 회색이지만 표가 테두리를 가져 경계는 분명하고,
-                    오시는 길 표.제품 상세 사양 표와 같은 규칙으로 남는다.
+                {/* 홈 PROCESS 섹션이 쓰는 그 배열이다(company.ts 의 process).
+                    글을 새로 짓지 않는다 — 같은 과정을 두 자리에서 다르게
+                    말하면 어느 쪽이 맞는지 알 수 없게 된다.
 
-                    행 순서도 오시는 길과 맞췄다 — 전화.주소.팩스.운영 시간.
-                    주소가 팩스보다 위인 것은 방문.발송에 더 자주 쓰여서다.
-                    (오시는 길에 있는 이메일.주차 행은 여기 없다. 이메일은
-                     바로 위 버튼이 맡고, 주차는 길 찾아온 사람의 정보다.)
+                    홈은 가로 넉 장 카드고 여기는 세로 넉 줄이다. 칸이 379px
+                    라 카드를 눕힐 자리가 없다. */}
+                <ol className="mt-5 flex flex-col gap-5">
+                  {process.map((p, i) => (
+                    <li key={p.step} className="flex gap-3">
+                      {/* 번호 배지. 홈 PROCESS 가 쓰는 레드 번호와 같은
+                          언어다(그쪽은 brand/30 워터마크). 24px 원 넷이라
+                          레드 면적도 좁다 — globals.css 토큰 주석의
+                          "레드는 면적을 좁게" 를 지킨다.
 
-                    ⚠️ 640 미만에서는 sm:flex-row 가 풀려 라벨이 값 위로
-                       쌓인다. 좁은 폭에서 w-28 라벨 열을 떼면 값 칸이
-                       너무 좁아진다. */}
-                <dl className="mt-6 flex flex-col overflow-hidden rounded-xl border border-line bg-white">
-                  {/* 대표번호는 위 큰 버튼이 맡는다. 여기는 나머지 회선이다.
-                      오시는 길은 두 번호를 한 줄에 · 로 잇지만, 이 칸은
-                      426.7px 라 두 줄로 둔다. 둘째 줄이 muted 인 것은 오시는
-                      길 표의 추가 회선과 같은 처리다.
-
-                      전에 있던 -mx-2 px-2 py-1.5(터치 영역 넓히기)는 걷었다 —
-                      행이 py-3 라 링크 높이가 target-size 24px 를 넘긴다. */}
-                  <div className="flex flex-col border-b border-line sm:flex-row">
-                    <dt className="bg-surface px-4 py-3 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
-                      전화
-                    </dt>
-                    <dd className="px-4 py-3 sm:flex sm:flex-col sm:justify-center">
-                      {site.telExtra.map((number, i) => (
-                        <a
-                          key={number}
-                          href={telHref(number)}
-                          className={`block text-sm tabular-nums transition-colors hover:text-brand ${
-                            i === 0 ? "text-ink-soft" : "mt-1 text-muted"
-                          }`}
-                        >
-                          {number}
-                        </a>
-                      ))}
-                    </dd>
-                  </div>
-
-                  <div className="flex flex-col border-b border-line sm:flex-row">
-                    <dt className="bg-surface px-4 py-3 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
-                      주소
-                    </dt>
-                    {/* 한때 이 아래 "오시는 길 보기" 버튼이 붙어 있었다.
-                        헤더.푸터 메뉴에 "오시는 길" 이 있어 길은 그대로
-                        남으므로 걷었다. */}
-                    <dd className="px-4 py-3 text-sm text-ink-soft sm:flex sm:items-center">
-                      {site.address.road}
-                    </dd>
-                  </div>
-
-                  <div className="flex flex-col border-b border-line sm:flex-row">
-                    <dt className="bg-surface px-4 py-3 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
-                      팩스
-                    </dt>
-                    <dd className="px-4 py-3 text-sm tabular-nums text-ink-soft sm:flex sm:items-center">
-                      {site.fax}
-                    </dd>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row">
-                    <dt className="bg-surface px-4 py-3 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
-                      운영 시간
-                    </dt>
-                    <dd className="px-4 py-3 sm:flex sm:flex-col sm:justify-center">
-                      <span className="block text-sm tabular-nums text-ink-soft">
-                        {site.hours.weekday}
+                          ⚠️ aria-hidden 을 떼지 말 것. 순서는 ol / li 가 이미
+                             전하므로 시각 보조다. 대비는 계산상 4.66:1 로
+                             기준(4.5:1)을 넘지만 검사 대상에서 빼 둔다. */}
+                      <span
+                        aria-hidden="true"
+                        className="mt-px flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand/10 text-[11px] font-bold tabular-nums text-brand"
+                      >
+                        {i + 1}
                       </span>
-                      <span className="mt-1 block text-sm text-muted">
-                        {site.hours.holiday}
-                      </span>
-                    </dd>
-                  </div>
-                </dl>
+                      <div className="min-w-0">
+                        <p className="text-sm font-bold text-ink">{p.title}</p>
+                        <ul className="mt-1.5 flex flex-col gap-1">
+                          {p.points.map((point) => (
+                            <li key={point} className="flex items-center gap-2">
+                              <span
+                                aria-hidden="true"
+                                className="h-1 w-1 shrink-0 rounded-full bg-muted/50"
+                              />
+                              <span className="text-[13px] leading-snug text-ink-soft">
+                                {point}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+
+                {/* 둘째 구역. 한때 제목이 "바로 연락하기" 였다 — 위에 프로세스가
+                    생기면서 둘 다 행동을 재촉하는 말이 되어, 이쪽은 "어디로
+                    거는가" 를 적는 자리로 낮췄다. */}
+                <div className="mt-7 border-t border-line pt-6">
+                  <h2 className="text-sm font-bold tracking-[0.08em] text-ink">
+                    문의처
+                  </h2>
+                  {/* 네이비로 꽉 채웠던 버튼을 흰 바탕으로 낮췄다. 폼의
+                      "문의 보내기" 와 둘 다 진하면 화면에서 둘이 겨룬다 —
+                      진한 주 버튼은 하나여야 한다. */}
+                  <a
+                    href={telHref(site.tel)}
+                    className="mt-4 flex h-14 items-center justify-center rounded-xl border border-line bg-white text-base font-bold tabular-nums text-navy transition-colors hover:border-navy/40"
+                  >
+                    {site.tel}
+                  </a>
+                  {/* 이메일도 박스다. 맨 글자로 두니 바로 위 전화 버튼과 짝이
+                      안 맞았다. 다만 한 치수 낮춘다 — 전화 h-14 / 16px bold,
+                      여기 h-12 / 14px semibold. 진한 주 동선은 전화 하나다. */}
+                  <a
+                    href={`mailto:${site.email}`}
+                    className="mt-2 flex h-12 items-center justify-center rounded-xl border border-line bg-white text-sm font-semibold text-ink-soft transition-colors hover:border-navy/40 hover:text-brand"
+                  >
+                    {site.email}
+                  </a>
+                  {/* 연락처 표를 걷으면서 이 페이지에서 영업시간이 사라졌다.
+                      한 줄만 남긴다 — 전화를 걸기 전에 보는 값이다. */}
+                  <p className="mt-3 text-[13px] leading-relaxed text-muted">
+                    {site.hours.weekday} · {site.hours.holiday}
+                  </p>
+                </div>
               </div>
             </Reveal>
           </div>
