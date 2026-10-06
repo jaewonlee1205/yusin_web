@@ -35,6 +35,17 @@ type Props = {
    *    어두운 쪽은 바탕을 깔지 않는다 — navy 위 brand-light 대비를 그대로 쓴다.
    */
   align?: "left" | "center";
+  /**
+   * 제목 줄 오른쪽에 둘 링크·버튼. "영상 더 보기" 처럼 그 섹션에서 이어갈
+   * 곳이 있을 때만 쓴다.
+   *
+   * 주면 제목 블록과 두 칸짜리 줄이 되고(sm 이상), sm 미만에서는 세로로
+   * 쌓여 제목 아래로 내려간다. sm:items-end 로 아랫변을 제목에 맞춘다.
+   *
+   * ⚠️ align="center" 와 같이 쓰지 않는다 — 가운데로 모은 제목 옆에 오른쪽
+   *    액션이 붙으면 축이 둘이 되어 읽는 자리가 흔들린다.
+   */
+  action?: ReactNode;
   id?: string;
   className?: string;
 };
@@ -59,6 +70,7 @@ export default function Section({
   tone = "white",
   size = "default",
   align = "left",
+  action,
   id,
   className = "",
 }: Props) {
@@ -68,12 +80,15 @@ export default function Section({
   return (
     <section id={id} className={`${TONE[tone]} ${PAD[size]} ${className}`}>
       <Container>
-        {(eyebrow || title || lead) && (
+        {(eyebrow || title || lead || action) && (
           <div
-            className={`mb-10 max-w-2xl sm:mb-14 ${
-              centered ? "mx-auto text-center" : ""
-            }`}
+            className={
+              action
+                ? "mb-10 flex flex-col gap-5 sm:mb-14 sm:flex-row sm:items-end sm:justify-between"
+                : `mb-10 max-w-2xl sm:mb-14 ${centered ? "mx-auto text-center" : ""}`
+            }
           >
+            <div className={action ? "max-w-2xl" : ""}>
             {eyebrow &&
               (centered ? (
                 <p
@@ -112,6 +127,8 @@ export default function Section({
                 {lead}
               </p>
             )}
+            </div>
+            {action && <div className="shrink-0">{action}</div>}
           </div>
         )}
         {children}

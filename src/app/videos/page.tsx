@@ -38,10 +38,32 @@ export default function VideosPage() {
         lead="정렬 자세와 공급 속도는 구동 화면에서 가장 잘 드러납니다."
       />
 
+      {/* 제목이 "부품별" 을 안고 간다. 전에는 "구동 영상 4편" 아래에
+          "부품의 형상이 다르면 트랙과 선별 지그도 달라집니다 …" 라는 리드가
+          있었는데, 그 문장이 말하던 축(서로 다른 부품)을 제목 한 단어로
+          옮기고 리드를 걷었다. 개수는 빼 둔다 — 영상이 늘거나 줄 때마다
+          제목이 흔들릴 이유가 없다.
+
+          유튜브 버튼은 제목 줄 오른쪽에 둔다(Section 의 action). 격자 아래에
+          혼자 있을 때는 눈에 걸리지 않았고, 위에 있으면 "채널에 더 있다" 를
+          먼저 알리게 된다. */}
       <Section
         eyebrow="IN OPERATION"
-        title={`구동 영상 ${videos.length}편`}
-        lead="부품의 형상이 다르면 트랙과 선별 지그도 달라집니다. 아래 영상은 서로 다른 부품을 다룬 사례입니다."
+        title="부품별 구동 영상"
+        action={
+          <a
+            href={site.youtube}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2.5 rounded-lg border border-line bg-white px-5 py-3.5 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand"
+          >
+            {/* 글자에서 "유튜브" 를 뺐다. 왼쪽 아이콘이 이미 유튜브를
+                가리키므로 뜻이 흐려지지 않고, 제목 줄에 함께 서는 자리라
+                짧을수록 좋다. */}
+            <YoutubeIcon className="shrink-0 text-brand" />
+            영상 더 보기
+          </a>
+        }
       >
         {/* 적용 분야·다른 제품 격자와 같은 등장 방식이다. 전에는 영상만
             Reveal 이 없어 스크롤하면 혼자 먼저 떠 있었다. */}
@@ -52,20 +74,6 @@ export default function VideosPage() {
             </Reveal>
           ))}
         </ul>
-
-        {/* 전에는 본문과 같은 크기의 글씨 한 줄이라 눈에 걸리지 않았다.
-            채널에는 여기 넷 말고도 영상이 더 있을 수 있어, 다음 행동으로
-            제시할 만한 자리다. 버튼 모양으로 올리고 아이콘을 붙인다
-            (푸터가 쓰는 YoutubeIcon 과 같은 마크다). */}
-        <a
-          href={site.youtube}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-10 inline-flex items-center gap-2.5 rounded-lg border border-line bg-white px-5 py-3.5 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand"
-        >
-          <YoutubeIcon className="shrink-0 text-brand" />
-          유튜브 채널에서 더 보기
-        </a>
       </Section>
 
       <ContactCTA />

@@ -328,6 +328,32 @@ export default function Home() {
           eyebrow="VIDEO"
           title="제품 영상"
           lead="실제 현장에서 부품이 정렬되어 나오는 모습입니다."
+          action={
+            /* /videos 와 같은 자리에 둔다. 한쪽만 제목 줄로 올리면 같은
+               성격의 두 섹션이 달라 보인다. 글자는 "전체 보기" 그대로다 —
+               여기는 /videos 로 가는 내부 링크이고, /videos 쪽은 유튜브로
+               나가는 "더 보기" 라 역할이 다르다. */
+            <Link
+              href="/videos"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-navy underline underline-offset-4 hover:text-brand"
+            >
+              영상 전체 보기
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </Link>
+          }
         >
           <ul className="grid gap-6 sm:grid-cols-2 sm:gap-8">
             {featuredVideos.map((v, i) => (
@@ -336,26 +362,6 @@ export default function Home() {
               </Reveal>
             ))}
           </ul>
-          <Link
-            href="/videos"
-            className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-navy underline underline-offset-4 hover:text-brand"
-          >
-            영상 전체 보기
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
-          </Link>
         </Section>
       )}
 
