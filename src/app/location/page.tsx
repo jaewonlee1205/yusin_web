@@ -3,6 +3,7 @@ import ContactCTA from "@/components/ContactCTA";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
+import { KakaoIcon, NaverIcon } from "@/components/icons";
 import { site, telHref } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -38,10 +39,39 @@ const CONTACT_ROWS: {
   { label: "이메일", value: site.email, link: "mailto" },
 ];
 
-/** 지도 앱으로 나가는 길찾기 링크. 둘 다 검색 질의라 키가 필요 없다. */
+/**
+ * 지도 앱으로 나가는 길찾기 링크.
+ *
+ * 네이버는 플레이스(place id) 주소다. 전에는 카카오와 같은 주소 검색이었는데,
+ * 그러면 지도에 지번만 찍힌다. site.naverPlace 는 상호가 등재된 업체 페이지라
+ * 사진.리뷰.길찾기가 함께 나온다(푸터가 이미 이 주소를 쓴다). 카카오는
+ * place id 가 없어 검색 질의 그대로다 — 둘 다 키는 필요 없다.
+ *
+ * chip/mark 는 버튼 앞 동그라미와 그 안 마크의 크기다. 색은 각 브랜드 원색을
+ * 쓴다. 사이트 팔레트에 가까운 색이 없고, 앱 아이콘을 축소한 모양이라야
+ * 한눈에 알아본다 — 푸터가 네이버 초록에 대해 내린 것과 같은 판단이다.
+ * (아이콘은 aria-hidden 장식이고 링크 이름은 글자가 들고 있어 WCAG 1.4.11
+ * 대상이 아니다. 자세한 근거는 Footer.tsx 주석에 있다.)
+ *
+ * mark 가 둘이 다른 이유: N 은 광학 보정 viewBox 때문에 상자 안에서 0.78 배로
+ * 들어간다. 14px 상자에 잉크 10.9px, 말풍선은 13px 상자에 잉크 10.6px 라
+ * 나란히 뒀을 때 둘이 같은 크기로 보인다.
+ */
 const MAP_APPS = [
-  { label: "네이버 지도", href: `https://map.naver.com/p/search/${query}` },
-  { label: "카카오맵", href: `https://map.kakao.com/?q=${query}` },
+  {
+    label: "네이버 지도",
+    href: site.naverPlace,
+    Icon: NaverIcon,
+    chip: "bg-[#03C75A] text-white",
+    mark: "size-[14px]",
+  },
+  {
+    label: "카카오맵",
+    href: `https://map.kakao.com/?q=${query}`,
+    Icon: KakaoIcon,
+    chip: "bg-[#FEE500] text-[#191919]",
+    mark: "size-[13px]",
+  },
 ];
 
 export default function LocationPage() {
@@ -193,14 +223,17 @@ export default function LocationPage() {
                 </div>
               </dl>
 
-              {/* 길찾기 — 밖으로 나가는 링크라 화살표를 붙인다. 브랜드
-                  아이콘은 쓰지 않는다: icons.tsx 에 네이버만 있고 카카오가
-                  없어 한쪽만 넣으면 둘이 다른 급으로 보인다.
+              {/* 길찾기 — 밖으로 나가는 링크라 화살표를 붙인다.
 
-                  글자에 "에서 보기" 를 둔다. 잠깐 "네이버 지도" 로 줄였던
-                  적이 있는데, 그때는 위에 "길찾기" 제목이 맥락을 줬다.
-                  제목이 없으면 눌렀을 때 무엇이 되는지가 버튼 글자에만
-                  남으므로 줄이지 않는다. */}
+                  앞에 브랜드 마크를 둔다. 마크만 두고 글자를 빼는 길도
+                  있었지만(푸터 채널 버튼이 그렇다) 여기서는 "지도" 라는
+                  뜻이 마크에 없다 — N 도 말풍선도 지도를 가리키지 않는다.
+                  그래서 글자를 남기되 "에서 보기" 만 떼어 짧게 줄였다.
+                  title 은 그 뗀 말을 풍선말로 돌려준다.
+
+                  접근성 이름은 보이는 글자가 진다. svg 는 aria-hidden 이라
+                  이름에 보태지 않고, aria-label 도 두지 않는다 — 두면
+                  보이는 글자와 읽히는 이름이 갈라진다. */}
               <div className="mt-5 flex flex-wrap gap-3">
                 {MAP_APPS.map((m) => (
                   <a
@@ -208,9 +241,17 @@ export default function LocationPage() {
                     href={m.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 rounded-lg border border-line bg-white px-5 py-3 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand"
+                    title={`${m.label}에서 보기`}
+                    className="group inline-flex items-center gap-2 rounded-lg border border-line bg-white py-3 pl-3 pr-5 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand"
                   >
-                    {m.label}에서 보기
+                    {/* 칩 색은 호버에 흔들리지 않는다 — 브랜드 마크라
+                        사이트 색으로 물들면 못 알아본다. */}
+                    <span
+                      className={`flex size-6 shrink-0 items-center justify-center rounded-full ${m.chip}`}
+                    >
+                      <m.Icon className={`shrink-0 ${m.mark}`} />
+                    </span>
+                    {m.label}
                     <svg
                       width="13"
                       height="13"
