@@ -230,20 +230,20 @@ export default function Home() {
             />
           </Reveal>
           <Reveal delay={120}>
-            {/* 첫 문단이 정의, 둘째가 회사 이야기다. 첫 문단만 ink +
-                semibold 로 올려 읽는 차례를 만든다.
+            {/* 정의 한 줄 + 박스 셋이 이 칸의 전부다.
 
-                한때 크기로만 포인트를 줬고(20px, 회사 개요 인사말과 같은 쌍)
-                그 뒤에는 포인트를 아래 박스 셋에 넘기고 둘 다 본문 톤으로
-                되돌렸는데, 그러니 이번엔 두 문단이 밋밋했다. 크기 대신
-                굵기다 — 크기를 더 키우면 바로 아래 박스와 다툰다. */}
+                한때 뒤에 문단이 하나 더 있었다("유신 F.A 시스템은 이 피더를
+                34년째 만들어 왔습니다…"). 회사 이야기는 바로 아래 "회사소개
+                자세히 보기" 가 맡는 자리라 걷었다.
+
+                포인트는 굵기로 준다. 크기로만 줬던 때도(20px) 있었고 둘 다
+                본문 톤으로 되돌렸던 때도 있었는데, 크기를 더 키우면 바로 아래
+                박스와 다툰다.
+
+                ⚠️ 이 문단은 1024 이상에서 한 줄이다 — products.ts 의
+                   feederDefinition.body 길이가 거기 맞춰져 있다. */}
             <p className="text-[17px] font-semibold leading-relaxed text-ink sm:text-lg">
               {feederDefinition.body}
-            </p>
-            <p className="mt-4 text-base leading-[1.9] text-ink-soft">
-              유신 F.A 시스템은 이 피더를 {yearsInBusiness}년째 만들어 왔습니다.
-              볼 형상 설계부터 가공·조립, 진동 튜닝, 현장 설치까지 한 공장에서
-              끝냅니다.
             </p>
             {/* 피더가 해 주는 일 셋. 한 문장이던 것을 쪼갠 것이라 위 본문과
                 내용이 겹치지 않는다(products.ts 주석 참고).
@@ -342,15 +342,31 @@ export default function Home() {
                 </span>
                 <h3 className="text-base font-bold text-ink">{p.title}</h3>
               </div>
-              {/* 본문을 회색 박스에 앉힌다. 피더 섹션의 박스 셋과 같은 언어다.
+              {/* 회색 박스 안에 점 목록 셋. 피더 섹션의 박스 셋과 같은
+                  읽기 방식이다 — 다만 칸이 좁아 점을 한 치수 작게 둔다.
 
-                  ⚠️ 박스 패딩(좌우 32px)만큼 글상자가 좁아져 줄 수가 바뀐다.
-                     company.ts 의 process 네 body 는 폭마다 줄 수가 서로
-                     같아지도록 길이를 맞춰 둔 것이라, 패딩이나 글자 크기를
-                     건드리면 거기서 다시 맞춰야 한다. */}
-              <p className="mt-4 rounded-xl bg-surface px-4 py-3 text-sm leading-relaxed text-ink-soft">
-                {p.body}
-              </p>
+                  한때 박스 안이 긴 문장 하나였는데, 글상자가 좁아 3~4줄로
+                  눌려 읽혔다. 지금은 단계마다 할 일 셋이 한 줄씩 선다.
+
+                  ol > li 안의 ul 이다 — 단계 목록 안의 세부 목록이라 의미가
+                  맞는다. 점은 장식이라 aria-hidden 이고, 목록이라는 사실은
+                  ul/li 가 전한다.
+
+                  ⚠️ 항목 길이는 company.ts 의 process 주석을 따른다(1024 에서
+                     글 폭 114px, 한 줄). */}
+              <ul className="mt-4 flex flex-col gap-2 rounded-xl bg-surface px-4 py-3.5">
+                {p.points.map((point) => (
+                  <li key={point} className="flex items-center gap-2">
+                    <span
+                      aria-hidden="true"
+                      className="h-1 w-1 shrink-0 rounded-full bg-brand"
+                    />
+                    <span className="text-[13px] leading-snug text-ink-soft">
+                      {point}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </Reveal>
           ))}
         </ol>
