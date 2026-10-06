@@ -163,32 +163,39 @@ export default async function ProductDetailPage({
                   dt/dd 는 dl 직계여야 한다(접근성 검사 dlitem). 묶는 div 대신
                   Fragment 를 쓴다 — 아래 사양 표와 같은 이유다. */}
               <div className="mt-6 lg:mt-auto">
-                {/* 아래 "제작 사양" 표와 같은 짜임이다 — gap-px + bg-line 격자선,
-                    dt bg-surface / dd bg-white, 테두리 + 둥근 모서리 +
-                    overflow-hidden.
+                {/* 홈 "부품 자동정렬 공급기" 섹션의 박스 셋과 같은 언어다 —
+                    bg-surface 박스 + 레드 점 + 굵은 라벨. 히어로가 흰 바탕이라
+                    회색 박스가 또렷하다.
 
-                    전에는 회색 카드 안에 border-t 만 둔 표였는데, 셀 좌우 패딩이
-                    0 이고 카드의 px-5 가 대신하는 구조라 선이 안쪽 20px 에서
-                    시작해 20px 전에 끝났다. 아래 표는 선이 테두리까지 닿는다 —
-                    그 차이 때문에 히어로 쪽만 표 같기도 하고 아닌 것 같기도
-                    했다. 테두리를 표 자신이 가지게 하면서 왼쪽 갤러리 이미지
-                    박스와도 좌우 끝.테두리색.모서리가 같아진다.
+                    한때 아래 "제작 사양" 표와 같은 격자 표였다(gap-px +
+                    bg-line 격자선, dt bg-surface / dd bg-white). 사양이 세
+                    줄뿐인 자리에 표의 틀까지 두니 무거웠다. 아래 표는 값이
+                    21개라 격자가 맞고, 여기는 박스 셋이 맞다.
 
-                    크기만 아래 표보다 작다. 라벨 칸 6rem(아래는 9rem), 글자
-                    12/13px(14px), 패딩 px-4(px-5). 6rem 은 글상자 64px 로,
-                    가장 긴 라벨("거칠기 등급", 12px bold 약 58px)이 든다.
+                    dl/dt/dd 와 Fragment 는 그대로다 — 사양은 "용어-정의" 이고,
+                    dt.dd 는 dl 직계여야 접근성 검사(dlitem)를 통과한다. 한 행이
+                    하나의 박스로 보이게 dt 가 왼쪽 모서리를, dd 가 오른쪽
+                    모서리를 나눠 가진다.
 
-                    높이는 행 52px x 3 + 격자선 2 = 158px 다. 라벨을 걷으면서
-                    블록이 186 -> 158px 가 되어 1280 이상에서 오른쪽 칸이
-                    갤러리보다 그만큼 짧아진다 — 둘 다 같은 Container 안이라
-                    아래쪽 여백만 조금 생기고 어긋나 보이지는 않는다. */}
-                <dl className="grid grid-cols-[6rem_minmax(0,1fr)] gap-px overflow-hidden rounded-2xl bg-line">
+                    ⚠️ 값 셋은 1024 이상에서 모두 한 줄이다(가장 긴 것이
+                       "스테인리스, 알루미늄 (부품 특성에 따라 선정)"). 라벨이
+                       같은 줄에 서면서 값 칸이 그만큼 좁아지므로, 사양 글을
+                       늘릴 때 1024 에서 다시 재야 한다.
+
+                    높이는 147px 다(행 47 x 3 + 간격 8 x 2). 격자 표이던 때
+                    161px 에서 줄었는데, 이 칸이 lg:mt-auto 로 아래 정렬이라
+                    표 바닥과 갤러리 사진 바닥의 줄 맞춤은 그대로다. */}
+                <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-y-2">
                   {product.specs.slice(0, 3).map((spec) => (
                     <Fragment key={spec.label}>
-                      <dt className="bg-surface px-4 py-4 text-xs font-bold text-ink">
+                      <dt className="flex items-center gap-2.5 whitespace-nowrap rounded-l-xl bg-surface py-3 pl-4 pr-2 text-[13px] font-bold text-ink">
+                        <span
+                          aria-hidden="true"
+                          className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+                        />
                         {spec.label}
                       </dt>
-                      <dd className="bg-white px-4 py-4 text-[13px] leading-relaxed text-ink-soft">
+                      <dd className="flex items-center rounded-r-xl bg-surface py-3 pr-4 text-[13px] leading-snug text-ink-soft">
                         {spec.value}
                       </dd>
                     </Fragment>

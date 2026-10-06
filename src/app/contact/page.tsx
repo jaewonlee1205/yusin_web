@@ -65,9 +65,6 @@ export default function ContactPage() {
                 <h2 className="text-sm font-bold tracking-[0.08em] text-ink">
                   바로 연락하기
                 </h2>
-                <p className="mt-3 text-sm leading-relaxed text-ink-soft">
-                  급한 건이라면 전화가 가장 빠릅니다.
-                </p>
                 {/* 네이비로 꽉 채웠던 버튼을 흰 바탕으로 낮췄다. 폼의
                     "문의 보내기" 와 둘 다 진하면 화면에서 둘이 겨룬다 —
                     진한 주 버튼은 하나여야 한다. */}
@@ -77,9 +74,12 @@ export default function ContactPage() {
                 >
                   {site.tel}
                 </a>
+                {/* 이메일도 박스다. 맨 글자로 두니 바로 위 전화 버튼과 짝이
+                    안 맞았다. 다만 한 치수 낮춘다 — 전화 h-14 / 16px bold,
+                    여기 h-12 / 14px semibold. 진한 주 동선은 전화 하나다. */}
                 <a
                   href={`mailto:${site.email}`}
-                  className="mt-2 block rounded-xl py-2.5 text-center text-sm font-semibold text-ink-soft transition-colors hover:text-brand"
+                  className="mt-2 flex h-12 items-center justify-center rounded-xl border border-line bg-white text-sm font-semibold text-ink-soft transition-colors hover:border-navy/40 hover:text-brand"
                 >
                   {site.email}
                 </a>
