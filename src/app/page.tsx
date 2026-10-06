@@ -238,7 +238,33 @@ export default function Home() {
           지금은 윗변이 맞고 아래만 영상이 17px 먼저 끝난다. 시작점이 어긋나는
           것보다 끝점이 어긋나는 쪽이 훨씬 덜 보인다. 1024 미만은 1열이라 뜻이
           없으므로 lg 부터다. */}
-      <Section eyebrow="ABOUT US" title="피더를 만드는 데 필요한 것">
+      <Section
+        eyebrow="ABOUT US"
+        title="피더를 만드는 데 필요한 것"
+        action={
+          /* PRODUCTS.PROCESS.VIDEO.CLIENTS 와 같은 자리.같은 꼴이다.
+             박스 아래에 있던 것을 제목 줄로 올렸다 — 오른쪽 칸이 박스만
+             남아 영상 높이와 거의 같아진다. */
+          <Link href="/company" className={BTN}>
+            회사소개 자세히 보기
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className="shrink-0 transition-transform group-hover:translate-x-1"
+            >
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </Link>
+        }
+      >
         <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-start lg:gap-16">
           {/* 정지 사진이던 자리다. 피더가 무엇인지는 "부품이 돌다가 한 줄로
               서서 나간다" 는 움직임 자체라, 멈춘 사진으로는 절반만 전해졌다.
@@ -306,27 +332,6 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-            {/* 밑줄 링크였다. 오시는 길의 지도앱 버튼.영상자료의 "영상 더 보기"
-                와 같은 모양으로 맞춘다 — 사이트에 이미 있는 언어라 새 모양을
-                더하지 않는다. */}
-            <Link href="/company" className={`mt-7 ${BTN}`}>
-              회사소개 자세히 보기
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-                className="shrink-0 transition-transform group-hover:translate-x-1"
-              >
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
-            </Link>
           </Reveal>
         </div>
       </Section>

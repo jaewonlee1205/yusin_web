@@ -361,7 +361,7 @@ export default async function ProductDetailPage({
                 <path d="M12 16v-4M12 8h.01" />
               </svg>
               <p className="text-[13px] leading-relaxed text-ink-soft">
-                <b className="font-bold text-ink">예시 규격</b> — 실제 값은
+                <b className="font-bold text-ink">예시 규격</b> : 실제 값은
                 공급할 부품에 따라 산출합니다. {product.specTable.caption}
               </p>
             </div>
@@ -444,10 +444,20 @@ export default async function ProductDetailPage({
           <dl className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-[9rem_minmax(0,1fr)]">
             {product.specs.slice(3).map((spec) => (
               <Fragment key={spec.label}>
-                <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink">
+                {/* 패딩이 px-4 py-3 인 것은 위 예시 규격표와 맞추기 위해서다.
+                    한때 px-5 py-4 라 행 높이가 55px 였는데(위 표는 44px),
+                    그 11px 차이에 라벨 열의 회색 띠가 더해져 표가 두껍고
+                    가로선도 굵어 보였다. 선 자체는 전부터 1px 로 같았다.
+
+                    dd 에서 leading-relaxed 도 걷었다. 패딩만 맞췄더니 47px 로
+                    3px 가 남았는데, 줄높이가 1.625(22.75px)라 위 표의 기본
+                    1.25rem(20px)보다 높았던 탓이다. 지금 값은 모두 한 줄이라
+                    넉넉한 줄높이가 필요 없다 — 두 줄짜리 값이 생기면 그때
+                    되살리고 위 표와 높이가 갈리는 것을 받아들인다. */}
+                <dt className="bg-surface px-4 py-3 text-sm font-bold text-ink">
                   {spec.label}
                 </dt>
-                <dd className="bg-white px-5 py-4 text-sm leading-relaxed text-ink-soft">
+                <dd className="bg-white px-4 py-3 text-sm text-ink-soft">
                   {spec.value}
                 </dd>
               </Fragment>

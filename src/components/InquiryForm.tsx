@@ -196,7 +196,9 @@ export default function InquiryForm() {
 
       <fieldset>
         <legend className={label}>문의 분야</legend>
-        <div className="flex flex-wrap gap-2">
+        {/* 세로만 12px 로 벌린다. 가로.세로가 모두 8px 일 때 줄 사이가
+            붙어 답답했는데, 가로까지 벌리면 칩 묶음이 흩어진다. */}
+        <div className="flex flex-wrap gap-x-2 gap-y-3">
           {TOPICS.map((t, i) => (
             <label key={t}>
               <input
