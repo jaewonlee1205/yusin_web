@@ -20,16 +20,19 @@ import Reveal from "./Reveal";
  * 어긋난다. 셋으로 끊으면 어느 폭에서도 이름 한 줄, 설명 두 줄이다.
  *
  * 분야 수는 제품마다 다르다(볼피더 5 · 진동기.컨트롤러.우레탄 3 ·
- * 직진피더.호퍼피더.방음커버 2). 격자로 3열을 고정하면 둘짜리는 한 칸이,
- * 다섯짜리는 마지막 줄 오른쪽이 구멍으로 남는다. 그래서 격자 대신 flex-wrap
- * 을 쓰고 칸 폭을 basis 로 준다 — 모자란 마지막 줄은 justify-center 가
- * 가운데로 모으고, 꽉 찬 줄은 가운데 정렬의 영향을 받지 않는다.
+ * 직진피더.호퍼피더.방음커버 2). 격자로 3열을 고정하면 칸이 모자라도 자리가
+ * 남아 구멍이 생긴다. 그래서 격자 대신 flex-wrap 을 쓰고 칸 폭을 basis 로
+ * 준다 — 모자란 줄은 자리를 차지하지 않고 그냥 끝난다.
+ *
+ * 왼쪽 정렬이다(flex 기본값). 한때 justify-center 로 모자란 줄을 가운데
+ * 모았는데, 첫 카드가 184px 안으로 들어가 "적용 분야" 제목.제작 사양 표와
+ * 선이 어긋났다. 왼쪽에 세우면 그 셋이 한 선에 선다.
  *
  * ⚠️ 칸 폭은 개수와 무관하다. 한동안 "둘 이하면 lg 에서도 2열" 로 두었는데,
  *    그러면 카드가 칸을 꽉 채워 호퍼피더.방음커버의 사진이 536x302 가 됐다 —
  *    셋 이상인 제품의 352x198 보다 면적이 2.3배다. 같은 자리의 같은 성격
  *    사진이 제품에 따라 갈리면 안 되고, 바로 위에 적은 "제품 사진보다 커서는
- *    안 된다" 는 기준도 깨진다. 분야가 둘이어도 352px 두 장을 가운데 둔다.
+ *    안 된다" 는 기준도 깨진다. 분야가 둘이어도 352px 두 장을 왼쪽에 둔다.
  *
  *   폭      열   Container   카드   사진
  *   320     1       265      265   263x148
@@ -56,7 +59,7 @@ export default function ApplicationCases({
   cases: ApplicationCase[];
 }) {
   return (
-    <ul className="mt-4 flex flex-wrap justify-center gap-4">
+    <ul className="mt-4 flex flex-wrap gap-4">
       {cases.map((c, i) => (
         <Reveal as="li" key={c.name} delay={i * 70} className={BASIS}>
           <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-card">
