@@ -22,10 +22,17 @@ import VideoEmbed from "./VideoEmbed";
  * 한 줄, 좁은 화면에서는 두 줄이 되는데(글상자가 486px 와 223px 로 두 배
  * 차이다) 그래도 한 행 안에서 아랫변이 가지런하다.
  */
-export default function VideoCard({ video }: { video: Video }) {
+export default function VideoCard({
+  video,
+  /** 화면에 들어오면 소리 없이 자동으로 돌린다. 홈에서만 켠다 — VideoEmbed 참고 */
+  preview = false,
+}: {
+  video: Video;
+  preview?: boolean;
+}) {
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-card">
-      <VideoEmbed video={video} />
+      <VideoEmbed video={video} preview={preview} />
 
       <div className="flex flex-1 flex-col border-t border-line p-5">
         <p className="text-[15px] font-bold leading-snug text-ink">

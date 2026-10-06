@@ -238,11 +238,14 @@ export default function Home() {
           보기" 는 결이 안 맞고, "제품 전체 보기" 는 바로 아래 PRODUCTS 섹션
           버튼과 겹친다. /company 동선은 헤더.푸터 메뉴에 있다. 대신 lead
           한 줄이 제목을 받는다. */}
-      <Section
-        eyebrow="PERFORMANCE"
-        title="한 자세로, 멈추지 않고"
-        lead="부품을 같은 자세로 가려 세워, 라인이 멈추지 않게 합니다."
-      >
+      {/* 제목이 제품의 동작을 그대로 말한다. 한때 "한 자세로, 멈추지
+          않고" 에 "부품을 같은 자세로 가려 세워, 라인이 멈추지 않게 합니다"
+          라는 리드가 붙어 있었는데, 둘이 같은 말이라 리드를 걷고 제목만
+          남겼다. 아래가 바로 영상이라 설명 줄이 더 필요하지 않다.
+
+          후보 다섯을 글상자에 그려 폭마다 쟀다 — 320 에서 2줄, 390 이상
+          한 줄이다. */}
+      <Section eyebrow="PERFORMANCE" title="쏟아 넣으면 한 줄로 나옵니다">
         {/* 정지 사진이던 자리다. 피더가 무엇인지는 "부품이 돌다가 한 줄로
             서서 나간다" 는 움직임 자체라, 멈춘 사진으로는 절반만 전해졌다.
 
@@ -302,15 +305,23 @@ export default function Home() {
             시원함이 줄고, 맨 글자는 흰 바탕에서 네 덩어리가 흩어져 보인다.
             1열.2열에서는 선이 뜻을 잃으므로 lg 부터만 긋는다.
 
+            lg 부터 가운데 정렬이다. 왼쪽 정렬일 때 네 덩어리가 각 칸의 왼쪽에
+            붙어, 전체 폭으로 선 영상과 축이 어긋나 보였다. 1열.2열에서는
+            왼쪽을 지킨다 — 좁은 폭에서 가운데로 모으면 글이 떠 보인다.
+
+            ⚠️ lg:pl-7 을 두지 말 것. 구분선과 글을 띄우려고 넣었던 것인데,
+               가운데 정렬에서는 왼쪽 패딩만 있으면 글 덩어리가 오른쪽으로
+               밀린다. 칸 사이는 lg:gap-7 이 벌린다.
+
             ⚠️ StatCounter 를 쓰지 않는다. 바로 위 히어로 지표 띠가 이미 세어
                올리고 있어, 한 화면에서 숫자가 두 번 구르면 산만하다. */}
-        <ul className="mt-10 grid gap-8 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4 lg:gap-7">
+        <ul className="mt-10 grid gap-8 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4 lg:gap-7 lg:text-center">
           {performanceKpis.map((kpi, i) => (
             <Reveal
               as="li"
               key={kpi.label}
               delay={i * 80}
-              className={i > 0 ? "lg:border-l lg:border-line lg:pl-7" : ""}
+              className={i > 0 ? "lg:border-l lg:border-line" : ""}
             >
               <p className="text-[34px] font-extrabold leading-none tracking-tight tabular-nums text-ink">
                 {kpi.value}
@@ -542,7 +553,10 @@ export default function Home() {
           <ul className="grid gap-6 sm:grid-cols-2 sm:gap-8">
             {featuredVideos.map((v, i) => (
               <Reveal as="li" key={v.id} delay={i * 70}>
-                <VideoCard video={v} />
+                {/* preview — 화면에 들어오면 소리 없이 자동으로 돈다.
+                    /videos 쪽은 이 prop 을 주지 않아 지금처럼 버튼을 눌러야
+                    재생된다. */}
+                <VideoCard video={v} preview />
               </Reveal>
             ))}
           </ul>
