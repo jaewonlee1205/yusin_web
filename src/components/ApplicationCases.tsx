@@ -20,11 +20,16 @@ import Reveal from "./Reveal";
  * 어긋난다. 셋으로 끊으면 어느 폭에서도 이름 한 줄, 설명 두 줄이다.
  *
  * 분야 수는 제품마다 다르다(볼피더 5 · 진동기.컨트롤러.우레탄 3 ·
- * 직진피더.호퍼피더.방음커버 2). 3열에 고정하면 둘짜리는 한 칸이, 다섯짜리는
- * 마지막 줄 오른쪽이 352x326 짜리 구멍으로 남는다. 그래서 격자 대신
- * flex-wrap 을 쓰고 칸 폭을 basis 로 준다 — 둘 이하면 lg 에서도 2열에서
- * 멈추고, 모자란 마지막 줄은 justify-center 가 가운데로 모은다. 꽉 찬 줄은
- * 가운데 정렬의 영향을 받지 않는다.
+ * 직진피더.호퍼피더.방음커버 2). 격자로 3열을 고정하면 둘짜리는 한 칸이,
+ * 다섯짜리는 마지막 줄 오른쪽이 구멍으로 남는다. 그래서 격자 대신 flex-wrap
+ * 을 쓰고 칸 폭을 basis 로 준다 — 모자란 마지막 줄은 justify-center 가
+ * 가운데로 모으고, 꽉 찬 줄은 가운데 정렬의 영향을 받지 않는다.
+ *
+ * ⚠️ 칸 폭은 개수와 무관하다. 한동안 "둘 이하면 lg 에서도 2열" 로 두었는데,
+ *    그러면 카드가 칸을 꽉 채워 호퍼피더.방음커버의 사진이 536x302 가 됐다 —
+ *    셋 이상인 제품의 352x198 보다 면적이 2.3배다. 같은 자리의 같은 성격
+ *    사진이 제품에 따라 갈리면 안 되고, 바로 위에 적은 "제품 사진보다 커서는
+ *    안 된다" 는 기준도 깨진다. 분야가 둘이어도 352px 두 장을 가운데 둔다.
  *
  *   폭      열   Container   카드   사진
  *   320     1       265      265   263x148
@@ -40,22 +45,20 @@ import Reveal from "./Reveal";
  * 링크가 아니다. 분야는 눌러서 갈 곳이 없다 — 카드 모양만 빌려 왔고 호버
  * 효과도 두지 않는다.
  */
+/* 칸 폭. gap-4(1rem) 기준이라 2열은 간격 하나, 3열은 둘을 빼면 폭이 정확히
+   맞아떨어진다. 개수에 기대지 않는 값이라 밖에 둔다. */
+const BASIS =
+  "basis-full sm:basis-[calc((100%-1rem)/2)] lg:basis-[calc((100%-2rem)/3)]";
+
 export default function ApplicationCases({
   cases,
 }: {
   cases: ApplicationCase[];
 }) {
-  /* gap-4(1rem) 기준이다. 2열은 간격이 하나, 3열은 둘이라 그만큼 빼면
-     폭이 정확히 맞아떨어진다. */
-  const basis =
-    cases.length <= 2
-      ? "basis-full sm:basis-[calc((100%-1rem)/2)]"
-      : "basis-full sm:basis-[calc((100%-1rem)/2)] lg:basis-[calc((100%-2rem)/3)]";
-
   return (
     <ul className="mt-4 flex flex-wrap justify-center gap-4">
       {cases.map((c, i) => (
-        <Reveal as="li" key={c.name} delay={i * 70} className={basis}>
+        <Reveal as="li" key={c.name} delay={i * 70} className={BASIS}>
           <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-card">
             <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface">
               <Image
