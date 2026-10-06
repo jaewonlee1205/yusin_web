@@ -215,7 +215,12 @@ export default function Home() {
       {/* 3. 피더란 / 회사 개요 요약 */}
       <Section eyebrow="WHAT IS THE FEEDER" title={feederDefinition.title}>
         <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-          <Reveal className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface">
+          {/* lg 부터 비율 고정을 푼다. 오른쪽 칸이 박스 셋만큼 길어지는데
+              사진이 4/3 에 묶여 있으면 혼자 짧아 보인다. grid 의 기본
+              align-items:stretch 가 행 높이만큼 늘려 주고, Image 가 fill +
+              object-cover 라 늘어난 칸을 그대로 채운다. 1024 미만은 1열이라
+              사진이 혼자 서므로 4/3 을 그대로 둔다. */}
+          <Reveal className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface lg:aspect-auto lg:h-full">
             <Image
               src="/images/products/bowl-feeder-01.webp"
               alt="구리 부품을 정렬해 배출하고 있는 볼피더"
@@ -225,23 +230,41 @@ export default function Home() {
             />
           </Reveal>
           <Reveal delay={120}>
-            {/* 회사 개요 인사말과 같은 쌍이다 — 첫 문단만 키우고(20px, ink)
-                둘째를 낮춘다(16px, ink-soft). 전에는 둘 다 text-base sm:text-lg
-                text-ink-soft 로 같은 크기.같은 색이어서, 둘 중 어디가 머리인지
-                알 수 없었다.
-
-                ⚠️ 두 문단의 글 길이는 1024 이상에서 3줄 + 2줄로 떨어지도록
-                   맞춰 둔 것이다. 첫 문단은 products.ts 의 feederDefinition.body
-                   이고, 둘째는 여기 하드코딩이다. 어느 쪽이든 한 구절 더하면
-                   줄이 늘어나므로 고칠 때 폭마다 다시 재야 한다. */}
-            <p className="text-lg leading-[1.85] text-ink sm:text-xl">
+            {/* 한때 첫 문단만 20px 로 키워 포인트를 줬다(회사 개요 인사말과
+                같은 쌍). 글자 크기만으로는 "글만 있는 칸" 이라는 인상이 바뀌지
+                않아, 포인트를 아래 박스 셋에 넘기고 두 문단은 본문 톤으로
+                되돌렸다. */}
+            <p className="text-base leading-relaxed text-ink-soft sm:text-lg">
               {feederDefinition.body}
             </p>
-            <p className="mt-5 text-base leading-[1.9] text-ink-soft">
+            <p className="mt-4 text-base leading-[1.9] text-ink-soft">
               유신 F.A 시스템은 이 피더를 {yearsInBusiness}년째 만들어 왔습니다.
               볼 형상 설계부터 가공·조립, 진동 튜닝, 현장 설치까지 한 공장에서
               끝냅니다.
             </p>
+            {/* 피더가 해 주는 일 셋. 한 문장이던 것을 쪼갠 것이라 위 본문과
+                내용이 겹치지 않는다(products.ts 주석 참고).
+
+                bg-surface + 레드 점은 제품 상세의 적용 분야 칩과 같은 꼴이다 —
+                사이트에 이미 있는 언어라 새 모양을 더하지 않는다. 섹션이 흰
+                바탕이라 흰 카드는 묻히고, 회색 박스가 또렷하다. */}
+            <ul className="mt-6 space-y-2">
+              {feederDefinition.points.map((point) => (
+                <li
+                  key={point.label}
+                  className="flex items-center gap-3 rounded-xl bg-surface px-4 py-3.5"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+                  />
+                  <p className="text-sm leading-snug text-ink-soft">
+                    <b className="font-bold text-ink">{point.label}</b>
+                    &nbsp;&nbsp;{point.body}
+                  </p>
+                </li>
+              ))}
+            </ul>
             {/* 밑줄 링크였다. 오시는 길의 지도앱 버튼.영상자료의 "영상 더 보기"
                 와 같은 모양으로 맞춘다 — 사이트에 이미 있는 언어라 새 모양을
                 더하지 않는다. */}
