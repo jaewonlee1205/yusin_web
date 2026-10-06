@@ -76,8 +76,9 @@ export default function ContactPage() {
                     글을 새로 짓지 않는다 — 같은 과정을 두 자리에서 다르게
                     말하면 어느 쪽이 맞는지 알 수 없게 된다.
 
-                    홈은 가로 넉 장 카드고 여기는 세로 넉 줄이다. 칸이 379px
-                    라 카드를 눕힐 자리가 없다. */}
+                    홈은 가로 넉 장 카드라 points(항목 셋)를 세우고, 여기는
+                    세로 넉 줄이라 summary(한 줄)를 쓴다. 같은 데이터의 두
+                    길이다. 칸이 379px 라 카드를 눕힐 자리가 없다. */}
                 <ol className="mt-5 flex flex-col gap-5">
                   {process.map((p, i) => (
                     <li key={p.step} className="flex gap-3">
@@ -97,19 +98,16 @@ export default function ContactPage() {
                       </span>
                       <div className="min-w-0">
                         <p className="text-sm font-bold text-ink">{p.title}</p>
-                        <ul className="mt-1.5 flex flex-col gap-1">
-                          {p.points.map((point) => (
-                            <li key={point} className="flex items-center gap-2">
-                              <span
-                                aria-hidden="true"
-                                className="h-1 w-1 shrink-0 rounded-full bg-muted/50"
-                              />
-                              <span className="text-[13px] leading-snug text-ink-soft">
-                                {point}
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
+                        {/* points 가 아니라 summary 다. 한때 여기 점 목록이
+                            셋이라 한 단계가 네 줄을 차지했다 — 글 칸이 390
+                            에서 287px, 1024 에서 319px 뿐이라 좁다.
+
+                            ⚠️ 네 문장이 폭마다 같은 줄 수여야 한다. 글을
+                               고치려면 company.ts 의 summary 주석을 먼저
+                               볼 것. */}
+                        <p className="mt-1 text-[13px] leading-relaxed text-ink-soft">
+                          {p.summary}
+                        </p>
                       </div>
                     </li>
                   ))}
