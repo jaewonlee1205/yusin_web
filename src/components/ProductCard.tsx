@@ -31,11 +31,12 @@ export default function ProductCard({ product }: { product: Product }) {
   return (
     <Link
       href={`/products/${product.slug}`}
-      /* 쉴 때도 그림자를 얕게 깐다. 카드가 놓이는 바닥(bg-surface #f6f7f9)과
-         카드(#ffffff)의 대비가 1.04 밖에 안 돼, 테두리만으로는 카드가 판에서
-         떠 보이지 않는다. 포커스 링은 globals.css 가 a·button 전부에
-         brand 색으로 이미 걸어 둔다 — 여기서 또 주지 않는다. */
-      className="group flex flex-col overflow-hidden rounded-lg border border-line bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand/30 hover:shadow-xl"
+      /* 이제 그림자가 카드의 유일한 윤곽이다. 카드가 놓이는 바닥
+         (bg-surface #f6f7f9)과 카드(#ffffff)의 대비가 1.04 밖에 안 되는데
+         테두리까지 걷었으므로, shadow-card 가 빠지면 카드가 판에 녹는다.
+         포커스 링은 globals.css 가 a·button 전부에 brand 색으로 이미 걸어
+         둔다 — 여기서 또 주지 않는다. */
+      className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-white">
         <Image
@@ -95,7 +96,7 @@ export default function ProductCard({ product }: { product: Product }) {
       </div>
 
       <div className="flex flex-1 flex-col border-t border-line p-5 sm:p-6">
-        <p className="text-xs font-bold tracking-[0.15em] text-brand">
+        <p className="text-xs font-bold tracking-[0.08em] text-brand">
           {product.category}
         </p>
         <h3 className="mt-2 text-lg font-bold text-ink transition-colors duration-300 group-hover:text-brand">

@@ -43,7 +43,7 @@ export default function ApplicationCases({
     <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {cases.map((c, i) => (
         <Reveal as="li" key={c.name} delay={i * 70}>
-          <div className="flex h-full flex-col overflow-hidden rounded-lg border border-line bg-white">
+          <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-card">
             <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface">
               <Image
                 src={c.src}

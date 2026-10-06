@@ -26,6 +26,14 @@
      칸이 구분된다. 테두리 없는 입력칸에서 이 색이 곧 칸의 윤곽이다. */
   --color-field: #f2f4f6;
 
+  /* 카드 그림자. 테두리를 대신한다.
+
+     두 겹이다 — 1px 짜리가 카드 가장자리를 세우고, 24px 짜리가 바닥에서
+     띄운다. 흰 카드(#fff)는 흰 바탕에서도, 회색 판(#f6f7f9) 위에서도
+     대비가 1.04 밖에 안 돼 윤곽이 그림자에만 걸려 있다. */
+  --shadow-card:
+    0 1px 3px rgba(26, 29, 35, 0.04), 0 8px 24px rgba(26, 29, 35, 0.06);
+
   --font-sans: var(--font-noto-sans-kr), "Malgun Gothic", system-ui, sans-serif;
 }
 

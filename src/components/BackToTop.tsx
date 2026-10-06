@@ -34,7 +34,7 @@ export default function BackToTop() {
       aria-label="맨 위로"
       aria-hidden={!shown}
       tabIndex={shown ? 0 : -1}
-      className={`fixed bottom-5 right-5 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-navy text-white shadow-lg transition-all duration-300 hover:bg-navy-deep sm:bottom-7 sm:right-7 ${
+      className={`fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-white text-ink shadow-card ring-1 ring-ink/5 transition-all duration-300 hover:bg-surface sm:bottom-7 sm:right-7 ${
         shown ? "opacity-100" : "pointer-events-none translate-y-2 opacity-0"
       }`}
     >

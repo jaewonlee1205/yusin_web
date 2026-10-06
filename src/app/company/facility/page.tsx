@@ -76,7 +76,7 @@ export default function FacilityPage() {
               <Reveal
                 key={group.key}
                 delay={i * 80}
-                className="rounded-lg border border-line p-6 sm:p-7"
+                className="rounded-2xl bg-white p-6 shadow-card sm:p-7"
               >
                 {/* 아래 품목 행과 같은 틀(이름 왼쪽 / 수 오른쪽)이라 그룹 합계가
                     품목 대수와 한 열로 선다. 합계를 품목보다 약하게 둔다 —
@@ -113,7 +113,7 @@ export default function FacilityPage() {
                   {items.map((item) => (
                     <li
                       key={item.name}
-                      className="inline-flex items-baseline gap-2 rounded bg-surface px-3 py-1.5"
+                      className="inline-flex items-baseline gap-2 rounded-lg bg-surface px-3 py-1.5"
                     >
                       <span className="text-sm text-ink-soft">{item.name}</span>
                       <span className="shrink-0 text-sm tabular-nums text-navy">

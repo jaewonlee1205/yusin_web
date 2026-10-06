@@ -32,7 +32,7 @@ export default function ProductGallery({
 
   return (
     <div>
-      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-line bg-white">
+      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-white shadow-card">
         <Image
           src={cover.src}
           alt={cover.alt}
@@ -58,7 +58,7 @@ export default function ProductGallery({
                   aria-label={`사진 ${i + 1} 보기`}
                   aria-current={on ? "true" : undefined}
                   onClick={() => setPicked(i)}
-                  className={`relative block aspect-[4/3] w-24 overflow-hidden rounded border bg-white transition-colors ${
+                  className={`relative block aspect-[4/3] w-24 overflow-hidden rounded-lg border bg-white transition-colors ${
                     on ? "border-navy" : "border-line hover:border-navy/40"
                   }`}
                 >

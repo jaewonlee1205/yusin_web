@@ -77,9 +77,9 @@ export default function ProductBrowser() {
             영문을 또 쓰지 않는다. */}
         <nav
           aria-label="제품 분류"
-          className="overflow-hidden rounded-lg border border-line bg-white"
+          className="overflow-hidden rounded-2xl bg-white shadow-card"
         >
-          <p className="bg-navy px-5 py-3.5 text-xs font-bold tracking-[0.2em] text-white">
+          <p className="bg-navy px-5 py-3.5 text-xs font-bold tracking-[0.08em] text-white">
             제품 분류
           </p>
           <ul className="border-t border-line">
@@ -131,7 +131,7 @@ export default function ProductBrowser() {
 
             문구는 배너 lead·ContactCTA·/contact lead 와 글자가 겹치지 않게
             새로 썼다. 같은 말을 두 번 읽게 하지 않는다. */}
-        <div className="mt-4 rounded-lg border border-line bg-white p-5 shadow-sm">
+        <div className="mt-4 rounded-2xl bg-white p-5 shadow-card">
           <p className="text-sm font-bold leading-relaxed text-ink">
             목록에 없는 부품인가요?
           </p>

@@ -65,7 +65,7 @@ export default function CompanyPage() {
       */}
       <Section>
         <Reveal className="mb-3">
-          <p className="text-xs font-bold tracking-[0.2em] text-brand">ABOUT</p>
+          <p className="text-xs font-bold tracking-[0.08em] text-brand">ABOUT</p>
         </Reveal>
         {/* items-start 를 쓰지 않는다. 그리드 기본값(stretch)이라야 패널이 칸
             높이를 채워 아랫변까지 본문 끝과 맞는다. 윗변은 행이 제목에서
@@ -142,7 +142,7 @@ export default function CompanyPage() {
                 합성 볼드를 그려 붓획이 뭉갠다. */}
             <span
               aria-hidden="true"
-              className={`${nanumBrush.className} sign-ink text-4xl leading-none tracking-[0.2em] text-ink sm:text-5xl`}
+              className={`${nanumBrush.className} sign-ink text-4xl leading-none tracking-[0.08em] text-ink sm:text-5xl`}
             >
               {site.ceo}
             </span>
@@ -154,9 +154,9 @@ export default function CompanyPage() {
           <Reveal
             as="aside"
             delay={80}
-            className="rounded-lg bg-navy-deep p-7 sm:p-8 lg:col-start-2 lg:row-start-1"
+            className="rounded-2xl bg-navy-deep p-7 sm:p-8 lg:col-start-2 lg:row-start-1"
           >
-            <p className="text-xs font-bold tracking-[0.2em] text-brand-light">
+            <p className="text-xs font-bold tracking-[0.08em] text-brand-light">
               경영이념
             </p>
             <p className="mt-3 text-xl font-bold leading-snug text-white sm:text-2xl">
@@ -197,7 +197,7 @@ export default function CompanyPage() {
           너무 눌러 이번엔 훑을 기준선이 없어졌다. 크기로 위계를 두고 색으로
           두 열을 가른다. (네이비는 설비 대수·본문 링크에 이미 쓰는 강조색이다)
         */}
-        <dl className="overflow-hidden rounded-lg border border-line bg-white">
+        <dl className="overflow-hidden rounded-2xl bg-white shadow-card">
           {/* 행 자체를 Reveal 로 만든다(as="div") — 래퍼가 끼면 dl > div > dt/dd
               구조가 깨진다. 45ms 씩 밀어 표가 한 줄씩 채워지게 한다. */}
           {overview.map((row, i) => (

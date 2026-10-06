@@ -120,7 +120,7 @@ export default function LocationPage() {
                 높이가 확정돼 있어야 해서, 그리드 행 높이를 오른쪽 칸이 정하는
                 이 배치에서는 flex 가 안전하다. min-h 는 지도가 너무 납작해지지
                 않게 받치는 바닥값이다. */}
-            <Reveal className="overflow-hidden rounded-lg border border-line lg:flex lg:min-h-[25rem]">
+            <Reveal className="overflow-hidden rounded-2xl shadow-card lg:flex lg:min-h-[25rem]">
               <iframe
                 src={MAP_SRC}
                 title={`${site.name} 위치 지도`}
@@ -137,7 +137,7 @@ export default function LocationPage() {
                 제목은 "연락처" 다. "오시는 길" 로 하면 바로 위 h1 과 같은
                 말을 두 번 하게 된다. */}
             <Reveal delay={90} className="flex flex-col">
-              <p className="text-xs font-bold tracking-[0.2em] text-brand">
+              <p className="text-xs font-bold tracking-[0.08em] text-brand">
                 CONTACT
               </p>
               <h2 className="mt-3 text-2xl font-bold tracking-tight text-ink sm:text-4xl">
@@ -148,7 +148,7 @@ export default function LocationPage() {
                   남는 높이를 내용 비율대로 나눠 갖는다. flex-1(=basis 0)
                   이면 네 행이 똑같아져 팩스 한 줄과 주소 두 줄이 같은
                   높이가 된다 — 그건 표가 아니라 격자로 보인다. */}
-              <dl className="mt-7 flex flex-1 flex-col overflow-hidden rounded-lg border border-line">
+              <dl className="mt-7 flex flex-1 flex-col overflow-hidden rounded-2xl shadow-card">
                 {/* 전화 — 대표번호는 ink-soft(주소.팩스.이메일과 같은 색),
                     추가 회선은 한 단계 연한 muted 다. 크기는 둘 다 표의 다른
                     값과 같은 14px 로 둔다. */}
@@ -247,7 +247,7 @@ export default function LocationPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     title={`${m.label}에서 보기`}
-                    className="group inline-flex items-center gap-2 rounded-lg border border-line bg-white py-3 pl-3 pr-5 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand"
+                    className="group inline-flex items-center gap-2 rounded-xl border border-line bg-white py-3 pl-3 pr-5 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand"
                   >
                     {/* 칩 색은 호버에 흔들리지 않는다 — 브랜드 마크라
                         사이트 색으로 물들면 못 알아본다. */}

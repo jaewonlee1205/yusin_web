@@ -45,7 +45,7 @@ export default function ClientsPage() {
           {clientIndustries.map((industry) => (
             <div
               key={industry.name}
-              className="rounded-lg border border-line bg-white p-6"
+              className="rounded-2xl bg-white p-6 shadow-card"
             >
               <h3 className="text-base font-bold text-ink">{industry.name}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted">

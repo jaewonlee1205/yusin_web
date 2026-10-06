@@ -128,7 +128,7 @@ export default async function ProductDetailPage({
               <h1 className="mt-4 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
                 {product.name}
               </h1>
-              <p className="mt-2 text-sm font-medium uppercase tracking-[0.15em] text-muted">
+              <p className="mt-2 text-sm font-medium uppercase tracking-[0.08em] text-muted">
                 {product.nameEn}
               </p>
 
@@ -182,7 +182,7 @@ export default async function ProductDetailPage({
                     블록이 186 -> 158px 가 되어 1280 이상에서 오른쪽 칸이
                     갤러리보다 그만큼 짧아진다 — 둘 다 같은 Container 안이라
                     아래쪽 여백만 조금 생기고 어긋나 보이지는 않는다. */}
-                <dl className="grid grid-cols-[6rem_minmax(0,1fr)] gap-px overflow-hidden rounded-lg border border-line bg-line">
+                <dl className="grid grid-cols-[6rem_minmax(0,1fr)] gap-px overflow-hidden rounded-2xl bg-line">
                   {product.specs.slice(0, 3).map((spec) => (
                     <Fragment key={spec.label}>
                       <dt className="bg-surface px-4 py-4 text-xs font-bold text-ink">
@@ -212,13 +212,13 @@ export default async function ProductDetailPage({
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/contact/"
-                  className="rounded bg-brand px-8 py-4 text-center text-[15px] font-semibold text-white transition-colors hover:bg-brand-dark sm:flex-1"
+                  className="rounded-xl bg-brand px-8 py-4 text-center text-[15px] font-semibold text-white transition-colors hover:bg-brand-dark sm:flex-1"
                 >
                   {product.name} 견적 문의
                 </Link>
                 <Link
                   href="/products/"
-                  className="rounded border border-navy/30 px-8 py-4 text-center text-[15px] font-semibold text-navy transition-colors hover:border-navy hover:bg-surface sm:flex-1"
+                  className="rounded-xl border border-navy/30 px-8 py-4 text-center text-[15px] font-semibold text-navy transition-colors hover:border-navy hover:bg-surface sm:flex-1"
                 >
                   제품 목록
                 </Link>
@@ -339,7 +339,7 @@ export default async function ProductDetailPage({
 
               dt/dd 는 격자 직계여야 한다(접근성 검사 dlitem). 그래서 묶는
               div 대신 Fragment 를 쓴다. */}
-          <dl className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-[9rem_minmax(0,1fr)]">
+          <dl className="grid gap-px overflow-hidden rounded-2xl bg-line sm:grid-cols-[9rem_minmax(0,1fr)]">
             {product.specs.slice(3).map((spec) => (
               <Fragment key={spec.label}>
                 <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink">
@@ -371,7 +371,7 @@ export default async function ProductDetailPage({
             가장 좁은 768 에 들어가려면 636px 이 한계라 지금 문장이 그
             기준으로 깎여 있다. 640 이하(508px)에서는 어차피 두 줄이 된다 —
             거기서 한 줄로 넣으려면 뜻이 남지 않는다. */}
-          <div className="mt-4 flex items-start gap-3 rounded-lg bg-surface px-5 py-4">
+          <div className="mt-4 flex items-start gap-3 rounded-xl bg-surface px-5 py-4">
             <svg
               width="16"
               height="16"

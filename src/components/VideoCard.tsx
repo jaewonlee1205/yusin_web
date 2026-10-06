@@ -24,7 +24,7 @@ import VideoEmbed from "./VideoEmbed";
  */
 export default function VideoCard({ video }: { video: Video }) {
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-lg border border-line bg-white shadow-sm">
+    <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-card">
       <VideoEmbed video={video} />
 
       <div className="flex flex-1 flex-col border-t border-line p-5">

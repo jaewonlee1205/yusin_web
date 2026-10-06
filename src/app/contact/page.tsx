@@ -63,7 +63,7 @@ export default function ContactPage() {
               {/* 카드는 바탕색으로만 선다. 테두리와 바탕을 함께 쓰면 경계가
                   두 겹이 된다. */}
               <div className="rounded-2xl bg-surface p-7">
-                <h2 className="text-sm font-bold tracking-[0.15em] text-ink">
+                <h2 className="text-sm font-bold tracking-[0.08em] text-ink">
                   바로 연락하기
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-ink-soft">
@@ -80,7 +80,7 @@ export default function ContactPage() {
                 </a>
                 <a
                   href={`mailto:${site.email}`}
-                  className="mt-2 block rounded-lg py-2.5 text-center text-sm font-semibold text-ink-soft transition-colors hover:text-brand"
+                  className="mt-2 block rounded-xl py-2.5 text-center text-sm font-semibold text-ink-soft transition-colors hover:text-brand"
                 >
                   {site.email}
                 </a>
@@ -100,7 +100,7 @@ export default function ContactPage() {
                         <a
                           key={number}
                           href={telHref(number)}
-                          className="-mx-2 block rounded px-2 py-1.5 transition-colors hover:text-brand"
+                          className="-mx-2 block rounded-lg px-2 py-1.5 transition-colors hover:text-brand"
                         >
                           {number}
                         </a>

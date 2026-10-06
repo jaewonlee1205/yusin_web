@@ -92,7 +92,7 @@ export default function Section({
             {eyebrow &&
               (centered ? (
                 <p
-                  className={`mb-4 inline-flex rounded-full border px-4 py-1.5 text-xs font-bold tracking-[0.2em] ${
+                  className={`mb-4 inline-flex rounded-full border px-4 py-1.5 text-xs font-bold tracking-[0.08em] ${
                     dark
                       ? "border-brand-light/30 text-brand-light"
                       : "border-brand/20 bg-white text-brand"
@@ -102,7 +102,7 @@ export default function Section({
                 </p>
               ) : (
                 <p
-                  className={`mb-3 text-xs font-bold tracking-[0.2em] ${
+                  className={`mb-3 text-xs font-bold tracking-[0.08em] ${
                     dark ? "text-brand-light" : "text-brand"
                   }`}
                 >

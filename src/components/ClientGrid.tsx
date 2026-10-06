@@ -14,7 +14,7 @@ export default function ClientGrid({
 }) {
   return (
     <ul
-      className={`grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3 lg:grid-cols-4 ${className}`}
+      className={`grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-line sm:grid-cols-3 lg:grid-cols-4 ${className}`}
     >
       {names.map((name) => (
         <li

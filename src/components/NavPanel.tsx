@@ -21,7 +21,7 @@ export function ListPanel({
           <Link
             href={item.href}
             onClick={onNavigate}
-            className="group/item block rounded-md p-3 transition-colors hover:bg-surface"
+            className="group/item block rounded-lg p-3 transition-colors hover:bg-surface"
           >
             <span className="flex items-center justify-between gap-4">
               <span className="text-sm font-bold text-ink group-hover/item:text-brand">

@@ -63,7 +63,7 @@ export default function OrgChart() {
   const { head, plant } = organization;
 
   return (
-    <Reveal className="rounded-lg border border-line bg-surface p-6 sm:p-10">
+    <Reveal className="rounded-2xl bg-surface p-6 sm:p-10">
       <ul>
         <li className="lg:flex lg:flex-col lg:items-center">
           <Node label={head} tone="brand" style={delay(STEP.head)} />
@@ -89,7 +89,7 @@ export default function OrgChart() {
                         포함한 칸 전체 높이를 먹어 안이 텅 빈 채 길쭉해진다.
                         다섯 칸 모두 이름 한 줄이라 높이는 저절로 맞는다. */}
                     <div
-                      className="org-node rounded-lg border border-line bg-white p-4 text-base font-bold text-ink sm:p-5 lg:text-center"
+                      className="org-node rounded-xl bg-white p-4 text-base font-bold text-ink shadow-card sm:p-5 lg:text-center"
                       style={delay(STEP.team + i * STEP.teamGap)}
                     >
                       {team.name}
@@ -179,7 +179,7 @@ const TASKS = `${DROP} mt-2.5 flex flex-wrap gap-1.5 lg:mt-0 lg:flex-col lg:flex
  * bg-surface 라 여기서 bg-surface 를 쓰면 배경에 묻힌다.
  */
 const TASK =
-  "org-node rounded border border-line bg-white px-2.5 py-1.5 " +
+  "org-node rounded-lg border border-line bg-white px-2.5 py-1.5 " +
   "text-xs leading-normal text-ink-soft lg:py-2 lg:text-center";
 
 function Node({
@@ -199,7 +199,7 @@ function Node({
   return (
     <div
       style={style}
-      className={`org-node inline-block whitespace-nowrap rounded-lg px-6 py-3 text-center text-sm font-bold ${styles[tone]}`}
+      className={`org-node inline-block whitespace-nowrap rounded-xl px-6 py-3 text-center text-sm font-bold ${styles[tone]}`}
     >
       {label}
     </div>

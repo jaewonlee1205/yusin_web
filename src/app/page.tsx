@@ -152,14 +152,14 @@ export default function Home() {
               >
                 <Link
                   href="/products"
-                  className="group inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-6 py-4 text-[15px] font-semibold text-white transition-colors hover:bg-brand-dark sm:px-8"
+                  className="group inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-6 py-4 text-[15px] font-semibold text-white transition-colors hover:bg-brand-dark sm:px-8"
                 >
                   제품 살펴보기
                   <ArrowRight />
                 </Link>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center justify-center rounded-lg border border-white/45 px-6 py-4 text-[15px] font-semibold text-white transition-colors hover:border-white/70 hover:bg-white/10 sm:px-8"
+                  className="inline-flex items-center justify-center rounded-xl border border-white/45 px-6 py-4 text-[15px] font-semibold text-white transition-colors hover:border-white/70 hover:bg-white/10 sm:px-8"
                 >
                   견적 문의하기
                 </Link>
@@ -219,7 +219,7 @@ export default function Home() {
       {/* 3. 피더란 / 회사 개요 요약 */}
       <Section eyebrow="WHAT IS THE FEEDER" title={feederDefinition.title}>
         <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-          <Reveal className="relative aspect-[4/3] overflow-hidden rounded-lg border border-line bg-surface">
+          <Reveal className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface">
             <Image
               src="/images/products/bowl-feeder-01.webp"
               alt="구리 부품을 정렬해 배출하고 있는 볼피더"
@@ -283,7 +283,7 @@ export default function Home() {
         title="유신의 강점"
         lead="피더는 카탈로그에서 고르는 물건이 아니라 부품에 맞춰 만드는 물건입니다. 그래서 만드는 사람의 손이 남습니다."
       >
-        <div className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">
+        <div className="grid gap-px overflow-hidden rounded-2xl bg-line sm:grid-cols-2">
           {strengths.map((s, i) => (
             <Reveal key={s.title} delay={i * 80} className="bg-white p-7 sm:p-9">
               <span className="text-sm font-bold tabular-nums text-brand">
@@ -305,7 +305,7 @@ export default function Home() {
         title="문의부터 납품까지"
         lead="부품 샘플 한 점에서 시작합니다. 아래 네 단계를 거쳐 현장에서 도는 피더가 됩니다."
       >
-        <ol className="grid gap-px overflow-hidden rounded-lg bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="grid gap-px overflow-hidden rounded-2xl bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
           {process.map((p, i) => (
             <Reveal as="li" key={p.step} delay={i * 80} className="bg-navy-deep p-7 sm:p-8">
               <span className="text-3xl font-bold tabular-nums text-brand-light">
