@@ -20,16 +20,19 @@ const query = encodeURIComponent(site.address.jibun);
 const MAP_SRC = `https://maps.google.com/maps?q=${query}&z=16&hl=ko&output=embed`;
 
 /**
- * 값이 여럿이면 배열이다 — 전화는 대표번호를 맨 위에 두고 나머지 회선을
- * 아래로 쌓는다. 팩스는 걸 수 없어 link 가 없다(헤더·푸터·CTA와 같은 규칙).
+ * 전화는 이 목록에서 뺐다. 세 번호를 같은 크기로 쌓아 두니 어디로 걸어야
+ * 하는지가 화면에서 사라졌다 — site.ts 는 대표번호(tel)와 추가 회선
+ * (telExtra)을 나눠 두는데 그 구분이 묻혔다. 아래 표에서 전화 행만 따로
+ * 그려 대표번호를 한 급 키운다.
+ *
+ * 팩스는 걸 수 없어 link 가 없다(헤더·푸터·CTA와 같은 규칙).
  */
 const CONTACT_ROWS: {
   label: string;
-  value: string | string[];
-  link?: "tel" | "mailto";
+  value: string;
+  link?: "mailto";
 }[] = [
   { label: "주소", value: site.address.road },
-  { label: "전화", value: [site.tel, ...site.telExtra], link: "tel" },
   { label: "팩스", value: site.fax },
   { label: "이메일", value: site.email, link: "mailto" },
 ];
@@ -74,82 +77,143 @@ export default function LocationPage() {
 
           <div className="mt-10 grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
             <div>
-              <h2 className="text-lg font-bold text-ink">연락처 및 위치</h2>
-              <dl className="mt-5 overflow-hidden rounded-lg border border-line">
+              {/* Section 컴포넌트를 쓰지 않는다. 그쪽은 제목을 항상 맨 위에
+                  놓는데, 오시는 길에 온 사람은 위치부터 보므로 지도가 먼저
+                  와야 한다. 생김새만 Section 의 제목 블록과 맞춘다.
+
+                  제목은 "연락처" 다. "오시는 길" 로 하면 바로 위 h1 과 같은
+                  말을 두 번 하게 된다. */}
+              <p className="text-xs font-bold tracking-[0.2em] text-brand">
+                CONTACT
+              </p>
+              <h2 className="mt-3 text-2xl font-bold tracking-tight text-ink sm:text-4xl">
+                연락처
+              </h2>
+
+              <dl className="mt-7 overflow-hidden rounded-lg border border-line">
+                {/* 전화 — 대표번호를 한 급 키운다. 세 번호가 같은 무게면
+                    어디로 걸어야 하는지 고르게 된다. */}
+                <div className="flex flex-col border-b border-line sm:flex-row">
+                  <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
+                    전화
+                  </dt>
+                  <dd className="px-5 py-4">
+                    <a
+                      href={telHref(site.tel)}
+                      className="block text-[15px] font-semibold tabular-nums text-ink transition-colors hover:text-brand"
+                    >
+                      {site.tel}
+                    </a>
+                    <span className="mt-1.5 block text-[13px] leading-relaxed text-muted">
+                      {site.telExtra.map((number, i) => (
+                        <span key={number}>
+                          {i > 0 && " · "}
+                          <a
+                            href={telHref(number)}
+                            className="tabular-nums transition-colors hover:text-brand"
+                          >
+                            {number}
+                          </a>
+                        </span>
+                      ))}
+                    </span>
+                  </dd>
+                </div>
+
                 {CONTACT_ROWS.map((row) => (
                   <div
                     key={row.label}
                     className="flex flex-col border-b border-line last:border-0 sm:flex-row"
                   >
-                    {/* 라벨은 칸 높이 가운데. 전화처럼 값이 여러 줄인 행에서
-                        맨 위에 붙어 보였다. bg-surface 칸은 그대로 행을 다 채운다. */}
+                    {/* 라벨은 칸 높이 가운데. 값이 여러 줄인 행에서 맨 위에
+                        붙어 보였다. bg-surface 칸은 그대로 행을 다 채운다. */}
                     <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
                       {row.label}
                     </dt>
                     <dd className="px-5 py-4 text-sm leading-relaxed text-ink-soft">
-                      {(Array.isArray(row.value)
-                        ? row.value
-                        : [row.value]
-                      ).map((value) => (
-                        <span key={value} className="block tabular-nums">
-                          {row.link ? (
-                            <a
-                              href={
-                                row.link === "tel"
-                                  ? telHref(value)
-                                  : `mailto:${value}`
-                              }
-                              className="transition-colors hover:text-brand"
-                            >
-                              {value}
-                            </a>
-                          ) : (
-                            value
-                          )}
-                        </span>
-                      ))}
+                      {row.link ? (
+                        <a
+                          href={`mailto:${row.value}`}
+                          className="transition-colors hover:text-brand"
+                        >
+                          {row.value}
+                        </a>
+                      ) : (
+                        row.value
+                      )}
                     </dd>
                   </div>
                 ))}
               </dl>
 
-              <div className="mt-6 flex flex-wrap gap-3">
-                <a
-                  href={`https://map.naver.com/p/search/${query}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded border border-line px-5 py-2.5 text-sm font-semibold text-ink-soft transition-colors hover:border-navy/40 hover:text-ink"
-                >
-                  네이버 지도에서 보기
-                </a>
-                <a
-                  href={`https://map.kakao.com/?q=${query}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded border border-line px-5 py-2.5 text-sm font-semibold text-ink-soft transition-colors hover:border-navy/40 hover:text-ink"
-                >
-                  카카오맵에서 보기
-                </a>
-              </div>
             </div>
 
-            <aside className="self-start rounded-lg border border-line bg-surface p-7">
-              <h2 className="text-sm font-bold tracking-[0.15em] text-ink">
-                운영 시간
-              </h2>
-              <ul className="mt-4 space-y-2.5 text-sm text-ink-soft">
-                <li>{site.hours.weekday}</li>
-                <li className="text-muted">{site.hours.holiday}</li>
-              </ul>
+            {/* self-start 를 뗐다. 그때는 카드가 내용 높이에서 멈춰 왼쪽
+                칸(표 + 지도 버튼)보다 125px 짧았고 오른쪽 아래가 비었다.
+                세로 flex 로 두고 아래 블록에 mt-auto 를 주면 카드가 칸을
+                채우면서 두 칸의 아랫변이 만난다(히어로에서 사양 표를 바닥에
+                붙인 것과 같은 기법이다).
 
-              <h2 className="mt-8 text-sm font-bold tracking-[0.15em] text-ink">
-                방문 전 안내
-              </h2>
-              <p className="mt-4 text-sm leading-relaxed text-ink-soft">
-                부품 샘플을 가져오시면 그 자리에서 제작 가능 여부를 함께
-                검토해 드립니다. 담당자가 현장에 나가 있을 수 있으니 방문
-                전 전화로 일정을 잡아 주시면 좋습니다.
+                제목은 h3 다. 전에는 h2 였는데, 회색 카드 안의 14px 글씨가
+                본문 섹션 제목과 같은 급일 이유가 없다. */}
+            <aside className="flex flex-col rounded-lg border border-line bg-surface p-7">
+              <h3 className="text-sm font-bold tracking-[0.15em] text-ink">
+                운영 시간
+              </h3>
+              <p className="mt-4 text-lg font-semibold tabular-nums text-ink">
+                {site.hours.weekday}
               </p>
+              <p className="mt-1.5 text-sm text-muted">{site.hours.holiday}</p>
+
+              <h3 className="mt-8 text-sm font-bold tracking-[0.15em] text-ink">
+                방문 전 안내
+              </h3>
+              {/* 배너가 "샘플을 들고 오시면 현장에서 함께 검토합니다" 를 이미
+                  말한다. 전에는 그 문장을 여기서 길게 되풀이했다 — 배너가
+                  요약을 맡고 여기는 배너가 말하지 않는 것만 적는다. */}
+              <p className="mt-4 text-sm leading-relaxed text-ink-soft">
+                담당자가 현장에 나가 있을 수 있습니다. 방문 전에 전화로 일정을
+                잡아 주시면 기다리지 않으십니다.
+              </p>
+
+              {/* 길찾기는 이 카드로 모은다 — 운영 시간.방문 주의.길찾기가
+                  모두 "방문" 묶음이라 한자리에 있는 편이 읽기 쉽다. 왼쪽은
+                  연락처만 남아 두 칸의 역할이 깔끔히 갈린다.
+
+                  mt-auto 로 바닥에 붙여 카드가 칸 끝까지 찬다. 밖으로 나가는 링크라 화살표를 붙인다. 브랜드 아이콘은
+                  쓰지 않는다 — icons.tsx 에 네이버만 있고 카카오가 없어
+                  한쪽만 넣으면 둘이 다른 급으로 보인다. */}
+              <div className="mt-auto flex flex-wrap gap-3 pt-8">
+                {[
+                  { label: "네이버 지도", href: `https://map.naver.com/p/search/${query}` },
+                  { label: "카카오맵", href: `https://map.kakao.com/?q=${query}` },
+                ].map((m) => (
+                  <a
+                    key={m.label}
+                    href={m.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-2 rounded-lg border border-line bg-white px-5 py-3 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand"
+                  >
+                    {m.label}에서 보기
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                      className="shrink-0 text-muted transition-colors group-hover:text-brand"
+                    >
+                      <path d="M7 17 17 7" />
+                      <path d="M8 7h9v9" />
+                    </svg>
+                  </a>
+                ))}
+              </div>
             </aside>
           </div>
         </Container>
