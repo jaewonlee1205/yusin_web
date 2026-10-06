@@ -35,23 +35,22 @@ const MAP_SRC = `https://maps.google.com/maps?q=${query}&z=16&hl=ko&output=embed
 /**
  * 전화.운영 시간을 뺀 나머지 행. 그 둘은 값이 두 줄이라 아래에서 따로 그린다.
  *
- * ⚠️ 라벨이 "사업자등록번호" 가 아니라 "사업자번호" 인 것은 칸 폭 때문이다.
- *    dt 가 sm:w-28(112px) 에 좌우 패딩 20px 씩이라 글이 쓸 수 있는 폭이
- *    72px 인데, 14px bold 로 재면 "사업자등록번호" 가 90px 로 넘치고
- *    "사업자번호" 는 64px 로 든다. 칸을 넓히면 값 칸이 좁아져 주소가 세 줄이
- *    될 수 있어 라벨 쪽을 줄였다.
+ * 마지막 칸은 한동안 사업자번호였는데, 거래 서류에 적는 값이지 연락하는
+ * 방법이 아니라 결이 달랐다. 대표 이름이 "연락처" 라는 표 제목에 맞는다.
+ *
+ * ⚠️ 라벨 칸이 좁다. dt 가 sm:w-28(112px) 에 좌우 패딩 20px 씩이라 글이 쓸 수
+ *    있는 폭이 72px 다 — 14px bold 로 "사업자등록번호" 는 90px 라 넘쳤고
+ *    "대표" 는 26px 로 넉넉하다. 라벨을 바꿀 때 이 72px 를 넘기지 말 것.
  */
 const CONTACT_ROWS: {
   label: string;
   value: string;
   link?: "mailto";
-  /** 숫자 값은 자릿수를 고정해 세로로 가지런히 선다 */
-  nums?: true;
 }[] = [
   { label: "주소", value: site.address.road },
   { label: "팩스", value: site.fax },
   { label: "이메일", value: site.email, link: "mailto" },
-  { label: "사업자번호", value: site.businessNumber, nums: true },
+  { label: "대표", value: site.ceo },
 ];
 
 export default function LocationPage() {
@@ -165,11 +164,7 @@ export default function LocationPage() {
                     <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
                       {row.label}
                     </dt>
-                    <dd
-                      className={`px-5 py-4 text-sm leading-relaxed text-ink-soft sm:flex sm:items-center ${
-                        row.nums ? "tabular-nums" : ""
-                      }`}
-                    >
+                    <dd className="px-5 py-4 text-sm leading-relaxed text-ink-soft sm:flex sm:items-center">
                       {row.link ? (
                         <a
                           href={`mailto:${row.value}`}
@@ -188,7 +183,7 @@ export default function LocationPage() {
                     value 가 한 줄짜리라 평일/휴무 두 줄을 담을 수 없어
                     여기서 따로 그린다.
 
-                    표 맨 끝인 이유: 연락처(전화.주소.팩스.이메일.사업자번호)를
+                    표 맨 끝인 이유: 연락처(전화.주소.팩스.이메일.대표)를
                     먼저 읽고 "언제 가면 되나" 가 뒤따르는 순서가 자연스럽다.
 
                     한때 이 아래 "길찾기 | 네이버 지도 · 카카오맵" 행이 하나 더

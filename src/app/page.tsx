@@ -213,47 +213,66 @@ export default function Home() {
       </section>
 
       {/* 3. 피더란 / 회사 개요 요약 */}
-      <Section eyebrow="WHAT IS THE FEEDER" title={feederDefinition.title}>
+      {/* 정의 한 문장은 제목 바로 아래 lead 자리에 둔다.
+
+          한때 오른쪽 칸에서 박스 셋 바로 위에 있었는데, 넷 다 "…합니다" 로
+          끝나는 문장이라 정의가 네 번째 항목처럼 읽혔다. 리드로 올리면
+          제목 → 정의 → (영상 | 효용 셋) 으로 층이 갈린다. */}
+      <Section
+        eyebrow="WHAT IS THE FEEDER"
+        title={feederDefinition.title}
+        lead={feederDefinition.body}
+      >
         <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-          {/* lg 부터 비율 고정을 푼다. 오른쪽 칸이 박스 셋만큼 길어지는데
-              사진이 4/3 에 묶여 있으면 혼자 짧아 보인다. grid 의 기본
-              align-items:stretch 가 행 높이만큼 늘려 주고, Image 가 fill +
-              object-cover 라 늘어난 칸을 그대로 채운다. 1024 미만은 1열이라
-              사진이 혼자 서므로 4/3 을 그대로 둔다. */}
-          <Reveal className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface lg:aspect-auto lg:h-full">
+          {/* 정지 사진이던 자리다. 피더가 무엇인지는 "부품이 돌다가 한 줄로
+              서서 나간다" 는 움직임 자체라, 멈춘 사진으로는 절반만 전해졌다.
+
+              히어로가 쓰는 영상을 그대로 건다. 볼피더가 커넥터 부품을 정렬해
+              트랙으로 내보내는 10초짜리인데, 히어로에서는 opacity 0.3 에
+              네이비 오버레이까지 덮여 거의 안 보인다 — 같은 파일이어도 여기서
+              밝게 돌면 다른 영상처럼 읽히고, 이미 받는 파일이라 전송량도
+              늘지 않는다.
+
+              칸은 16/9 다 — 영상 원본과 같은 비율이라 아무 데도 잘리지
+              않는다. 한때 사진 시절의 4/3 에 lg:h-full(오른쪽 칸 높이를 따라감)
+              을 걸어 뒀는데, 정의 문장이 리드로 올라가면서 오른쪽이 짧아져
+              2.07:1 까지 납작해졌다. 16/9 로 고정하면 영상이 274px 로 서고,
+              grid 의 stretch 가 오른쪽 칸을 거기 맞춰 두 칸 높이도 그대로
+              일치한다.
+
+              ⚠️ Image 가 아래 깔려 있는 것은 장식이 아니다. globals.css 의
+                 prefers-reduced-motion 블록이 .hero-video 를 display:none 으로
+                 숨기므로, 움직임을 끈 사람에게는 이 정지컷이 보인다. 영상에서
+                 뽑은 그림이라 장면이 어긋나지 않는다. 지우면 그 사람에게 빈
+                 칸만 남는다. */}
+          <Reveal className="relative aspect-video overflow-hidden rounded-2xl bg-surface">
             <Image
-              src="/images/products/bowl-feeder-01.webp"
-              alt="구리 부품을 정렬해 배출하고 있는 볼피더"
+              src="/images/hero-poster.webp"
+              alt="커넥터 부품을 정렬해 트랙으로 내보내는 볼피더"
               fill
               sizes="(max-width: 1024px) 100vw, 45vw"
               className="object-cover"
             />
+            <video
+              className="hero-video absolute inset-0 h-full w-full object-cover"
+              poster="/images/hero-poster.webp"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+            >
+              <source src="/videos/hero.mp4" type="video/mp4" />
+            </video>
           </Reveal>
           <Reveal delay={120}>
-            {/* 정의 한 줄 + 박스 셋이 이 칸의 전부다.
-
-                한때 뒤에 문단이 하나 더 있었다("유신 F.A 시스템은 이 피더를
-                34년째 만들어 왔습니다…"). 회사 이야기는 바로 아래 "회사소개
-                자세히 보기" 가 맡는 자리라 걷었다.
-
-                포인트는 굵기로 준다. 크기로만 줬던 때도(20px) 있었고 둘 다
-                본문 톤으로 되돌렸던 때도 있었는데, 크기를 더 키우면 바로 아래
-                박스와 다툰다.
-
-                ⚠️ 이 문단은 1024 이상에서 한 줄이다 — products.ts 의
-                   feederDefinition.body 길이가 거기 맞춰져 있다. 20px 에서
-                   한 줄이 되도록 글을 줄인 것이라, 크기를 더 키우려면 글을
-                   또 줄여야 한다(1024 글상자 461px 가 병목). */}
-            <p className="text-lg font-semibold leading-relaxed text-ink sm:text-xl">
-              {feederDefinition.body}
-            </p>
-            {/* 피더가 해 주는 일 셋. 한 문장이던 것을 쪼갠 것이라 위 본문과
-                내용이 겹치지 않는다(products.ts 주석 참고).
+            {/* 피더가 해 주는 일 셋. 위 lead 한 문장을 풀어 쓴 것이라 겹치지
+                않는다(products.ts 주석 참고).
 
                 bg-surface + 레드 점은 제품 상세의 적용 분야 칩과 같은 꼴이다 —
                 사이트에 이미 있는 언어라 새 모양을 더하지 않는다. 섹션이 흰
                 바탕이라 흰 카드는 묻히고, 회색 박스가 또렷하다. */}
-            <ul className="mt-6 space-y-2">
+            <ul className="space-y-2">
               {feederDefinition.points.map((point) => (
                 <li
                   key={point.label}
@@ -314,6 +333,33 @@ export default function Home() {
       <Section
         eyebrow="PROCESS"
         title="문의부터 납품까지"
+        action={
+          /* 제작 과정을 읽은 다음이 문의로 가기 가장 자연스러운 자리다.
+             VIDEO.CLIENTS 섹션의 "전체 보기" 와 같은 꼴이다.
+
+             글자가 "견적 문의하기" 가 아닌 것은 히어로 버튼이 이미 그 말을
+             쓰고 있어서다. 한 페이지에 같은 글자 버튼이 둘이면 눌러 본 것을
+             또 누르게 된다. 여기는 바로 위에서 제작 과정을 읽은 자리라
+             "제작" 쪽이 맥락에도 맞는다. */
+          <Link href="/contact" className={BTN}>
+            제작 문의하기
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className="shrink-0 transition-transform group-hover:translate-x-1"
+            >
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </Link>
+        }
       >
         {/* 떨어진 그림자 카드다. 사이트의 카드 언어가 rounded-2xl +
             shadow-card 이므로 여기도 같은 모양으로 둔다.
