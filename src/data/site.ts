@@ -7,7 +7,8 @@
  * ⚠️ TODO — 아직 확인이 필요한 것
  *   1. 도로명 주소   : 아래는 여전히 지번이다. 지도·검색 노출에 쓰인다.
  *   2. 우편번호      : 15090 은 추정값이다.
- *   3. 도메인        : url 은 JSON-LD·sitemap·robots 에 쓰여 실제 주소가 필요하다.
+ *   (3. 도메인은 2026-10-06 에 yusin.co.kr 로 확정했다. url 을 바꾸면
+ *    JSON-LD·sitemap·robots·OG 가 한꺼번에 따라간다.)
  */
 
 export const site = {
@@ -16,7 +17,7 @@ export const site = {
   tagline: "FEEDING AUTOMATION SYSTEM",
   description:
     "1992년 설립 이래 볼피더·직진피더·호퍼피더·방음커버·컨트롤러를 자체 설계부터 가공·튜닝까지 일관 제작해 온 부품 자동정렬 공급기 전문 기업입니다.",
-  url: "https://yusin-fa.com", // TODO: 실제 도메인 확정 후 교체
+  url: "https://yusin.co.kr",
   founded: "1992-06-06",
   ceo: "이준희",
 
