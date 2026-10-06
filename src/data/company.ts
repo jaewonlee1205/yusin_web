@@ -100,6 +100,12 @@ export const overview: {
   { label: "대표번호", value: [site.tel, ...site.telExtra], link: "tel" },
   { label: "팩스", value: site.fax },
   { label: "이메일", value: site.email, link: "mailto" },
+  // 연락 수단의 끝이다. 값은 site.url 에서 스킴만 떼어 쓴다 — 도메인을
+  // 바꾸면 여기도 따라온다.
+  //
+  // 링크를 걸지 않는 것은 보는 사람이 이미 이 사이트 안에 있어서다.
+  // 팩스가 link 없이 글자로만 있는 것과 같은 처리다.
+  { label: "홈페이지", value: site.url.replace(/^https?:\/\//, "") },
   {
     label: "주 사업",
     value:

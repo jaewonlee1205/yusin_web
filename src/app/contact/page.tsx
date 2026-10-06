@@ -58,42 +58,50 @@ export default function ContactPage() {
                 멀어 읽히지 않아 문의 내용 입력란 바로 위로 옮겼다. 이제 이
                 칸에는 연락처 한 장만 선다. */}
             <Reveal as="aside" delay={180} className="self-start">
-              {/* 바탕도 테두리도 없다. 한때 rounded-2xl bg-surface p-7 짜리
-                  회색 카드였는데, 아래 연락처를 표로 바꾸면서 걷었다 — 표의
-                  라벨 칸이 bg-surface 라 카드 바탕과 같은 색이 되어 녹아
-                  보였다. 카드에 테두리를 주는 안은 카드 테두리와 표 테두리로
-                  경계가 두 겹이 된다(시안 넷을 찍어 비교했다).
+              {/* 제목.버튼 둘.표가 한 네모 안에 든다. 경계는 이 테두리
+                  한 겹뿐이고, 안쪽 표는 바깥 테두리 없이 행 구분선만 갖는다.
 
-                  바탕을 걷으면 전화 버튼.이메일 버튼.표 셋이 모두 흰 바탕
-                  위 1px 테두리라 한 결이 되고, /location 의 CONTACT 블록과도
-                  같은 꼴이 된다. 표 폭도 370.7 -> 426.7px 로 넓어진다. */}
-              <div>
-                <h2 className="text-sm font-bold tracking-[0.08em] text-ink">
-                  바로 연락하기
-                </h2>
-                {/* 네이비로 꽉 채웠던 버튼을 흰 바탕으로 낮췄다. 폼의
-                    "문의 보내기" 와 둘 다 진하면 화면에서 둘이 겨룬다 —
-                    진한 주 버튼은 하나여야 한다. */}
-                <a
-                  href={telHref(site.tel)}
-                  className="mt-5 flex h-14 items-center justify-center rounded-xl border border-line bg-white text-base font-bold tabular-nums text-navy transition-colors hover:border-navy/40"
-                >
-                  {site.tel}
-                </a>
-                {/* 이메일도 박스다. 맨 글자로 두니 바로 위 전화 버튼과 짝이
-                    안 맞았다. 다만 한 치수 낮춘다 — 전화 h-14 / 16px bold,
-                    여기 h-12 / 14px semibold. 진한 주 동선은 전화 하나다. */}
-                <a
-                  href={`mailto:${site.email}`}
-                  className="mt-2 flex h-12 items-center justify-center rounded-xl border border-line bg-white text-sm font-semibold text-ink-soft transition-colors hover:border-navy/40 hover:text-brand"
-                >
-                  {site.email}
-                </a>
-                {/* 오시는 길의 연락처 표와 같은 표다 — 테두리.패딩(px-5 py-4).
+                  정체를 세 번 바꿨다. 처음엔 rounded-2xl bg-surface p-7 짜리
+                  회색 카드였다. 연락처를 표로 바꾸면서 걷었는데(표의 라벨 칸이
+                  bg-surface 라 카드 바탕에 녹았다), 이번엔 제목.버튼.표가
+                  각자 떠서 한 묶음으로 안 읽혔다.
+
+                  지금은 네모가 둘을 나눠 갖는다 — 위는 bg-surface,
+                  아래(표)는 흰 바탕. 한 네모 안에서 "눌러서 연락하는 곳" 과
+                  "읽는 자료" 가 색으로 갈리고, 흰 버튼이 회색 위에서
+                  또렷해진다. 시안 셋을 찍어 비교했다. */}
+              <div className="overflow-hidden rounded-2xl border border-line">
+                <div className="bg-surface p-6">
+                  <h2 className="text-sm font-bold tracking-[0.08em] text-ink">
+                    바로 연락하기
+                  </h2>
+                  {/* 네이비로 꽉 채웠던 버튼을 흰 바탕으로 낮췄다. 폼의
+                      "문의 보내기" 와 둘 다 진하면 화면에서 둘이 겨룬다 —
+                      진한 주 버튼은 하나여야 한다. */}
+                  <a
+                    href={telHref(site.tel)}
+                    className="mt-5 flex h-14 items-center justify-center rounded-xl border border-line bg-white text-base font-bold tabular-nums text-navy transition-colors hover:border-navy/40"
+                  >
+                    {site.tel}
+                  </a>
+                  {/* 이메일도 박스다. 맨 글자로 두니 바로 위 전화 버튼과 짝이
+                      안 맞았다. 다만 한 치수 낮춘다 — 전화 h-14 / 16px bold,
+                      여기 h-12 / 14px semibold. 진한 주 동선은 전화 하나다. */}
+                  <a
+                    href={`mailto:${site.email}`}
+                    className="mt-2 flex h-12 items-center justify-center rounded-xl border border-line bg-white text-sm font-semibold text-ink-soft transition-colors hover:border-navy/40 hover:text-brand"
+                  >
+                    {site.email}
+                  </a>
+                </div>
+                {/* 오시는 길의 연락처 표와 같은 표다 — 패딩(px-4 py-3).
                     라벨 폭(w-28).글자 크기가 모두 location/page.tsx 와 같은
                     값이다. 한때 여기는 라벨과 값을 gap-3 으로 띄운 글 목록
                     이었는데, 값이 여러 줄인 행에서 어디까지가 한 항목인지
                     경계가 없어 읽기 불편했다.
+
+                    바깥 테두리와 radius 는 갖지 않는다 — 위 네모가 맡는다.
+                    border-t 하나로 버튼 영역과 갈린다.
 
                     행 순서도 오시는 길과 맞췄다 — 전화.주소.팩스.운영 시간.
                     주소가 팩스보다 위인 것은 방문.발송에 더 자주 쓰여서다.
@@ -103,25 +111,25 @@ export default function ContactPage() {
                     ⚠️ 640 미만에서는 sm:flex-row 가 풀려 라벨이 값 위로
                        쌓인다. 좁은 폭에서 w-28 라벨 열을 떼면 값 칸이
                        너무 좁아진다. */}
-                <dl className="mt-6 flex flex-col overflow-hidden rounded-2xl border border-line">
+                <dl className="flex flex-col border-t border-line">
                   {/* 대표번호는 위 큰 버튼이 맡는다. 여기는 나머지 회선이다.
                       오시는 길은 두 번호를 한 줄에 · 로 잇지만, 이 칸은
                       426.7px 라 두 줄로 둔다. 둘째 줄이 muted 인 것은 오시는
                       길 표의 추가 회선과 같은 처리다.
 
                       전에 있던 -mx-2 px-2 py-1.5(터치 영역 넓히기)는 걷었다 —
-                      행이 py-4 라 링크 높이가 target-size 24px 를 넘긴다. */}
+                      행이 py-3 라 링크 높이가 target-size 24px 를 넘긴다. */}
                   <div className="flex flex-col border-b border-line sm:flex-row">
-                    <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
+                    <dt className="bg-surface px-4 py-3 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
                       전화
                     </dt>
-                    <dd className="px-5 py-4 sm:flex sm:flex-col sm:justify-center">
+                    <dd className="px-4 py-3 sm:flex sm:flex-col sm:justify-center">
                       {site.telExtra.map((number, i) => (
                         <a
                           key={number}
                           href={telHref(number)}
                           className={`block text-sm tabular-nums transition-colors hover:text-brand ${
-                            i === 0 ? "text-ink-soft" : "mt-1.5 text-muted"
+                            i === 0 ? "text-ink-soft" : "mt-1 text-muted"
                           }`}
                         >
                           {number}
@@ -131,42 +139,41 @@ export default function ContactPage() {
                   </div>
 
                   <div className="flex flex-col border-b border-line sm:flex-row">
-                    <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
+                    <dt className="bg-surface px-4 py-3 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
                       주소
                     </dt>
                     {/* 한때 이 아래 "오시는 길 보기" 버튼이 붙어 있었다.
                         헤더.푸터 메뉴에 "오시는 길" 이 있어 길은 그대로
                         남으므로 걷었다. */}
-                    <dd className="px-5 py-4 text-sm leading-relaxed text-ink-soft sm:flex sm:items-center">
+                    <dd className="px-4 py-3 text-sm text-ink-soft sm:flex sm:items-center">
                       {site.address.road}
                     </dd>
                   </div>
 
                   <div className="flex flex-col border-b border-line sm:flex-row">
-                    <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
+                    <dt className="bg-surface px-4 py-3 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
                       팩스
                     </dt>
-                    <dd className="px-5 py-4 text-sm tabular-nums text-ink-soft sm:flex sm:items-center">
+                    <dd className="px-4 py-3 text-sm tabular-nums text-ink-soft sm:flex sm:items-center">
                       {site.fax}
                     </dd>
                   </div>
 
                   <div className="flex flex-col sm:flex-row">
-                    <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
+                    <dt className="bg-surface px-4 py-3 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
                       운영 시간
                     </dt>
-                    <dd className="px-5 py-4 sm:flex sm:flex-col sm:justify-center">
+                    <dd className="px-4 py-3 sm:flex sm:flex-col sm:justify-center">
                       <span className="block text-sm tabular-nums text-ink-soft">
                         {site.hours.weekday}
                       </span>
-                      <span className="mt-1.5 block text-sm leading-relaxed text-muted">
+                      <span className="mt-1 block text-sm text-muted">
                         {site.hours.holiday}
                       </span>
                     </dd>
                   </div>
                 </dl>
               </div>
-
             </Reveal>
           </div>
         </Container>

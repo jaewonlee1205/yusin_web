@@ -126,7 +126,13 @@ export default function LocationPage() {
               {/* flex-1 로 표가 칸 끝까지 내려오고, 행마다 flex-auto 라
                   남는 높이를 내용 비율대로 나눠 갖는다. flex-1(=basis 0)
                   이면 네 행이 똑같아져 팩스 한 줄과 주소 두 줄이 같은
-                  높이가 된다 — 그건 표가 아니라 격자로 보인다. */}
+                  높이가 된다 — 그건 표가 아니라 격자로 보인다.
+
+                  지금은 이 둘이 아무 일도 하지 않는다. 행 패딩을 px-4 py-3
+                  으로 줄이면서 표가 347px 로 서고, 그 높이를 지도가 따라오기
+                  때문이다(남는 높이가 0). 다만 표가 더 줄어 지도가
+                  lg:min-h-[25rem](400px)에 걸리면 그때부터 다시 일한다 —
+                  그래서 걷지 않는다. */}
               {/* 테두리로 선다(2D). 한때 shadow-card 로 떠 있었는데, 표는
                   떠 있는 카드가 아니라 읽는 자료다 — 제품 상세의 사양 표와
                   같은 1px line 테두리로 맞춘다. 행 사이 선도 같은 색이라
@@ -139,17 +145,17 @@ export default function LocationPage() {
                     추가 회선은 한 단계 연한 muted 다. 크기는 둘 다 표의 다른
                     값과 같은 14px 로 둔다. */}
                 <div className="flex flex-auto flex-col border-b border-line sm:flex-row">
-                  <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
+                  <dt className="bg-surface px-4 py-3 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
                     전화
                   </dt>
-                  <dd className="px-5 py-4 sm:flex sm:flex-col sm:justify-center">
+                  <dd className="px-4 py-3 sm:flex sm:flex-col sm:justify-center">
                     <a
                       href={telHref(site.tel)}
                       className="block text-sm tabular-nums text-ink-soft transition-colors hover:text-brand"
                     >
                       {site.tel}
                     </a>
-                    <span className="mt-1.5 block text-sm leading-relaxed text-muted">
+                    <span className="mt-1 block text-sm text-muted">
                       {site.telExtra.map((number, i) => (
                         <span key={number}>
                           {i > 0 && " · "}
@@ -171,11 +177,17 @@ export default function LocationPage() {
                     className="flex flex-auto flex-col border-b border-line sm:flex-row"
                   >
                     {/* 라벨은 칸 높이 가운데. 값이 여러 줄인 행에서 맨 위에
-                        붙어 보였다. bg-surface 칸은 그대로 행을 다 채운다. */}
-                    <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
+                        붙어 보였다. bg-surface 칸은 그대로 행을 다 채운다.
+
+                        패딩이 px-4 py-3 인 것은 제품 상세의 사양 표와 맞추기
+                        위해서다. 한때 px-5 py-4 에 dd 가 leading-relaxed 라
+                        한 줄 행이 56px 였는데(사양 표는 44px), 자료를 읽는
+                        표 둘의 두께가 서로 달랐다. 45px 로 내려 1px 차이만
+                        남는다 — 이쪽은 sm:flex 라 줄 상자 계산이 다르다. */}
+                    <dt className="bg-surface px-4 py-3 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
                       {row.label}
                     </dt>
-                    <dd className="px-5 py-4 text-sm leading-relaxed text-ink-soft sm:flex sm:items-center">
+                    <dd className="px-4 py-3 text-sm text-ink-soft sm:flex sm:items-center">
                       {row.link ? (
                         <a
                           href={`mailto:${row.value}`}
@@ -204,14 +216,14 @@ export default function LocationPage() {
                     CTA와 푸터에도 같은 값이 나오지만 그 둘은 모든 페이지에
                     깔리는 사이트 크롬이고, 여기서는 방문 시간이다. */}
                 <div className="flex flex-auto flex-col sm:flex-row">
-                  <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
+                  <dt className="bg-surface px-4 py-3 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
                     운영 시간
                   </dt>
-                  <dd className="px-5 py-4 sm:flex sm:flex-col sm:justify-center">
+                  <dd className="px-4 py-3 sm:flex sm:flex-col sm:justify-center">
                     <span className="block text-sm tabular-nums text-ink-soft">
                       {site.hours.weekday}
                     </span>
-                    <span className="mt-1.5 block text-sm leading-relaxed text-muted">
+                    <span className="mt-1 block text-sm text-muted">
                       {site.hours.holiday}
                     </span>
                   </dd>

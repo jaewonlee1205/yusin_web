@@ -361,8 +361,12 @@ export default async function ProductDetailPage({
                 <path d="M12 16v-4M12 8h.01" />
               </svg>
               <p className="text-[13px] leading-relaxed text-ink-soft">
-                <b className="font-bold text-ink">예시 규격</b> 실제 값은
-                공급할 부품에 따라 산출합니다. {product.specTable.caption}
+                {/* &nbsp; 넷이다. HTML 은 연속 공백을 하나로 접으므로
+                    보통 공백으로는 벌릴 수 없다(홈 ABOUT US 박스가 쓰는 것과
+                    같은 방법이다). 1~5칸을 찍어 비교했다 — 1~2칸은 라벨이
+                    설명에 붙어 읽히고, 5칸은 두 덩어리로 갈라진다. */}
+                <b className="font-bold text-ink">예시 규격</b>&nbsp;&nbsp;&nbsp;&nbsp;실제
+                값은 공급할 부품에 따라 산출합니다. {product.specTable.caption}
               </p>
             </div>
 
