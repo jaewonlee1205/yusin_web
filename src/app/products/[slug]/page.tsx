@@ -361,7 +361,7 @@ export default async function ProductDetailPage({
                 <path d="M12 16v-4M12 8h.01" />
               </svg>
               <p className="text-[13px] leading-relaxed text-ink-soft">
-                <b className="font-bold text-ink">예시 규격</b> : 실제 값은
+                <b className="font-bold text-ink">예시 규격</b> 실제 값은
                 공급할 부품에 따라 산출합니다. {product.specTable.caption}
               </p>
             </div>

@@ -260,11 +260,22 @@ export default function Header() {
           </nav>
 
           <div className="hidden items-center gap-6 lg:flex lg:justify-self-end">
+            {/* 번호는 ink, 아이콘만 brand 다.
+
+                한때 둘 다 navy 였는데, 흰 헤더 위에서 그 파랑이 로고 레드.
+                회색 메뉴 어느 쪽과도 짝이 안 맞아 혼자 뜨고 링크처럼 읽혔다.
+                시안 다섯을 한 화면에 찍어 비교했다 — 메뉴와 같은 ink-soft 는
+                번호가 메뉴에 묻히고, 번호까지 brand 로 하면 바로 옆 "견적
+                문의" 버튼과 레드가 둘이 되어 겨룬다.
+
+                아이콘 레드는 15px 짜리라 면적이 거의 없다(globals.css 토큰
+                주석 — "레드는 면적을 좁게"). hover:text-brand 는 그대로 둔다.
+                올리면 번호가 레드가 되고 아이콘은 이미 레드다. */}
             <a
               href={telHref(site.tel)}
-              className="inline-flex items-center gap-1.5 text-sm font-semibold tabular-nums text-navy transition-colors hover:text-brand"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold tabular-nums text-ink transition-colors hover:text-brand"
             >
-              <PhoneIcon />
+              <PhoneIcon className="shrink-0 text-brand" />
               {site.tel}
             </a>
             <Link
@@ -367,9 +378,11 @@ export default function Header() {
             </nav>
 
             <div className="my-5 flex flex-col gap-3">
+              {/* 위 데스크톱 전화 링크와 같은 ink 다. 여기는 아이콘이
+                  없어 레드 포인트도 없다. */}
               <a
                 href={telHref(site.tel)}
-                className="rounded-xl border border-line py-3 text-center text-sm font-semibold text-navy"
+                className="rounded-xl border border-line py-3 text-center text-sm font-semibold text-ink"
               >
                 전화 {site.tel}
               </a>

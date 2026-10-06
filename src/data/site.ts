@@ -78,7 +78,10 @@ export const site = {
   },
 
   hours: {
-    weekday: "평일 08:30 – 18:00",
+    /* 시각 사이는 물결표다. en dash(–)는 글에서 말을 잇는 기호라
+       "08:30 – 18:00" 이 범위로 안 읽혔다. 이 한 줄이 네 화면을 먹인다 —
+       /contact · /location · ContactCTA · Footer. */
+    weekday: "평일 08:30 ~ 18:00",
     holiday: "토·일요일, 공휴일 휴무",
   },
 

@@ -58,9 +58,16 @@ export default function ContactPage() {
                 멀어 읽히지 않아 문의 내용 입력란 바로 위로 옮겼다. 이제 이
                 칸에는 연락처 한 장만 선다. */}
             <Reveal as="aside" delay={180} className="self-start">
-              {/* 카드는 바탕색으로만 선다. 테두리와 바탕을 함께 쓰면 경계가
-                  두 겹이 된다. */}
-              <div className="rounded-2xl bg-surface p-7">
+              {/* 바탕도 테두리도 없다. 한때 rounded-2xl bg-surface p-7 짜리
+                  회색 카드였는데, 아래 연락처를 표로 바꾸면서 걷었다 — 표의
+                  라벨 칸이 bg-surface 라 카드 바탕과 같은 색이 되어 녹아
+                  보였다. 카드에 테두리를 주는 안은 카드 테두리와 표 테두리로
+                  경계가 두 겹이 된다(시안 넷을 찍어 비교했다).
+
+                  바탕을 걷으면 전화 버튼.이메일 버튼.표 셋이 모두 흰 바탕
+                  위 1px 테두리라 한 결이 되고, /location 의 CONTACT 블록과도
+                  같은 꼴이 된다. 표 폭도 370.7 -> 426.7px 로 넓어진다. */}
+              <div>
                 <h2 className="text-sm font-bold tracking-[0.08em] text-ink">
                   바로 연락하기
                 </h2>
@@ -82,48 +89,79 @@ export default function ContactPage() {
                 >
                   {site.email}
                 </a>
-                <dl className="mt-6 space-y-2 border-t border-line pt-5 text-sm text-muted">
-                  {/* 대표번호는 위 큰 버튼이 맡는다. 여기는 나머지 회선이다. */}
-                  {/* dt 와 dd 가 같은 세로 패딩을 갖는다. 전에는 전화 행의
-                      링크에만 py-1.5 가 있어(target-size 를 넓히려고 넣었다)
-                      "전화" 라는 라벨 글자와 번호 글자가 6px 어긋나 보였다.
-                      전화 행만 dd 에 패딩이 없다 — 안의 링크가 그 몫을 한다. */}
-                  <div className="flex gap-3">
-                    <dt className="w-12 shrink-0 py-1.5 text-ink-soft">전화</dt>
-                    <dd className="tabular-nums">
-                      {/* -mx-2 px-2 py-1.5 로 터치 영역을 넓힌다. 글자만
-                          두면 103x20px 라 target-size(24px)에 못 미친다.
-                          음수 마진이라 글자 자리는 그대로다. */}
-                      {site.telExtra.map((number) => (
+                {/* 오시는 길의 연락처 표와 같은 표다 — 테두리.패딩(px-5 py-4).
+                    라벨 폭(w-28).글자 크기가 모두 location/page.tsx 와 같은
+                    값이다. 한때 여기는 라벨과 값을 gap-3 으로 띄운 글 목록
+                    이었는데, 값이 여러 줄인 행에서 어디까지가 한 항목인지
+                    경계가 없어 읽기 불편했다.
+
+                    행 순서도 오시는 길과 맞췄다 — 전화.주소.팩스.운영 시간.
+                    주소가 팩스보다 위인 것은 방문.발송에 더 자주 쓰여서다.
+                    (오시는 길에 있는 이메일.주차 행은 여기 없다. 이메일은
+                     바로 위 버튼이 맡고, 주차는 길 찾아온 사람의 정보다.)
+
+                    ⚠️ 640 미만에서는 sm:flex-row 가 풀려 라벨이 값 위로
+                       쌓인다. 좁은 폭에서 w-28 라벨 열을 떼면 값 칸이
+                       너무 좁아진다. */}
+                <dl className="mt-6 flex flex-col overflow-hidden rounded-2xl border border-line">
+                  {/* 대표번호는 위 큰 버튼이 맡는다. 여기는 나머지 회선이다.
+                      오시는 길은 두 번호를 한 줄에 · 로 잇지만, 이 칸은
+                      426.7px 라 두 줄로 둔다. 둘째 줄이 muted 인 것은 오시는
+                      길 표의 추가 회선과 같은 처리다.
+
+                      전에 있던 -mx-2 px-2 py-1.5(터치 영역 넓히기)는 걷었다 —
+                      행이 py-4 라 링크 높이가 target-size 24px 를 넘긴다. */}
+                  <div className="flex flex-col border-b border-line sm:flex-row">
+                    <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
+                      전화
+                    </dt>
+                    <dd className="px-5 py-4 sm:flex sm:flex-col sm:justify-center">
+                      {site.telExtra.map((number, i) => (
                         <a
                           key={number}
                           href={telHref(number)}
-                          className="-mx-2 block rounded-lg px-2 py-1.5 transition-colors hover:text-brand"
+                          className={`block text-sm tabular-nums transition-colors hover:text-brand ${
+                            i === 0 ? "text-ink-soft" : "mt-1.5 text-muted"
+                          }`}
                         >
                           {number}
                         </a>
                       ))}
                     </dd>
                   </div>
-                  <div className="flex gap-3">
-                    <dt className="w-12 shrink-0 py-1.5 text-ink-soft">팩스</dt>
-                    <dd className="py-1.5 tabular-nums">{site.fax}</dd>
-                  </div>
-                  <div className="flex gap-3">
-                    <dt className="w-12 shrink-0 py-1.5 text-ink-soft">운영</dt>
-                    <dd className="py-1.5">
-                      {site.hours.weekday}
-                      <br />
-                      {site.hours.holiday}
+
+                  <div className="flex flex-col border-b border-line sm:flex-row">
+                    <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
+                      주소
+                    </dt>
+                    {/* 한때 이 아래 "오시는 길 보기" 버튼이 붙어 있었다.
+                        헤더.푸터 메뉴에 "오시는 길" 이 있어 길은 그대로
+                        남으므로 걷었다. */}
+                    <dd className="px-5 py-4 text-sm leading-relaxed text-ink-soft sm:flex sm:items-center">
+                      {site.address.road}
                     </dd>
                   </div>
-                  <div className="flex gap-3">
-                    <dt className="w-12 shrink-0 py-1.5 text-ink-soft">주소</dt>
-                    <dd className="py-1.5 leading-relaxed">
-                      {/* 한때 여기 "오시는 길 보기" 버튼이 붙어 있었다.
-                          헤더.푸터 메뉴에 "오시는 길" 이 있어 길은 그대로
-                          남으므로 걷었다. */}
-                      {site.address.road}
+
+                  <div className="flex flex-col border-b border-line sm:flex-row">
+                    <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
+                      팩스
+                    </dt>
+                    <dd className="px-5 py-4 text-sm tabular-nums text-ink-soft sm:flex sm:items-center">
+                      {site.fax}
+                    </dd>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row">
+                    <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
+                      운영 시간
+                    </dt>
+                    <dd className="px-5 py-4 sm:flex sm:flex-col sm:justify-center">
+                      <span className="block text-sm tabular-nums text-ink-soft">
+                        {site.hours.weekday}
+                      </span>
+                      <span className="mt-1.5 block text-sm leading-relaxed text-muted">
+                        {site.hours.holiday}
+                      </span>
                     </dd>
                   </div>
                 </dl>
