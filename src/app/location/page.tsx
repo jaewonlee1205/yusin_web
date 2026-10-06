@@ -44,10 +44,6 @@ const MAP_APPS = [
   { label: "카카오맵", href: `https://map.kakao.com/?q=${query}` },
 ];
 
-/** 세 칸이 같은 모양을 쓴다 — 운영 시간·방문 전 안내·길찾기. */
-const CARD = "rounded-lg border border-line bg-surface p-7";
-const CARD_TITLE = "text-sm font-bold tracking-[0.15em] text-ink";
-
 export default function LocationPage() {
   return (
     <>
@@ -151,7 +147,7 @@ export default function LocationPage() {
                 {CONTACT_ROWS.map((row) => (
                   <div
                     key={row.label}
-                    className="flex flex-auto flex-col border-b border-line last:border-0 sm:flex-row"
+                    className="flex flex-auto flex-col border-b border-line sm:flex-row"
                   >
                     {/* 라벨은 칸 높이 가운데. 값이 여러 줄인 행에서 맨 위에
                         붙어 보였다. bg-surface 칸은 그대로 행을 다 채운다. */}
@@ -172,58 +168,49 @@ export default function LocationPage() {
                     </dd>
                   </div>
                 ))}
+
+                {/* 운영 시간 — 전화 행과 같은 생김새다. CONTACT_ROWS 는
+                    value 가 한 줄짜리라 평일/휴무 두 줄을 담을 수 없어
+                    여기서 따로 그린다.
+
+                    표 맨 끝인 이유: 연락처(전화.주소.팩스.이메일)를 먼저
+                    읽고 "언제 가면 되나" 가 뒤따르는 순서가 자연스럽다.
+
+                    CTA와 푸터에도 같은 값이 나오지만 그 둘은 모든 페이지에
+                    깔리는 사이트 크롬이고, 여기서는 방문 시간이다. */}
+                <div className="flex flex-auto flex-col sm:flex-row">
+                  <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
+                    운영 시간
+                  </dt>
+                  <dd className="px-5 py-4 sm:flex sm:flex-col sm:justify-center">
+                    <span className="block text-[15px] font-semibold tabular-nums text-ink">
+                      {site.hours.weekday}
+                    </span>
+                    <span className="mt-1.5 block text-[13px] leading-relaxed text-muted">
+                      {site.hours.holiday}
+                    </span>
+                  </dd>
+                </div>
               </dl>
-            </Reveal>
-          </div>
 
-          {/* 방문 묶음 — 언제 오면 되는지, 오기 전에 할 일, 오는 길.
+              {/* 길찾기 — 밖으로 나가는 링크라 화살표를 붙인다. 브랜드
+                  아이콘은 쓰지 않는다: icons.tsx 에 네이버만 있고 카카오가
+                  없어 한쪽만 넣으면 둘이 다른 급으로 보인다.
 
-              전에는 운영 시간과 방문 안내가 회색 카드 하나에 들어 있었고,
-              그 카드를 왼쪽 표와 같은 높이로 늘리려고 mt-auto 로 빈자리를
-              벌려 두었다. 아랫변은 맞았지만 글이 짧아 그 자리가 허전했다 —
-              줄을 맞추려고 빈 공간을 만든 셈이다. 셋을 나란히 두면 그리드가
-              알아서 높이를 맞추므로 벌릴 자리가 없다.
-
-              md 부터 3칸이다. sm(640)에서 셋으로 나누면 칸이 200px 라 글이
-              너무 자주 꺾인다. */}
-          <Reveal delay={180} className="mt-8 grid gap-5 md:grid-cols-3">
-            <div className={CARD}>
-              <h3 className={CARD_TITLE}>운영 시간</h3>
-              <p className="mt-4 text-lg font-semibold tabular-nums text-ink">
-                {site.hours.weekday}
-              </p>
-              <p className="mt-1.5 text-sm text-muted">{site.hours.holiday}</p>
-            </div>
-
-            <div className={CARD}>
-              <h3 className={CARD_TITLE}>방문 전 안내</h3>
-              {/* 배너가 "샘플을 들고 오시면 현장에서 함께 검토합니다" 를 이미
-                  말한다. 전에는 그 문장을 여기서 길게 되풀이했다 — 배너가
-                  요약을 맡고 여기는 배너가 말하지 않는 것만 적는다. */}
-              <p className="mt-4 text-sm leading-relaxed text-ink-soft">
-                담당자가 현장에 나가 있을 수 있습니다. 방문 전에 전화로 일정을
-                잡아 주시면 기다리지 않으십니다.
-              </p>
-            </div>
-
-            <div className={CARD}>
-              {/* 전에는 버튼 둘만 있어 옆 두 칸과 급이 달라 보였다. 제목을
-                  주면 셋이 같은 묶음으로 읽힌다.
-
-                  밖으로 나가는 링크라 화살표를 붙인다. 브랜드 아이콘은 쓰지
-                  않는다 — icons.tsx 에 네이버만 있고 카카오가 없어 한쪽만
-                  넣으면 둘이 다른 급으로 보인다. */}
-              <h3 className={CARD_TITLE}>길찾기</h3>
-              <div className="mt-4 flex flex-wrap gap-3">
+                  글자에 "에서 보기" 를 둔다. 잠깐 "네이버 지도" 로 줄였던
+                  적이 있는데, 그때는 위에 "길찾기" 제목이 맥락을 줬다.
+                  제목이 없으면 눌렀을 때 무엇이 되는지가 버튼 글자에만
+                  남으므로 줄이지 않는다. */}
+              <div className="mt-5 flex flex-wrap gap-3">
                 {MAP_APPS.map((m) => (
                   <a
                     key={m.label}
                     href={m.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 rounded-lg border border-line bg-white px-4 py-3 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand"
+                    className="group inline-flex items-center gap-2 rounded-lg border border-line bg-white px-5 py-3 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand"
                   >
-                    {m.label}
+                    {m.label}에서 보기
                     <svg
                       width="13"
                       height="13"
@@ -242,8 +229,8 @@ export default function LocationPage() {
                   </a>
                 ))}
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
+          </div>
         </Container>
       </div>
 
