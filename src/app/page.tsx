@@ -227,12 +227,19 @@ export default function Home() {
           제목 다음이 바로 영상이다. 한동안 정의 한 문장이 사이에 있었는데
           박스 셋이 같은 말을 풀어 쓰고 있어 걷었다.
 
-          lg:items-center — 영상(274px)이 오른쪽 덩어리(박스 셋 + 버튼, 235px)
-          보다 길다. stretch 로 두면 오른쪽 내용이 위에 붙고 아래가 비는데,
-          가운데로 맞추면 두 덩어리의 세로 중심이 포개진다. 1024 미만은 1열이라
-          뜻이 없으므로 lg 부터다. */}
+          lg:items-start — 윗변을 맞춘다.
+
+          한때 items-center 였다. 박스가 셋이던 때는 오른쪽 덩어리가 235px 로
+          영상(274px)보다 짧아, 가운데로 맞추면 두 덩어리의 세로 중심이 포개져
+          자연스러웠다. 박스가 넷이 되면서 오른쪽이 291px 로 길어져 전제가
+          뒤집혔다 — 영상이 가운데로 내려가면서 첫 박스가 영상보다 8px 위에
+          떴다.
+
+          지금은 윗변이 맞고 아래만 영상이 17px 먼저 끝난다. 시작점이 어긋나는
+          것보다 끝점이 어긋나는 쪽이 훨씬 덜 보인다. 1024 미만은 1열이라 뜻이
+          없으므로 lg 부터다. */}
       <Section eyebrow="ABOUT US" title="피더를 만드는 데 필요한 것">
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-16">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-start lg:gap-16">
           {/* 정지 사진이던 자리다. 피더가 무엇인지는 "부품이 돌다가 한 줄로
               서서 나간다" 는 움직임 자체라, 멈춘 사진으로는 절반만 전해졌다.
 
@@ -410,7 +417,7 @@ export default function Home() {
               as="li"
               key={p.step}
               delay={i * 80}
-              className="relative rounded-2xl bg-white p-7 shadow-card sm:p-8"
+              className="relative rounded-2xl bg-white p-6 shadow-card"
             >
               {/* 숫자와 제목을 한 줄로 묶는다. 전에는 숫자가 3xl 로 혼자
                   한 줄을 차지하고 그 아래 제목.본문이 모두 맨 글자였다 —
@@ -451,6 +458,28 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
+
+              {/* 오른쪽 위에 깔리는 큰 숫자. 목록 글이 짧아 그 자리가
+                  비어 있었다 — 카드가 헐겁게 읽히던 까닭이다.
+
+                  시안을 넷 비교했다. 원형 배지는 숫자가 작아져 오히려 약해지고,
+                  상단 레드 띠는 넷이 다 가지면 과한 데다 레드 면적이 넓어진다
+                  (globals.css 토큰 주석 — "레드는 면적을 좁게"). 이 워터마크가
+                  빈 자리를 채우면서 번호를 포인트로 만든다.
+
+                  색이 line/70 인 것은 왼쪽의 작은 숫자와 겹쳐 읽히지 않아야
+                  해서다. 장식이라 aria-hidden 이고, 번호는 왼쪽 숫자와 ol 이
+                  이미 전한다.
+
+                  ⚠️ 카드에 overflow-hidden 을 주지 말 것. 주면 아래 화살표가
+                     카드 밖으로 나간 부분에서 잘린다. 이 숫자는 right-4 top-2
+                     라 안쪽에 머문다. */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute right-4 top-2 text-[56px] font-extrabold leading-none text-line/70"
+              >
+                {p.step}
+              </span>
 
               {/* 카드 사이를 잇는 화살표. 넷이 나란히 서 있을 뿐 단계가
                   이어지는 표시가 없어 심심했다.

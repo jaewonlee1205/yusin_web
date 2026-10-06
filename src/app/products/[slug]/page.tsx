@@ -432,7 +432,15 @@ export default async function ProductDetailPage({
 
               dt/dd 는 격자 직계여야 한다(접근성 검사 dlitem). 그래서 묶는
               div 대신 Fragment 를 쓴다. */}
-          <dl className="grid gap-px overflow-hidden rounded-2xl bg-line sm:grid-cols-[9rem_minmax(0,1fr)]">
+          {/* p-px 가 바깥 테두리다. gap-px + bg-line 은 칸 사이 선만 만드는데,
+              값 칸이 흰색이고 섹션 바탕도 흰색이라 오른쪽 가장자리가 어디서
+              끝나는지 보이지 않았다 — 표가 잘린 것처럼 읽혔다.
+
+              border 를 쓰지 않는 것은 bg-line 과 겹쳐 가장자리만 2px 로
+              굵어지기 때문이다. p-px 면 안쪽 격자선과 똑같은 1px 이 된다.
+              (위 예시 규격표는 칸 배경이 없어 border-line 으로 테두리를
+               갖는다 — 두 표의 선 색.굵기는 이로써 같아진다.) */}
+          <dl className="grid gap-px overflow-hidden rounded-2xl bg-line p-px sm:grid-cols-[9rem_minmax(0,1fr)]">
             {product.specs.slice(3).map((spec) => (
               <Fragment key={spec.label}>
                 <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink">
