@@ -4,13 +4,13 @@ import Container from "@/components/Container";
 import ContactCTA from "@/components/ContactCTA";
 import ProductCard from "@/components/ProductCard";
 import Section from "@/components/Section";
-import { aboutPoints, process } from "@/data/company";
+import { process } from "@/data/company";
 import ClientGrid from "@/components/ClientGrid";
 import Reveal from "@/components/Reveal";
 import ScrollCue from "@/components/ScrollCue";
 import StatCounter from "@/components/StatCounter";
 import { featuredClients, totalClients } from "@/data/clients";
-import { products } from "@/data/products";
+import { performanceKpis, products } from "@/data/products";
 import { site, yearsInBusiness } from "@/data/site";
 import VideoCard from "@/components/VideoCard";
 import { featuredVideos } from "@/data/videos";
@@ -222,138 +222,109 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. 피더란 / 회사 개요 요약 */}
-      {/* 회사를 말하는 자리다.
+      {/* 3. 제품 성능 */}
+      {/* 제품이 무엇을 해내는가를 숫자로 말하는 자리다.
 
-          한동안 여기가 "피더란 무엇인가" 였다(제목 "부품 자동정렬 공급기",
-          박스 셋이 피더가 하는 일). 그런데 홈에서 회사를 말하는 자리가 히어로
-          한 줄뿐이라, 이 자리를 회사 쪽으로 돌렸다.
+          한동안 여기가 회사를 말하는 자리였다 — "피더를 만드는 데 필요한 것"
+          에 부서.설비.쌓인 사례를 적은 글 상자 다섯. 그 전에는 "피더란
+          무엇인가" 였다. 글 상자는 읽어야 뜻이 오는데, 홈에서 이 자리를 보는
+          사람은 아직 읽을 마음이 없다. 숫자는 보면 바로 온다.
 
-          ⚠️ 히어로와 겹치지 않게 각도를 잡는다. 히어로가 이미 "설계부터
-             튜닝까지 직접 만듭니다 / 34년째 만들고 있습니다" 를 말하므로,
-             여기서는 같은 주장을 되풀이하지 않고 그것이 가능한 까닭(부서.
-             설비.쌓인 사례)을 댄다. 제목도 박스 셋을 묶는 말이다.
+          ⚠️ 바로 위 히어로 지표 띠(1992.34년.34개사.7종)와 축이 다르다 —
+             그쪽은 회사의 규모.연혁이고 여기는 기계의 성능이다. 숫자를 더하거나
+             바꿀 때 그 넷과 겹치지 않는지 본다.
 
-          제목 다음이 바로 영상이다. 한동안 정의 한 문장이 사이에 있었는데
-          박스 셋이 같은 말을 풀어 쓰고 있어 걷었다.
-
-          lg:items-stretch — 윗변과 아랫변을 모두 맞춘다.
-
-          정렬을 세 번 바꿨다. 박스가 셋이던 때는 오른쪽 덩어리(235px)가
-          영상(274px)보다 짧아 items-center 로 세로 중심을 포갰고, 박스가
-          넷이 되며 오른쪽이 길어지자 첫 박스가 영상보다 8px 위에 떠서
-          items-start 로 윗변을 맞췄다. 그래도 아랫변은 6px 남았다 — 영상이
-          aspect-video 로 높이를 스스로 정하기 때문이다.
-
-          지금은 stretch 로 두 칸을 같은 높이로 늘리고, 영상 쪽에서 비율을
-          놓는다(lg:aspect-auto lg:h-full). 그러면 행 높이를 오른쪽 박스가
-          정하고 영상이 거기 맞춰져 위아래가 모두 떨어진다.
-
-          1024 미만은 1열이라 뜻이 없으므로 lg 부터다. */}
+          버튼(action)을 두지 않는다. 내용이 제품 성능이라 "회사소개 자세히
+          보기" 는 결이 안 맞고, "제품 전체 보기" 는 바로 아래 PRODUCTS 섹션
+          버튼과 겹친다. /company 동선은 헤더.푸터 메뉴에 있다. 대신 lead
+          한 줄이 제목을 받는다. */}
       <Section
-        eyebrow="ABOUT US"
-        title="피더를 만드는 데 필요한 것"
-        action={
-          /* PRODUCTS.PROCESS.VIDEO.CLIENTS 와 같은 자리.같은 꼴이다.
-             박스 아래에 있던 것을 제목 줄로 올렸다 — 오른쪽 칸이 박스만
-             남아 영상 높이와 거의 같아진다. */
-          <Link href="/company" className={BTN}>
-            회사소개 자세히 보기
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-              className="shrink-0 transition-transform group-hover:translate-x-1"
-            >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
-          </Link>
-        }
+        eyebrow="PERFORMANCE"
+        title="한 자세로, 멈추지 않고"
+        lead="부품을 같은 자세로 가려 세워, 라인이 멈추지 않게 합니다."
       >
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-stretch lg:gap-16">
-          {/* 정지 사진이던 자리다. 피더가 무엇인지는 "부품이 돌다가 한 줄로
-              서서 나간다" 는 움직임 자체라, 멈춘 사진으로는 절반만 전해졌다.
+        {/* 정지 사진이던 자리다. 피더가 무엇인지는 "부품이 돌다가 한 줄로
+            서서 나간다" 는 움직임 자체라, 멈춘 사진으로는 절반만 전해졌다.
 
-              히어로가 쓰는 영상을 그대로 건다. 볼피더가 커넥터 부품을 정렬해
-              트랙으로 내보내는 10초짜리인데, 히어로에서는 opacity 0.3 에
-              네이비 오버레이까지 덮여 거의 안 보인다 — 같은 파일이어도 여기서
-              밝게 돌면 다른 영상처럼 읽히고, 이미 받는 파일이라 전송량도
-              늘지 않는다.
+            히어로가 쓰는 영상을 그대로 건다. 볼피더가 커넥터 부품을 정렬해
+            트랙으로 내보내는 10초짜리인데, 히어로에서는 opacity 0.3 에
+            네이비 오버레이까지 덮여 거의 안 보인다 — 같은 파일이어도 여기서
+            밝게 돌면 다른 영상처럼 읽히고, 이미 받는 파일이라 전송량도
+            늘지 않는다.
 
-              1024 미만은 16/9 다 — 영상 원본과 같은 비율이라 아무 데도
-              잘리지 않는다. lg 부터는 그 고정을 놓고 오른쪽 칸 높이를 따라간다
-              (lg:aspect-auto lg:h-full). 오른쪽 박스 다섯이 268px 이고 16/9 면
-              274px 이라, 비율을 쥐고 있으면 아랫변이 6px 어긋난다.
+            1024 미만은 16/9 다 — 영상 원본과 같은 비율이라 아무 데도 잘리지
+            않는다. lg 부터는 3/1 로 눕힌다. 전체 폭(1088px)에서 16/9 면
+            612px 라 영상이 화면을 다 먹고 아래 KPI 가 밀려난다. 3/1 이면
+            363px 이고, 제목.영상.KPI 넷이 1440x900 한 화면에 들어온다.
 
-              따라간 비율은 1280 이상에서 1.82 로 16/9(1.78)와 거의 같고,
-              2열이 가장 좁은 1024 에서만 1.56 까지 선다. 어느 쪽이든
-              object-cover 가 가장자리를 조금 자를 뿐이라 트랙 위 부품이
-              가운데 남는다 — 두 폭 다 눈으로 확인했다.
+            object-cover 가 위아래를 자르지만 트랙이 화면을 가로지르는 장면
+            이라 부품이 가운데 남는다 — 눈으로 확인했다.
 
-              ⚠️ 한때 사진 시절의 4/3 에 lg:h-full 을 걸어 뒀다가, 정의 문장이
-                 리드로 올라가면서 오른쪽이 짧아져 2.07:1 까지 납작해진 적이
-                 있다. 박스 개수나 글을 바꾸면 이 비율을 다시 재야 한다 —
-                 1.9 보다 납작해지면 aspect 를 다시 쥐는 편이 낫다.
+            ⚠️ Image 가 아래 깔려 있는 것은 장식이 아니다. globals.css 의
+               prefers-reduced-motion 블록이 .hero-video 를 display:none 으로
+               숨기므로, 움직임을 끈 사람에게는 이 정지컷이 보인다. 영상에서
+               뽑은 그림이라 장면이 어긋나지 않는다. 지우면 그 사람에게 빈
+               칸만 남는다. */}
+        <Reveal className="relative aspect-video overflow-hidden rounded-2xl bg-surface lg:aspect-[3/1]">
+          <Image
+            src="/images/hero-poster.webp"
+            alt="커넥터 부품을 정렬해 트랙으로 내보내는 볼피더"
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+          <video
+            className="hero-video absolute inset-0 h-full w-full object-cover"
+            poster="/images/hero-poster.webp"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+          >
+            <source src="/videos/hero.mp4" type="video/mp4" />
+          </video>
+        </Reveal>
 
-              ⚠️ Image 가 아래 깔려 있는 것은 장식이 아니다. globals.css 의
-                 prefers-reduced-motion 블록이 .hero-video 를 display:none 으로
-                 숨기므로, 움직임을 끈 사람에게는 이 정지컷이 보인다. 영상에서
-                 뽑은 그림이라 장면이 어긋나지 않는다. 지우면 그 사람에게 빈
-                 칸만 남는다. */}
-          <Reveal className="relative aspect-video overflow-hidden rounded-2xl bg-surface lg:aspect-auto lg:h-full">
-            <Image
-              src="/images/hero-poster.webp"
-              alt="커넥터 부품을 정렬해 트랙으로 내보내는 볼피더"
-              fill
-              sizes="(max-width: 1024px) 100vw, 45vw"
-              className="object-cover"
-            />
-            <video
-              className="hero-video absolute inset-0 h-full w-full object-cover"
-              poster="/images/hero-poster.webp"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
+        {/* KPI 넷. 값 - 라벨 - 조건 세 줄이다.
+
+            ⚠️ dl 이 아니라 ul 이다. 처음에 히어로 지표 띠를 따라 dl/dt/dd 로
+               짰다가 Lighthouse 접근성이 96 으로 떨어졌다(definition-list 미통과,
+               agent-accessibility-tree 0). dl 의 자식 div 안에는 dt 와 dd 만
+               올 수 있는데 조건 줄이 p 라 섞인 탓이다. 히어로 띠가 통과하는
+               것은 거기가 dd + dt 둘뿐이라서다.
+
+               여기는 줄이 셋이고 용어-정의 쌍도 아니다 — 측정값 목록이라
+               ul/li 가 뜻에도 맞다.
+
+            칸 사이는 세로 구분선이다. 시안 셋(맨 글자 / 구분선 / 회색 박스)을
+            찍어 비교했다 — 회색 박스는 아래 제품 카드와 결이 겹쳐 KPI 의
+            시원함이 줄고, 맨 글자는 흰 바탕에서 네 덩어리가 흩어져 보인다.
+            1열.2열에서는 선이 뜻을 잃으므로 lg 부터만 긋는다.
+
+            ⚠️ StatCounter 를 쓰지 않는다. 바로 위 히어로 지표 띠가 이미 세어
+               올리고 있어, 한 화면에서 숫자가 두 번 구르면 산만하다. */}
+        <ul className="mt-10 grid gap-8 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4 lg:gap-7">
+          {performanceKpis.map((kpi, i) => (
+            <Reveal
+              as="li"
+              key={kpi.label}
+              delay={i * 80}
+              className={i > 0 ? "lg:border-l lg:border-line lg:pl-7" : ""}
             >
-              <source src="/videos/hero.mp4" type="video/mp4" />
-            </video>
-          </Reveal>
-          <Reveal delay={120}>
-            {/* 회사의 됨됨이 셋 — 부서.설비.쌓인 사례. 제목("피더를 만드는
-                데 필요한 것")이 묶는 말이고 이 셋이 그 내용이다.
-
-                bg-surface + 레드 점은 제품 상세의 사양 박스.적용 분야 칩과
-                같은 꼴이다 — 사이트에 이미 있는 언어라 새 모양을 더하지
-                않는다. 섹션이 흰 바탕이라 흰 카드는 묻히고, 회색 박스가
-                또렷하다. */}
-            <ul className="space-y-2">
-              {aboutPoints.map((point) => (
-                <li
-                  key={point.label}
-                  className="flex items-center gap-3 rounded-xl bg-surface px-4 py-3.5"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
-                  />
-                  <p className="text-sm leading-snug text-ink-soft">
-                    <b className="font-bold text-ink">{point.label}</b>
-                    &nbsp;&nbsp;{point.body}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-        </div>
+              <p className="text-[34px] font-extrabold leading-none tracking-tight tabular-nums text-ink">
+                {kpi.value}
+                <span className="ml-0.5 text-lg font-bold text-brand">
+                  {kpi.unit}
+                </span>
+              </p>
+              <p className="mt-2.5 text-sm font-bold text-ink">{kpi.label}</p>
+              <p className="mt-1.5 text-xs leading-relaxed text-muted">
+                {kpi.note}
+              </p>
+            </Reveal>
+          ))}
+        </ul>
       </Section>
 
       {/* 4. 제품 라인업 */}
