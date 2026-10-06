@@ -445,50 +445,9 @@ export default async function ProductDetailPage({
             ))}
           </dl>
 
-          {/* 경쟁사(신창에프에이)는 표준 기종을 팔아 형식별 용량·전원·진동수·
-            중량 표가 있다. 유신은 부품에 맞춰 만드는 회사라 그 표가 나올 수
-            없다 — 숨기지 말고 여기서 말한다.
-
-            ⚠️ 위에 예시 규격표를 두게 되면서 이 문단의 역할이 바뀌었다. 전에는
-               "수치표가 아예 없다" 는 사실을 알리는 자리였는데, 지금은 위 표가
-               예시일 뿐이고 실제 값은 견적 때 나온다는 것을 한 번 더 못 박는
-               자리다. 둘 중 하나만 고치면 표와 글이 어긋난다.
-
-            뒷문장은 company.ts 의 process[0]("공급할 부품 샘플과 도면을 받아
-            형상·재질·무게·요구 공급 속도를 확인합니다")을 근거로 쓴다.
-            유신에서 기종별 수치를 받으면 이 문단을 지우고 위 표를 수치표로
-            바꾼다(README '받아야 할 자료' 7번).
-
-            박스로 묶었다. 전에는 표 아래 회색 글자가 그냥 떠 있어 표의
-            일부인지 다음 이야기인지 안 읽혔다. 레드 강조선은 쓰지 않는다 —
-            주의 경고가 아니라 "수치는 견적 때 산출한다" 는 안내다.
-
-            ⚠️ 한 줄을 넘기지 말 것. 박스 글상자가 1280 이상 1020px,
-            1024 877px, 768 636px 다(패딩 40 + 아이콘·간격 28 을 뺀 값).
-            가장 좁은 768 에 들어가려면 636px 이 한계라 지금 문장이 그
-            기준으로 깎여 있다. 640 이하(508px)에서는 어차피 두 줄이 된다 —
-            거기서 한 줄로 넣으려면 뜻이 남지 않는다. */}
-          <div className="mt-4 flex items-start gap-3 rounded-xl bg-surface px-5 py-4">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-              className="mt-0.5 shrink-0 text-muted"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 16v-4M12 8h.01" />
-            </svg>
-            <p className="text-sm leading-relaxed text-muted">
-              위 규격은 예시입니다. 볼 직경·처리 수량 같은 수치는 부품과 속도에
-              따라 달라지므로, 샘플과 도면을 주시면 산출해 회신드립니다.
-            </p>
-          </div>
+          {/* 한때 이 아래에 "위 규격은 예시입니다 …" 안내 박스가 하나 더
+              있었다. 표 위 안내가 생기면서 같은 말이 두 번이 되어 걷었다 —
+              먼저 읽히는 쪽을 남긴다. */}
         </Reveal>
 
         <h3 className="mt-12 text-lg font-bold text-ink">적용 분야</h3>

@@ -329,9 +329,34 @@ export default function Home() {
         tone="surface"
         eyebrow="PRODUCTS"
         title="제품 라인업"
+        action={
+          /* VIDEO.CLIENTS.PROCESS 와 같은 자리.같은 꼴이다. */
+          <Link href="/products" className={BTN}>
+            제품 전체 보기
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className="shrink-0 transition-transform group-hover:translate-x-1"
+            >
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </Link>
+        }
       >
+        {/* 셋만 건다. 일곱 개를 다 늘어놓으면 3+3+1 로 끊겨 마지막 줄에 한
+            칸만 남고, 홈에서 제품을 "훑어보는" 자리가 제품 목록 페이지와
+            같아진다. 앞 셋은 배열 순서 그대로다 — 볼피더가 본체, 직진피더가
+            이송, 진동기가 구동부로 피더 한 벌의 뼈대다. */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product, i) => (
+          {products.slice(0, 3).map((product, i) => (
             <Reveal key={product.slug} delay={i * 70}>
               <ProductCard product={product} />
             </Reveal>
@@ -385,7 +410,7 @@ export default function Home() {
               as="li"
               key={p.step}
               delay={i * 80}
-              className="rounded-2xl bg-white p-7 shadow-card sm:p-8"
+              className="relative rounded-2xl bg-white p-7 shadow-card sm:p-8"
             >
               {/* 숫자와 제목을 한 줄로 묶는다. 전에는 숫자가 3xl 로 혼자
                   한 줄을 차지하고 그 아래 제목.본문이 모두 맨 글자였다 —
@@ -426,6 +451,36 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
+
+              {/* 카드 사이를 잇는 화살표. 넷이 나란히 서 있을 뿐 단계가
+                  이어지는 표시가 없어 심심했다.
+
+                  -right-[18px] 가 틈 한가운데다 — 카드 간격이 gap-4(16px)이고
+                  화살표가 20px 이라 16/2 + 20/2 = 18 이다.
+
+                  lg 부터만 띄운다. 2열(sm)에서는 1→2 는 가로인데 2→3 은 줄이
+                  바뀌어, 화살표가 엉뚱한 곳을 가리킨다.
+
+                  장식이라 aria-hidden 이다. 순서는 ol 과 숫자가 이미 전한다. */}
+              {i < process.length - 1 && (
+                <span
+                  aria-hidden="true"
+                  className="absolute -right-[18px] top-1/2 hidden -translate-y-1/2 text-muted/50 lg:flex"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M9 6l6 6-6 6" />
+                  </svg>
+                </span>
+              )}
             </Reveal>
           ))}
         </ol>
