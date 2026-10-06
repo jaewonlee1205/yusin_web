@@ -325,6 +325,10 @@ export const aboutPoints: { label: string; body: string }[] = [
     body: `밀링·선반·연마기 등 ${equipmentTotals.kinds}종 ${equipmentTotals.units}대로 직접 깎습니다`,
   },
   {
+    label: "전담 튜닝",
+    body: "실제 부품으로 진동을 맞추는 전담 인력이 있습니다",
+  },
+  {
     label: `${yearsInBusiness}년 데이터`,
     body: "부품별 볼 형상·지그 사례가 쌓여 있습니다",
   },

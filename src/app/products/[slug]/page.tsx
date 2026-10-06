@@ -330,6 +330,80 @@ export default async function ProductDetailPage({
       </Section>
 
       <Section size="compact" eyebrow="SPECIFICATIONS" title="제작 사양">
+        {/* 모델별 예시 규격표.
+
+            ⚠️⚠️ 이 수치는 유신이 확인해 준 값이 아니다. 업계에서 쓰는 축과
+                 일반값으로 짜 넣은 예시이고, 그래서 **표를 읽기 전에** 보이게
+                 안내 줄을 표 위에 둔다(아래에 두면 다 읽은 뒤에야 보인다).
+                 자세한 내력은 products.ts 의 specTable 주석에 있다.
+
+            가로 스크롤은 표에만 건다. 열이 다섯이라 좁은 폭에서는 밀어서
+            봐야 하는데, 페이지 자체가 가로로 넘치면 안 된다.
+
+            table 을 쓴다 — 행과 열이 모두 뜻을 갖는 자료라 dl 로는 형식별
+            비교가 전달되지 않는다. th 에 scope 를 준다. */}
+        {product.specTable && (
+          <Reveal className="mb-8">
+            <div className="flex items-start gap-2.5 rounded-xl bg-surface px-4 py-3">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+                className="mt-0.5 shrink-0 text-muted"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 16v-4M12 8h.01" />
+              </svg>
+              <p className="text-[13px] leading-relaxed text-ink-soft">
+                <b className="font-bold text-ink">예시 규격</b> — 실제 값은
+                공급할 부품에 따라 산출합니다. {product.specTable.caption}
+              </p>
+            </div>
+
+            <div className="mt-3 overflow-x-auto rounded-2xl border border-line">
+              <table className="w-full border-collapse text-left text-sm">
+                <thead>
+                  <tr className="bg-surface">
+                    {product.specTable.columns.map((col) => (
+                      <th
+                        key={col}
+                        scope="col"
+                        className="whitespace-nowrap px-4 py-3 font-bold text-ink"
+                      >
+                        {col}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-line">
+                  {product.specTable.rows.map((row) => (
+                    <tr key={row[0]}>
+                      {row.map((cell, i) => (
+                        <td
+                          key={i}
+                          className={`whitespace-nowrap px-4 py-3 ${
+                            i === 0
+                              ? "font-bold tabular-nums text-ink"
+                              : "tabular-nums text-ink-soft"
+                          }`}
+                        >
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Reveal>
+        )}
+
         {/* 표와 그 아래 안내 문단은 한 덩어리로 읽히므로 한 겹으로 묶는다. */}
         <Reveal>
           {/* 한 행에 두 쌍을 넣는다. 전에는 행마다 flex 였는데 dd 에 flex-1
@@ -373,8 +447,12 @@ export default async function ProductDetailPage({
 
           {/* 경쟁사(신창에프에이)는 표준 기종을 팔아 형식별 용량·전원·진동수·
             중량 표가 있다. 유신은 부품에 맞춰 만드는 회사라 그 표가 나올 수
-            없다 — 숨기지 말고 여기서 말한다. 없는 수치를 지어 넣으면 고객이
-            그대로 믿고 발주하는 값이 되므로 하지 않는다.
+            없다 — 숨기지 말고 여기서 말한다.
+
+            ⚠️ 위에 예시 규격표를 두게 되면서 이 문단의 역할이 바뀌었다. 전에는
+               "수치표가 아예 없다" 는 사실을 알리는 자리였는데, 지금은 위 표가
+               예시일 뿐이고 실제 값은 견적 때 나온다는 것을 한 번 더 못 박는
+               자리다. 둘 중 하나만 고치면 표와 글이 어긋난다.
 
             뒷문장은 company.ts 의 process[0]("공급할 부품 샘플과 도면을 받아
             형상·재질·무게·요구 공급 속도를 확인합니다")을 근거로 쓴다.
@@ -407,8 +485,8 @@ export default async function ProductDetailPage({
               <path d="M12 16v-4M12 8h.01" />
             </svg>
             <p className="text-sm leading-relaxed text-muted">
-              볼 직경·처리 수량 같은 수치는 부품과 속도에 따라 다릅니다. 샘플과
-              도면을 주시면 산출해 회신드립니다.
+              위 규격은 예시입니다. 볼 직경·처리 수량 같은 수치는 부품과 속도에
+              따라 달라지므로, 샘플과 도면을 주시면 산출해 회신드립니다.
             </p>
           </div>
         </Reveal>
@@ -489,7 +567,11 @@ export default async function ProductDetailPage({
 
           섹션은 약 609 -> 648px 가 된다. */}
       <Section size="compact" eyebrow="OTHER PRODUCTS" title="다른 제품">
-        <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-16 xl:gap-x-36">
+        {/* 간격은 가로.세로 모두 24px 다. 한때 lg:gap-x-16 xl:gap-x-36
+            (144px)이었는데, 카드 셋이 멀찍이 떨어져 한 묶음으로 안 읽혔다.
+            사이트의 다른 카드 격자와 같은 값으로 맞춘다(FEATURES gap-6,
+            적용 분야 gap-4). */}
+        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {related.map((p, i) => (
             <Reveal as="li" key={p.slug} delay={i * 70}>
               <ProductCard product={p} />
