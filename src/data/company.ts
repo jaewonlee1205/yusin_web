@@ -279,6 +279,11 @@ export const process: { step: string; title: string; body: string }[] = [
 ];
 
 /** 홈 '유신의 강점' 섹션. */
+/**
+ * ⚠️ 지금은 어디서도 쓰지 않는다. 홈의 "유신의 강점"(WHY YUSIN) 섹션이 이 넷을
+ *    그렸는데 그 섹션을 걷어냈다. 글이 아까워 데이터는 남겨 둔다 — 되살리려면
+ *    page.tsx 에서 import 해 Section 하나로 그리면 된다.
+ */
 export const strengths: { title: string; body: string }[] = [
   {
     title: "설계부터 튜닝까지 사내 일관 제작",

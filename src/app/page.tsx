@@ -4,7 +4,7 @@ import Container from "@/components/Container";
 import ContactCTA from "@/components/ContactCTA";
 import ProductCard from "@/components/ProductCard";
 import Section from "@/components/Section";
-import { process, strengths } from "@/data/company";
+import { process } from "@/data/company";
 import ClientGrid from "@/components/ClientGrid";
 import Reveal from "@/components/Reveal";
 import ScrollCue from "@/components/ScrollCue";
@@ -32,6 +32,11 @@ const STATS = [
   { value: totalClients, count: true, unit: "개사", note: "주요 거래처" },
   { value: products.length, count: true, unit: "종 제품", note: "피더 전 라인업" },
 ];
+
+/* "자세히 보기 / 전체 보기" 버튼. 오시는 길의 지도앱 버튼, 영상자료의
+   "영상 더 보기" 와 같은 모양이다. */
+const BTN =
+  "group inline-flex items-center gap-2 rounded-xl border border-line bg-white px-5 py-3.5 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand";
 
 export default function Home() {
   return (
@@ -224,14 +229,14 @@ export default function Home() {
               {feederDefinition.body}
             </p>
             <p className="mt-5 text-base leading-relaxed text-ink-soft sm:text-lg">
-              유신 F.A 시스템은 이 피더를 {yearsInBusiness}년째 만들어 온
-              회사입니다. 볼 형상 설계, 정렬 지그 가공, 진동 튜닝, 조립과 현장
-              설치까지 한 공장 안에서 끝냅니다.
+              유신 F.A 시스템은 이 피더를 {yearsInBusiness}년째 만들어 왔습니다.
+              볼 형상 설계, 정렬 지그 가공, 진동 튜닝, 조립과 현장 설치까지 한
+              공장 안에서 끝냅니다.
             </p>
-            <Link
-              href="/company"
-              className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-navy underline underline-offset-4 hover:text-brand"
-            >
+            {/* 밑줄 링크였다. 오시는 길의 지도앱 버튼.영상자료의 "영상 더 보기"
+                와 같은 모양으로 맞춘다 — 사이트에 이미 있는 언어라 새 모양을
+                더하지 않는다. */}
+            <Link href="/company" className={`mt-7 ${BTN}`}>
               회사소개 자세히 보기
               <svg
                 width="14"
@@ -243,6 +248,7 @@ export default function Home() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 aria-hidden="true"
+                className="shrink-0 transition-transform group-hover:translate-x-1"
               >
                 <path d="M5 12h14" />
                 <path d="m12 5 7 7-7 7" />
@@ -257,7 +263,6 @@ export default function Home() {
         tone="surface"
         eyebrow="PRODUCTS"
         title="제품 라인업"
-        lead="피더 본체부터 이송·보충·제어·방음·표면처리까지, 라인 구성에 필요한 요소를 모두 직접 제작합니다."
       >
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product, i) => (
@@ -268,36 +273,16 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* 5. 강점 */}
-      <Section
-        eyebrow="WHY YUSIN"
-        title="유신의 강점"
-        lead="피더는 카탈로그에서 고르는 물건이 아니라 부품에 맞춰 만드는 물건입니다. 그래서 만드는 사람의 손이 남습니다."
-      >
-        <div className="grid gap-px overflow-hidden rounded-2xl bg-line sm:grid-cols-2">
-          {strengths.map((s, i) => (
-            <Reveal key={s.title} delay={i * 80} className="bg-white p-7 sm:p-9">
-              <span className="text-sm font-bold tabular-nums text-brand">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3 className="mt-3 text-lg font-bold text-ink">{s.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-ink-soft">
-                {s.body}
-              </p>
-            </Reveal>
-          ))}
-        </div>
-      </Section>
-
-      {/* 6. 제작 프로세스 */}
+      {/* 5. 제작 프로세스 */}
       <Section
         eyebrow="PROCESS"
         title="문의부터 납품까지"
-        lead="부품 샘플 한 점에서 시작합니다. 아래 네 단계를 거쳐 현장에서 도는 피더가 됩니다."
       >
-        {/* 떨어진 그림자 카드다. 바로 위 "유신의 강점" 이 흰 바탕 + bg-line
-            격자(칸 사이 1px 선)를 쓰므로, 여기까지 같은 기법이면 두 섹션이
-            나란히 같은 모양이 된다.
+        {/* 떨어진 그림자 카드다. 사이트의 카드 언어가 rounded-2xl +
+            shadow-card 이므로 여기도 같은 모양으로 둔다.
+
+            (한때 "바로 위 유신의 강점 섹션과 겹치지 않게" 라고 적어 두었는데,
+            그 섹션을 걷어내 더는 해당되지 않는다.)
 
             숫자는 brand 다. 네이비 위에서 쓰던 brand-light(#ff6b5e)는 흰
             바탕에서 3.0:1 로 떨어진다(brand #d5261e 는 5.1:1). */}
@@ -321,23 +306,19 @@ export default function Home() {
         </ol>
       </Section>
 
-      {/* 7. 제품 영상 — videos.ts가 비어 있으면 통째로 렌더하지 않는다.
+      {/* 6. 제품 영상 — videos.ts가 비어 있으면 통째로 렌더하지 않는다.
              여기는 맛보기 두 편만 걸고 나머지는 /videos 에서 본다. */}
       {featuredVideos.length > 0 && (
         <Section
           tone="surface"
           eyebrow="VIDEO"
           title="제품 영상"
-          lead="실제 현장에서 부품이 정렬되어 나오는 모습입니다."
           action={
             /* /videos 와 같은 자리에 둔다. 한쪽만 제목 줄로 올리면 같은
                성격의 두 섹션이 달라 보인다. 글자는 "전체 보기" 그대로다 —
                여기는 /videos 로 가는 내부 링크이고, /videos 쪽은 유튜브로
                나가는 "더 보기" 라 역할이 다르다. */
-            <Link
-              href="/videos"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-navy underline underline-offset-4 hover:text-brand"
-            >
+            <Link href="/videos" className={BTN}>
               영상 전체 보기
               <svg
                 width="14"
@@ -349,6 +330,7 @@ export default function Home() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 aria-hidden="true"
+                className="shrink-0 transition-transform group-hover:translate-x-1"
               >
                 <path d="M5 12h14" />
                 <path d="m12 5 7 7-7 7" />
@@ -366,19 +348,15 @@ export default function Home() {
         </Section>
       )}
 
-      {/* 8. 주요 거래처 */}
+      {/* 7. 주요 거래처 */}
       <Section
         eyebrow="CLIENTS"
         title="주요 거래처"
-        lead={`전기·전자부품부터 제약, 화장품 용기까지 ${totalClients}개사에 납품해 왔습니다.`}
       >
         <Reveal>
           <ClientGrid names={featuredClients} />
         </Reveal>
-        <Link
-          href="/clients"
-          className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-navy underline underline-offset-4 hover:text-brand"
-        >
+        <Link href="/clients" className={`mt-8 ${BTN}`}>
           거래처 전체 보기
           <svg
             width="14"
@@ -390,6 +368,7 @@ export default function Home() {
             strokeLinecap="round"
             strokeLinejoin="round"
             aria-hidden="true"
+            className="shrink-0 transition-transform group-hover:translate-x-1"
           >
             <path d="M5 12h14" />
             <path d="m12 5 7 7-7 7" />
@@ -397,7 +376,7 @@ export default function Home() {
         </Link>
       </Section>
 
-      {/* 9. 문의 CTA */}
+      {/* 8. 문의 CTA */}
       <ContactCTA />
 
       <script
