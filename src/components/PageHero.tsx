@@ -42,17 +42,38 @@ export default function PageHero({
         className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-brand"
       />
       <Container className="relative flex min-h-[13.5rem] flex-col justify-center py-12 sm:min-h-[15rem] sm:py-14">
-        {/* 글자를 올리며 들여보내지 않는다. 메뉴를 옮겨 다닐 때마다 매번
-            기다리게 되기 때문이다 — 목적지는 이미 받아져 있으니 바로 보여 준다.
-            (홈 히어로는 첫 화면 연출이라 .rise 를 그대로 쓴다) */}
-        <p className="text-xs font-bold tracking-[0.2em] text-brand-light">
+        {/* 글자가 아래에서 올라오며 나타난다.
+
+            한동안 여기만 애니메이션을 두지 않았다. 메뉴를 옮겨 다닐 때마다
+            매번 기다리게 된다는 이유였는데, 맞는 걱정이지만 답이 "빼기" 는
+            아니었다. 홈 히어로가 느린 것이지(.rise 0.7초 + 지연 300ms =
+            약 1초) 움직임 자체가 문제가 아니다.
+
+            그래서 .rise-quick 을 따로 뒀다. 거리 0.6rem, 0.45초, 지연
+            0/70/140ms — 전부 끝나는 데 약 0.59초라 기다린다는 느낌이 들기
+            전에 끝난다. 홈 히어로는 첫 화면 연출이라 .rise 그대로다.
+
+            배너 높이가 min-h 로 고정이고 justify-center 라, opacity 와
+            transform 만 움직이는 이 연출은 아래 내용을 밀지 않는다(CLS 0).
+            prefers-reduced-motion 에서는 globals.css 끝 블록이 모든
+            애니메이션을 꺼 버리므로 글자가 즉시 보인다. */}
+        <p
+          className="rise-quick text-xs font-bold tracking-[0.2em] text-brand-light"
+          style={{ animationDelay: "0ms" }}
+        >
           {eyebrow}
         </p>
-        <h1 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-5xl">
+        <h1
+          className="rise-quick mt-3 text-3xl font-bold tracking-tight text-white sm:text-5xl"
+          style={{ animationDelay: "70ms" }}
+        >
           {title}
         </h1>
         {lead && (
-          <p className="mt-5 min-h-[3.25rem] max-w-2xl text-base leading-relaxed text-white/70 sm:min-h-[1.875rem] sm:text-lg">
+          <p
+            className="rise-quick mt-5 min-h-[3.25rem] max-w-2xl text-base leading-relaxed text-white/70 sm:min-h-[1.875rem] sm:text-lg"
+            style={{ animationDelay: "140ms" }}
+          >
             {lead}
           </p>
         )}
