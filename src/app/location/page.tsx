@@ -22,10 +22,14 @@ const query = encodeURIComponent(site.address.jibun);
 const MAP_SRC = `https://maps.google.com/maps?q=${query}&z=16&hl=ko&output=embed`;
 
 /**
- * 전화는 이 목록에서 뺐다. 세 번호를 같은 크기로 쌓아 두니 어디로 걸어야
- * 하는지가 화면에서 사라졌다 — site.ts 는 대표번호(tel)와 추가 회선
- * (telExtra)을 나눠 두는데 그 구분이 묻혔다. 아래 표에서 전화 행만 따로
- * 그려 대표번호를 한 급 키운다.
+ * 전화는 이 목록에서 뺐다. 세 번호를 똑같이 쌓아 두니 어디로 걸어야 하는지가
+ * 화면에서 사라졌다 — site.ts 는 대표번호(tel)와 추가 회선(telExtra)을 나눠
+ * 두는데 그 구분이 묻혔다. 아래 표에서 전화 행만 따로 그려 대표번호를
+ * 가른다.
+ *
+ * 가르는 수단은 색 하나다. 한동안 크기(15px)와 굵기(semibold)까지 함께
+ * 썼는데, 그러면 표 안에 글자 크기가 13/14/15px 세 가지가 되고 그중 둘만
+ * 굵어 행을 훑는 눈이 두 번 멈췄다. 구분은 색 한 단계로 충분하다.
  *
  * 팩스는 걸 수 없어 link 가 없다(헤더·푸터·CTA와 같은 규칙).
  */
@@ -145,8 +149,9 @@ export default function LocationPage() {
                   이면 네 행이 똑같아져 팩스 한 줄과 주소 두 줄이 같은
                   높이가 된다 — 그건 표가 아니라 격자로 보인다. */}
               <dl className="mt-7 flex flex-1 flex-col overflow-hidden rounded-lg border border-line">
-                {/* 전화 — 대표번호를 한 급 키운다. 세 번호가 같은 무게면
-                    어디로 걸어야 하는지 고르게 된다. */}
+                {/* 전화 — 대표번호는 ink-soft(주소.팩스.이메일과 같은 색),
+                    추가 회선은 한 단계 연한 muted 다. 크기는 둘 다 표의 다른
+                    값과 같은 14px 로 둔다. */}
                 <div className="flex flex-auto flex-col border-b border-line sm:flex-row">
                   <dt className="bg-surface px-5 py-4 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
                     전화
@@ -154,11 +159,11 @@ export default function LocationPage() {
                   <dd className="px-5 py-4 sm:flex sm:flex-col sm:justify-center">
                     <a
                       href={telHref(site.tel)}
-                      className="block text-[15px] font-semibold tabular-nums text-ink transition-colors hover:text-brand"
+                      className="block text-sm tabular-nums text-ink-soft transition-colors hover:text-brand"
                     >
                       {site.tel}
                     </a>
-                    <span className="mt-1.5 block text-[13px] leading-relaxed text-muted">
+                    <span className="mt-1.5 block text-sm leading-relaxed text-muted">
                       {site.telExtra.map((number, i) => (
                         <span key={number}>
                           {i > 0 && " · "}
@@ -213,10 +218,10 @@ export default function LocationPage() {
                     운영 시간
                   </dt>
                   <dd className="px-5 py-4 sm:flex sm:flex-col sm:justify-center">
-                    <span className="block text-[15px] font-semibold tabular-nums text-ink">
+                    <span className="block text-sm tabular-nums text-ink-soft">
                       {site.hours.weekday}
                     </span>
-                    <span className="mt-1.5 block text-[13px] leading-relaxed text-muted">
+                    <span className="mt-1.5 block text-sm leading-relaxed text-muted">
                       {site.hours.holiday}
                     </span>
                   </dd>
