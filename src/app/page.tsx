@@ -39,11 +39,6 @@ export default function Home() {
       {/* 1. Hero — 헤더를 뺀 한 화면에 지표 줄까지 전부 들어가야 한다.
           화면이 낮아지면 패딩·글자·이미지가 clamp()로 같이 줄어든다. */}
       <section className="hero-screen relative flex flex-col overflow-hidden bg-navy-deep">
-        {/* 배경 1 — 네이비 그라데이션 바닥 */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-br from-navy-deep via-navy-deep to-navy"
-        />
         {/* 배경 2 — 실제 피더가 도는 영상.
 
             유튜브 iframe 을 쓰지 않는다. 홈은 외부 요청이 0건이고(그러려고
@@ -54,10 +49,16 @@ export default function Home() {
             설정에서 그대로 보이게 하려는 것이다(globals.css 의 .hero-video 참고).
 
             opacity 는 바깥 한 겹에만 건다 — 두 겹에 걸면 어두워진다.
-            drift(느린 확대)는 걸지 않는다 — 영상 자체가 움직여 겹치면 과하다. */}
+            drift(느린 확대)는 걸지 않는다 — 영상 자체가 움직여 겹치면 과하다.
+
+            0.5 였다가 0.3 으로 내렸다. 히어로의 겹을 다섯에서 둘로 줄이면서
+            가장자리 비네트와 3D 도면 뒤를 눌러 주던 겹이 없어졌는데, 영상에는
+            밝은 구간이 있어 그 프레임에서 도면과 글자가 흐려졌다. 스크림을
+            다시 얹는 대신 영상 자체를 한 단계 낮춘다 — 겹은 둘로 남고 배경이
+            조용해진다. 영상은 여전히 보인다. */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-[0.5]"
+          className="pointer-events-none absolute inset-0 opacity-[0.3]"
         >
           <Image
             src="/images/hero-poster.webp"
@@ -81,31 +82,21 @@ export default function Home() {
             <source src="/videos/hero.mp4" type="video/mp4" />
           </video>
         </div>
-        {/* 배경 3 — 글자가 읽히도록 덮는 네이비 오버레이 + 가장자리 비네트 */}
+        {/* 배경 3 — 글자가 읽히도록 덮는 네이비 오버레이.
+
+            ⚠️ 이 한 겹이 글자 가독성을 혼자 맡는다. 지우면 영상 위에서 흰
+               글자가 읽히지 않는다.
+
+            한때 히어로에 겹이 다섯이었다 — 바닥 그라디언트, 영상, 이 오버레이,
+            가장자리 비네트, 3D 도면 뒤를 눌러 주는 자리. 하위 페이지 배너는
+            장식을 모두 걷어 바탕 한 장으로 세웠는데 홈만 다섯이라, 영상(제품이
+            도는 모습이니 내용이다)과 이 오버레이만 남겼다. 바닥 그라디언트는
+            section 의 bg-navy-deep 과 거의 같은 색을 한 번 더 까는 것이었고,
+            비네트와 도면 뒤 자리는 도면이 흰 금속이라 어두운 영상 위에서 그
+            자체로 구분돼 없어도 읽힌다. */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-gradient-to-r from-navy-deep via-navy-deep/75 to-transparent"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_45%,transparent_45%,rgba(6,38,92,0.72)_100%)]"
-        />
-        {/* 배경 4 — 3D 도면 뒤에 까는 어두운 자리.
-
-            영상이 가장 잘 드러나는 지점이 하필 도면 자리다. 영상을 켠 화면과 끈
-            화면의 픽셀 차이를 격자로 재 보면 도면 뒤가 나머지보다 28% 더 드러난다.
-            볼 테두리의 큰 곡선과 도면의 원형 플레이트가 포개져 서로를 방해하므로
-            도면 뒤만 눌러 준다. 영상은 비어 있는 아래쪽·가장자리에서 보인다.
-
-            앞서 여기 있던 원형 글로우(-right-32)는 목적은 같았지만 중심이 화면
-            밖이라 정작 도면 뒤를 덮지 못했다.
-
-            왼쪽을 걷어내 영상을 보이게 하는 방향은 쓰지 않는다 — 거긴 글자 자리다.
-
-            도면은 sm 미만에서 숨으므로(아래 rise-zoom 블록) 스크림도 sm 부터 건다. */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 hidden bg-[radial-gradient(ellipse_34%_46%_at_70%_44%,rgba(6,38,92,0.95)_0%,rgba(6,38,92,0.65)_55%,transparent_80%)] sm:block"
         />
 
         <Container className="relative flex flex-1 items-center py-[clamp(1.5rem,4vh,3.5rem)]">
@@ -300,19 +291,29 @@ export default function Home() {
 
       {/* 6. 제작 프로세스 */}
       <Section
-        tone="navy"
         eyebrow="PROCESS"
         title="문의부터 납품까지"
         lead="부품 샘플 한 점에서 시작합니다. 아래 네 단계를 거쳐 현장에서 도는 피더가 됩니다."
       >
-        <ol className="grid gap-px overflow-hidden rounded-2xl bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
+        {/* 떨어진 그림자 카드다. 바로 위 "유신의 강점" 이 흰 바탕 + bg-line
+            격자(칸 사이 1px 선)를 쓰므로, 여기까지 같은 기법이면 두 섹션이
+            나란히 같은 모양이 된다.
+
+            숫자는 brand 다. 네이비 위에서 쓰던 brand-light(#ff6b5e)는 흰
+            바탕에서 3.0:1 로 떨어진다(brand #d5261e 는 5.1:1). */}
+        <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {process.map((p, i) => (
-            <Reveal as="li" key={p.step} delay={i * 80} className="bg-navy-deep p-7 sm:p-8">
-              <span className="text-3xl font-bold tabular-nums text-brand-light">
+            <Reveal
+              as="li"
+              key={p.step}
+              delay={i * 80}
+              className="rounded-2xl bg-white p-7 shadow-card sm:p-8"
+            >
+              <span className="text-3xl font-bold tabular-nums text-brand">
                 {p.step}
               </span>
-              <h3 className="mt-4 text-base font-bold text-white">{p.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-white/65">
+              <h3 className="mt-4 text-base font-bold text-ink">{p.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-ink-soft">
                 {p.body}
               </p>
             </Reveal>
