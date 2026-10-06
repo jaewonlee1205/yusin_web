@@ -49,6 +49,18 @@ const CONTACT_ROWS: {
   link?: "mailto";
 }[] = [
   { label: "주소", value: site.address.road },
+  // 위 "주소" 는 지번(정왕동 1288-2)이다. 도로명주소 DB 에서 지번 1288-2 =
+  // 도로명 정왕천로 197 = 건물명 동우디지털파크로 확인했고, 네이버 플레이스에
+  // 적힌 값과도 같다(site.ts 의 naverPlace 주석). 호수 표기만 아직 확인이
+  // 안 돼 주소 행은 지번 그대로 두고 도로명을 따로 적는다.
+  { label: "도로명", value: site.address.roadName },
+  // 공단 안에서는 지번으로 찍으면 못 찾는 일이 있다. 건물명은 위와 같은
+  // 자료에서 확인된 값이다.
+  //
+  // ⚠️ 대중교통 행은 일부러 넣지 않았다. 노선이 자료마다 엇갈려(1광명.25.
+  //    8856 <-> 20-1.11-A.11-B) 확인 없이 적으면 방문객이 헤맨다.
+  //    README 자료 요청 표 16번에 적어 뒀다.
+  { label: "내비게이션", value: `${site.address.building}로 검색` },
   { label: "팩스", value: site.fax },
   { label: "이메일", value: site.email, link: "mailto" },
   { label: "주차", value: site.parking },
