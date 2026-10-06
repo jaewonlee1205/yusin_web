@@ -227,17 +227,19 @@ export default function Home() {
           제목 다음이 바로 영상이다. 한동안 정의 한 문장이 사이에 있었는데
           박스 셋이 같은 말을 풀어 쓰고 있어 걷었다.
 
-          lg:items-start — 윗변을 맞춘다.
+          lg:items-stretch — 윗변과 아랫변을 모두 맞춘다.
 
-          한때 items-center 였다. 박스가 셋이던 때는 오른쪽 덩어리가 235px 로
-          영상(274px)보다 짧아, 가운데로 맞추면 두 덩어리의 세로 중심이 포개져
-          자연스러웠다. 박스가 넷이 되면서 오른쪽이 291px 로 길어져 전제가
-          뒤집혔다 — 영상이 가운데로 내려가면서 첫 박스가 영상보다 8px 위에
-          떴다.
+          정렬을 세 번 바꿨다. 박스가 셋이던 때는 오른쪽 덩어리(235px)가
+          영상(274px)보다 짧아 items-center 로 세로 중심을 포갰고, 박스가
+          넷이 되며 오른쪽이 길어지자 첫 박스가 영상보다 8px 위에 떠서
+          items-start 로 윗변을 맞췄다. 그래도 아랫변은 6px 남았다 — 영상이
+          aspect-video 로 높이를 스스로 정하기 때문이다.
 
-          지금은 윗변이 맞고 아래만 영상이 17px 먼저 끝난다. 시작점이 어긋나는
-          것보다 끝점이 어긋나는 쪽이 훨씬 덜 보인다. 1024 미만은 1열이라 뜻이
-          없으므로 lg 부터다. */}
+          지금은 stretch 로 두 칸을 같은 높이로 늘리고, 영상 쪽에서 비율을
+          놓는다(lg:aspect-auto lg:h-full). 그러면 행 높이를 오른쪽 박스가
+          정하고 영상이 거기 맞춰져 위아래가 모두 떨어진다.
+
+          1024 미만은 1열이라 뜻이 없으므로 lg 부터다. */}
       <Section
         eyebrow="ABOUT US"
         title="피더를 만드는 데 필요한 것"
@@ -265,7 +267,7 @@ export default function Home() {
           </Link>
         }
       >
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-start lg:gap-16">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-stretch lg:gap-16">
           {/* 정지 사진이던 자리다. 피더가 무엇인지는 "부품이 돌다가 한 줄로
               서서 나간다" 는 움직임 자체라, 멈춘 사진으로는 절반만 전해졌다.
 
@@ -275,19 +277,27 @@ export default function Home() {
               밝게 돌면 다른 영상처럼 읽히고, 이미 받는 파일이라 전송량도
               늘지 않는다.
 
-              칸은 16/9 다 — 영상 원본과 같은 비율이라 아무 데도 잘리지
-              않는다. 한때 사진 시절의 4/3 에 lg:h-full(오른쪽 칸 높이를 따라감)
-              을 걸어 뒀는데, 정의 문장이 리드로 올라가면서 오른쪽이 짧아져
-              2.07:1 까지 납작해졌다. 16/9 로 고정하면 영상이 274px 로 서고,
-              grid 의 stretch 가 오른쪽 칸을 거기 맞춰 두 칸 높이도 그대로
-              일치한다.
+              1024 미만은 16/9 다 — 영상 원본과 같은 비율이라 아무 데도
+              잘리지 않는다. lg 부터는 그 고정을 놓고 오른쪽 칸 높이를 따라간다
+              (lg:aspect-auto lg:h-full). 오른쪽 박스 다섯이 268px 이고 16/9 면
+              274px 이라, 비율을 쥐고 있으면 아랫변이 6px 어긋난다.
+
+              따라간 비율은 1280 이상에서 1.82 로 16/9(1.78)와 거의 같고,
+              2열이 가장 좁은 1024 에서만 1.56 까지 선다. 어느 쪽이든
+              object-cover 가 가장자리를 조금 자를 뿐이라 트랙 위 부품이
+              가운데 남는다 — 두 폭 다 눈으로 확인했다.
+
+              ⚠️ 한때 사진 시절의 4/3 에 lg:h-full 을 걸어 뒀다가, 정의 문장이
+                 리드로 올라가면서 오른쪽이 짧아져 2.07:1 까지 납작해진 적이
+                 있다. 박스 개수나 글을 바꾸면 이 비율을 다시 재야 한다 —
+                 1.9 보다 납작해지면 aspect 를 다시 쥐는 편이 낫다.
 
               ⚠️ Image 가 아래 깔려 있는 것은 장식이 아니다. globals.css 의
                  prefers-reduced-motion 블록이 .hero-video 를 display:none 으로
                  숨기므로, 움직임을 끈 사람에게는 이 정지컷이 보인다. 영상에서
                  뽑은 그림이라 장면이 어긋나지 않는다. 지우면 그 사람에게 빈
                  칸만 남는다. */}
-          <Reveal className="relative aspect-video overflow-hidden rounded-2xl bg-surface">
+          <Reveal className="relative aspect-video overflow-hidden rounded-2xl bg-surface lg:aspect-auto lg:h-full">
             <Image
               src="/images/hero-poster.webp"
               alt="커넥터 부품을 정렬해 트랙으로 내보내는 볼피더"

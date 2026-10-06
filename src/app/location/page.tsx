@@ -96,7 +96,10 @@ export default function LocationPage() {
                 높이가 확정돼 있어야 해서, 그리드 행 높이를 오른쪽 칸이 정하는
                 이 배치에서는 flex 가 안전하다. min-h 는 지도가 너무 납작해지지
                 않게 받치는 바닥값이다. */}
-            <Reveal className="overflow-hidden rounded-2xl shadow-card lg:flex lg:min-h-[25rem]">
+            {/* 아래 표와 함께 테두리로 선다(2D). 그림자로 띄우면 지도.표가
+                입체로 읽혀 자료를 읽는 자리에 맞지 않고, 한쪽만 바꾸면
+                나란히 선 둘의 결이 갈린다. */}
+            <Reveal className="overflow-hidden rounded-2xl border border-line lg:flex lg:min-h-[25rem]">
               <iframe
                 src={MAP_SRC}
                 title={`${site.name} 위치 지도`}
@@ -124,7 +127,14 @@ export default function LocationPage() {
                   남는 높이를 내용 비율대로 나눠 갖는다. flex-1(=basis 0)
                   이면 네 행이 똑같아져 팩스 한 줄과 주소 두 줄이 같은
                   높이가 된다 — 그건 표가 아니라 격자로 보인다. */}
-              <dl className="mt-7 flex flex-1 flex-col overflow-hidden rounded-2xl shadow-card">
+              {/* 테두리로 선다(2D). 한때 shadow-card 로 떠 있었는데, 표는
+                  떠 있는 카드가 아니라 읽는 자료다 — 제품 상세의 사양 표와
+                  같은 1px line 테두리로 맞춘다. 행 사이 선도 같은 색이라
+                  바깥과 안쪽이 한 벌로 읽힌다.
+
+                  사이트의 다른 shadow-card(제품 카드.적용 분야.영상 카드.
+                  PROCESS 카드)는 그대로 둔다 — 그쪽은 떠 있는 카드가 맞다. */}
+              <dl className="mt-7 flex flex-1 flex-col overflow-hidden rounded-2xl border border-line">
                 {/* 전화 — 대표번호는 ink-soft(주소.팩스.이메일과 같은 색),
                     추가 회선은 한 단계 연한 muted 다. 크기는 둘 다 표의 다른
                     값과 같은 14px 로 둔다. */}
