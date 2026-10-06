@@ -54,16 +54,25 @@ export default function VideoEmbed({ video }: { video: Video }) {
             aria-hidden="true"
             className="absolute inset-0 bg-navy-deep/25 transition-colors group-hover:bg-navy-deep/10"
           />
+          {/* 맨 위로 버튼(BackToTop)과 같은 언어다 — rounded-full + bg-white
+              + text-ink + shadow-card. 전에는 64px 브랜드 레드 원이었는데,
+              레드 원은 유튜브 자체의 재생 버튼과 겹쳐 보이고 이 사이트에서
+              레드는 강조 한 점에만 쓰는 색이다.
+
+              흰 원이 밝은 썸네일 위에서도 보이는 것은 바로 위의 어두운
+              겹(navy-deep/25) 덕이다. 그 겹을 지우면 원이 묻힌다.
+
+              호버 확대는 1.1 에서 1.06 으로 줄였다. */}
           <span
             aria-hidden="true"
-            className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-brand/95 shadow-lg transition-transform duration-300 group-hover:scale-110"
+            className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 text-ink shadow-card backdrop-blur-sm transition duration-200 group-hover:scale-[1.06] group-hover:bg-white"
           >
             <svg
-              width="22"
-              height="22"
+              width="18"
+              height="18"
               viewBox="0 0 24 24"
               fill="currentColor"
-              className="ml-1 text-white"
+              className="ml-0.5"
             >
               <path d="M8 5v14l11-7z" />
             </svg>

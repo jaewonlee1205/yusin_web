@@ -3,7 +3,7 @@ import ClientGrid from "@/components/ClientGrid";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
-import { clientIndustries, clients, totalClients } from "@/data/clients";
+import { clients, totalClients } from "@/data/clients";
 
 export const metadata: Metadata = {
   title: "납품실적",
@@ -15,45 +15,29 @@ export default function ClientsPage() {
     <>
       {/* 전에는 "언제나 저희 제품을 이용하여 주심에 깊은 감사를 드립니다" 였다.
           회사 소개 PPT 의 인사말이 그대로 넘어온 것이라, 실적 페이지 배너가
-          실적 대신 인사를 하고 있었다. 숫자는 totalClients 에서 뽑는다. */}
+          실적 대신 인사를 하고 있었다. 숫자는 totalClients 에서 뽑는다.
+
+          그다음 "34개사의 생산 라인에서 유신이 만든 피더가 돌고 있습니다" 로
+          고쳤는데, 그건 말맛이지 실적이 아니었다. 실적 페이지의 배너가 답할
+          것은 언제부터.몇 곳에.무엇을 다. 그래서 설립연도(1992년 6월 6일,
+          company.ts 의 overview)를 앞에 세우고 "생산 라인" 이라는 뭉뚱그린
+          말을 조립.검사 라인으로 좁혔다. */}
       <PageHero
         eyebrow="CLIENTS"
         title="납품실적"
-        lead={`${totalClients}개사의 생산 라인에서 유신이 만든 피더가 돌고 있습니다.`}
+        lead={`1992년 설립 이후 ${totalClients}개사의 조립·검사 라인에 자동공급기를 납품해 왔습니다.`}
       />
 
-      <Section
-        eyebrow="ALL CLIENTS"
-        title={`주요 거래처 ${totalClients}개사`}
-        lead="전기·전자부품부터 제약, 화장품 용기까지. 부품의 성격이 다르면 피더도 달라집니다."
-      >
+      {/* 격자 하나뿐이다. 전에는 리드("전기·전자부품부터 제약, 화장품
+          용기까지…")와 각주("위 목록은 회사 소개 자료 기준이며…")가 붙어
+          있었고, 그 아래 "산업별 납품 분야" 섹션이 같은 거래처 이름을 산업별로
+          한 번 더 늘어놓았다. 셋 다 걷었다 — 격자가 34개사를 이미 다 보여 주는
+          자리에서 같은 말을 세 번 하고 있었다.
+
+          clients.ts 의 clientIndustries 데이터는 남아 있다(미아라는 경고를
+          그쪽에 적어 뒀다). */}
+      <Section eyebrow="ALL CLIENTS" title={`주요 거래처 ${totalClients}개사`}>
         <ClientGrid names={clients} />
-
-        <p className="mt-6 text-xs leading-relaxed text-muted">
-          위 목록은 회사 소개 자료 기준이며 가나다순이 아닙니다.
-          각 사의 상호는 납품 당시 표기를 따랐습니다.
-        </p>
-      </Section>
-
-      <Section
-        tone="surface"
-        eyebrow="BY INDUSTRY"
-        title="산업별 납품 분야"
-        lead="아래 분야에서 쌓은 제작 사례를 가지고 있습니다. 비슷한 부품을 다뤄 본 경험이 곧 시행착오를 줄입니다."
-      >
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {clientIndustries.map((industry) => (
-            <div
-              key={industry.name}
-              className="rounded-2xl bg-white p-6 shadow-card"
-            >
-              <h3 className="text-base font-bold text-ink">{industry.name}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
-                {industry.examples}
-              </p>
-            </div>
-          ))}
-        </div>
       </Section>
 
       <ContactCTA />

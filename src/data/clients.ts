@@ -57,7 +57,15 @@ export const totalClients = clients.length;
 /** 홈 거래처 섹션에서 미리 보여 줄 만큼. */
 export const featuredClients = clients.slice(0, 12);
 
-/** 거래처가 속한 산업 — 어떤 분야에 납품해 왔는지 한눈에 보여 주기 위한 분류. */
+/**
+ * 거래처가 속한 산업 — 어떤 분야에 납품해 왔는지 한눈에 보여 주기 위한 분류.
+ *
+ * ⚠️ 지금은 어디서도 그리지 않는다. /clients 의 "산업별 납품 분야"(BY INDUSTRY)
+ *    섹션이 이 여섯을 카드로 늘어놓았는데, 바로 위 ALL CLIENTS 격자가 같은
+ *    거래처 이름을 이미 다 보여 주고 있어 걷어냈다. 데이터는 남겨 둔다 —
+ *    products.ts 의 적용 분야 주석이 이 분류를 가리키고 있고, 되살리려면
+ *    clients/page.tsx 에서 import 해 Section 하나로 그리면 된다.
+ */
 export const clientIndustries: { name: string; examples: string }[] = [
   { name: "전기 · 전자부품", examples: "LS산전, 대성전기, 일신전기산업, 다다전자" },
   { name: "커넥터 · 단자", examples: "한국단자공업, 익스팬전자, 코스텍시스" },

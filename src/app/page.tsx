@@ -225,13 +225,22 @@ export default function Home() {
             />
           </Reveal>
           <Reveal delay={120}>
-            <p className="text-base leading-relaxed text-ink-soft sm:text-lg">
+            {/* 회사 개요 인사말과 같은 쌍이다 — 첫 문단만 키우고(20px, ink)
+                둘째를 낮춘다(16px, ink-soft). 전에는 둘 다 text-base sm:text-lg
+                text-ink-soft 로 같은 크기.같은 색이어서, 둘 중 어디가 머리인지
+                알 수 없었다.
+
+                ⚠️ 두 문단의 글 길이는 1024 이상에서 3줄 + 2줄로 떨어지도록
+                   맞춰 둔 것이다. 첫 문단은 products.ts 의 feederDefinition.body
+                   이고, 둘째는 여기 하드코딩이다. 어느 쪽이든 한 구절 더하면
+                   줄이 늘어나므로 고칠 때 폭마다 다시 재야 한다. */}
+            <p className="text-lg leading-[1.85] text-ink sm:text-xl">
               {feederDefinition.body}
             </p>
-            <p className="mt-5 text-base leading-relaxed text-ink-soft sm:text-lg">
+            <p className="mt-5 text-base leading-[1.9] text-ink-soft">
               유신 F.A 시스템은 이 피더를 {yearsInBusiness}년째 만들어 왔습니다.
-              볼 형상 설계, 정렬 지그 가공, 진동 튜닝, 조립과 현장 설치까지 한
-              공장 안에서 끝냅니다.
+              볼 형상 설계부터 가공·조립, 진동 튜닝, 현장 설치까지 한 공장에서
+              끝냅니다.
             </p>
             {/* 밑줄 링크였다. 오시는 길의 지도앱 버튼.영상자료의 "영상 더 보기"
                 와 같은 모양으로 맞춘다 — 사이트에 이미 있는 언어라 새 모양을
