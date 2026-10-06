@@ -35,12 +35,13 @@ const MAP_SRC = `https://maps.google.com/maps?q=${query}&z=16&hl=ko&output=embed
 /**
  * 전화.운영 시간을 뺀 나머지 행. 그 둘은 값이 두 줄이라 아래에서 따로 그린다.
  *
- * 마지막 칸은 한동안 사업자번호였는데, 거래 서류에 적는 값이지 연락하는
- * 방법이 아니라 결이 달랐다. 대표 이름이 "연락처" 라는 표 제목에 맞는다.
+ * 마지막 칸은 두 번 바뀌었다. 사업자번호는 거래 서류에 적는 값이지 연락하는
+ * 방법이 아니었고, 대표 이름은 연락처이긴 해도 "오시는 길" 에서 찾는 것이
+ * 아니었다. 주차는 이 페이지에 온 사람이 주소 다음으로 궁금해하는 것이다.
  *
  * ⚠️ 라벨 칸이 좁다. dt 가 sm:w-28(112px) 에 좌우 패딩 20px 씩이라 글이 쓸 수
  *    있는 폭이 72px 다 — 14px bold 로 "사업자등록번호" 는 90px 라 넘쳤고
- *    "대표" 는 26px 로 넉넉하다. 라벨을 바꿀 때 이 72px 를 넘기지 말 것.
+ *    "주차" 는 26px 로 넉넉하다. 라벨을 바꿀 때 이 72px 를 넘기지 말 것.
  */
 const CONTACT_ROWS: {
   label: string;
@@ -50,7 +51,7 @@ const CONTACT_ROWS: {
   { label: "주소", value: site.address.road },
   { label: "팩스", value: site.fax },
   { label: "이메일", value: site.email, link: "mailto" },
-  { label: "대표", value: site.ceo },
+  { label: "주차", value: site.parking },
 ];
 
 export default function LocationPage() {
@@ -183,7 +184,7 @@ export default function LocationPage() {
                     value 가 한 줄짜리라 평일/휴무 두 줄을 담을 수 없어
                     여기서 따로 그린다.
 
-                    표 맨 끝인 이유: 연락처(전화.주소.팩스.이메일.대표)를
+                    표 맨 끝인 이유: 어디로.어떻게(전화.주소.팩스.이메일.주차)를
                     먼저 읽고 "언제 가면 되나" 가 뒤따르는 순서가 자연스럽다.
 
                     한때 이 아래 "길찾기 | 네이버 지도 · 카카오맵" 행이 하나 더

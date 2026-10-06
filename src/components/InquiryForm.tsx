@@ -216,14 +216,6 @@ export default function InquiryForm() {
         <label htmlFor="message" className={label}>
           문의 내용
         </label>
-        {/* 전에는 이 다섯 가지가 사이드바 카드에 있었다. 정작 쓸 자리에서
-            멀어 읽히지 않았다 — 쓰기 직전에 보여야 쓸모가 있다.
-
-            요약은 "무엇을", placeholder 는 "어떻게" 를 맡는다. 둘이 같은
-            말을 하면 하나는 소음이다. */}
-        <p className="-mt-1 mb-2.5 text-[13px] leading-relaxed text-muted">
-          부품 종류와 크기 · 시간당 수량 · 후공정 설비 · 설치 조건 · 희망 납기
-        </p>
         <textarea
           id="message"
           name="message"

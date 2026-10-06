@@ -49,13 +49,6 @@ export default function ContactPage() {
                 <h2 className="text-2xl font-bold tracking-tight text-ink">
                   온라인 문의
                 </h2>
-              {/* 전에는 "* 표시는 필수 항목입니다" 였다. 여섯 항목이 모두
-                  필수라 별이 가려 주는 것이 없었고, 빨간 점 여섯 개만
-                  남았다. 한 줄로 갈음한다 — required 속성은 그대로라
-                  브라우저 검증도 그대로 뜬다. */}
-                <p className="mt-2.5 text-sm text-muted">
-                  모든 항목을 입력해 주세요.
-                </p>
               </Reveal>
               <Reveal delay={90} className="mt-8">
                 <InquiryForm />

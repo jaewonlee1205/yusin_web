@@ -229,6 +229,15 @@ export type ApplicationCase = {
  */
 export const feederDefinition = {
   title: "부품 자동정렬 공급기",
+  /**
+   * ⚠️ 지금은 어디서도 그리지 않는다. 홈에서 제목 아래 한 줄로 서 있었는데,
+   *    바로 아래 points 셋이 같은 말을 풀어 쓰고 있어 걷었다.
+   *
+   *    글은 남겨 둔다 — 위 주석이 이 문장을 PPT 원문에서 두 번에 걸쳐 다듬어
+   *    온 내력이고, points 가 왜 그렇게 쪼개졌는지도 그 내력이 설명한다.
+   *    되살리려면 page.tsx 의 Section 에 lead={feederDefinition.body} 를
+   *    돌려주면 된다.
+   */
   body: "조립·검사 라인에 부품을 일정한 자세로 공급합니다.",
   /**
    * 홈 WHAT IS 섹션의 박스 셋.

@@ -213,17 +213,18 @@ export default function Home() {
       </section>
 
       {/* 3. 피더란 / 회사 개요 요약 */}
-      {/* 정의 한 문장은 제목 바로 아래 lead 자리에 둔다.
+      {/* 제목 다음이 바로 영상이다.
 
-          한때 오른쪽 칸에서 박스 셋 바로 위에 있었는데, 넷 다 "…합니다" 로
-          끝나는 문장이라 정의가 네 번째 항목처럼 읽혔다. 리드로 올리면
-          제목 → 정의 → (영상 | 효용 셋) 으로 층이 갈린다. */}
-      <Section
-        eyebrow="WHAT IS THE FEEDER"
-        title={feederDefinition.title}
-        lead={feederDefinition.body}
-      >
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+          한동안 정의 한 문장(feederDefinition.body)이 사이에 있었다 — 처음엔
+          오른쪽 칸에서 박스 셋 위에, 그다음엔 여기 lead 자리에. 박스 셋이
+          같은 말을 셋으로 풀어 쓰고 있어 결국 걷었다.
+
+          lg:items-center — 영상(274px)이 오른쪽 덩어리(박스 셋 + 버튼, 235px)
+          보다 길다. stretch 로 두면 오른쪽 내용이 위에 붙고 아래가 비는데,
+          가운데로 맞추면 두 덩어리의 세로 중심이 포개진다. 1024 미만은 1열이라
+          뜻이 없으므로 lg 부터다. */}
+      <Section eyebrow="WHAT IS THE FEEDER" title={feederDefinition.title}>
+        <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-16">
           {/* 정지 사진이던 자리다. 피더가 무엇인지는 "부품이 돌다가 한 줄로
               서서 나간다" 는 움직임 자체라, 멈춘 사진으로는 절반만 전해졌다.
 
