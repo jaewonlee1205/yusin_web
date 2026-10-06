@@ -3,6 +3,7 @@ import Link from "next/link";
 import Container from "@/components/Container";
 import InquiryForm from "@/components/InquiryForm";
 import PageHero from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
 import { site, telHref } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -41,25 +42,30 @@ export default function ContactPage() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
             <div>
-              <h2 className="text-2xl font-bold tracking-tight text-ink">
-                온라인 문의
-              </h2>
+              {/* 덩어리 단위로 올린다 — 제목 / 폼 / 연락처가 0.90.180ms 다.
+                  입력칸을 하나씩 올리지는 않는다. 입력하러 온 사람이 칸이
+                  다 나타날 때까지 기다리게 된다. */}
+              <Reveal>
+                <h2 className="text-2xl font-bold tracking-tight text-ink">
+                  온라인 문의
+                </h2>
               {/* 전에는 "* 표시는 필수 항목입니다" 였다. 여섯 항목이 모두
                   필수라 별이 가려 주는 것이 없었고, 빨간 점 여섯 개만
                   남았다. 한 줄로 갈음한다 — required 속성은 그대로라
                   브라우저 검증도 그대로 뜬다. */}
-              <p className="mt-2.5 text-sm text-muted">
-                모든 항목을 입력해 주세요.
-              </p>
-              <div className="mt-8">
+                <p className="mt-2.5 text-sm text-muted">
+                  모든 항목을 입력해 주세요.
+                </p>
+              </Reveal>
+              <Reveal delay={90} className="mt-8">
                 <InquiryForm />
-              </div>
+              </Reveal>
             </div>
 
             {/* "이런 내용을 알려 주세요" 카드가 여기 있었다. 쓸 자리에서
                 멀어 읽히지 않아 문의 내용 입력란 바로 위로 옮겼다. 이제 이
                 칸에는 연락처 한 장만 선다. */}
-            <aside className="self-start">
+            <Reveal as="aside" delay={180} className="self-start">
               {/* 카드는 바탕색으로만 선다. 테두리와 바탕을 함께 쓰면 경계가
                   두 겹이 된다. */}
               <div className="rounded-2xl bg-surface p-7">
@@ -134,7 +140,7 @@ export default function ContactPage() {
                 </dl>
               </div>
 
-            </aside>
+            </Reveal>
           </div>
         </Container>
       </div>

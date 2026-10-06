@@ -18,7 +18,13 @@ import Reveal from "./Reveal";
  * 들어가지만, 그때 카드가 205px 이고 글상자가 171px 뿐이라 분야 이름이
  * 어떤 칸은 한 줄, 어떤 칸은 두 줄로 접혔다 — 다섯 장의 글 시작 높이가
  * 어긋난다. 셋으로 끊으면 어느 폭에서도 이름 한 줄, 설명 두 줄이다.
- * 대신 마지막 행에 한 칸이 빈다(목록 페이지도 일곱 장이라 같은 모양이다).
+ *
+ * 분야 수는 제품마다 다르다(볼피더 5 · 진동기.컨트롤러.우레탄 3 ·
+ * 직진피더.호퍼피더.방음커버 2). 3열에 고정하면 둘짜리는 한 칸이, 다섯짜리는
+ * 마지막 줄 오른쪽이 352x326 짜리 구멍으로 남는다. 그래서 격자 대신
+ * flex-wrap 을 쓰고 칸 폭을 basis 로 준다 — 둘 이하면 lg 에서도 2열에서
+ * 멈추고, 모자란 마지막 줄은 justify-center 가 가운데로 모은다. 꽉 찬 줄은
+ * 가운데 정렬의 영향을 받지 않는다.
  *
  *   폭      열   Container   카드   사진
  *   320     1       265      265   263x148
@@ -39,10 +45,17 @@ export default function ApplicationCases({
 }: {
   cases: ApplicationCase[];
 }) {
+  /* gap-4(1rem) 기준이다. 2열은 간격이 하나, 3열은 둘이라 그만큼 빼면
+     폭이 정확히 맞아떨어진다. */
+  const basis =
+    cases.length <= 2
+      ? "basis-full sm:basis-[calc((100%-1rem)/2)]"
+      : "basis-full sm:basis-[calc((100%-1rem)/2)] lg:basis-[calc((100%-2rem)/3)]";
+
   return (
-    <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <ul className="mt-4 flex flex-wrap justify-center gap-4">
       {cases.map((c, i) => (
-        <Reveal as="li" key={c.name} delay={i * 70}>
+        <Reveal as="li" key={c.name} delay={i * 70} className={basis}>
           <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-card">
             <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface">
               <Image
@@ -53,10 +66,9 @@ export default function ApplicationCases({
                 className="object-cover"
               />
             </div>
-            {/* 위아래 여백이 다르다. 이름 위는 한 줄(20px ≒ 이름 줄 높이
-                19.25px), 설명 아래는 두 줄(40px ≒ 설명 줄 높이 21.1px 의
-                두 배)이다. */}
-            <div className="flex flex-1 flex-col border-t border-line px-4 pt-5 pb-10">
+            {/* 위아래 여백을 같게 둔다. 한동안 아래만 40px 로 두 배였는데,
+                설명이 두 줄로 끝나는 카드에서 그 아래가 빈 채로 남아 보였다. */}
+            <div className="flex flex-1 flex-col border-t border-line px-4 py-5">
               <p className="text-sm font-bold leading-snug text-ink">
                 {c.name}
               </p>
