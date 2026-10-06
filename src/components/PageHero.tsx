@@ -26,22 +26,19 @@ export default function PageHero({
   lead?: string;
 }) {
   return (
-    <div className="relative overflow-hidden bg-navy-deep">
-      {/* 이미지 대신 CSS로 그린 미세한 기술 그리드. 어느 해상도에서도 또렷하고
-          내려받을 파일이 없다. */}
-      <div
-        aria-hidden="true"
-        className="tech-grid pointer-events-none absolute inset-0 opacity-[0.07]"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-navy-deep via-navy-deep/85 to-navy/60"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-brand"
-      />
-      <Container className="relative flex min-h-[13.5rem] flex-col justify-center py-12 sm:min-h-[15rem] sm:py-14">
+    /* 바탕 한 장으로 선다.
+
+       전에는 네이비 위에 장식이 세 겹이었다 — CSS 로 그린 기술 그리드,
+       대각 그라디언트, 그리고 아래쪽 1px 짜리 빨간 선. 셋을 걷고 바탕을
+       surface 로 올리니 헤더(흰색)와 본문(흰색) 사이에서 배너가 한 덩어리로
+       읽힌다. 색 면은 페이지 끝의 CTA 한 곳에만 남는다.
+
+       ⚠️ 리드를 text-muted 로 내리면 안 된다. 흰 바탕에서는 4.83:1 이지만
+          이 surface(#f6f7f9) 위에서는 4.08:1 로 AA(4.5)에 못 미친다.
+          ink-soft 가 8.4:1 이다. 제목 ink 는 15.9:1, eyebrow brand 는
+          5.78:1 로 둘 다 통과한다. */
+    <div className="bg-surface">
+      <Container className="flex min-h-[13.5rem] flex-col justify-center py-12 sm:min-h-[15rem] sm:py-14">
         {/* 글자가 아래에서 올라오며 나타난다.
 
             한동안 여기만 애니메이션을 두지 않았다. 메뉴를 옮겨 다닐 때마다
@@ -58,20 +55,20 @@ export default function PageHero({
             prefers-reduced-motion 에서는 globals.css 끝 블록이 모든
             애니메이션을 꺼 버리므로 글자가 즉시 보인다. */}
         <p
-          className="rise-quick text-xs font-bold tracking-[0.2em] text-brand-light"
+          className="rise-quick text-[13px] font-semibold tracking-[0.02em] text-brand"
           style={{ animationDelay: "0ms" }}
         >
           {eyebrow}
         </p>
         <h1
-          className="rise-quick mt-3 text-3xl font-bold tracking-tight text-white sm:text-5xl"
+          className="rise-quick mt-3 text-3xl font-bold tracking-tight text-ink sm:text-5xl"
           style={{ animationDelay: "70ms" }}
         >
           {title}
         </h1>
         {lead && (
           <p
-            className="rise-quick mt-5 min-h-[3.25rem] max-w-2xl text-base leading-relaxed text-white/70 sm:min-h-[1.875rem] sm:text-lg"
+            className="rise-quick mt-5 min-h-[3.25rem] max-w-2xl text-base leading-relaxed text-ink-soft sm:min-h-[1.875rem] sm:text-lg"
             style={{ animationDelay: "140ms" }}
           >
             {lead}

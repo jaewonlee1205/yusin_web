@@ -29,21 +29,13 @@ import { site, telHref } from "@/data/site";
  */
 export default function ContactCTA() {
   return (
-    <section className="relative overflow-hidden bg-navy">
-      {/* 위쪽 brand 선. PageHero 아래쪽 선과 호응해 본문을 위아래로 감싼다. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-brand"
-      />
-      <div
-        aria-hidden="true"
-        className="tech-grid pointer-events-none absolute inset-0 opacity-[0.09]"
-      />
-      {/* 버튼 쪽에 깊이를 준다 — 평평한 네이비 한 장이면 면이 죽는다. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_90%_at_82%_30%,rgba(6,38,92,0.55),transparent_70%)]"
-      />
+    /* 평평한 네이비 한 장이다.
+
+       전에는 위쪽 brand 선 + 기술 그리드 + 방사형 그라디언트가 얹혀 있었다.
+       배너가 밝아지면서 이 블록이 사이트에서 유일한 색 면이 됐으므로, 장식을
+       걷어도 면이 죽지 않는다 — 오히려 페이지 끝의 포인트로 또렷해진다.
+       (위쪽 선은 PageHero 아래쪽 선과 호응하던 것인데, 그쪽이 없어졌다.) */
+    <section className="bg-navy">
       {/* 푸터와 같은 wide 폭이다 — 헤더·CTA·푸터가 한 줄로 서고, 그 사이
           본문만 읽기 좋은 폭으로 안쪽에 들어간다.
 
@@ -51,7 +43,7 @@ export default function ContactCTA() {
           칸이 603px 라 제목이 575/120, 본문이 529/93 토막이 되고 높이도
           311px 다. wide(1280)면 왼 칸이 731px 가 되어 제목 703·본문 627 이
           각각 한 줄에 들어가고 250px 로 낮아진다. */}
-      <Container width="wide" className="relative py-14 sm:py-20">
+      <Container width="wide" className="py-14 sm:py-20">
         <div className="flex flex-col items-start gap-8 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-16">
           <Reveal>
             <h2 className="text-2xl font-bold leading-snug text-white sm:text-3xl">
@@ -100,7 +92,7 @@ export default function ContactCTA() {
             <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
               <Link
                 href="/contact"
-                className="group inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-6 py-4 text-[15px] font-semibold text-white transition-colors hover:bg-brand-dark sm:px-8"
+                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-6 py-4 text-[15px] font-semibold text-white transition-colors hover:bg-brand-dark sm:px-8"
               >
                 온라인 문의하기
                 <svg
@@ -122,7 +114,7 @@ export default function ContactCTA() {
               {/* 아이콘과 자릿수 정렬은 헤더 전화 링크와 같은 모양으로 맞춘다 */}
               <a
                 href={telHref(site.tel)}
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/45 px-6 py-4 text-[15px] font-semibold tabular-nums text-white transition-colors hover:border-white/70 hover:bg-white/10 sm:px-8"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/45 px-6 py-4 text-[15px] font-semibold tabular-nums text-white transition-colors hover:border-white/70 hover:bg-white/10 sm:px-8"
               >
                 <PhoneIcon />
                 전화 {site.tel}

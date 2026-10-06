@@ -58,8 +58,10 @@ const FOOTER_GROUPS: {
 
    세 열의 목록 링크 11개만 쓴다. 브랜드 열의 바깥 채널 링크는 한때 이 글자
    모양을 같이 썼지만 지금은 테두리 버튼이라 따로 간다(CHANNEL_BUTTON). */
+/* 열 제목을 흐리게 내리고 링크를 ink 로 올렸다. 눈이 분류명보다 갈 곳을
+   먼저 짚는다. */
 const LINK =
-  "inline-block py-1 text-sm text-ink-soft transition-colors hover:text-brand";
+  "inline-block py-1 text-sm text-ink transition-colors hover:text-brand";
 
 /* 브랜드 열의 외부 채널 버튼(유튜브·네이버).
 
@@ -88,14 +90,21 @@ const LINK =
      link-name 도 깨진다. 글자를 되살리든 라벨을 두든, 둘 중 하나는 반드시
      있어야 한다. */
 const CHANNEL_BUTTON =
-  "flex items-center justify-center rounded-full border border-ink/15 p-2 text-ink-soft transition-colors hover:border-navy/40 hover:text-ink";
+  "flex items-center justify-center rounded-full border border-line p-2 text-ink-soft transition-colors hover:border-navy/40 hover:text-ink";
 
-/* 자간 0.2em 은 Section.tsx 의 eyebrow 와 같은 값이다(푸터만 0.15em 이었다). */
-const HEADING = "text-xs font-bold tracking-[0.2em] text-ink";
+/* 자간을 벌리지 않는다. 0.2em 으로 늘렸던 적이 있는데(Section 의 eyebrow 와
+   맞춘 값이었다), eyebrow 는 한두 단어짜리 영문 꼬리표라 벌려도 읽히지만
+   "고객지원" 같은 한글 열 제목은 자간이 벌어지면 글자가 흩어져 보인다. */
+const HEADING = "text-[13px] font-semibold text-muted";
 
+/* 상단 선을 뺐다. 바로 위가 네이비 CTA 라 경계가 이미 뚜렷하고, 바탕색이
+   다른 데 선까지 두면 구분이 두 겹이 된다.
+
+   ⚠️ 이 주석은 return 위에 둔다. {/* … *​/} 형태는 JSX 안에서만 유효해서,
+      return ( 바로 뒤에 두면 객체 리터럴로 파싱돼 빌드가 깨진다. */
 export default function Footer() {
   return (
-    <footer className="mt-auto border-t border-line bg-surface">
+    <footer className="mt-auto bg-surface">
       {/* 헤더와 같은 wide 폭이다. 푸터도 사이트 크롬인데 content(1152) 를
           쓰고 있어 헤더 로고와 64px 어긋나 있었다. 하단 CTA 도 같이 넓혔다.
 

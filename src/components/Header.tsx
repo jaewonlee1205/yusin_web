@@ -187,7 +187,7 @@ export default function Header() {
                     href={item.href}
                     onClick={(e) => onSameRouteClick(e, item.href)}
                     aria-current={active ? "page" : undefined}
-                    className={`rounded px-2 py-2 text-[15px] font-medium transition-colors xl:px-4 ${
+                    className={`rounded-lg px-2 py-2 text-[15px] font-medium transition-colors xl:px-4 ${
                       active ? "text-brand" : "text-ink-soft hover:text-ink"
                     }`}
                   >
@@ -233,7 +233,7 @@ export default function Header() {
                       setOpenMenu(null);
                       onSameRouteClick(e, item.href);
                     }}
-                    className={`flex items-center gap-1.5 rounded px-2 py-2 text-[15px] font-medium transition-colors xl:px-4 ${
+                    className={`flex items-center gap-1.5 rounded-lg px-2 py-2 text-[15px] font-medium transition-colors xl:px-4 ${
                       active ? "text-brand" : "text-ink-soft hover:text-ink"
                     }`}
                   >
@@ -246,7 +246,7 @@ export default function Header() {
                       id={panelId}
                       className="absolute left-1/2 top-full z-50 w-56 -translate-x-1/2 pt-2"
                     >
-                      <div className="overflow-hidden rounded-lg border border-line bg-white shadow-xl shadow-ink/10">
+                      <div className="overflow-hidden rounded-xl border border-line bg-white shadow-lg shadow-ink/8">
                         <ListPanel
                           items={childrenFor(item)}
                           onNavigate={() => setOpenMenu(null)}
@@ -269,7 +269,7 @@ export default function Header() {
             </a>
             <Link
               href={headerCta.href}
-              className="rounded bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+              className="rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
             >
               {headerCta.label}
             </Link>
@@ -369,13 +369,13 @@ export default function Header() {
             <div className="my-5 flex flex-col gap-3">
               <a
                 href={telHref(site.tel)}
-                className="rounded border border-line py-3 text-center text-sm font-semibold text-navy"
+                className="rounded-xl border border-line py-3 text-center text-sm font-semibold text-navy"
               >
                 전화 {site.tel}
               </a>
               <Link
                 href="/contact"
-                className="rounded bg-brand py-3 text-center text-sm font-semibold text-white"
+                className="rounded-xl bg-brand py-3 text-center text-sm font-semibold text-white"
               >
                 견적 문의
               </Link>
