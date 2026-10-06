@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Container from "@/components/Container";
 import InquiryForm from "@/components/InquiryForm";
 import PageHero from "@/components/PageHero";
@@ -121,35 +120,10 @@ export default function ContactPage() {
                   <div className="flex gap-3">
                     <dt className="w-12 shrink-0 py-1.5 text-ink-soft">주소</dt>
                     <dd className="py-1.5 leading-relaxed">
+                      {/* 한때 여기 "오시는 길 보기" 버튼이 붙어 있었다.
+                          헤더.푸터 메뉴에 "오시는 길" 이 있어 길은 그대로
+                          남으므로 걷었다. */}
                       {site.address.road}
-                      {/* 밑줄 링크였다. 회색 카드 안이라 흰 버튼이 또렷하다.
-                          위 전화번호 버튼과 같은 언어이되 주소 행 안에 들어가는
-                          보조 동선이라 한 치수 작게 둔다(rounded-lg, 13px).
-
-                          flex w-fit 이다 — inline-flex 로 두면 주소 글 흐름에
-                          끼어들어 둘째 줄 끝에 달라붙는다. flex 는 블록 레벨이라
-                          아래 줄로 떨어지고, w-fit 이 글자 폭만 차지하게 한다. */}
-                      <Link
-                        href="/location"
-                        className="group mt-3 flex w-fit items-center gap-1.5 rounded-lg border border-line bg-white px-3 py-2 text-[13px] font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand"
-                      >
-                        오시는 길 보기
-                        <svg
-                          width="13"
-                          height="13"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          aria-hidden="true"
-                          className="shrink-0 transition-transform group-hover:translate-x-1"
-                        >
-                          <path d="M5 12h14" />
-                          <path d="m12 5 7 7-7 7" />
-                        </svg>
-                      </Link>
                     </dd>
                   </div>
                 </dl>

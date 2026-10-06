@@ -419,19 +419,10 @@ export default function Home() {
               delay={i * 80}
               className="relative rounded-2xl bg-white p-6 shadow-card"
             >
-              {/* 숫자와 제목을 한 줄로 묶는다. 전에는 숫자가 3xl 로 혼자
-                  한 줄을 차지하고 그 아래 제목.본문이 모두 맨 글자였다 —
-                  흰 섹션 위 흰 카드라 카드 자체도 약해서, 칸 전체가 글자만
-                  있는 것처럼 보였다.
-
-                  숫자를 한 줄로 올려 번 자리를 본문 박스가 받는다. 숫자는
-                  제목과 나란히 서므로 3xl 에서 xl 로 줄인다. */}
-              <div className="flex items-baseline gap-2.5">
-                <span className="text-xl font-bold tabular-nums text-brand">
-                  {p.step}
-                </span>
-                <h3 className="text-base font-bold text-ink">{p.title}</h3>
-              </div>
+              {/* 제목만 선다. 한때 여기 왼쪽에 작은 숫자가 함께 있었는데,
+                  오른쪽 위에 큰 숫자를 깔면서 한 카드에 같은 번호가 둘이 됐다.
+                  큰 쪽을 남기고 이쪽을 걷었다. */}
+              <h3 className="text-base font-bold text-ink">{p.title}</h3>
               {/* 점 목록 셋. 한때 박스 안이 긴 문장 하나였는데, 글상자가
                   좁아 3~4줄로 눌려 읽혔다. 지금은 단계마다 할 일 셋이 한 줄씩
                   선다.
@@ -459,24 +450,29 @@ export default function Home() {
                 ))}
               </ul>
 
-              {/* 오른쪽 위에 깔리는 큰 숫자. 목록 글이 짧아 그 자리가
-                  비어 있었다 — 카드가 헐겁게 읽히던 까닭이다.
+              {/* 카드의 번호. 오른쪽 위에 크게 깔린다 — 목록 글이 짧아
+                  그 자리가 비어 있었고, 카드가 헐겁게 읽히던 까닭이다.
 
-                  시안을 넷 비교했다. 원형 배지는 숫자가 작아져 오히려 약해지고,
+                  모양을 넷 비교했다. 원형 배지는 숫자가 작아져 오히려 약해지고,
                   상단 레드 띠는 넷이 다 가지면 과한 데다 레드 면적이 넓어진다
-                  (globals.css 토큰 주석 — "레드는 면적을 좁게"). 이 워터마크가
-                  빈 자리를 채우면서 번호를 포인트로 만든다.
+                  (globals.css 토큰 주석 — "레드는 면적을 좁게").
 
-                  색이 line/70 인 것은 왼쪽의 작은 숫자와 겹쳐 읽히지 않아야
-                  해서다. 장식이라 aria-hidden 이고, 번호는 왼쪽 숫자와 ol 이
-                  이미 전한다.
+                  농도도 넷 비교했다 — brand/18 은 너무 연해 번호가 약하고,
+                  brand/45 는 레드 면적이 크게 느껴진다. brand/30 이 번호가
+                  읽히면서 면적 부담이 적다. 한때 line/70(회색)이었는데,
+                  왼쪽 작은 숫자를 걷으면서 그쪽이 쥐고 있던 brand 색을
+                  이쪽이 이어받았다.
+
+                  ⚠️ aria-hidden 을 떼지 말 것. brand/30 은 흰 바탕에서 대비가
+                     1.3:1 이라 떼는 순간 color-contrast 가 미통과한다. 순서는
+                     ol / li 가 이미 전하므로 시각적 보조로 둔다.
 
                   ⚠️ 카드에 overflow-hidden 을 주지 말 것. 주면 아래 화살표가
                      카드 밖으로 나간 부분에서 잘린다. 이 숫자는 right-4 top-2
                      라 안쪽에 머문다. */}
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute right-4 top-2 text-[56px] font-extrabold leading-none text-line/70"
+                className="pointer-events-none absolute right-4 top-2 text-[56px] font-extrabold leading-none text-brand/30"
               >
                 {p.step}
               </span>
