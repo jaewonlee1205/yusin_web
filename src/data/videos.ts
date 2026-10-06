@@ -19,33 +19,64 @@
  * 썸네일은 scripts/fetch-video-thumbs.mjs 가 public/images/videos/<id>.webp 로
  * 받아 둔다. 영상 ID를 늘리거나 바꾸면 `npm run video-thumbs` 를 다시 돌린다.
  */
-export type Video = { id: string; title: string; note: string };
+export type Video = {
+  id: string;
+  title: string;
+  note: string;
+  /**
+   * 소리 없이 저절로 도는 미리보기 파일(public/videos/).
+   *
+   * 있는 영상만 홈에 올라간다(아래 featuredVideos). 유튜브 임베드로도 자동
+   * 재생을 걸어 봤지만 플레이어 자체의 결 — 로딩 화면, 루프 이음매, 화질
+   * 전환 — 이 남아 "유튜브 미리보기" 로 보였다. 히어로.PERFORMANCE 가 쓰는
+   * 로컬 <video> 와 같은 꼴로 맞춘다.
+   *
+   * 만드는 법은 README "제품 영상 미리보기 만들기" 참고. 원본 촬영본은
+   * 저장소에 없다(yusin-web 바로 위 폴더).
+   */
+  preview?: string;
+};
 
 export const videos: Video[] = [
   {
     id: "DzUOtS_O2ko",
     title: "소형 부품 정렬 · 에어 선별",
     note: "트랙에 한 줄로 선 부품을 위쪽 노즐이 공기로 걸러 냅니다.",
+    // 원본 촬영본에 이 장면이 없다(검정.연두 볼 + 에어 노즐). 넷 중 이것만
+    // 못 찾았다 — 그래서 홈에 올리지 않는다.
   },
   {
     id: "_zG4dYTCWpc",
     title: "금속 부품 정렬",
     note: "구멍 뚫린 판금 브래킷이 트랙을 타고 한 방향으로 올라갑니다.",
+    preview: "/videos/preview-metal-parts.mp4",
   },
   {
     id: "qbBMoY2g_WE",
     title: "커넥터 부품 정렬",
     note: "커넥터 하우징이 볼에서 트랙으로 올라서며 자세를 잡습니다.",
+    // 원본은 있다(MAH07514). 다만 그것이 hero.mp4 와 같은 촬영본이라, 홈에
+    // 올리면 바로 위 PERFORMANCE 영상과 같은 장면이 두 번 돈다.
   },
   {
     id: "KiiYXbIajog",
     title: "볼 내부 선별 지그",
     note: "볼 안쪽에 세운 지그가 지나가는 부품의 자세를 가려냅니다.",
+    preview: "/videos/preview-bowl-jig.mp4",
   },
 ];
 
-/** 홈에 맛보기로 띄울 두 개. 나머지는 /videos 에서 본다. */
-export const featuredVideos = videos.slice(0, 2);
+/**
+ * 홈에 맛보기로 띄울 둘. 나머지는 /videos 에서 본다.
+ *
+ * 한때 videos.slice(0, 2) 였다. 미리보기 파일이 있는 것만 고르도록 바꾼
+ * 것은, 홈 두 장이 서로 다른 방식(하나는 영상이 돌고 하나는 멈춘 썸네일)
+ * 으로 서면 나란히 둔 뜻이 없어지기 때문이다.
+ *
+ * ⚠️ preview 가 둘 미만이면 홈 카드도 그만큼 줄어든다. 영상을 더하거나 뺄
+ *    때 이 수를 본다.
+ */
+export const featuredVideos = videos.filter((v) => v.preview).slice(0, 2);
 
 /* 채널 주소는 site.ts 의 site.youtube 로 옮겼다 — 푸터가 모든 페이지에
    걸게 되면서 영상 데이터가 아니라 회사 상수가 됐다. */

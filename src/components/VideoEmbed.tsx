@@ -13,9 +13,16 @@ import type { Video } from "@/data/videos";
  * 나가는 요청이 하나도 없다.
  *
  * preview 를 켜면(홈 '제품 영상' 섹션) 그 자리에 들어왔을 때 소리 없는
- * 미리보기가 저절로 돈다. 이때도 페이지를 열자마자 붙지는 않는다 —
- * IntersectionObserver 로 그 섹션까지 내려와야 iframe 을 만든다. 위 문단의
- * 이유를 그대로 지키려는 것이다.
+ * 미리보기가 저절로 돈다. 미리보기는 유튜브가 아니라 **로컬 mp4** 다
+ * (videos.ts 의 Video.preview).
+ *
+ *   ⚠️ 한때 유튜브 임베드에 autoplay&mute&loop&controls=0 을 걸어 미리보기를
+ *      만들었다. 파라미터로 UI 를 아무리 눌러도 플레이어 자체의 결 — 로딩
+ *      화면, 루프 이음매, 화질 전환 — 이 남아 "유튜브 미리보기" 로 보였다.
+ *      히어로.PERFORMANCE 가 쓰는 로컬 <video> 와 같은 꼴로 맞췄다.
+ *
+ * 어느 쪽이든 페이지를 열자마자 받지는 않는다 — IntersectionObserver 로 그
+ * 섹션까지 내려와야 만든다.
  *
  * 겉이 <button> 이라 키보드로도 재생된다. 자리는 aspect-video 로 미리 잡아
  * 두어 iframe 으로 바뀔 때 아래 내용이 밀리지 않는다.
@@ -25,23 +32,23 @@ import type { Video } from "@/data/videos";
  */
 export default function VideoEmbed({
   video,
-  /** 화면에 들어오면 소리 없이 자동으로 돌린다 */
+  /** 화면에 들어오면 소리 없이 자동으로 돌린다 (video.preview 가 있을 때만) */
   preview = false,
 }: {
   video: Video;
   preview?: boolean;
 }) {
-  /** 소리.컨트롤이 있는 정식 재생. 버튼을 눌러야 켜진다 */
+  /** 소리.컨트롤이 있는 유튜브 정식 재생. 버튼을 눌러야 켜진다 */
   const [playing, setPlaying] = useState(false);
-  /** 미리보기 iframe 을 붙여도 되는 때가 됐는가 */
+  /** 미리보기를 붙여도 되는 때가 됐는가 */
   const [inView, setInView] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const watchUrl = `https://www.youtube.com/watch?v=${video.id}`;
 
   // Reveal 과 같은 패턴이다. 한 번 들어오면 관찰을 끊는다 — 오르내릴 때마다
-  // iframe 을 다시 만들 이유가 없다.
+  // 영상을 다시 받을 이유가 없다.
   useEffect(() => {
-    if (!preview) return;
+    if (!preview || !video.preview) return;
     const el = ref.current;
     if (!el) return;
 
@@ -60,9 +67,9 @@ export default function VideoEmbed({
 
     io.observe(el);
     return () => io.disconnect();
-  }, [preview]);
+  }, [preview, video.preview]);
 
-  const showPreview = preview && inView && !playing;
+  const showPreview = preview && !!video.preview && inView && !playing;
 
   // 테두리와 둥근 모서리는 감싸는 VideoCard 가 가진다 — 여기서도 주면 카드
   // 안에 선이 두 겹으로 보인다. aspect-video 는 남긴다: 재생 전에 자리를 잡아
@@ -80,9 +87,9 @@ export default function VideoEmbed({
         />
       ) : (
         <>
-          {/* 썸네일은 미리보기가 붙은 뒤에도 아래에 남는다. 자동재생을 막는
-              브라우저(모바일 일부)에서 유튜브가 멈춘 채 떠도 그림이 비치고,
-              iframe 이 뜨는 찰나에 검은 칸이 보이지 않는다. */}
+          {/* 썸네일은 미리보기가 붙은 뒤에도 아래에 남는다. 영상이 받아지는
+              동안 검은 칸이 보이지 않고, 아래 hero-video 가 숨겨지는
+              '움직임 줄이기' 설정에서도 그림이 남는다. */}
           <Image
             src={`/images/videos/${video.id}.webp`}
             alt=""
@@ -92,21 +99,23 @@ export default function VideoEmbed({
           />
 
           {showPreview && (
-            // 소리 없는 미리보기. loop 은 playlist 에 같은 id 를 줘야 돈다.
-            // controls.disablekb 를 끈 것은 이 iframe 이 조작 대상이 아니기
-            // 때문이다 — 누르는 일은 위에 덮인 버튼이 맡는다.
-            <iframe
-              src={
-                `https://www.youtube-nocookie.com/embed/${video.id}?autoplay=1&mute=1` +
-                `&loop=1&playlist=${video.id}&controls=0&modestbranding=1&rel=0` +
-                `&playsinline=1&disablekb=1`
-              }
-              title={`${video.title} 미리보기`}
-              aria-hidden="true"
-              tabIndex={-1}
-              allow="autoplay; encrypted-media"
-              className="pointer-events-none absolute inset-0 h-full w-full"
-            />
+            // hero-video 클래스를 그대로 쓴다 — globals.css 의
+            // prefers-reduced-motion 블록이 이 클래스를 display:none 으로
+            // 숨긴다. 움직임을 끈 사람에게는 위 썸네일만 남는다(히어로.
+            // PERFORMANCE 영상과 같은 처리다).
+            //
+            // preload="none" 이라 이 자리에 들어오기 전에는 받지 않는다.
+            <video
+              className="hero-video absolute inset-0 h-full w-full object-cover"
+              poster={`/images/videos/${video.id}.webp`}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="none"
+            >
+              <source src={video.preview} type="video/mp4" />
+            </video>
           )}
 
           <button

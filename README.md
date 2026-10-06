@@ -88,6 +88,41 @@ ffmpeg -ss 0 -i public/videos/hero.mp4 -frames:v 1   -c:v libwebp -quality 72 pu
   가장 조용한 10초를 고른 것입니다.
 - 포스터를 바꾸면 `src/app/layout.tsx`의 preload 경로도 같이 확인하세요.
 
+### 제품 영상 미리보기 만들기
+
+홈 '제품 영상' 두 장은 **소리 없는 로컬 mp4**가 저절로 돕니다
+(`public/videos/preview-*.mp4`). 누르면 그때 유튜브로 바뀝니다.
+
+> ⚠️ 한때 유튜브 임베드에 `autoplay&mute&loop&controls=0` 을 걸어 미리보기를
+> 만들었는데, 파라미터로 UI 를 아무리 눌러도 플레이어 자체의 결(로딩 화면,
+> 루프 이음매, 화질 전환)이 남아 "유튜브 미리보기"로 보였습니다.
+
+```bash
+# 금속 부품 정렬 (유튜브 _zG4dYTCWpc)
+ffmpeg -ss 14 -t 7 -i 더블유비.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 32 -preset slow -g 48 -movflags +faststart   -vf scale=640:360 public/videos/preview-metal-parts.mp4
+
+# 볼 내부 선별 지그 (유튜브 KiiYXbIajog)
+ffmpeg -ss 53 -t 7 -i MAH05268.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 32 -preset slow -g 48 -movflags +faststart   -vf scale=640:360 public/videos/preview-bowl-jig.mp4
+```
+
+- **원본 촬영본은 저장소에 없습니다.** `yusin-web` 바로 위 폴더의
+  `더블유비.MP4` · `MAH05268.MP4` · `MAH07514.MP4` · `00093.MTS` 입니다.
+  그 파일이 없으면 다시 만들 수 없습니다
+- 카드가 작아(1440에서 487×274) 640×360 · CRF 32 로 충분합니다. 한 편
+  **300KB 안쪽**을 목표로 합니다
+- `-an` 무음 — 소리가 있으면 브라우저가 자동재생을 막습니다
+- 새로 만들면 `src/data/videos.ts` 의 `preview` 에 경로를 적습니다.
+  **그 필드가 있는 영상만 홈에 올라갑니다**(`featuredVideos`)
+
+**유튜브 영상 ↔ 원본 촬영본 대조표** (썸네일을 프레임과 맞춰 확인했습니다)
+
+| 유튜브 | 제목 | 원본 | 홈 |
+|---|---|---|---|
+| `DzUOtS_O2ko` | 소형 부품 정렬 · 에어 선별 | **없음** (검정·연두 볼 + 에어 노즐 장면이 원본 넷에 없습니다) | — |
+| `_zG4dYTCWpc` | 금속 부품 정렬 | `더블유비.MP4` | ✅ |
+| `qbBMoY2g_WE` | 커넥터 부품 정렬 | `MAH07514.MP4` — `hero.mp4` 와 같은 촬영본이라 홈에 올리면 PERFORMANCE 영상과 같은 장면이 두 번 돕니다 | — |
+| `KiiYXbIajog` | 볼 내부 선별 지그 | `MAH05268.MP4` | ✅ |
+
 ### 제품 사진 교체하기
 
 `public/images/products/`에 같은 파일명으로 덮어쓰거나,
