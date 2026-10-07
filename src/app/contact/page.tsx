@@ -3,8 +3,6 @@ import Container from "@/components/Container";
 import InquiryForm from "@/components/InquiryForm";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
-import { process } from "@/data/company";
-import { site, telHref } from "@/data/site";
 
 export const metadata: Metadata = {
   title: "문의하기",
@@ -46,9 +44,27 @@ export default function ContactPage() {
 
       <div className="py-14 sm:py-20">
         <Container>
-          <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
+          {/* 폼 하나뿐이라 가운데 한 칸이다.
+
+              한때 오른쪽에 사이드바가 있었다(lg:grid-cols-[1.4fr_1fr]) —
+              "도입 프로세스" 와 "문의처" 두 구역이 회색 박스 하나에 들어
+              있었는데 둘 다 걷어 달라는 요청에 통째로 뺐다.
+
+              ⚠️ 그래서 이 페이지에 **전화번호와 이메일이 없다.** 전화는 헤더
+                 (lg 이상에서만)와 푸터 굵은 줄에, 이메일은 푸터 맨 아래 12px
+                 한 줄에만 남는다. ContactCTA 는 이 페이지에 붙지 않는다(그
+                 컴포넌트가 /contact 를 뺀 9개 페이지용이다). 모바일에서 폼을
+                 못 쓰는 사람이 전화를 찾으려면 푸터까지 내려가야 한다는 뜻이다.
+                 다시 넣으라는 말이 나오면 이 문단이 그때의 근거다.
+
+              max-w-2xl(672px)은 전에 폼 칸이 597px 이던 것과 비슷하게 잡은
+              값이다. 더 넓히면 입력칸 2열이 과하게 벌어진다.
+
+              제목은 왼쪽 정렬 그대로다 — 가운데로 두면 바로 아래 라벨들과
+              축이 어긋난다. */}
+          <div className="mx-auto max-w-2xl">
             <div>
-              {/* 덩어리 단위로 올린다 — 제목 / 폼 / 연락처가 0.90.180ms 다.
+              {/* 덩어리 단위로 올린다 — 제목 / 폼이 0.90ms 다.
                   입력칸을 하나씩 올리지는 않는다. 입력하러 온 사람이 칸이
                   다 나타날 때까지 기다리게 된다. */}
               <Reveal>
@@ -60,115 +76,6 @@ export default function ContactPage() {
                 <InquiryForm />
               </Reveal>
             </div>
-
-            {/* "이런 내용을 알려 주세요" 카드가 여기 있었다. 쓸 자리에서
-                멀어 읽히지 않아 문의 내용 입력란 바로 위로 옮겼다. 이제 이
-                칸에는 연락처 한 장만 선다. */}
-            <Reveal as="aside" delay={180} className="self-start">
-              {/* 한 박스 안에 두 구역이 선다 — 위는 도입 프로세스, 아래는
-                  문의처. 구분선 하나로 가른다.
-
-                  이 칸은 여러 번 바뀌었다. 회색 카드 -> 바탕 걷음 -> 테두리
-                  네모 -> 회색 박스 + 안에 연락처 표. 표에 있던 추가 회선.
-                  주소.팩스는 걷었다 — 셋 다 푸터와 오시는 길 표, 회사 개요
-                  표에 그대로 있고, 문의하러 온 사람에게 먼저 보일 것은
-                  "맡기면 어떻게 진행되는가" 다. */}
-              <div className="rounded-2xl bg-surface p-6">
-                <h2 className="text-sm font-bold tracking-[0.08em] text-ink">
-                  도입 프로세스
-                </h2>
-
-                {/* 홈 PROCESS 섹션이 쓰는 그 배열이다(company.ts 의 process).
-                    글을 새로 짓지 않는다 — 같은 과정을 두 자리에서 다르게
-                    말하면 어느 쪽이 맞는지 알 수 없게 된다.
-
-                    홈은 가로 넉 장 카드라 points(항목 셋)를 세우고, 여기는
-                    세로 넉 줄이라 summary(한 줄)를 쓴다. 같은 데이터의 두
-                    길이다. 칸이 379px 라 카드를 눕힐 자리가 없다. */}
-                <ol className="mt-5 flex flex-col gap-5">
-                  {process.map((p, i) => (
-                    <li key={p.step} className="flex gap-3">
-                      {/* 번호 배지. 같은 데이터(company.ts 의 process)를
-                          홈 PROCESS 와 함께 쓰지만 **생김새는 다르다.**
-
-                          ⚠️ 한때 둘이 "같은 언어, 다른 크기"(원 · 연한 레드
-                             바탕 · 레드 숫자, 24 / 32px)였다. 홈이 동그라미를
-                             버리고 제목 위 작은 레드 번호로 갔으므로 그 말은
-                             더 이상 사실이 아니다. 여기는 원을 **그대로
-                             둔다** — 홈은 가로 카드 넷이 나란히 서서 번호가
-                             제목과 가로로 경쟁했지만, 여기는 세로 목록이라
-                             번호가 왼쪽 열을 맡고 글이 오른쪽으로 흐른다.
-                             그 구조에서는 원이 열을 또렷하게 잡아 준다.
-                             홈을 고칠 때 여기까지 따라 고치지 않아도 된다.
-
-                          24px 원 넷이라 레드 면적도 좁다 — globals.css 토큰
-                          주석의 "레드는 면적을 좁게" 를 지킨다. 글 칸이 390
-                          에서 287px, 1024 에서 319px 뿐인 세로 목록이라 더
-                          큰 원은 과하다.
-
-                          ⚠️ aria-hidden 을 떼지 말 것. 순서는 ol / li 가 이미
-                             전하므로 시각 보조다. 대비는 계산상 4.66:1 로
-                             기준(4.5:1)을 넘지만 검사 대상에서 빼 둔다. */}
-                      <span
-                        aria-hidden="true"
-                        className="mt-px flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand/10 text-[11px] font-bold tabular-nums text-brand"
-                      >
-                        {i + 1}
-                      </span>
-                      <div className="min-w-0">
-                        <p className="text-sm font-bold text-ink">{p.title}</p>
-                        {/* points 가 아니라 summary 다. 한때 여기 점 목록이
-                            셋이라 한 단계가 네 줄을 차지했다 — 글 칸이 390
-                            에서 287px, 1024 에서 319px 뿐이라 좁다.
-
-                            ⚠️ 네 문장이 폭마다 같은 줄 수여야 한다. 글을
-                               고치려면 company.ts 의 summary 주석을 먼저
-                               볼 것. */}
-                        <p className="mt-1 text-[13px] leading-relaxed text-ink-soft">
-                          {p.summary}
-                        </p>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-
-                {/* 둘째 구역. 한때 제목이 "바로 연락하기" 였다 — 위에 프로세스가
-                    생기면서 둘 다 행동을 재촉하는 말이 되어, 이쪽은 "어디로
-                    거는가" 를 적는 자리로 낮췄다. */}
-                <div className="mt-7 border-t border-line pt-6">
-                  <h2 className="text-sm font-bold tracking-[0.08em] text-ink">
-                    문의처
-                  </h2>
-                  {/* 네이비로 꽉 채웠던 버튼을 흰 바탕으로 낮췄다. 폼의
-                      "문의 보내기" 와 둘 다 진하면 화면에서 둘이 겨룬다 —
-                      진한 주 버튼은 하나여야 한다. */}
-                  <a
-                    href={telHref(site.tel)}
-                    className="mt-4 flex h-14 items-center justify-center rounded-xl border border-line bg-white text-base font-bold tabular-nums text-navy transition-colors hover:border-navy/40"
-                  >
-                    {site.tel}
-                  </a>
-                  {/* 이메일도 박스다. 맨 글자로 두니 바로 위 전화 버튼과 짝이
-                      안 맞았다. 다만 한 치수 낮춘다 — 전화 h-14 / 16px bold,
-                      여기 h-12 / 14px semibold. 진한 주 동선은 전화 하나다. */}
-                  <a
-                    href={`mailto:${site.email}`}
-                    className="mt-2 flex h-12 items-center justify-center rounded-xl border border-line bg-white text-sm font-semibold text-ink-soft transition-colors hover:border-navy/40 hover:text-brand"
-                  >
-                    {site.email}
-                  </a>
-                  {/* 연락처 표를 걷으면서 이 페이지에서 영업시간이 사라졌다.
-                      한 줄만 남긴다 — 전화를 걸기 전에 보는 값이다.
-
-                      가운데 정렬이다. 바로 위 전화.이메일 버튼이 가운데라
-                      이 줄만 왼쪽이면 축이 어긋나 보였다. 제목("문의처")은
-                      왼쪽 그대로다 — 그쪽은 섹션 제목이다. */}
-                  <p className="mt-3 text-center text-[13px] leading-relaxed text-muted">
-                    {site.hours.weekday} · {site.hours.holiday}
-                  </p>
-                </div>
-              </div>
-            </Reveal>
           </div>
         </Container>
       </div>

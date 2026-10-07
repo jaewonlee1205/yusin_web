@@ -112,12 +112,16 @@ export default async function ProductDetailPage({
             <div className="lg:flex lg:flex-col">
               {/* 분류 배지(왼쪽)와 YUSIN 워드마크(오른쪽)가 한 줄이다.
 
-                  ⚠️ 마크를 세 번 옮겼다 — 배지 줄 24px -> 제목 줄 32px ->
-                     다시 배지 줄 32px. 문제는 **자리가 아니라 크기**였다.
-                     24px 짜리가 70% 농도로 흐릿해, 배지와 양 끝에 설 무게가
-                     없으니 그 사이 251~499px 가 "뭔가 더 있어야 할 빈 곳" 으로
-                     보였다. 32px · 75% 면 93x30px 배지와 덩어리가 맞아 양 끝이
-                     균형을 이룬다. **다시 24px 로 줄이지 말 것.**
+                  ⚠️ 마크를 네 번 매만졌다 — 배지 줄 24px -> 제목 줄 32px ->
+                     다시 배지 줄 32px -> 28px. 문제는 **자리가 아니라 크기**
+                     였다. 24px 짜리가 70% 농도로 흐릿해, 배지와 양 끝에 설
+                     무게가 없으니 그 사이 251~499px 가 "뭔가 더 있어야 할 빈
+                     곳" 으로 보였다. 28px · 75% 면 93x30px 배지와 덩어리가
+                     맞는다.
+
+                     **24px 로 되돌리지 말 것**(무게가 없어진다). 32px 도 쓰지
+                     않는다 — 배지(30px)보다 커서 줄 높이를 마크가 정하게 되고,
+                     "조금 크다" 는 말을 들었다. 28px 이 그 사이다.
 
                   ⚠️ self-start 를 주지 않는다. 그 값은 이 줄이 flex 행이
                      아니던 시절, 배지가 lg:flex-col 의 교차축 stretch 로 칸
@@ -135,10 +139,10 @@ export default async function ProductDetailPage({
                      "표 바닥 383.9 vs 사진 바닥 384" 를 0.1px 정밀도로 맞춘
                      값이니, 마크를 더 키우려거든 이 셈을 먼저 다시 하라.
 
-                  ⚠️ 32px 가 상한이다. 이 파일은 손상된 PPT 래스터에서 잘라낸
-                     129x32 라 그보다 키우면 뭉갠다 — h-8 은 원본 크기 그대로라
-                     확대가 0 이다(h-6 은 오히려 0.75배 축소였다).
-                     README 자료 요청 5번: 벡터 원본을 받으면 다시 뽑는다.
+                  ⚠️ 32px 가 물리적 상한이다. 이 파일은 손상된 PPT 래스터에서
+                     잘라낸 129x32 라 그보다 키우면 뭉갠다. 지금 28px 은 0.875배
+                     축소라 선명하다. README 자료 요청 5번: 벡터 원본을 받으면
+                     다시 뽑는다.
 
                   ⚠️ 제품명(h1) 안에 넣지 말 것. company/page.tsx 가 "사이트에서
                      글 안에 이미지를 넣는 유일한 자리 … 다른 제목으로 번지지
@@ -164,7 +168,7 @@ export default async function ProductDetailPage({
                   alt=""
                   width={129}
                   height={32}
-                  className="h-8 w-auto shrink-0 opacity-75"
+                  className="h-7 w-auto shrink-0 opacity-75"
                 />
               </div>
 
@@ -236,7 +240,14 @@ export default async function ProductDetailPage({
                 <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-y-2">
                   {product.specs.slice(0, 4).map((spec) => (
                     <Fragment key={spec.label}>
-                      <dt className="flex items-center gap-2.5 whitespace-nowrap rounded-l-xl bg-surface py-3 pl-4 pr-2 text-[13px] font-bold text-ink">
+                      {/* ⚠️ pr-4(16px)다. pr-2(8px)이던 때 **가장 긴 라벨만**
+                             값에 달라붙어 보였다 — 열이 auto 라 그 라벨이 열
+                             폭을 정하고, 짧은 라벨은 남는 만큼 더 벌어지기
+                             때문이다(방음커버에서 "소음 저감" 8px vs "구성"
+                             36px). 8 · 16 · 20px 을 그려서 골랐다. 20px 은
+                             짧은 라벨이 48px 까지 벌어져 한 표 안의 편차가
+                             커진다. */}
+                      <dt className="flex items-center gap-2.5 whitespace-nowrap rounded-l-xl bg-surface py-3 pl-4 pr-4 text-[13px] font-bold text-ink">
                         <span
                           aria-hidden="true"
                           className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand"

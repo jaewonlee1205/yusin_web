@@ -304,6 +304,16 @@ export function equipmentByGroup(group: EquipmentGroup) {
  *       의 2~4주를 고치면 이 넷도 함께 본다. products.ts 의 직진피더 kpis
  *       위에 같은 취지의 금지 주석이 있다("납기가 둘이 된다").
  *
+ * photo 는 홈 카드에 서는 공정 사진이다.
+ *
+ * ⚠️⚠️ **유신이 찍은 사진이 아니다.** 적용 분야 사진과 같은 처지로 Pexels 에서
+ *      받았다(scripts/fetch-process-photos.mjs 에 출처 · 라이선스 · 선정 기준이
+ *      있다). 공장 전경이 아니라 캘리퍼스 · 도면 · 밀링 날 · 렌치처럼 공정을
+ *      나타내는 클로즈업만 골랐다 — 카드에서 사진이 212px 라 멀리서 찍은 것은
+ *      무엇인지 읽히지 않고, 남의 공장 전경을 쓰면 거짓이 되기 때문이다.
+ *      README 자료 요청 11번(공장 · 작업 현장 사진)을 받으면 같은 파일 이름으로
+ *      갈아 끼운다 — 여기 경로는 그대로 두면 된다.
+ *
  * output 은 그 단계가 끝나면 **고객에게 무엇이 가는가** 다. points 가 "무엇을
  * 하는가" 이므로 둘이 겹치지 않는다 — 예를 들어 02 의 points 는 "설비 레이아웃
  * 도면 작성"(그리는 일)이고 output 은 "레이아웃 도면 확인"(고객이 보는 일)이다.
@@ -338,13 +348,26 @@ export const process: {
   points: [string, string, string];
   /** 단계가 끝나면 고객에게 가는 것. points 와 겹치지 않는다. */
   output: string;
-  /** 좁은 칸용 한 줄 요약. 위 ⚠️ 참고 — 길이를 바꾸면 다시 재야 한다. */
+  /** 홈 카드에 서는 공정 사진(public/images/process/). */
+  photo: string;
+  /** 사진 설명. 무엇을 찍은 것인지만 적는다 — 단계 이름을 되풀이하지 않는다. */
+  photoAlt: string;
+  /**
+   * 좁은 칸용 한 줄 요약.
+   *
+   * ⚠️ **지금은 쓰는 곳이 없다.** 문의하기 오른쪽 "도입 프로세스" 가 이 값을
+   *    썼는데 그 사이드바를 통째로 걷었다. 지우지 않고 두는 것은 네 문장을
+   *    폭마다 같은 줄 수로 맞추느라 후보 세 벌을 여덟 폭에서 그려 본 값이기
+   *    때문이다 — 되살릴 때 그 수고를 아낀다. 아래 ⚠️ 가 그 기록이다.
+   */
   summary: string;
 }[] = [
   {
     step: "01",
     title: "부품 접수 · 분석",
     duration: "1~2일",
+    photo: "/images/process/01-receive.webp",
+    photoAlt: "선반 위에 놓인 금속 캘리퍼스",
     points: [
       "부품 샘플 또는 도면 접수",
       "형상 · 재질 · 무게 분석",
@@ -357,6 +380,8 @@ export const process: {
     step: "02",
     title: "설계",
     duration: "3~5일",
+    photo: "/images/process/02-design.webp",
+    photoAlt: "원통 형상의 치수가 그려진 기계 도면과 금속 자",
     points: [
       "부품에 맞춘 볼 형상 설계",
       "정렬 · 선별 지그 설계",
@@ -369,6 +394,8 @@ export const process: {
     step: "03",
     title: "가공 · 조립",
     duration: "1~2주",
+    photo: "/images/process/03-machining.webp",
+    photoAlt: "금속을 깎고 있는 밀링 날 끝",
     points: [
       "사내 밀링 · 선반 가공",
       "용접 · 표면 마감 가공",
@@ -381,6 +408,8 @@ export const process: {
     step: "04",
     title: "튜닝 · 납품",
     duration: "2~3일",
+    photo: "/images/process/04-tuning.webp",
+    photoAlt: "렌치로 기계를 조이는 두 손",
     points: [
       "실제 부품으로 진동 튜닝",
       "정렬률 · 공급 속도 확인",

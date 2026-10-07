@@ -9,7 +9,8 @@
     "postbuild": "node scripts/fix-segment-prefetch.mjs",
     "assets": "node scripts/extract-assets.mjs",
     "video-thumbs": "node scripts/fetch-video-thumbs.mjs",
-    "app-photos": "node scripts/fetch-application-photos.mjs"
+    "app-photos": "node scripts/fetch-application-photos.mjs",
+    "process-photos": "node scripts/fetch-process-photos.mjs"
   },
   "dependencies": {
     "next": "16.3.6",

@@ -510,7 +510,12 @@ export default function Home() {
 
                     ⚠️ 레드로 바꾸지 말 것. 아래 주석의 "카드 안 레드가 셋 —
                        번호 · 기간 칩 · 체크 — 여기에 넷째를 더하지 말 것" 이
-                       그대로 적용된다. text-line 이 사이트에서 가장 연한 선색이다. */}
+                       그대로 적용된다.
+
+                    ⚠️ text-muted 다. 한때 text-line 이었는데 흰 카드 위에서
+                       대비가 1.2:1 이라 거의 보이지 않았다. muted 는 4.8:1 로
+                       또렷하면서도 레드 번호보다 먼저 읽히지는 않는다
+                       (line · muted/50 · muted · ink/25 를 그려서 골랐다). */}
                 {i < process.length - 1 && (
                   <svg
                     width="14"
@@ -522,7 +527,7 @@ export default function Home() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     aria-hidden="true"
-                    className="shrink-0 text-line"
+                    className="shrink-0 text-muted"
                   >
                     <path d="m7 6 6 6-6 6" />
                     <path d="m14 6 6 6-6 6" />
@@ -530,32 +535,33 @@ export default function Home() {
                 )}
               </div>
               <h3 className="mt-1.5 text-base font-bold text-ink">{p.title}</h3>
-              {/* 점 목록 셋. 한때 박스 안이 긴 문장 하나였는데, 글상자가
-                  좁아 3~4줄로 눌려 읽혔다. 지금은 단계마다 할 일 셋이 한 줄씩
-                  선다.
+              {/* 공정 사진.
 
-                  회색 박스를 두르지 않는다. 한동안 피더 섹션의 박스 셋을 따라
-                  bg-surface 를 깔았는데, 거기는 흰 섹션 위에 바로 놓이는
-                  박스라 또렷했고 여기는 이미 흰 카드 안이라 면이 두 겹이 됐다.
+                  한때 여기 점 목록 셋이 있었다("부품 샘플 또는 도면 접수" 식).
+                  글로만 늘어놓으니 네 카드가 비슷해 보여, 사진으로 바꿨다.
 
-                  ol > li 안의 ul 이다 — 단계 목록 안의 세부 목록이라 의미가
-                  맞는다. 점은 장식이라 aria-hidden 이고, 목록이라는 사실은
-                  ul/li 가 전한다.
+                  ⚠️ 카드 패딩 안에 둔다(-mx-6 으로 넘기지 않는다). 넘기면 카드
+                     모서리와 사진 모서리가 겹쳐 면이 두 겹으로 읽힌다 — 점
+                     목록이 회색 박스를 거부하던 것과 같은 이유다. 사진이
+                     212px 로 작아지는 것은 그 대가로 받는다.
 
-                  ⚠️ 항목 길이는 company.ts 의 process 주석을 따른다. */}
-              <ul className="mt-4 flex flex-col gap-2">
-                {p.points.map((point) => (
-                  <li key={point} className="flex items-center gap-2">
-                    <span
-                      aria-hidden="true"
-                      className="h-1 w-1 shrink-0 rounded-full bg-brand"
-                    />
-                    <span className="text-[13px] leading-snug text-ink-soft">
-                      {point}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+                  ⚠️ rounded-xl 이다. 카드가 rounded-2xl 이라 안쪽은 한 단계
+                     작아야 두 모서리가 같은 곡률로 겹쳐 보이지 않는다.
+
+                  bg-surface 는 사진이 뜨기 전 자리를 지킨다. 첫 화면 밖이라
+                  next/image 가 lazy 로 받는다.
+
+                  ⚠️ 사진은 유신이 찍은 것이 아니다 — company.ts 의 process
+                     주석과 scripts/fetch-process-photos.mjs 참고. */}
+              <div className="relative mt-4 aspect-video overflow-hidden rounded-xl bg-surface">
+                <Image
+                  src={p.photo}
+                  alt={p.photoAlt}
+                  fill
+                  sizes="(min-width: 1024px) 260px, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
 
               {/* 카드 바닥 한 줄 — **얼마나 걸리고 무엇을 받는가.**
 
