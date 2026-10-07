@@ -319,9 +319,9 @@ export default async function ProductDetailPage({
             넣으면 가벼움이 사라진다. mt-0.5 는 20px 아이콘과 23.4px 제목 줄의
             시각 중심을 맞추는 값이다.
 
-            열은 둘이다. 안산FA 는 여섯 개라 3열이 딱 맞지만 우리는 제품마다
-            2~4개여서 3열이면 네 개가 3+1 로 어긋난다. 2열이면 칸이 556px
-            (1024 는 453px)라 본문이 한두 줄로 칸을 채운다.
+            열은 둘이다. 안산FA 는 여섯 개라 3열이 딱 맞지만 우리는 네
+            개여서 3열이면 3+1 로 어긋난다. 2열이면 칸이 556px(1024 는 453px)
+            라 제목 한 줄 + 항목 둘이 칸을 채운다.
 
             ⚠️ 흰 카드를 씌운 것은 나중의 판단이다. 안산FA 를 따라 배경도 선도
                없이 간격만으로 나눴는데, 회색 섹션 위에 맨 글자 네 덩어리가
@@ -354,9 +354,36 @@ export default async function ProductDetailPage({
                   <p className="text-[17px] font-bold leading-snug text-ink">
                     {f.title}
                   </p>
-                  <p className="mt-1.5 text-[15px] leading-relaxed text-ink-soft">
-                    {f.body}
-                  </p>
+                  {/* 점 목록 둘. 한때 두 문장이 이어 붙은 한 덩어리였는데,
+                      두 줄로 꽉 찬 글상자라 어디서 끊어 읽을지가 안 보였다.
+                      홈 PROCESS 카드의 points 목록과 같은 꼴이다.
+
+                      점은 4px(h-1 w-1)다 — 카드 **안의** 하위 항목에 쓰는
+                      크기다. 6px(h-1.5)은 적용 분야 칩이나 히어로 사양 라벨
+                      처럼 상위 요소가 쓴다.
+
+                      ⚠️ 체크 아이콘과 섞이지 않는다. 바깥 카드가
+                         grid-cols-[auto_minmax(0,1fr)] 로 체크를 열 1 에
+                         두므로, 이 목록은 열 2 안쪽에 들어간다.
+
+                      mt-[10px] 는 4px 점을 15px 글의 첫 줄 가운데에 맞추는
+                      값이다 — 줄 높이가 21.6px 라 (21.6 - 4) / 2 = 8.8 에
+                      글상자 위 여백을 더한 값이고, 재서 맞췄다(7px 이면
+                      2.6px 떠 보인다). 홈 PROCESS 는 글이 13px 한 줄이라
+                      items-center 로 충분했다. */}
+                  <ul className="mt-2.5 flex flex-col gap-1.5">
+                    {f.points.map((point) => (
+                      <li key={point} className="flex gap-2">
+                        <span
+                          aria-hidden="true"
+                          className="mt-[10px] h-1 w-1 shrink-0 rounded-full bg-brand"
+                        />
+                        <span className="text-[15px] leading-relaxed text-ink-soft">
+                          {point}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </Reveal>

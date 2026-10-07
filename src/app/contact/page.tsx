@@ -82,10 +82,15 @@ export default function ContactPage() {
                 <ol className="mt-5 flex flex-col gap-5">
                   {process.map((p, i) => (
                     <li key={p.step} className="flex gap-3">
-                      {/* 번호 배지. 홈 PROCESS 가 쓰는 레드 번호와 같은
-                          언어다(그쪽은 brand/30 워터마크). 24px 원 넷이라
-                          레드 면적도 좁다 — globals.css 토큰 주석의
-                          "레드는 면적을 좁게" 를 지킨다.
+                      {/* 번호 배지. 홈 PROCESS 가 쓰는 번호와 **같은 언어,
+                          다른 크기**다 — 원 · 연한 레드 바탕 · 레드 숫자 ·
+                          tabular-nums 가 같고 크기만 24 / 32px 로 갈린다.
+                          여기가 작은 쪽인 것은 글 칸이 390 에서 287px, 1024
+                          에서 319px 뿐인 세로 목록이라 32px 원이 과해서다.
+                          (홈은 가로 카드라 글상자가 212px 다)
+
+                          24px 원 넷이라 레드 면적도 좁다 — globals.css 토큰
+                          주석의 "레드는 면적을 좁게" 를 지킨다.
 
                           ⚠️ aria-hidden 을 떼지 말 것. 순서는 ol / li 가 이미
                              전하므로 시각 보조다. 대비는 계산상 4.66:1 로

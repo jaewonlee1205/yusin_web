@@ -302,6 +302,28 @@ export default function Home() {
           >
             <source src="/videos/hero.mp4" type="video/mp4" />
           </video>
+
+          {/* 자막. 제목("쏟아 넣으면 한 줄로 나옵니다")이 비유라면 이쪽은
+              장면 그대로를 말한다 — 위 Image 의 alt 와 같은 사실이다.
+              제품 상세 구동 영상(ProductVideo)과 같은 꼴이다.
+
+              ⚠️ <video> 가 아니라 **칸**의 자식이다. 그래야 '움직임 줄이기'
+                 에서 영상이 display:none 이 되어도 뒤에 깔린 정지컷 위에
+                 자막이 남는다.
+
+              ⚠️ 흰 글씨가 읽히는 것은 그라데이션 덕이다. hero.mp4 하단 띠를
+                 재니 lg 3:1 로 잘린 뒤 Y 115~122(자르기 전 127~130)인데,
+                 navy-deep/85 를 덮으면 Y 49 로 떨어져 대비가 약 12.2:1 이
+                 된다(AAA 7:1 의 1.7배). 영상을 갈아 끼울 때 하단이 더 밝으면
+                 다시 잰다.
+
+              세로는 늘지 않는다 — 영상 위에 겹치므로 아래 KPI 띠와의 간격
+              48px 가 그대로다. */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/40 to-transparent px-5 pb-5 pt-12 sm:px-6 sm:pb-6">
+            <p className="text-[13px] font-medium leading-relaxed text-white sm:text-sm">
+              볼피더가 커넥터를 한 자세로 가려 트랙으로 내보냅니다.
+            </p>
+          </div>
         </Reveal>
 
         {/* KPI 넷. 값 - 라벨 - 조건 세 줄이다.
@@ -443,10 +465,17 @@ export default function Home() {
             >
               {/* 번호 배지 + 제목.
 
-                  ⚠️ /contact 의 "도입 프로세스" 배지와 **글자 그대로 같은
-                     클래스**다. 같은 데이터(company.ts 의 process)를 두 자리에
-                     쓰면서 번호 꼴이 갈려 있으면, 한쪽을 고칠 때 다른 쪽을
-                     잊는다. 둘을 함께 고칠 것.
+                  ⚠️ /contact 의 "도입 프로세스" 배지와 **같은 언어, 다른
+                     크기**다. 원 · 연한 레드 바탕 · 레드 숫자 · tabular-nums 가
+                     같고 크기만 32 / 24px 로 갈린다 — 여기는 가로 카드라
+                     글상자가 212px 이고, 거기는 세로 목록이라 287~319px 뿐이라
+                     32px 원이 과하다. 같은 데이터(company.ts 의 process)를 두
+                     자리에 쓰므로 한쪽을 고칠 때 다른 쪽도 본다.
+
+                  크기는 56 -> 24 -> 32px 로 두 번 옮겼다. 56px 워터마크는
+                  제목만큼 무거워 답답했고, 24px 는 반대로 허전했다. 32px 가
+                  그 사이다 — 카드 높이가 158 -> 166px 로 넷 다 같고 제목은
+                  모두 한 줄이다.
 
                   {p.step}("01")이 아니라 {i + 1} 이다 — 24px 원에 두 글자는
                   빽빽하다. step 필드는 key 로 남는다.
@@ -456,7 +485,7 @@ export default function Home() {
               <div className="flex items-center gap-2.5">
                 <span
                   aria-hidden="true"
-                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand/10 text-[11px] font-bold tabular-nums text-brand"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand/10 text-[13px] font-bold tabular-nums text-brand"
                 >
                   {i + 1}
                 </span>
