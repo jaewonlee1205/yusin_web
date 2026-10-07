@@ -68,14 +68,15 @@ export const videos: Video[] = [
 
 ### 홈 히어로 배경 영상 교체하기
 
-첫 화면 배경은 `public/videos/hero.mp4`(1280x720, 무음, 10초 루프, 약 1.4MB)입니다.
-그 위에 네이비 오버레이가 덮이고 불투명도는 0.38이라 화질을 많이 아낄 수 있습니다.
+첫 화면 배경은 `public/videos/hero.mp4`(1280x720, 무음, 9초 루프, 약 1.7MB)입니다.
+**홈 PERFORMANCE 섹션도 같은 파일을 씁니다** — 거기서는 오버레이 없이 밝게 돌고,
+히어로에서는 네이비 오버레이가 덮여 불투명도 0.38로 깔립니다.
 
 원본 촬영본에서 아래 명령으로 만듭니다. 원본은 저장소에 두지 않습니다.
 
 ```bash
-# 영상 (19초 지점부터 10초)
-ffmpeg -ss 19 -t 10 -i 원본.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 30 -preset slow -g 60 -movflags +faststart   -vf scale=1280:720 public/videos/hero.mp4
+# 영상 (MAH07514.MP4 의 110초 지점부터 9초)
+ffmpeg -ss 110 -t 9 -i MAH07514.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 28 -preset slow -g 60 -movflags +faststart   -vf scale=1280:720 public/videos/hero.mp4
 
 # 포스터 (영상 첫 프레임). 영상이 뜨기 전과 '움직임 줄이기'에서 이게 보입니다.
 ffmpeg -ss 0 -i public/videos/hero.mp4 -frames:v 1   -c:v libwebp -quality 72 public/images/hero-poster.webp
@@ -83,10 +84,15 @@ ffmpeg -ss 0 -i public/videos/hero.mp4 -frames:v 1   -c:v libwebp -quality 72 pu
 
 - `-an` 무음 — 소리가 있으면 브라우저가 자동재생을 막습니다
 - `-movflags +faststart` — 메타데이터를 앞에 두어 받는 즉시 재생됩니다
-- **구간을 고를 때는 카메라가 멈춰 있는 곳을 고릅니다.** 배경이라 화면이
-  흔들리면 눈에 거슬립니다. 현재 구간은 원본 4개를 장면변화 점수로 재서
-  가장 조용한 10초를 고른 것입니다.
+- **구간을 고를 때는 카메라가 멈춰 있고 부품 흐름이 끊기지 않는 곳을 고릅니다.**
+  배경이라 화면이 흔들리면 눈에 거슬리고, PERFORMANCE 섹션에서는 밝게 보이므로
+  트랙이 비는 순간이 그대로 드러납니다.
+  한때 19~29초였는데 중간에 공급이 끊기는 구간이 있었습니다. 지금 구간
+  (110~119초)은 볼 전체가 들어오고 가장자리에 커넥터가 빽빽이 돌아가 흐름이
+  끊기지 않습니다 — 후보 둘(28초·110초)을 실제 클립으로 만들어 비교했습니다
 - 포스터를 바꾸면 `src/app/layout.tsx`의 preload 경로도 같이 확인하세요.
+  **구간을 바꾸면 포스터도 반드시 다시 뽑습니다** — 안 그러면 '움직임 줄이기'
+  에서 영상과 다른 그림이 뜹니다
 
 ### 제품 영상 미리보기 만들기
 
@@ -99,17 +105,20 @@ ffmpeg -ss 0 -i public/videos/hero.mp4 -frames:v 1   -c:v libwebp -quality 72 pu
 
 ```bash
 # 금속 부품 정렬 (유튜브 _zG4dYTCWpc)
-ffmpeg -ss 14 -t 7 -i 더블유비.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 32 -preset slow -g 48 -movflags +faststart   -vf scale=640:360 public/videos/preview-metal-parts.mp4
+ffmpeg -ss 14 -t 7 -i 더블유비.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 31 -preset slow -g 48 -movflags +faststart   -vf scale=1280:720 public/videos/preview-metal-parts.mp4
 
 # 볼 내부 선별 지그 (유튜브 KiiYXbIajog)
-ffmpeg -ss 53 -t 7 -i MAH05268.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 32 -preset slow -g 48 -movflags +faststart   -vf scale=640:360 public/videos/preview-bowl-jig.mp4
+ffmpeg -ss 53 -t 7 -i MAH05268.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 31 -preset slow -g 48 -movflags +faststart   -vf scale=1280:720 public/videos/preview-bowl-jig.mp4
 ```
 
 - **원본 촬영본은 저장소에 없습니다.** `yusin-web` 바로 위 폴더의
   `더블유비.MP4` · `MAH05268.MP4` · `MAH07514.MP4` · `00093.MTS` 입니다.
   그 파일이 없으면 다시 만들 수 없습니다
-- 카드가 작아(1440에서 487×274) 640×360 · CRF 32 로 충분합니다. 한 편
-  **300KB 안쪽**을 목표로 합니다
+- **해상도를 원본 그대로(1280×720) 둡니다.** 한때 640×360으로 줄였는데, 카드가
+  487×274로 보이므로 레티나(2x) 화면에서는 0.66배로 늘어나 뭉개졌습니다.
+  1280×720이면 1.31배라 또렷합니다. 한 편 **1MB 안쪽**이고, 그 섹션까지
+  내려와야 받으므로(`preload="none"` + IntersectionObserver) 첫 화면
+  전송량과는 무관합니다
 - `-an` 무음 — 소리가 있으면 브라우저가 자동재생을 막습니다
 - 새로 만들면 `src/data/videos.ts` 의 `preview` 에 경로를 적습니다.
   **그 필드가 있는 영상만 홈에 올라갑니다**(`featuredVideos`)
@@ -296,6 +305,7 @@ Apache·Nginx 기본 설정에서 별도 rewrite 없이 동작합니다.
 | 15 | **적용 사례 실물 사진** | 제품 상세 "적용 분야" **일곱 제품 20칸** 에 지금은 **일반 산업 사진**이 들어가 있습니다(출처는 `scripts/fetch-application-photos.mjs`, Pexels 무료 라이선스). 유신이 실제로 공급한 부품 사진을 주시면 `public/images/applications/` 의 같은 이름 파일만 갈아 끼우면 됩니다 — 분야마다 한 줄 적어 둔 설명(`products.ts` 의 `note`)도 부품군 일반의 성질만 적은 것이라 확인이 필요합니다 |
 | 17 | **홈 KPI 용 성능 수치** | 홈 두 번째 섹션(PERFORMANCE)에 `99% 정렬·선별 정확도 / 7,200회/분 최대 진동수 / 24시간 연속 가동 / 2~4주 설계→납품` 을 큰 숫자로 띄웠습니다. **이 중 7,200회/분만 제품 상세 `specTable` 과 같은 값이고, 나머지 셋은 파츠피더 업계 일반값으로 잡은 것입니다.** 유신이 실제로 말할 수 있는 수치(정렬률, 표준 납기, 연속 가동 조건)를 주시면 `src/data/products.ts` 의 `performanceKpis` 배열만 갈아 끼우면 됩니다 — 각 칸의 `note`(어떤 조건에서의 값인가)도 함께 주시면 좋습니다 |
 | 16 | **대중교통 안내** | 오시는 길 표에 한 행 넣으려 했는데 **노선이 자료마다 엇갈렸습니다** — 검색 결과가 `1광명·25·8856` 과 `20-1·11-A·11-B` 로 갈립니다. 틀린 노선을 적으면 방문객이 헤매므로 비워 뒀습니다. 가장 가까운 정류장 이름과 자주 쓰는 노선(또는 "정왕역에서 차로 ○분")을 주시면 `src/app/location/page.tsx` 의 `CONTACT_ROWS` 에 한 행 더합니다. 지금은 **도로명**과 **내비게이션 검색어(동우디지털파크)** 행이 들어가 있습니다 |
+| 18 | **고화질 제품 영상 원본** | 지금 원본 촬영본 넷이 `1280×720`(한 편만 `1440×1080`)입니다. 홈 PERFORMANCE 섹션은 전체 폭 배너(1088px)라 **레티나(2x) 화면에서는 소스가 0.59배밖에 안 되어** 어떤 인코딩 설정으로도 선명해지지 않습니다 — 실제로 CRF 23·25·27·30을 1:1로 비교했는데 넷이 구분되지 않았습니다(압축이 아니라 해상도 문제). **1080p 이상으로 다시 찍은 영상이나 더 높은 해상도의 원본 파일**을 주시면 그만큼 선명해집니다. 홈 영상 카드 둘은 작아서(487×274) 지금 원본으로도 2x를 채웁니다 |
 | 14 | **부서별 담당 업무** | PPT 조직도에는 부서 이름까지만 있었습니다. 조직도 3단의 업무 칸은 제작 프로세스·보유 설비 분류에서 끌어온 추정값이고, 칸 수도 그 문장이 열거하는 만큼으로 둡니다 (`src/data/company.ts` 의 `organization`) |
 
 ### 원문에서 손본 곳
