@@ -20,6 +20,11 @@ import type { Product } from "@/data/products";
  * 회색 띠를 두른 사진이 아니라 배경 없는 제품컷으로 보인다(진동기 원본이
  * 흰 배경 3D 도면이라 특히 잘 맞는다).
  *
+ * 카드에는 분류 · 제품명 · 영문명 셋만 선다. 한때 그 아래 설명 두 줄
+ * (tagline)이 있었는데 걷어 달라는 요청에 뺐다 — 세 자리가 같은 컴포넌트를
+ * 쓰므로 여기 한 곳을 고치면 /products 7장, 홈 라인업 3장, 상세 "다른 제품"
+ * 3장이 모두 바뀐다.
+ *
  * 제품 상세의 "다른 제품" 도 이 카드를 그대로 쓴다. 한때 거기만 사진 칸을
  * 2:1 로 낮춘 적이 있는데(카드를 작게 두려고), 4:3 원본이 318px 칸에 212px 로
  * 그려져 좌우에 53px 씩 흰 띠가 남았다. 띠를 없애려면 칸이 원본과 같은 비율
@@ -102,24 +107,20 @@ export default function ProductCard({ product }: { product: Product }) {
         <h3 className="mt-2 text-lg font-bold text-ink transition-colors duration-300 group-hover:text-brand">
           {product.name}
         </h3>
-        <p className="mt-0.5 text-xs font-medium uppercase tracking-wide text-muted">
+        {/* ⚠️ flex-1 이 여기 있다. 글 칸(flex flex-1 flex-col)에서 늘어나는
+               자식이 이것뿐이라, 빼면 글 칸이 내용 높이로 줄고 카드 아래에 빈
+               흰 자리가 남는다 — 격자는 stretch 라 카드 외곽만 같은 높이가 되고
+               안쪽이 들뜬다.
+
+            ⚠️ 한때 이 아래에 tagline 한 줄이 더 있었다("흩어진 부품을 진동으로
+               끌어올려 …"). 걷어 달라는 요청에 뺐고, flex-1 을 그 p 에서 이쪽으로
+               옮겼다. 카드가 376 -> 319px 가 된다.
+
+               tagline 데이터는 products.ts 에 그대로 있다 — 일곱 문장을 "어느
+               폭에서나 두 줄" 로 맞추느라 폭 열 종에서 1px 씩 잰 값이라 되살릴
+               때를 위해 남겼다. 그 주석도 함께 손봐 뒀다. */}
+        <p className="mt-0.5 flex-1 text-xs font-medium uppercase tracking-wide text-muted">
           {product.nameEn}
-        </p>
-        {/* summary 가 아니라 tagline 이다. summary 는 상세 배너 lead 를
-            겸해 30자 안팎인데, 카드 글상자(가장 좁을 때 217px)에서는 두 줄이
-            된다. 카드에는 한 줄짜리 tagline 만 쓴다.
-
-            어느 폭에서나 두 줄이어야 한다. 한 줄로 떨어지는 카드가 섞이면
-            격자에서 그 카드만 짧아진다. 일곱 tagline 을 14px/1.625 로 1px 씩
-            재 보면 모두 두 줄인 글상자 폭이 213~307px 다 — 좁으면 긴 셋(직진
-            피더 37자가 한계)이 세 줄이 되고, 넓으면 짧은 셋(방음커버.컨트롤러.
-            우레탄)이 한 줄이 된다. 이 카드를 쓰는 격자는 그 창 안으로 칸을
-            잡아야 한다(/products 는 217px, 상세 "다른 제품" 은 217~294px).
-
-            flex-1 을 남겨 둔다. 아래 "상세보기" 줄이 빠졌어도 본문이 카드
-            높이를 끝까지 채워야 격자에서 아랫변이 가지런하다. */}
-        <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-soft">
-          {product.tagline}
         </p>
       </div>
     </Link>

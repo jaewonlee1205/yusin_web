@@ -328,6 +328,10 @@ export default function Home() {
 
         {/* KPI 넷. 값 - 라벨 - 조건 세 줄이다.
 
+            ⚠️ 한때 값 · 라벨 · **조건** 세 줄이었다. 조건 줄(kpi.note)을
+               걷어 달라는 요청에 화면에서만 뺐다 — 데이터는 products.ts 에
+               그대로 있다(실제 수치를 받을 때 함께 되살린다). 띠가 93 -> 68px 다.
+
             ⚠️ dl 이 아니라 ul 이다. 처음에 히어로 지표 띠를 따라 dl/dt/dd 로
                짰다가 Lighthouse 접근성이 96 으로 떨어졌다(definition-list 미통과,
                agent-accessibility-tree 0). dl 의 자식 div 안에는 dt 와 dd 만
@@ -367,9 +371,7 @@ export default function Home() {
                 </span>
               </p>
               <p className="mt-2.5 text-sm font-bold text-ink">{kpi.label}</p>
-              <p className="mt-1.5 text-xs leading-relaxed text-muted">
-                {kpi.note}
-              </p>
+
             </Reveal>
           ))}
         </ul>

@@ -184,8 +184,15 @@ export default async function ProductDetailPage({
                 {product.summary}
               </p>
 
-              {/* 히어로 사양 표 — specs 앞 세 줄이다. 아래 사양 표는 slice(3)
-                  로 뒤 세 줄만 쓴다. 같은 줄이 두 번 나오지 않는다.
+              {/* 히어로 사양 표 — specs 앞 **네** 줄이다. 아래 "제작 사양" 표는
+                  slice(4) 로 뒤 두 줄을 쓴다. 일곱 제품 모두 specs 가 여섯 줄이라
+                  4 + 2 로 갈린다.
+
+                  ⚠️ 한동안 아래 표가 slice(3) 이어서 **specs[3] 하나가 두 번
+                     나왔다**(볼피더 "회전 방향", 직진피더.컨트롤러 "설치",
+                     진동기 "제어", 호퍼피더 "배출", 방음커버 "제작", 우레탄
+                     "효과"). 히어로를 세 줄에서 네 줄로 늘리면서 아래쪽을 같이
+                     옮기지 않은 탓이다. 한쪽 줄 수를 바꾸면 반드시 다른 쪽도 본다.
 
                   "주요 사양" 라벨은 두지 않는다. 표가 아래 "제작 사양" 과 같은
                   짜임(격자선 + 회색 라벨 칸)이 되면서 그 자체로 사양표로 읽혀,
@@ -410,7 +417,12 @@ export default async function ProductDetailPage({
           ))}
         </ul>
 
-        {/* KPI 넷. 값 - 라벨 - 조건 세 줄이 가로로 선다.
+        {/* KPI 넷. 값 - 라벨 두 줄이 가로로 선다.
+
+            ⚠️ 한때 아래에 조건 줄(kpi.note)이 하나 더 있었다. 걷어 달라는
+               요청에 화면에서만 뺐고 데이터는 products.ts 에 그대로 있다 —
+               실제 수치를 받을 때 함께 되살린다. 홈 PERFORMANCE 띠도 같이
+               뺐으므로 두 자리가 여전히 같은 꼴이다.
 
             특징 아래에 둔다. 위 카드 넷이 "그래서 무엇이 되는지" 를 산문으로
             말하고 나면, 같은 것을 숫자로 한 번 더 받는 자리다. 아래 사양
@@ -463,9 +475,6 @@ export default async function ProductDetailPage({
                 </span>
               </p>
               <p className="mt-2.5 text-sm font-bold text-ink">{kpi.label}</p>
-              <p className="mt-1.5 text-xs leading-relaxed text-muted">
-                {kpi.note}
-              </p>
             </Reveal>
           ))}
         </ul>
@@ -640,7 +649,7 @@ export default async function ProductDetailPage({
                  따라 그려지는 표준 테두리라 모서리에서 끊기지 않는다.
                  위 예시 규격표도 border-line 이라 두 표가 같은 방식이 된다. */}
           <dl className="grid overflow-hidden rounded-2xl border border-line sm:grid-cols-[9rem_minmax(0,1fr)]">
-            {product.specs.slice(3).map((spec, i, all) => (
+            {product.specs.slice(4).map((spec, i, all) => (
               <Fragment key={spec.label}>
                 {/* 패딩이 px-4 py-3 인 것은 위 예시 규격표와 맞추기 위해서다.
                     한때 px-5 py-4 라 행 높이가 55px 였는데(위 표는 44px),
