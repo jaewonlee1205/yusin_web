@@ -45,3 +45,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Lighthouse 리포트 — 측정할 때마다 만들어지는 1만 줄짜리 JSON 이다.
+# npx lighthouse 를 백그라운드 서브셸(`cd … && chrome &`) 뒤에 이어 쓰면
+# cd 가 그 서브셸에만 걸려 리포트가 저장소 루트에 떨어진다(dc60002 에서
+# 한 번 섞여 들어갔다). scratchpad 에 쓰더라도 이 줄은 남겨 둔다.
+lh-*.json
+lighthouse-*.json
