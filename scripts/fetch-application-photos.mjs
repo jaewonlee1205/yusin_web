@@ -26,13 +26,16 @@
  * 카드가 작다는 것도 잊지 말 것(가장 넓을 때 사진 350x197px). 피사체가
  * 프레임을 채우지 않으면 그 크기에서 무엇인지 읽히지 않는다.
  *
- * ⚠️⚠️ **이 스크립트를 돌리면 영상 프레임 여섯 장이 스톡으로 되돌아간다.**
- *      connector · appliance · linear-transfer · vibrator-bowl · hopper-bulk ·
- *      cover-metal 여섯 칸은 지금 유신 촬영 영상에서 뽑은 프레임이 덮고 있다
- *      (scripts/capture-video-frames.mjs). 파일 이름이 같아서다.
+ * ⚠️⚠️ **이 스크립트는 지금 화면에 보이는 사진을 만들지 않는다.** 적용 분야
+ *      19칸이 전부 유신 촬영 영상에서 뽑은 프레임으로 바뀌었다
+ *      (scripts/capture-video-frames.mjs). 파일 이름이 같아서, **이것을 돌리면
+ *      그 19장이 전부 스톡으로 되돌아간다.**
  *
- *      그러니 이 스크립트 뒤에는 반드시 한 번 더 돌린다:
- *        npm run app-photos && npm run video-frames
+ *      그래도 지우지 않는 것은 두 가지 때문이다 — Pexels 출처 기록이고,
+ *      영상으로 담을 수 없는 자리(공장 전경 같은 것)가 생기면 다시 쓸 수 있다.
+ *
+ *      실수로 돌렸다면 바로 되돌린다:
+ *        npm run video-frames
  *
  * 사진을 바꾸거나 분야를 늘린 뒤에는:  npm run app-photos
  */

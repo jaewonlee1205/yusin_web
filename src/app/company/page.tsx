@@ -198,28 +198,51 @@ export default function CompanyPage() {
             <p className="mt-3 text-xl font-bold leading-snug text-white sm:text-2xl">
               {philosophyMotto}
             </p>
-            <ul className="mt-6 space-y-4 border-t border-white/15 pt-6">
+            {/* **가로 두 칸이다** — 사회복지 | 연구개발 이 나란히 서고 각
+                칸에서 제목 아래로 사진이 깔린다.
+
+                ⚠️ 한 라운드 동안 세로 2행이었다(56px 썸네일 + 글이 가로).
+                   요청한 그림은 "사회복지 연구개발을 열로 두고 밑에 사진" 이라
+                   되돌렸다.
+
+                ⚠️ 칸이 좁다. 1024 에서 패널 안쪽이 319px 이라 한 칸이 154px,
+                   사진이 87px 다. 그래서 자막 글이 **130px 안에** 들어가야
+                   한다 — company.ts 의 caption 주석에 측정값이 있다. */}
+            <ul className="mt-6 grid grid-cols-2 gap-3 border-t border-white/15 pt-6">
               {philosophy.map((item) => (
-                <li key={item.title} className="flex items-center gap-3.5">
+                <li key={item.title}>
+                  <p className="text-sm font-bold text-brand-light">
+                    {item.title}
+                  </p>
                   {/* bg-navy 는 사진이 뜨기 전 자리를 지킨다. 패널이
-                      navy-deep 이라 한 단계 밝은 navy 가 칸으로 보인다. */}
-                  <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-navy">
+                      navy-deep 이라 한 단계 밝은 navy 가 칸으로 보인다.
+                      rounded-lg 는 패널(rounded-2xl)보다 두 단계 작다 — 작은
+                      칸에 같은 반경을 주면 모서리만 눈에 띈다. */}
+                  <div className="relative mt-2.5 aspect-video w-full overflow-hidden rounded-lg bg-navy">
                     <Image
                       src={item.photo}
                       alt={item.photoAlt}
                       fill
-                      sizes="56px"
+                      sizes="190px"
                       className="object-cover"
                     />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-sm font-bold text-brand-light">
-                      {item.title}
-                    </span>
-                    <span className="mt-0.5 block text-[13px] leading-snug text-white/75">
-                      {item.caption}
-                    </span>
-                  </span>
+                    {/* 사진 위 자막. 홈 PROCESS 카드 · 제품 구동 영상과 같은
+                        꼴이다 — 파란 그라데이션 위에 흰 글 한 줄.
+
+                        ⚠️ <Image> 가 아니라 **칸**의 자식이다. 그래야 사진이
+                           아직 안 떴거나 못 받았을 때도 띠가 남는다.
+
+                        px-3 pb-2 pt-6 — 사이트에서 가장 작은 자막이다. 사진이
+                        1024 에서 87px 뿐이라 PROCESS(px-3 pb-2.5 pt-8, 사진
+                        99~119px)보다도 줄였다.
+
+                        pointer-events-none — 누를 것이 없다. */}
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/40 to-transparent px-3 pb-2 pt-6">
+                      <p className="text-xs font-medium leading-snug text-white">
+                        {item.caption}
+                      </p>
+                    </div>
+                  </div>
                 </li>
               ))}
             </ul>

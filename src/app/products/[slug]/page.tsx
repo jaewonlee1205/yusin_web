@@ -380,45 +380,51 @@ export default async function ProductDetailPage({
 
             ⚠️ 2열로 되돌리려면 위 표를 먼저 볼 것. 사진을 카드 위로 되돌리지
                않는 한 1024 에서 글이 깨진다. */}
-        <ul className="grid gap-4">
+        {/* **2행 2열이다 — 단 1280(xl) 부터다.** 사진은 글 오른쪽 48px
+            정사각 썸네일이다.
+
+            ⚠️⚠️ **lg(1024)가 아니라 xl(1280)이다.** 1024 는 2열인데 Container 가
+                 945px 뿐이라 768(1열)보다도 좁다. 거기서 글상자가 사진 없이
+                 364px 인데, 48px 사진을 넣는 순간 316px 가 되어 **일곱 제품
+                 56칸 가운데 12칸이 두 줄**이 되고 카드 높이가 136·161·185 로
+                 갈렸다(실측). 사진을 40px 까지 줄여도 마찬가지다.
+
+                 사진 없이 재면 1024 에서도 일곱 제품 전부 0/8 이다 — 즉 **글이
+                 긴 것이 아니라 그 폭에 사진이 들어갈 자리가 없는 것**이다.
+
+                 2열을 1280 부터로 미루면 1024 는 1열이 되어 글상자가 넓어지고,
+                 1280 이상에서는 2열 + 사진이 전부 한 줄이다(글상자 388px).
+
+            ⚠️ 그 대가로 **1024~1279 구간에서는 카드가 세로로 넷 쌓인다.**
+               "2행 2열" 은 1280 이상에서 보인다. 되돌리려면 사진을 걷거나
+               56개 글을 줄여야 한다. */}
+        <ul className="grid gap-6 xl:grid-cols-2">
           {product.features.map((f, i) => (
             <Reveal as="li" key={f.title} delay={i * 70} className="h-full">
-              <div className="grid h-full overflow-hidden rounded-2xl bg-white shadow-card md:grid-cols-[minmax(0,1fr)_10rem]">
-                {/* 사진은 글 **오른쪽** 160px 칸이다. **768 부터다.**
+              {/* 체크 · 글 · 사진 **세 칸**이 한 줄로 선다. 사진은 오른쪽
+                  끝의 64x64 정사각 썸네일이다.
 
-                    ⚠️ md 미만에서는 격자가 1열로 떨어지므로 order 를 md: 로
-                       묶는다 — 좁은 화면에서는 사진이 글 **위**에 선다(적용
-                       분야 카드와 같은 꼴이고, 가로로 두면 글 칸이 남지 않는다).
+                  ⚠️⚠️ 사진 칸이 **정사각 48px** 이어야 한다. 두 가지를 재서
+                       정한 값이다 —
 
-                    ⚠️ **sm(640)이 아니라 md(768)이다.** 640 에서 옆에 두면
-                       Container 가 560px 뿐이라 사진 160 을 떼고 패딩 · 체크를
-                       빼면 글상자가 318px 가 된다 — 가장 긴 항목이 335px 라
-                       32칸 중 5칸이 두 줄이 되고 카드 높이가 셋으로 갈렸다
-                       (실측). 768 이면 글상자가 446px 라 전부 한 줄이다.
+                         세로 칸(64 x 136)은 16:9 원본의 **74%가 잘려** 초록 면이나
+                         금속 면만 남은 세로 띠가 됐다. 정사각이면 44%로 준다.
 
-                    ⚠️ aspect 가 없다. 카드 높이는 글이 정하고 사진이
-                       object-cover 로 그 높이를 채운다 — 비율을 고정하면 글이
-                       짧은 카드와 긴 카드의 높이가 갈린다. min-h-[8rem] 은
-                       sm 미만(1열)에서 사진이 납작해지지 않게 하는 바닥값이다.
+                         1024(2열)에서 사진이 커질수록 글이 두 줄이 된다 —
+                           사진 없음 0/8   48px 0/8   56px 4/8   64px 5/8
+                         48px 까지는 카드 높이가 136px 로 단일이고, 56px 부터
+                         161·185 로 갈린다. **56px 이상으로 키우지 말 것.**
 
-                    카드가 rounded-2xl + overflow-hidden 이라 사진에 따로 모서리를
-                    주지 않는다. bg-surface 는 사진이 뜨기 전 자리를 지킨다.
+                       그래서 카드 바깥 격자를 걷고 안쪽 한 줄로 평탄화했다 —
+                       사진이 카드 높이와 무관해야 하기 때문이다.
 
-                    ⚠️ 28장 가운데 **두 장만** 유신 영상에서 뽑은 것이다
-                       (bowl-feeder-4 · urethane-coating-4,
-                       scripts/capture-video-frames.mjs). 나머지 26장은 Pexels
-                       스톡이다 — products.ts 의 features 주석과
-                       scripts/fetch-feature-photos.mjs 참고. */}
-                <div className="relative min-h-[8rem] w-full overflow-hidden bg-surface md:order-2">
-                  <Image
-                    src={f.photo}
-                    alt={f.photoAlt}
-                    fill
-                    sizes="(min-width: 768px) 160px, 100vw"
-                    className="object-cover"
-                  />
-                </div>
-                <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3.5 p-6 md:order-1">
+                  self-center 로 글 묶음 가운데에 둔다. 위에 맞추면 제목 옆에
+                  붙어 제목과 경쟁하고, 아래에 맞추면 점 목록 둘째 줄에 걸린다.
+
+                  ⚠️ **28장이 전부 유신 촬영 영상에서 뽑은 프레임이다**
+                     (scripts/capture-video-frames.mjs). 제품마다 자기 영상에서
+                     구도 넷을 떼었다. 스톡은 한 장도 없다. */}
+              <div className="grid h-full grid-cols-[auto_minmax(0,1fr)_auto] gap-x-3.5 rounded-2xl bg-white p-6 shadow-card">
                 <svg
                   width="20"
                   height="20"
@@ -468,6 +474,14 @@ export default async function ProductDetailPage({
                     ))}
                   </ul>
                 </div>
+                <div className="relative h-12 w-12 shrink-0 self-center overflow-hidden rounded-lg bg-surface">
+                  <Image
+                    src={f.photo}
+                    alt={f.photoAlt}
+                    fill
+                    sizes="48px"
+                    className="object-cover"
+                  />
                 </div>
               </div>
             </Reveal>

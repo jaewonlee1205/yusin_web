@@ -70,6 +70,30 @@ const boxBase =
   "peer-focus-visible:ring-2 peer-focus-visible:ring-brand peer-focus-visible:ring-offset-2";
 const boxLabel =
   "text-sm leading-snug text-ink-soft transition-colors peer-checked:font-semibold peer-checked:text-ink";
+/**
+ * 개인정보 동의 체크박스. 위 문의 분야와 **같은 상자**이고 mt-0.5 만 다르다 —
+ * 글이 두 줄이라 첫 줄 가운데에 맞춘다.
+ *
+ * ⚠️ 한때 네이티브 체크박스(h-4 w-4 accent-[#d5261e])였다. 그때 주석에
+ *    "저쪽은 네이비, 여기는 레드다 — 반드시 눌러야 넘어가는 한 줄이라 색으로
+ *    알린다" 고 적어 두었는데, 문의 분야와 같은 모양으로 해 달라는 요청에
+ *    뒤집었다. 같은 모양에 다른 색이면 둘이 다른 장치로 읽힌다.
+ *    이제 폼 안의 레드는 제출 버튼 하나뿐이다.
+ *
+ * ⚠️⚠️ input 의 required 를 빼지 말 것. 동의 없이는 제출되지 않아야 하는
+ *      유일한 칸이다.
+ *
+ *      sr-only 로 숨겨도 **검증은 제대로 돈다.** 눌러서 확인했다 — 동의를
+ *      비우고 제출하면 폼이 그대로 남고(제출 안 됨) 브라우저가 이 input 에
+ *      포커스를 준다. sr-only 가 position:absolute 이지만 top/left 를 주지
+ *      않아 **원래 자리에 1px 로** 있기 때문에, 검증 말풍선도 상자 옆에 뜬다.
+ *
+ *      ⚠️ 그래서 이 input 에 left/top 을 주거나 display:none 으로 바꾸지 말
+ *         것. display:none 이면 Chrome 이 "An invalid form control is not
+ *         focusable" 로 제출을 **조용히** 막는다 — 사용자는 버튼이 먹통인
+ *         줄 안다. 숨기는 방식을 바꿀 때마다 직접 눌러서 확인한다.
+ */
+const boxAgree = `mt-0.5 ${boxBase}`;
 
 export default function InquiryForm() {
   const [status, setStatus] = useState<Status>("idle");
@@ -303,8 +327,24 @@ export default function InquiryForm() {
             type="checkbox"
             name="privacy"
             required
-            className="mt-0.5 h-4 w-4 shrink-0 accent-[#d5261e]"
+            className="peer sr-only"
           />
+          <span className={boxAgree}>
+            <svg
+              width="11"
+              height="11"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              strokeWidth="3.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className="hidden"
+            >
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+          </span>
           <span>
             개인정보 수집·이용에 동의합니다.
             {/* 고지 요건(항목.목적.기간)을 그대로 담되 사람 말로 적는다.

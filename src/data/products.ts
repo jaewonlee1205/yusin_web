@@ -149,36 +149,40 @@ export type Product = {
    *    하나만 셋이 되는 일이 빌드에서 막힌다(company.ts 의 process.points 와
    *    같은 이유다).
    *
-   * photo 는 글 **오른쪽** 160px 칸에 서는 사진이다.
+   * photo 는 글 **오른쪽** 48px 정사각 칸에 작게 서는 사진이다. 카드는
+   * **1280(xl) 부터** 2행 2열이고 그 아래에서는 1열로 쌓인다.
    *
-   * ⚠️⚠️ 그러려고 **카드를 1열로 눕혔다.** 2열 격자에서는 오른쪽에 사진을
-   *      둘 수 없다 — 1024 에서 글상자가 378px 이고 가장 긴 항목이 335px 라
-   *      43px 밖에 안 남아, 사진을 옆으로 빼면 56개가 전부 두 줄이 된다
-   *      (아래 길이 규칙이 통째로 깨진다). 1열이면 글상자가 703~846px 라
-   *      사진 160px 를 떼어 내도 넉넉하다.
+   * ⚠️⚠️ 2열을 1024 가 아니라 1280 부터로 둔 것이 이 배치의 조건이다. 1024 는
+   *      2열인데 Container 가 945px 뿐이라, 글상자가 사진 없이 364px 이고
+   *      48px 사진을 넣으면 316px 가 된다 — 일곱 제품 56칸 중 **12칸이 두 줄**
+   *      이 되고 카드 높이가 136·161·185 로 갈렸다(실측). 사진을 40px 로 줄여도
+   *      같았고, **사진 없이 재면 1024 에서도 전부 한 줄**이다.
    *
-   *      ⚠️ 사진이 옆에 서는 것은 **768 부터**다. 640 에서는 Container 가
-   *         560px 뿐이라 옆에 두면 글상자가 318px 로 떨어져 32칸 중 5칸이
-   *         두 줄이 됐다(실측). 그 아래 폭에서는 사진이 글 위에 선다.
+   *      즉 글이 긴 것이 아니라 그 폭에 사진 자리가 없는 것이다. 사진을 키우려면
+   *      2열 시작점을 더 올리거나 글을 줄여야 한다.
+   *
+   *      ⚠️ 한 라운드 동안 카드를 1열로 눕히고 사진을 160px 로 뒀었다. 그러면
+   *         56개가 전 폭에서 한 줄이지만(글상자 703~846px) 카드가 세로로 넷
+   *         쌓인다. 2행 2열이 요청이라 되돌렸다.
+   *
+   *      ⚠️ 사진이 옆에 서는 것은 **640 부터**다. 그 아래에서는 1열로 쌓이며
+   *         사진이 글 위로 올라간다.
    *
    *      한동안 사진이 카드 **위** 전폭 16:9 였던 것이 그 때문이다. 2열로
    *      되돌릴 생각이라면 사진도 위로 함께 되돌려야 한다.
    *
-   * ⚠️ **28장 가운데 두 장만 유신 영상에서 뽑은 것이다** —
-   *    bowl-feeder-4(볼 안에 세운 선별 지그)와 urethane-coating-4(우레탄을
-   *    입힌 볼과 트랙)다. scripts/capture-video-frames.mjs 에 어느 영상의 몇
-   *    초인지 적혀 있다.
+   * ⚠️ **28장이 전부 유신 영상에서 뽑은 프레임이다.** 제품마다 자기 영상
+   *    (product-*.mp4)에서 구도 넷을 떼었다. scripts/capture-video-frames.mjs
+   *    에 어느 영상의 몇 초, 어느 구도인지 적혀 있다. 스톡은 한 장도 없다.
    *
-   *    ⚠️ 나머지 26장은 **유신이 찍은 사진이 아니다.** scripts/
-   *       fetch-feature-photos.mjs 에 출처 · 라이선스 · 선정 기준이 있다.
-   *       특징이 "선별 · 방향 판별 지그" 처럼 고유 기술이라 꼭 맞는 스톡이
-   *       없어, **특징이 다루는 소재나 동작**으로 치환해 골랐다. 적용 분야 ·
-   *       공정 사진보다 연결이 약하다 — README 11번(공장 사진)을 받으면 가장
-   *       먼저 갈아 끼울 자리다.
+   *    ⚠️ alt 는 **영상 장면을 그대로** 적는다("볼 안쪽 나선 트랙 전체").
+   *       특징 제목을 되풀이하지 않는다 — 제목이 바로 옆에 있다.
    *
-   *    ⚠️ 컨트롤러 · 호퍼피더 · 방음커버는 **영상으로 바꿀 수가 없다.** 원본
-   *       촬영본 넷이 전부 볼피더가 도는 장면이라 그 장비가 찍힌 프레임이
-   *       아예 없다(README 자료 요청 8번).
+   *    ⚠️ 컨트롤러 · 호퍼피더 · 방음커버의 영상은 **볼피더가 도는 장면**이다.
+   *       원본 촬영본 넷이 전부 볼피더라 그 장비가 찍힌 프레임이 아예 없다
+   *       (README 자료 요청 8번). 그 세 제품의 사진이 볼피더인 것은 그래서고,
+   *       같은 페이지의 구동 영상도 같은 파일이라 페이지 안에서는 어긋나지
+   *       않는다.
    *
    * ⚠️ 길이 규칙. title 도 points 도 어느 폭에서나 한 줄이어야 한다.
    *
@@ -187,18 +191,16 @@ export type Product = {
    *            522px / 419px 다. 지금 가장 긴 제목이 163px("선별 · 방향 판별
    *            지그")라 320px 글상자에서도 한 줄이다.
    *
-   *    points  카드가 1열이 되면서 **768 이 가장 좁은 칸**이 됐다 — 거기서
-   *            글상자가 446px 다(Container 689 - 사진 160 - 패딩 48 - 체크와
-   *            간격 34 - 점과 간격 12). 640 이하는 사진이 글 위로 올라가
-   *            글상자가 오히려 넓다.
+   *    points  **가장 좁은 칸이 1024 의 316px** 다 — 2열인데 Container 가
+   *            945px 뿐이라 768(1열)보다도 좁고, 거기서 사진 48px 와 패딩 ·
+   *            체크 · 점을 뺀 값이다. 15px 로 약 21자다.
    *
-   *            지금 가장 긴 항목이 335px 라 111px 남는다. 28 x 2 = 56개를
-   *            폭 여섯(320.640.768.1024.1280.1440)에서 그려 **320 을 뺀
-   *            다섯에서 전부 한 줄**인 것을 확인했다. 320 은 Container 가
-   *            265px 뿐이라 어떤 문장으로도 한 줄이 안 된다.
+   *            지금 가장 긴 항목이 그 안에 들어가 **320 을 뺀 모든 폭에서
+   *            한 줄**이다. 글을 늘리면 1024 에서 먼저 깨진다.
    *
-   *            ⚠️ 한때 2열 격자라 "가장 좁은 칸이 1024 의 366px" 이었다.
-   *               2열로 되돌리면 그 값이 다시 기준이 된다.
+   *            ⚠️ 아래쪽 한계도 있다. 처음 쓴 글은 평균 216px · 최대 254px 로
+   *               칸의 59% 밖에 쓰지 않아 "글이 모자라 보인다" 는 말을 들었다.
+   *               지금은 평균 289px · 최대 335px 다. 그 사이를 지킨다.
    *
    *            ⚠️ **아래쪽 한계도 있다.** 처음 쓴 글은 평균 216px · 최대
    *               254px 로 366px 칸의 59% 밖에 쓰지 않았다. 한 줄이기는 해도
@@ -217,7 +219,7 @@ export type Product = {
   features: {
     title: string;
     points: [string, string];
-    /** 글 오른쪽 160px 칸에 서는 사진(public/images/features/). */
+    /** 글 오른쪽 64px 칸에 작게 서는 사진(public/images/features/). */
     photo: string;
     /** 사진 설명. 무엇을 찍은 것인지만 적는다 — 특징 제목을 되풀이하지 않는다. */
     photoAlt: string;
@@ -347,16 +349,14 @@ export type Product = {
    * 부품·재료·공구를 찍은 사진**으로 옮겨 붙였다 — 기계 전경 사진은 쓰지
    * 않는다(fetch 스크립트의 고르는 기준 참고).
    *
-   * ⚠️ **여섯 칸은 유신 영상에서 뽑은 프레임이다** — connector · appliance ·
-   *    linear-transfer · vibrator-bowl · hopper-bulk · cover-metal 이고,
-   *    scripts/capture-video-frames.mjs 에 어느 영상의 몇 초인지 적혀 있다.
-   *    그 여섯은 **유신이 실제로 만든 장비가 찍힌 사진**이다. 나머지 13칸은
-   *    Pexels 스톡이다.
+   * ⚠️ **19칸이 전부 유신 영상에서 뽑은 프레임이다.** scripts/
+   *    capture-video-frames.mjs 에 어느 영상의 몇 초, 어느 구도인지 적혀 있다.
+   *    스톡은 한 장도 없다 — 한동안 Pexels 였고 그 가운데 여섯 칸만 영상으로
+   *    바꿨었는데, 섞여 있는 것이 어색하다는 말에 전부 돌렸다.
    *
-   *    ⚠️ 사진을 바꿀 때 alt 를 함께 본다. 영상 프레임 쪽 alt 는 장면을
-   *       그대로 적었고("볼피더 트랙을 한 줄로 올라오는 검은 커넥터"),
-   *       스톡 쪽은 부품만 서술한다. 둘이 섞이면 어느 쪽이 유신 장비인지
-   *       글에서 알 수 없게 된다.
+   *    ⚠️ 사진을 바꿀 때 alt 를 함께 본다. 지금 alt 는 **영상 장면을 그대로**
+   *       적은 것이다("볼피더 트랙을 한 줄로 올라오는 검은 커넥터"). 사진만
+   *       갈아 끼우면 글이 거짓이 된다.
    */
   applications: (string | ApplicationCase)[];
   /**
@@ -556,7 +556,7 @@ export const products: Product[] = [
           "그 부품만을 위한 트랙과 정렬 지그를 새로 설계",
         ],
         photo: "/images/features/bowl-feeder-1.webp",
-        photoAlt: "공구 옆에 펼쳐 둔 기술 도면",
+        photoAlt: "부품이 도는 볼과 트랙 전체",
       },
       {
         title: "네 가지 기본 볼 형상",
@@ -565,7 +565,7 @@ export const products: Product[] = [
           "형상이 정렬 자세와 시간당 처리량을 함께 결정",
         ],
         photo: "/images/features/bowl-feeder-2.webp",
-        photoAlt: "같은 모양으로 포개 놓은 금속 그릇",
+        photoAlt: "볼 안쪽 곡면과 트랙",
       },
       {
         title: "소형부터 대형까지",
@@ -574,7 +574,7 @@ export const products: Product[] = [
           "부품 크기와 라인 소모량을 보고 볼 지름 결정",
         ],
         photo: "/images/features/bowl-feeder-3.webp",
-        photoAlt: "크기가 다른 볼베어링",
+        photoAlt: "트랙을 오르는 부품 줄",
       },
       {
         title: "선별 · 방향 판별 지그",
@@ -658,17 +658,17 @@ export const products: Product[] = [
       {
         name: "볼트 · 너트 · 나사 등 체결부품",
         src: "/images/applications/fastener.webp",
-        alt: "같은 규격의 나사가 가득 쌓여 있는 모습",
+        alt: "초록 볼 트랙에 줄지어 선 검은 판금 부품",
       },
       {
         name: "화장품 용기 캡 · 펌프 부품",
         src: "/images/applications/cosmetic.webp",
-        alt: "검은 뚜껑이 끼워진 갈색 유리 용기 여러 개",
+        alt: "볼 둘레를 따라 도는 부품들",
       },
       {
         name: "가전 · 전기기기 조립 부품",
         src: "/images/applications/appliance.webp",
-        alt: "볼피더 트랙에 줄지어 선 판금 브래킷",
+        alt: "위에서 내려다본 볼피더 전체와 트랙",
       },
     ],
     // specs 의 "옵션 = 방음커버, 호퍼피더, 직진피더 연결" 그대로다.
@@ -701,7 +701,7 @@ export const products: Product[] = [
           "조립기가 받는 자세까지 보고 슈트 모양을 결정",
         ],
         photo: "/images/features/linear-feeder-1.webp",
-        photoAlt: "깎아 낸 황동 부품의 단면",
+        photoAlt: "직선 트랙 전체",
       },
       {
         title: "독립 진동 제어",
@@ -710,7 +710,7 @@ export const products: Product[] = [
           "라인이 멈추면 이쪽만 세웠다 다시 돌릴 수 있음",
         ],
         photo: "/images/features/linear-feeder-2.webp",
-        photoAlt: "단독으로 놓인 가변 저항기",
+        photoAlt: "트랙 앞쪽과 은색 부품",
       },
       {
         title: "라인 길이에 맞춘 크기",
@@ -719,7 +719,7 @@ export const products: Product[] = [
           "짧으면 부품이 밀리고 길면 이송 중 자세가 흐트러짐",
         ],
         photo: "/images/features/linear-feeder-3.webp",
-        photoAlt: "칸마다 크기가 다른 부품 보관대",
+        photoAlt: "트랙 끝과 부품 적재부",
       },
       {
         title: "슈트 면을 직접 다듬는다",
@@ -728,7 +728,7 @@ export const products: Product[] = [
           "부품이 스치는 면이 거칠면 자세가 흐트러지기 때문",
         ],
         photo: "/images/features/linear-feeder-4.webp",
-        photoAlt: "금속을 갈 때 튀는 불꽃",
+        photoAlt: "트랙 면 클로즈업",
       },
     ],
     /* 이송 속도만 업계 일반값이고 나머지 셋은 아래 specTable 에서 왔다
@@ -794,12 +794,12 @@ export const products: Product[] = [
       {
         name: "볼피더 – 조립기 사이 부품 이송",
         src: "/images/applications/linear-transfer.webp",
-        alt: "직진피더 트랙을 지나는 금속 부품",
+        alt: "직진피더 알루미늄 트랙 윗면",
       },
       {
         name: "센서 검사 구간 통과 이송",
         src: "/images/applications/linear-inspect.webp",
-        alt: "마이크로미터로 금속판 두께를 재는 모습",
+        alt: "트랙 끝에 모여 있는 은색 부품",
       },
     ],
     // specs 의 "설치 = 볼피더 배출구 직결", "구동 = 전자석 진동기 + 전용 컨트롤러".
@@ -837,7 +837,7 @@ export const products: Product[] = [
           "모터가 없어 회전하며 마모되는 부분이 적음",
         ],
         photo: "/images/features/vibrator-1.webp",
-        photoAlt: "스프링 코일 클로즈업",
+        photoAlt: "볼 안쪽 나선 트랙 전체",
       },
       {
         title: "현장 튜닝 대응",
@@ -846,7 +846,7 @@ export const products: Product[] = [
           "납품 뒤 속도가 바뀌어도 전담 부서가 다시 잡아 드림",
         ],
         photo: "/images/features/vibrator-2.webp",
-        photoAlt: "눈금이 새겨진 금속 조정 다이얼",
+        photoAlt: "나선 트랙 이음매",
       },
       {
         title: "전압까지 함께 조정",
@@ -855,7 +855,7 @@ export const products: Product[] = [
           "같은 피더라도 다루는 부품이 바뀌면 다시 맞춰야 함",
         ],
         photo: "/images/features/vibrator-3.webp",
-        photoAlt: "나란히 선 압력 계기 셋",
+        photoAlt: "볼 안쪽 벽면",
       },
       {
         title: "진동부만 바꿔 단다",
@@ -864,7 +864,7 @@ export const products: Product[] = [
           "설비를 새로 들이지 않아도 공급 속도가 돌아옴",
         ],
         photo: "/images/features/vibrator-4.webp",
-        photoAlt: "떼어 쌓아 둔 금속 기어",
+        photoAlt: "트랙이 붙은 자리",
       },
     ],
     /* 넷 모두 아래 specTable 과 구동 방식에서 왔다 — 이 제품은 수치가
@@ -925,17 +925,17 @@ export const products: Product[] = [
       {
         name: "볼피더 구동부",
         src: "/images/applications/vibrator-bowl.webp",
-        alt: "부품이 타고 올라가는 볼 안쪽 나선 트랙",
+        alt: "볼 안쪽 나선 트랙 윗부분",
       },
       {
         name: "직진피더 구동부",
         src: "/images/applications/vibrator-linear.webp",
-        alt: "둥글게 감아 둔 강선 뭉치",
+        alt: "볼 안쪽 트랙 아래쪽 이음매",
       },
       {
         name: "기존 피더 진동부 교체",
         src: "/images/applications/vibrator-replace.webp",
-        alt: "검은 바닥에 놓인 크롬 소켓 공구 여러 개",
+        alt: "볼 안쪽 트랙 이음매 클로즈업",
       },
     ],
     // specs 의 "적용 = 볼피더 하부, 직진피더 하부", "제어 = 파츠피더 컨트롤러 연결".
@@ -963,7 +963,7 @@ export const products: Product[] = [
           "한꺼번에 쏟지 않아 부품이 눌려 상하는 일이 없음",
         ],
         photo: "/images/features/hopper-feeder-1.webp",
-        photoAlt: "초음파 센서 모듈",
+        photoAlt: "부품이 담긴 볼 전체",
       },
       {
         title: "무인 운전",
@@ -972,7 +972,7 @@ export const products: Product[] = [
           "야간과 주말처럼 사람이 없는 시간대 가동에 씀",
         ],
         photo: "/images/features/hopper-feeder-2.webp",
-        photoAlt: "사람 없이 도는 자동 설비",
+        photoAlt: "볼 바닥에 쌓인 부품",
       },
       {
         title: "소모량에 맞춘 용량",
@@ -981,7 +981,7 @@ export const products: Product[] = [
           "크면 부품이 오래 머물고 작으면 자주 채워야 함",
         ],
         photo: "/images/features/hopper-feeder-3.webp",
-        photoAlt: "칸칸이 나뉘어 담긴 체결 부품",
+        photoAlt: "볼 왼쪽 벽면과 트랙",
       },
       {
         title: "라인과 함께 선다",
@@ -990,7 +990,7 @@ export const products: Product[] = [
           "볼 안에 넘치거나 눌려 상하는 일이 생기지 않음",
         ],
         photo: "/images/features/hopper-feeder-4.webp",
-        photoAlt: "제어반이 달린 자동화 설비",
+        photoAlt: "트랙 출구 쪽",
       },
     ],
     /* "0명" 이 이 제품의 핵심이다 — 볼피더에 부품을 채워 넣는 일을 레벨
@@ -1060,12 +1060,12 @@ export const products: Product[] = [
       {
         name: "장시간 무인 운전 라인",
         src: "/images/applications/hopper-unattended.webp",
-        alt: "가득 쌓여 있는 육각 머리 볼트",
+        alt: "작은 부품이 가득 담긴 스테인리스 볼",
       },
       {
         name: "소형 부품 대량 공급 공정",
         src: "/images/applications/hopper-bulk.webp",
-        alt: "작은 부품이 가득 담긴 채 도는 볼피더",
+        alt: "볼 바닥에 쌓인 작은 부품",
       },
     ],
     // specs 의 "배출 = 볼피더 직상부 투입 슈트", "연동 = 볼피더 레벨 센서 신호".
@@ -1093,7 +1093,7 @@ export const products: Product[] = [
           "귀마개 없이 설비 앞에서 작업할 수 있는 수준",
         ],
         photo: "/images/features/soundproof-cover-1.webp",
-        photoAlt: "쐐기 모양이 반복되는 흡음재",
+        photoAlt: "트랙과 금속 부품 전체",
       },
       {
         title: "개폐형 구조",
@@ -1102,7 +1102,7 @@ export const products: Product[] = [
           "커버를 떼어 따로 보관해 둘 자리가 필요 없음",
         ],
         photo: "/images/features/soundproof-cover-2.webp",
-        photoAlt: "클램프로 여닫는 원통형 장비",
+        photoAlt: "트랙 가까이 본 부품",
       },
       {
         title: "씌울 피더를 재서 만든다",
@@ -1111,7 +1111,7 @@ export const products: Product[] = [
           "틈이 생기면 소리가 그대로 빠져나가기 때문",
         ],
         photo: "/images/features/soundproof-cover-3.webp",
-        photoAlt: "캘리퍼스와 컴퍼스 등 측정 공구",
+        photoAlt: "볼 바깥 둘레",
       },
       {
         title: "금속 부품 라인에 효과",
@@ -1120,7 +1120,7 @@ export const products: Product[] = [
           "수지 부품 라인은 원래 소리가 작은 편",
         ],
         photo: "/images/features/soundproof-cover-4.webp",
-        photoAlt: "쌓여 있는 금속 링",
+        photoAlt: "줄지어 선 검은 금속 부품",
       },
     ],
     /* 90dB 는 진동식 피더가 금속 부품을 다룰 때의 업계 일반값이다. 저감
@@ -1192,7 +1192,7 @@ export const products: Product[] = [
       {
         name: "작업자 상주 구역 인접 설비",
         src: "/images/applications/cover-worker.webp",
-        alt: "공구를 걸어 둔 작업장 벽과 작업대",
+        alt: "볼 아래쪽 트랙과 금속 부품",
       },
     ],
     // specs 의 "제작 = 볼피더 외경에 맞춰". 우레탄 코팅과 나란히 둔다 —
@@ -1225,7 +1225,7 @@ export const products: Product[] = [
           "운전을 멈추지 않고도 세기를 바꿀 수 있음",
         ],
         photo: "/images/features/controller-1.webp",
-        photoAlt: "숫자가 새겨진 회전 노브",
+        photoAlt: "스테인리스 볼 전체",
       },
       {
         title: "볼 · 직진 개별 제어",
@@ -1234,7 +1234,7 @@ export const products: Product[] = [
           "한쪽만 빨라 부품이 밀리거나 끊기는 일을 막음",
         ],
         photo: "/images/features/controller-2.webp",
-        photoAlt: "여러 갈래로 나뉜 제어 배선",
+        photoAlt: "트랙 왼쪽과 부품",
       },
       {
         title: "붙이거나 따로 둔다",
@@ -1243,7 +1243,7 @@ export const products: Product[] = [
           "설비 배치와 작업자 동선을 보고 자리를 정함",
         ],
         photo: "/images/features/controller-3.webp",
-        photoAlt: "패널에 박힌 둥근 조작 버튼",
+        photoAlt: "볼 아래쪽 트랙",
       },
       {
         title: "스위치와 다이얼뿐",
@@ -1252,7 +1252,7 @@ export const products: Product[] = [
           "교대 인원이 바뀌어도 따로 설명할 것이 없음",
         ],
         photo: "/images/features/controller-4.webp",
-        photoAlt: "눈금 다이얼이 달린 조작부",
+        photoAlt: "볼 안쪽 바닥",
       },
     ],
     /* 앞 셋은 아래 specTable 에서, 넷째는 이미 적혀 있는 사실을 수치로
@@ -1326,17 +1326,17 @@ export const products: Product[] = [
       {
         name: "볼피더 속도 제어",
         src: "/images/applications/controller-bowl.webp",
-        alt: "회전 노브와 계기가 달린 제어 패널",
+        alt: "위에서 내려다본 스테인리스 볼 윗면",
       },
       {
         name: "직진피더 속도 제어",
         src: "/images/applications/controller-linear.webp",
-        alt: "전선이 물려 있는 단자대",
+        alt: "볼 안쪽 바닥과 트랙 아래쪽",
       },
       {
         name: "호퍼피더 자동 공급 제어",
         src: "/images/applications/controller-hopper.webp",
-        alt: "전선이 연결된 릴레이 모듈",
+        alt: "부품이 둘러선 볼 위쪽",
       },
     ],
     // 바로 위 적용 분야 세 줄이 가리키는 제품 그대로다.
@@ -1368,7 +1368,7 @@ export const products: Product[] = [
           "방음커버와 함께 쓰면 소음 저감 효과가 겹침",
         ],
         photo: "/images/features/urethane-coating-1.webp",
-        photoAlt: "결이 촘촘한 흡음 폼 단면",
+        photoAlt: "우레탄을 입힌 볼 전체",
       },
       {
         title: "부품 손상 방지",
@@ -1377,7 +1377,7 @@ export const products: Product[] = [
           "완성품 외관이 그대로 고객에게 가는 공정에 적합",
         ],
         photo: "/images/features/urethane-coating-2.webp",
-        photoAlt: "미끄럼을 막는 고무 매트 결",
+        photoAlt: "코팅면 가까이",
       },
       {
         title: "샘플로 등급을 정한다",
@@ -1386,7 +1386,7 @@ export const products: Product[] = [
           "너무 매끄러우면 미끄러지고 거칠면 걸리기 때문",
         ],
         photo: "/images/features/urethane-coating-3.webp",
-        photoAlt: "결이 다른 금속 링을 포개 둔 모습",
+        photoAlt: "볼 왼쪽 코팅면",
       },
       {
         title: "트랙 · 슈트에도 입힌다",
@@ -1456,17 +1456,17 @@ export const products: Product[] = [
       {
         name: "도금 · 도장 부품",
         src: "/images/applications/urethane-plated.webp",
-        alt: "크롬으로 도금된 금속 부품이 쌓여 있는 모습",
+        alt: "우레탄을 입힌 볼 위쪽과 부품",
       },
       {
         name: "수지 · 세라믹 등 깨지기 쉬운 부품",
         src: "/images/applications/urethane-resin.webp",
-        alt: "같은 모양으로 사출된 흰 플라스틱 부품 더미",
+        alt: "코팅된 볼 안쪽 면",
       },
       {
         name: "소음 저감이 필요한 라인",
         src: "/images/applications/urethane-noise.webp",
-        alt: "굴곡이 반복되는 흡음재 표면",
+        alt: "위에서 내려다본 코팅 볼과 부품",
       },
     ],
     // specs 의 "적용 부위 = 볼 내면, 트랙, 직진피더 슈트".
