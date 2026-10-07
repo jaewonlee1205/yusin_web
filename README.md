@@ -75,8 +75,8 @@ export const videos: Video[] = [
 원본 촬영본에서 아래 명령으로 만듭니다. 원본은 저장소에 두지 않습니다.
 
 ```bash
-# 영상 (MAH07514.MP4 의 110초 지점부터 9초)
-ffmpeg -ss 110 -t 9 -i MAH07514.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 28 -preset slow -g 60 -movflags +faststart   -vf scale=1280:720 public/videos/hero.mp4
+# 영상 (MAH07514.MP4 의 119초 지점부터 9초)
+ffmpeg -ss 119 -t 9 -i MAH07514.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 28 -preset slow -g 60 -movflags +faststart   -vf scale=1280:720 public/videos/hero.mp4
 
 # 포스터 (영상 첫 프레임). 영상이 뜨기 전과 '움직임 줄이기'에서 이게 보입니다.
 ffmpeg -ss 0 -i public/videos/hero.mp4 -frames:v 1   -c:v libwebp -quality 72 public/images/hero-poster.webp
@@ -84,12 +84,27 @@ ffmpeg -ss 0 -i public/videos/hero.mp4 -frames:v 1   -c:v libwebp -quality 72 pu
 
 - `-an` 무음 — 소리가 있으면 브라우저가 자동재생을 막습니다
 - `-movflags +faststart` — 메타데이터를 앞에 두어 받는 즉시 재생됩니다
-- **구간을 고를 때는 카메라가 멈춰 있고 부품 흐름이 끊기지 않는 곳을 고릅니다.**
-  배경이라 화면이 흔들리면 눈에 거슬리고, PERFORMANCE 섹션에서는 밝게 보이므로
-  트랙이 비는 순간이 그대로 드러납니다.
-  한때 19~29초였는데 중간에 공급이 끊기는 구간이 있었습니다. 지금 구간
-  (110~119초)은 볼 전체가 들어오고 가장자리에 커넥터가 빽빽이 돌아가 흐름이
-  끊기지 않습니다 — 후보 둘(28초·110초)을 실제 클립으로 만들어 비교했습니다
+- **구간은 눈으로 고르지 말고 수치로 고릅니다.** 배경이라 화면이 흔들리면
+  눈에 거슬리고, PERFORMANCE 섹션에서는 밝게 보이므로 흔들림과 빈 트랙이
+  그대로 드러납니다. 아래 명령으로 1초 단위 흔들림을 재고, 9초 윈도의 평균이
+  가장 낮은 곳을 고릅니다.
+
+  ```bash
+  # 값이 낮을수록 조용합니다 (인접 프레임 차이의 밝기 평균)
+  ffmpeg -i MAH07514.MP4 -vf "scale=320:-1,tblend=all_mode=difference,signalstats,metadata=print:key=lavfi.signalstats.YAVG:file=diff.txt" -f null -
+  ```
+
+  | 시작 | 9초 평균 | 구간 내 최대 | |
+  |---|---|---|---|
+  | 19초 | 6.15 | 7.16 | 중간에 공급이 끊깁니다 |
+  | 110초 | 5.83 | 13.09 | **앞 3초가 카메라 이동입니다**(10.3·9.9·13.1) |
+  | 119초 | 2.90 | 3.25 | 현재 구간 — 전 구간이 고르게 조용합니다 |
+
+  110초를 쓸 때는 눈으로 "카메라가 고정됐다"고 봤는데 틀렸습니다. 수치가
+  아니면 3초짜리 이동을 놓칩니다.
+
+  값이 너무 낮은 곳(102~105초의 2.2~2.7)은 피더가 보이지 않는 직진 트랙
+  장면입니다 — **조용하면서 피더가 돌고 있는** 구간이어야 합니다
 - 포스터를 바꾸면 `src/app/layout.tsx`의 preload 경로도 같이 확인하세요.
   **구간을 바꾸면 포스터도 반드시 다시 뽑습니다** — 안 그러면 '움직임 줄이기'
   에서 영상과 다른 그림이 뜹니다
