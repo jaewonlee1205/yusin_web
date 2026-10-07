@@ -441,10 +441,27 @@ export default function Home() {
               delay={i * 80}
               className="relative rounded-2xl bg-white p-6 shadow-card"
             >
-              {/* 제목만 선다. 한때 여기 왼쪽에 작은 숫자가 함께 있었는데,
-                  오른쪽 위에 큰 숫자를 깔면서 한 카드에 같은 번호가 둘이 됐다.
-                  큰 쪽을 남기고 이쪽을 걷었다. */}
-              <h3 className="text-base font-bold text-ink">{p.title}</h3>
+              {/* 번호 배지 + 제목.
+
+                  ⚠️ /contact 의 "도입 프로세스" 배지와 **글자 그대로 같은
+                     클래스**다. 같은 데이터(company.ts 의 process)를 두 자리에
+                     쓰면서 번호 꼴이 갈려 있으면, 한쪽을 고칠 때 다른 쪽을
+                     잊는다. 둘을 함께 고칠 것.
+
+                  {p.step}("01")이 아니라 {i + 1} 이다 — 24px 원에 두 글자는
+                  빽빽하다. step 필드는 key 로 남는다.
+
+                  ⚠️ aria-hidden 을 떼지 말 것. 순서는 ol / li 가 이미 전하므로
+                     시각 보조다(/contact 주석과 같은 이유). */}
+              <div className="flex items-center gap-2.5">
+                <span
+                  aria-hidden="true"
+                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand/10 text-[11px] font-bold tabular-nums text-brand"
+                >
+                  {i + 1}
+                </span>
+                <h3 className="text-base font-bold text-ink">{p.title}</h3>
+              </div>
               {/* 점 목록 셋. 한때 박스 안이 긴 문장 하나였는데, 글상자가
                   좁아 3~4줄로 눌려 읽혔다. 지금은 단계마다 할 일 셋이 한 줄씩
                   선다.
@@ -472,32 +489,20 @@ export default function Home() {
                 ))}
               </ul>
 
-              {/* 카드의 번호. 오른쪽 위에 크게 깔린다 — 목록 글이 짧아
-                  그 자리가 비어 있었고, 카드가 헐겁게 읽히던 까닭이다.
+              {/* ⚠️ 한때 여기에 카드 오른쪽 위를 덮는 56px 워터마크 번호가
+                     있었다(text-[56px] font-extrabold text-brand/30). 목록 글이
+                     짧아 그 자리가 비어 카드가 헐겁게 읽히던 것을 메우려던
+                     것이고, 모양 넷(원형 배지 · 상단 레드 띠 · …)과 농도
+                     넷(brand/18 · /30 · /45 · line/70)을 비교해 고른 값이었다.
 
-                  모양을 넷 비교했다. 원형 배지는 숫자가 작아져 오히려 약해지고,
-                  상단 레드 띠는 넷이 다 가지면 과한 데다 레드 면적이 넓어진다
-                  (globals.css 토큰 주석 — "레드는 면적을 좁게").
+                     걷은 이유는 그 숫자가 제목만큼 무거워 **부담스럽다**는
+                     것이다 — 메우려던 문제보다 생긴 문제가 컸다. 다시 넣을
+                     생각이라면 그때 비교한 넷을 또 비교하지 말고, 위 배지가
+                     /contact 와 통일되어 있다는 점부터 볼 것.
 
-                  농도도 넷 비교했다 — brand/18 은 너무 연해 번호가 약하고,
-                  brand/45 는 레드 면적이 크게 느껴진다. brand/30 이 번호가
-                  읽히면서 면적 부담이 적다. 한때 line/70(회색)이었는데,
-                  왼쪽 작은 숫자를 걷으면서 그쪽이 쥐고 있던 brand 색을
-                  이쪽이 이어받았다.
-
-                  ⚠️ aria-hidden 을 떼지 말 것. brand/30 은 흰 바탕에서 대비가
-                     1.3:1 이라 떼는 순간 color-contrast 가 미통과한다. 순서는
-                     ol / li 가 이미 전하므로 시각적 보조로 둔다.
-
-                  ⚠️ 카드에 overflow-hidden 을 주지 말 것. 주면 아래 화살표가
-                     카드 밖으로 나간 부분에서 잘린다. 이 숫자는 right-4 top-2
-                     라 안쪽에 머문다. */}
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute right-4 top-2 text-[56px] font-extrabold leading-none text-brand/30"
-              >
-                {p.step}
-              </span>
+                  ⚠️ 카드의 relative 를 걷지 말 것. 아래 화살표가 -right-[18px]
+                     로 카드 밖에 걸쳐 있어 그 기준점이 필요하다. overflow-hidden
+                     을 주면 그 부분이 잘린다. */}
 
               {/* 카드 사이를 잇는 화살표. 넷이 나란히 서 있을 뿐 단계가
                   이어지는 표시가 없어 심심했다.

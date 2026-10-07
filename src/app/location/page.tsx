@@ -4,7 +4,12 @@ import ContactCTA from "@/components/ContactCTA";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
-import { NaverIcon } from "@/components/icons";
+import { KakaoIcon, NaverIcon } from "@/components/icons";
+
+/* 지도 앱 버튼 둘이 같은 꼴이다. 글자는 ink-soft + medium — 회색 상자 안에서
+   가장 진한 글자가 되지 않게 낮춘 값이다(그 자리 주석 참고). */
+const MAP_BTN =
+  "inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-line bg-white px-4 py-3 text-sm font-medium text-ink-soft transition-colors hover:border-ink/20 hover:text-ink";
 import { site, telHref } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -298,24 +303,56 @@ export default function LocationPage() {
                     </span>
                   </p>
                 </div>
-                <a
-                  href={site.naverPlace}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  /* 테두리로 선다(2D). 한때 shadow-card 였는데, 회색 상자
-                     위에 흰 버튼이 그림자로 떠 있어 입체로 읽혔다. 호버도
-                     색만 바꾼다 — 떠오르거나 그림자가 짙어지면 2D 로 바꾼
-                     뜻이 사라진다.
+                {/* 지도 앱 둘. 국내에서 길찾기에 실제로 쓰이는 둘이다.
 
-                     글은 "길찾기" 한 낱말이다. "네이버 지도로 길찾기" 는
-                     189px 였는데 104px 로 준다 — 어디로 가는지는 왼쪽의 녹색
-                     N 아이콘이 말한다. 끝에 있던 화살표도 뺐다. 아이콘이
-                     왼쪽에 서면 글자를 기호 둘이 앞뒤로 감싸 번잡하다. */
-                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-line bg-white px-5 py-3 text-sm font-bold text-ink transition-colors hover:border-ink/20 hover:text-brand"
-                >
-                  <NaverIcon className="shrink-0 text-[#03C75A]" />
-                  길찾기
-                </a>
+                    네이버는 place id(site.naverPlace)로, 카카오는 좌표
+                    (site.coords)로 건다 — 카카오맵 길찾기 주소가
+                    /link/to/{이름},{위도},{경도} 꼴이라 좌표가 있어야 한다.
+                    T맵은 넣지 않는다. 범용 웹 주소가 없어 PC 에서는 아무
+                    일도 일어나지 않는다.
+
+                    테두리로 선다(2D). 한때 shadow-card 였는데, 회색 상자 위에
+                    흰 버튼이 그림자로 떠 있어 입체로 읽혔다. 호버도 색만
+                    바꾼다 — 떠오르거나 그림자가 짙어지면 2D 로 바꾼 뜻이
+                    사라진다.
+
+                    ⚠️ 글자가 text-ink + bold 가 아니다. 그러면 회색 상자 안에서
+                       가장 진한 글자가 되어 "대중교통 / 정왕역" 보다 먼저 눈에
+                       들었다 — 주인공이 뒤바뀐다. ink-soft + medium 으로
+                       낮췄다(시안 넷을 그려 비교했다).
+
+                    ⚠️ 글이 "길찾기" 가 아니라 앱 이름이다. 버튼이 둘이 되면
+                       어느 쪽을 누를지를 글이 말해야 한다 — 16px 아이콘만으로는
+                       네이버.카카오 구분이 약하다.
+
+                    ⚠️ 아이콘 상자 크기가 다르다(네이버 16 / 카카오 17px).
+                       둘 다 viewBox 안에서 잉크가 꽉 차지 않는데 그 비율이
+                       달라서다 — 재 보니 네이버가 0.781, 카카오가 0.747 이다.
+                       상자를 같게 두면 카카오 심볼이 1.3px 작아 보인다.
+                       16 x 0.781 = 12.5px 에 맞추려고 카카오를 17px 로 줬다
+                       (17 x 0.747 = 12.7px). 아이콘을 바꾸면 다시 잰다. */}
+                <div className="flex shrink-0 gap-2">
+                  <a
+                    href={site.naverPlace}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={MAP_BTN}
+                  >
+                    <NaverIcon className="h-4 w-4 shrink-0 text-[#03C75A]" />
+                    네이버 지도
+                  </a>
+                  <a
+                    href={`https://map.kakao.com/link/to/${encodeURIComponent(
+                      site.name
+                    )},${site.coords.lat},${site.coords.lng}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={MAP_BTN}
+                  >
+                    <KakaoIcon className="h-[17px] w-[17px] shrink-0 text-[#3C1E1E]" />
+                    카카오맵
+                  </a>
+                </div>
               </div>
             </Reveal>
           </div>
