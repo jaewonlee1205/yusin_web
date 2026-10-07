@@ -362,7 +362,29 @@ export default async function ProductDetailPage({
         <ul className="grid gap-6 lg:grid-cols-2">
           {product.features.map((f, i) => (
             <Reveal as="li" key={f.title} delay={i * 70} className="h-full">
-              <div className="grid h-full grid-cols-[auto_minmax(0,1fr)] gap-x-3.5 rounded-2xl bg-white p-6 shadow-card">
+              <div className="grid h-full grid-rows-[auto_1fr] overflow-hidden rounded-2xl bg-white shadow-card">
+                {/* 사진은 카드 **위**에 전폭으로 깔린다(적용 분야 카드와 같은 꼴).
+
+                    ⚠️ 오른쪽에 두지 말 것. "점 목록 옆 여백에" 라는 요청이었지만
+                       1024 에서 글상자가 366px 이고 가장 긴 글이 323px 라 43px
+                       밖에 안 남는다 — 사진을 옆으로 빼면 56개 항목이 전부 두
+                       줄이 된다. 위에 두면 글상자 폭이 그대로다.
+
+                    카드가 rounded-2xl + overflow-hidden 이라 사진에 따로 모서리를
+                    주지 않는다. bg-surface 는 사진이 뜨기 전 자리를 지킨다.
+
+                    ⚠️ 사진은 유신이 찍은 것이 아니다 — products.ts 의 features
+                       주석과 scripts/fetch-feature-photos.mjs 참고. */}
+                <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface">
+                  <Image
+                    src={f.photo}
+                    alt={f.photoAlt}
+                    fill
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3.5 p-6">
                 <svg
                   width="20"
                   height="20"
@@ -411,6 +433,7 @@ export default async function ProductDetailPage({
                       </li>
                     ))}
                   </ul>
+                </div>
                 </div>
               </div>
             </Reveal>

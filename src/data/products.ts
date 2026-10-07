@@ -149,6 +149,19 @@ export type Product = {
    *    하나만 셋이 되는 일이 빌드에서 막힌다(company.ts 의 process.points 와
    *    같은 이유다).
    *
+   * photo 는 카드 **위**에 16:9 로 서는 사진이다.
+   *
+   * ⚠️⚠️ 오른쪽이 아니라 위다. "점 목록 옆 여백에 넣어 달라" 는 요청이었지만
+   *      1024 에서 글상자가 366px 이고 가장 긴 글이 323px 라 43px 밖에 안
+   *      남는다(아래 길이 규칙 참고). 사진을 옆으로 빼면 그 전제가 깨져 56개
+   *      항목을 전부 다시 써야 한다. 위에 두면 글상자 폭이 그대로다.
+   *
+   * ⚠️ **유신이 찍은 사진이 아니다.** scripts/fetch-feature-photos.mjs 에
+   *    출처 · 라이선스 · 선정 기준이 있다. 특징이 "선별 · 방향 판별 지그"
+   *    처럼 고유 기술이라 꼭 맞는 스톡이 없어, **특징이 다루는 소재나 동작**
+   *    으로 치환해 골랐다. 적용 분야 · 공정 사진보다 연결이 약하다 —
+   *    README 11번(공장 사진)을 받으면 가장 먼저 갈아 끼울 자리다.
+   *
    * ⚠️ 길이 규칙. title 도 points 도 어느 폭에서나 한 줄이어야 한다.
    *
    *    title   특징이 두 열이라 항목 칸이 1280 이상에서 556px, 1024 에서
@@ -176,7 +189,14 @@ export type Product = {
    *    에서 2+1 과 1+1 이 섞였다), 서술어를 덜어 낸 **명사구**로 고쳐 썼다.
    *    뜻은 빼지 않는다 — 서술어만 덜어 낸다. 마침표도 붙이지 않는다.
    */
-  features: { title: string; points: [string, string] }[];
+  features: {
+    title: string;
+    points: [string, string];
+    /** 카드 위에 서는 사진(public/images/features/). */
+    photo: string;
+    /** 사진 설명. 무엇을 찍은 것인지만 적는다 — 특징 제목을 되풀이하지 않는다. */
+    photoAlt: string;
+  }[];
   /**
    * 제품 특징 아래에 가로로 서는 KPI. **네 개로 맞춘다.**
    *
@@ -499,6 +519,8 @@ export const products: Product[] = [
           "받은 샘플의 형상 · 재질 · 무게를 하나씩 분석",
           "그 부품만을 위한 트랙과 정렬 지그를 새로 설계",
         ],
+        photo: "/images/features/bowl-feeder-1.webp",
+        photoAlt: "공구 옆에 펼쳐 둔 기술 도면",
       },
       {
         title: "네 가지 기본 볼 형상",
@@ -506,6 +528,8 @@ export const products: Product[] = [
           "부품 특성과 요구 공급 속도에 맞는 형상 선택",
           "형상이 정렬 자세와 시간당 처리량을 함께 결정",
         ],
+        photo: "/images/features/bowl-feeder-2.webp",
+        photoAlt: "같은 모양으로 포개 놓은 금속 그릇",
       },
       {
         title: "소형부터 대형까지",
@@ -513,6 +537,8 @@ export const products: Product[] = [
           "미세 전자부품용 소형기부터 볼트용 대형기까지",
           "부품 크기와 라인 소모량을 보고 볼 지름 결정",
         ],
+        photo: "/images/features/bowl-feeder-3.webp",
+        photoAlt: "크기가 다른 볼베어링",
       },
       {
         title: "선별 · 방향 판별 지그",
@@ -520,6 +546,8 @@ export const products: Product[] = [
           "역방향 부품을 되돌려 보내는 선별 기구를 볼 안에",
           "불량 형상은 트랙에서 떨어뜨려 뒷공정 부담 감소",
         ],
+        photo: "/images/features/bowl-feeder-4.webp",
+        photoAlt: "같은 자세로 줄 맞춘 황동 부품",
       },
     ],
     /* 99% 는 홈과 같은 근거다. 300개/분은 업계 일반값이고, 뒤 둘은 아래
@@ -636,6 +664,8 @@ export const products: Product[] = [
           "이송할 부품의 형상과 폭에 맞춘 전용 슈트 제작",
           "조립기가 받는 자세까지 보고 슈트 모양을 결정",
         ],
+        photo: "/images/features/linear-feeder-1.webp",
+        photoAlt: "깎아 낸 황동 부품의 단면",
       },
       {
         title: "독립 진동 제어",
@@ -643,6 +673,8 @@ export const products: Product[] = [
           "볼피더와 별도 컨트롤러로 이송 속도를 따로 조절",
           "라인이 멈추면 이쪽만 세웠다 다시 돌릴 수 있음",
         ],
+        photo: "/images/features/linear-feeder-2.webp",
+        photoAlt: "단독으로 놓인 가변 저항기",
       },
       {
         title: "라인 길이에 맞춘 크기",
@@ -650,6 +682,8 @@ export const products: Product[] = [
           "볼피더에서 조립기까지 거리를 재서 트랙 길이 산정",
           "짧으면 부품이 밀리고 길면 이송 중 자세가 흐트러짐",
         ],
+        photo: "/images/features/linear-feeder-3.webp",
+        photoAlt: "칸마다 크기가 다른 부품 보관대",
       },
       {
         title: "슈트 면을 직접 다듬는다",
@@ -657,6 +691,8 @@ export const products: Product[] = [
           "슈트는 사내 밀링으로 깎고 그라인더로 면을 마감",
           "부품이 스치는 면이 거칠면 자세가 흐트러지기 때문",
         ],
+        photo: "/images/features/linear-feeder-4.webp",
+        photoAlt: "금속을 갈 때 튀는 불꽃",
       },
     ],
     /* 이송 속도만 업계 일반값이고 나머지 셋은 아래 specTable 에서 왔다
@@ -764,6 +800,8 @@ export const products: Product[] = [
           "경사진 판스프링과 전자석이 나선 운동을 만들어 냄",
           "모터가 없어 회전하며 마모되는 부분이 적음",
         ],
+        photo: "/images/features/vibrator-1.webp",
+        photoAlt: "스프링 코일 클로즈업",
       },
       {
         title: "현장 튜닝 대응",
@@ -771,6 +809,8 @@ export const products: Product[] = [
           "스프링 매수와 각도를 조정해 공급 속도를 맞춤",
           "납품 뒤 속도가 바뀌어도 전담 부서가 다시 잡아 드림",
         ],
+        photo: "/images/features/vibrator-2.webp",
+        photoAlt: "눈금이 새겨진 금속 조정 다이얼",
       },
       {
         title: "전압까지 함께 조정",
@@ -778,6 +818,8 @@ export const products: Product[] = [
           "스프링만이 아니라 전압까지 함께 잡아 세팅",
           "같은 피더라도 다루는 부품이 바뀌면 다시 맞춰야 함",
         ],
+        photo: "/images/features/vibrator-3.webp",
+        photoAlt: "나란히 선 압력 계기 셋",
       },
       {
         title: "진동부만 바꿔 단다",
@@ -785,6 +827,8 @@ export const products: Product[] = [
           "본체는 그대로 두고 진동부만 바꿔 달 수 있음",
           "설비를 새로 들이지 않아도 공급 속도가 돌아옴",
         ],
+        photo: "/images/features/vibrator-4.webp",
+        photoAlt: "떼어 쌓아 둔 금속 기어",
       },
     ],
     /* 넷 모두 아래 specTable 과 구동 방식에서 왔다 — 이 제품은 수치가
@@ -882,6 +926,8 @@ export const products: Product[] = [
           "레벨 센서가 볼피더 잔량을 보고 필요한 만큼만 공급",
           "한꺼번에 쏟지 않아 부품이 눌려 상하는 일이 없음",
         ],
+        photo: "/images/features/hopper-feeder-1.webp",
+        photoAlt: "초음파 센서 모듈",
       },
       {
         title: "무인 운전",
@@ -889,6 +935,8 @@ export const products: Product[] = [
           "한 번 적재해 두면 작업자 없이 라인이 이어짐",
           "야간과 주말처럼 사람이 없는 시간대 가동에 씀",
         ],
+        photo: "/images/features/hopper-feeder-2.webp",
+        photoAlt: "사람 없이 도는 자동 설비",
       },
       {
         title: "소모량에 맞춘 용량",
@@ -896,6 +944,8 @@ export const products: Product[] = [
           "하루 소모량을 보고 호퍼 적재 용량을 정함",
           "크면 부품이 오래 머물고 작으면 자주 채워야 함",
         ],
+        photo: "/images/features/hopper-feeder-3.webp",
+        photoAlt: "칸칸이 나뉘어 담긴 체결 부품",
       },
       {
         title: "라인과 함께 선다",
@@ -903,6 +953,8 @@ export const products: Product[] = [
           "볼피더 신호를 그대로 받아 함께 서고 함께 돎",
           "볼 안에 넘치거나 눌려 상하는 일이 생기지 않음",
         ],
+        photo: "/images/features/hopper-feeder-4.webp",
+        photoAlt: "제어반이 달린 자동화 설비",
       },
     ],
     /* "0명" 이 이 제품의 핵심이다 — 볼피더에 부품을 채워 넣는 일을 레벨
@@ -1004,6 +1056,8 @@ export const products: Product[] = [
           "원통 커버 내벽의 흡음재가 볼 안 충돌음을 흡수",
           "귀마개 없이 설비 앞에서 작업할 수 있는 수준",
         ],
+        photo: "/images/features/soundproof-cover-1.webp",
+        photoAlt: "쐐기 모양이 반복되는 흡음재",
       },
       {
         title: "개폐형 구조",
@@ -1011,6 +1065,8 @@ export const products: Product[] = [
           "한 손으로 열어 젖히는 개폐 구조라 점검이 빠름",
           "커버를 떼어 따로 보관해 둘 자리가 필요 없음",
         ],
+        photo: "/images/features/soundproof-cover-2.webp",
+        photoAlt: "클램프로 여닫는 원통형 장비",
       },
       {
         title: "씌울 피더를 재서 만든다",
@@ -1018,6 +1074,8 @@ export const products: Product[] = [
           "표준 치수가 아니라 씌울 피더를 직접 재서 제작",
           "틈이 생기면 소리가 그대로 빠져나가기 때문",
         ],
+        photo: "/images/features/soundproof-cover-3.webp",
+        photoAlt: "캘리퍼스와 컴퍼스 등 측정 공구",
       },
       {
         title: "금속 부품 라인에 효과",
@@ -1025,6 +1083,8 @@ export const products: Product[] = [
           "볼트나 금속 가공품처럼 서로 부딪히는 부품에 효과",
           "수지 부품 라인은 원래 소리가 작은 편",
         ],
+        photo: "/images/features/soundproof-cover-4.webp",
+        photoAlt: "쌓여 있는 금속 링",
       },
     ],
     /* 90dB 는 진동식 피더가 금속 부품을 다룰 때의 업계 일반값이다. 저감
@@ -1128,6 +1188,8 @@ export const products: Product[] = [
           "단계가 아니라 무단으로 조절해 꼭 맞는 지점을 찾음",
           "운전을 멈추지 않고도 세기를 바꿀 수 있음",
         ],
+        photo: "/images/features/controller-1.webp",
+        photoAlt: "숫자가 새겨진 회전 노브",
       },
       {
         title: "볼 · 직진 개별 제어",
@@ -1135,6 +1197,8 @@ export const products: Product[] = [
           "볼피더와 직진피더를 각각의 컨트롤러로 따로 제어",
           "한쪽만 빨라 부품이 밀리거나 끊기는 일을 막음",
         ],
+        photo: "/images/features/controller-2.webp",
+        photoAlt: "여러 갈래로 나뉜 제어 배선",
       },
       {
         title: "붙이거나 따로 둔다",
@@ -1142,6 +1206,8 @@ export const products: Product[] = [
           "피더 일체형과 조작반 별치형 가운데 선택",
           "설비 배치와 작업자 동선을 보고 자리를 정함",
         ],
+        photo: "/images/features/controller-3.webp",
+        photoAlt: "패널에 박힌 둥근 조작 버튼",
       },
       {
         title: "스위치와 다이얼뿐",
@@ -1149,6 +1215,8 @@ export const products: Product[] = [
           "운전 · 정지 스위치와 세기 다이얼만 있는 조작부",
           "교대 인원이 바뀌어도 따로 설명할 것이 없음",
         ],
+        photo: "/images/features/controller-4.webp",
+        photoAlt: "눈금 다이얼이 달린 조작부",
       },
     ],
     /* 앞 셋은 아래 specTable 에서, 넷째는 이미 적혀 있는 사실을 수치로
@@ -1263,6 +1331,8 @@ export const products: Product[] = [
           "우레탄 층이 금속에 닿는 충돌음과 진동을 흡수",
           "방음커버와 함께 쓰면 소음 저감 효과가 겹침",
         ],
+        photo: "/images/features/urethane-coating-1.webp",
+        photoAlt: "결이 촘촘한 흡음 폼 단면",
       },
       {
         title: "부품 손상 방지",
@@ -1270,6 +1340,8 @@ export const products: Product[] = [
           "도금 · 수지처럼 흠집에 민감한 부품 표면을 보호",
           "완성품 외관이 그대로 고객에게 가는 공정에 적합",
         ],
+        photo: "/images/features/urethane-coating-2.webp",
+        photoAlt: "미끄럼을 막는 고무 매트 결",
       },
       {
         title: "샘플로 등급을 정한다",
@@ -1277,6 +1349,8 @@ export const products: Product[] = [
           "부품을 받아 몇 가지 등급으로 시험해 보고 결정",
           "너무 매끄러우면 미끄러지고 거칠면 걸리기 때문",
         ],
+        photo: "/images/features/urethane-coating-3.webp",
+        photoAlt: "결이 다른 금속 링을 포개 둔 모습",
       },
       {
         title: "트랙 · 슈트에도 입힌다",
@@ -1284,6 +1358,8 @@ export const products: Product[] = [
           "볼 내면뿐 아니라 트랙과 직진피더 슈트에도 적용",
           "한 곳만 입히면 그쪽만 조용해지기 때문",
         ],
+        photo: "/images/features/urethane-coating-4.webp",
+        photoAlt: "결이 고르게 덮인 검은 표면",
       },
     ],
     /* 앞 셋은 아래 specTable(UN-1~3 · 1~4mm · Shore A 60~80)이 그대로

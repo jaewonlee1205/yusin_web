@@ -563,6 +563,25 @@ export default function Home() {
                   sizes="(min-width: 1024px) 260px, (min-width: 640px) 50vw, 100vw"
                   className="object-cover"
                 />
+                {/* 사진 위 자막. 제품 구동 영상(ProductVideo)과 홈 영상 카드가
+                    쓰는 그 꼴이다 — 파란 그라데이션 위에 흰 글 한 줄.
+
+                    ⚠️ <Image> 가 아니라 **칸**의 자식이다. 그래야 사진이 아직
+                       안 떴거나 못 받았을 때도 띠가 남는다.
+
+                    ⚠️ 글이 한 줄이어야 한다. 가장 좁은 1024 에서 사진이 176px,
+                       자막 글상자가 152px 뿐이라 12px 로 약 12자다. 네 줄의
+                       길이 규칙은 company.ts 의 summary 주석에 있다.
+
+                    px-3 pb-2.5 pt-8 — 영상 자막(px-5 pb-5 pt-12)보다 작다.
+                    사진 높이가 99~119px 라 같은 패딩을 주면 절반을 덮는다.
+
+                    pointer-events-none — 누를 것이 없다. */}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/40 to-transparent px-3 pb-2.5 pt-8">
+                  <p className="text-xs font-medium leading-snug text-white">
+                    {p.summary}
+                  </p>
+                </div>
               </div>
 
               {/* 카드 바닥 한 줄 — **얼마나 걸리고 무엇을 받는가.**

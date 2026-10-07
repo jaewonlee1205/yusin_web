@@ -135,12 +135,20 @@ export default function ProductBrowser() {
           <p className="text-sm font-bold leading-relaxed text-ink">
             목록에 없는 부품인가요?
           </p>
-          <p className="mt-2 text-[13px] leading-relaxed text-ink-soft">
-            형태가 달라도 만듭니다. 샘플을 보고 정합니다.
-          </p>
+          {/* 한때 여기에 "형태가 달라도 만듭니다. 샘플을 보고 정합니다." 두
+              줄이 있었다. 걷어 달라는 요청에 뺐다 — 제목 한 줄이 이미 같은
+              것을 묻고 있어 뜻이 줄지 않는다.
+
+              ⚠️ 글자 링크를 테두리 박스로 바꿨다. 설명이 빠지니 글자 링크
+                 하나만 남아 허전했다. **위 "빨강 버튼을 쓰지 않는다" 는 그대로
+                 유효하다** — 이 버튼은 navy 테두리이고 바탕이 없다.
+
+                 색은 제품 상세의 "제품 목록" 버튼(border-navy/30 … hover:
+                 border-navy hover:bg-surface)에서 가져왔다. 사이트의 공통
+                 BTN 은 hover 가 brand 로 번져 여기 쓸 수 없다. */}
           <Link
             href="/contact/"
-            className="group mt-3 inline-flex items-center gap-1.5 text-[13px] font-semibold text-navy"
+            className="group mt-4 flex items-center justify-center gap-1.5 rounded-xl border border-navy/30 px-4 py-2.5 text-[13px] font-semibold text-navy transition-colors hover:border-navy hover:bg-surface"
           >
             제작 문의
             <svg
@@ -153,7 +161,7 @@ export default function ProductBrowser() {
               strokeLinecap="round"
               strokeLinejoin="round"
               aria-hidden="true"
-              className="transition-transform group-hover:translate-x-1"
+              className="shrink-0 transition-transform group-hover:translate-x-1"
             >
               <path d="M5 12h14" />
               <path d="m12 5 7 7-7 7" />
