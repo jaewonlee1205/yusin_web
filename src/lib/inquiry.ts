@@ -19,6 +19,14 @@ export type InquiryPayload = {
   name: string;
   phone: string;
   email: string;
+  /**
+   * 문의 분야. **여러 개가 " · " 로 이어진 하나의 문자열**이다 —
+   * InquiryForm 이 체크박스 값을 getAll 로 모아 합쳐 넘긴다.
+   *
+   * ⚠️ 빈 문자열일 수 있다. 분야는 고르지 않아도 보낼 수 있다(라디오이던
+   *    때는 첫 칸이 미리 골라져 있어 늘 값이 있었다). 아래 submitInquiry 가
+   *    제목과 본문 두 군데서 그 경우를 받는다.
+   */
   category: string;
   message: string;
   /** 봇 잡이용 숨김 필드. 값이 채워져 있으면 스팸으로 본다. */
@@ -47,6 +55,23 @@ export async function submitInquiry(payload: InquiryPayload): Promise<void> {
     );
   }
 
+  /* 메일 **제목**에 들어갈 분야. 본문과 달리 줄인다.
+
+     분야를 여러 개 고를 수 있게 되면서 제목이 길어졌다 — 열 개를 다 고르면
+     이어 붙인 값만 60자가 넘어 메일함 목록에서 회사명이 잘린다. 그래서 제목은
+     "첫 분야 외 N건" 으로 줄이고, **본문 문의분야에는 고른 것을 전부** 넣는다
+     (아래 payload.category 그대로).
+
+     하나도 안 골랐으면 "문의" 다. 그냥 두면 제목이 " - " 로 끝나 잘린 것처럼
+     보인다. */
+  const topics = payload.category ? payload.category.split(" · ") : [];
+  const subjectTopic =
+    topics.length === 0
+      ? "문의"
+      : topics.length === 1
+        ? topics[0]
+        : `${topics[0]} 외 ${topics.length - 1}건`;
+
   const res = await fetch(ENDPOINT, {
     method: "POST",
     headers: {
@@ -55,13 +80,13 @@ export async function submitInquiry(payload: InquiryPayload): Promise<void> {
     },
     body: JSON.stringify({
       access_key: ACCESS_KEY,
-      subject: `[홈페이지 문의] ${payload.company || payload.name} - ${payload.category}`,
+      subject: `[홈페이지 문의] ${payload.company || payload.name} - ${subjectTopic}`,
       from_name: "유신 F.A 시스템 홈페이지",
       회사명: payload.company,
       담당자: payload.name,
       연락처: payload.phone,
       이메일: payload.email,
-      문의분야: payload.category,
+      문의분야: payload.category || "선택 안 함",
       문의내용: payload.message,
     }),
   });

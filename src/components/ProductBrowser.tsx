@@ -146,26 +146,19 @@ export default function ProductBrowser() {
                  색은 제품 상세의 "제품 목록" 버튼(border-navy/30 … hover:
                  border-navy hover:bg-surface)에서 가져왔다. 사이트의 공통
                  BTN 은 hover 가 brand 로 번져 여기 쓸 수 없다. */}
+          {/* ⚠️ 화살표가 없다. 테두리 박스로 바꾸던 라운드에 오른쪽 화살표를
+                 그대로 들고 왔는데(글자 링크 시절의 것이다) 걷어 달라는 요청에
+                 뺐다. 박스 자체가 이미 누를 곳임을 말하므로 화살표는 같은 말을
+                 두 번 하는 꼴이었다.
+
+                 group 과 gap-1.5 도 함께 걷었다 — group 은 화살표의
+                 group-hover:translate-x-1 하나만 쓰던 것이고, gap 은 자식이
+                 글자 하나뿐이면 할 일이 없다. justify-center 는 남긴다. */}
           <Link
             href="/contact/"
-            className="group mt-4 flex items-center justify-center gap-1.5 rounded-xl border border-navy/30 px-4 py-2.5 text-[13px] font-semibold text-navy transition-colors hover:border-navy hover:bg-surface"
+            className="mt-4 flex items-center justify-center rounded-xl border border-navy/30 px-4 py-2.5 text-[13px] font-semibold text-navy transition-colors hover:border-navy hover:bg-surface"
           >
             제작 문의
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-              className="shrink-0 transition-transform group-hover:translate-x-1"
-            >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
           </Link>
         </div>
       </aside>

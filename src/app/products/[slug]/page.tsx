@@ -582,15 +582,33 @@ export default async function ProductDetailPage({
               </p>
             </div>
 
-            <div className="mt-3 overflow-x-auto rounded-2xl border border-line">
+            {/* 오시는 길 연락처 표와 같은 결이다 — 선뿐이고 바탕도 테두리도
+                없다. 바꾼 것은 셋이다: 바깥 border 와 rounded-2xl 을 걷고
+                border-t 한 줄로, 머리의 bg-surface 회색 띠를 걷고 border-b
+                한 줄로, th 글자를 먹색 굵은 글씨에서 13px 회색(연락처 표의
+                라벨 색)으로.
+
+                ⚠️ overflow-x-auto 는 반드시 남긴다. 열이 다섯이라 좁은 폭에서는
+                   밀어서 봐야 하고, 페이지 자체가 가로로 넘치면 안 된다.
+                   테두리를 걷었어도 이것은 그대로다.
+
+                ⚠️ table 을 dl 로 바꾸지 말 것. 행과 열이 모두 뜻을 갖는
+                   자료다(아래 dl 과 다르다). 바뀐 것은 생김새뿐이다. */}
+            <div className="mt-3 overflow-x-auto border-t border-line">
               <table className="w-full border-collapse text-left text-sm">
                 <thead>
-                  <tr className="bg-surface">
-                    {product.specTable.columns.map((col) => (
+                  <tr className="border-b border-line">
+                    {/* ⚠️ 첫 열만 pl-0 이다. 셀 패딩이 px-4 면 글이 표
+                        왼쪽 끝에서 16px 들어가 서는데, 바로 아래 구동 · 옵션
+                        목록은 패딩이 행에 있어 글이 0 에서 시작한다. 두 표가
+                        세로로 붙어 있어 그 16px 가 어긋나 보였다(실측). */}
+                    {product.specTable.columns.map((col, i) => (
                       <th
                         key={col}
                         scope="col"
-                        className="whitespace-nowrap px-4 py-3 font-bold text-ink"
+                        className={`whitespace-nowrap py-3 pr-4 text-[13px] font-bold text-muted ${
+                          i === 0 ? "" : "pl-4"
+                        }`}
                       >
                         {col}
                       </th>
@@ -603,10 +621,10 @@ export default async function ProductDetailPage({
                       {row.map((cell, i) => (
                         <td
                           key={i}
-                          className={`whitespace-nowrap px-4 py-3 ${
+                          className={`whitespace-nowrap py-3 pr-4 ${
                             i === 0
                               ? "font-bold tabular-nums text-ink"
-                              : "tabular-nums text-ink-soft"
+                              : "pl-4 tabular-nums text-ink-soft"
                           }`}
                         >
                           {cell}
@@ -622,83 +640,50 @@ export default async function ProductDetailPage({
 
         {/* 표와 그 아래 안내 문단은 한 덩어리로 읽히므로 한 겹으로 묶는다. */}
         <Reveal>
-          {/* 한 행에 두 쌍을 넣는다. 전에는 행마다 flex 였는데 dd 에 flex-1
-              이 없어 dd 가 내용 크기만큼만 차지했다 — 1088px 표에서 dt 176 +
-              dd 125px 를 쓰고 787px 가 빈 채, 값이 행마다 다른 곳(125~322px)
-              에서 끝나고 구분선만 끝까지 그어졌다.
+          {/* **오시는 길 연락처 표와 같은 디자인이다** — 선뿐인 목록(border-t
+              한 줄 + 행마다 border-b)이고 바탕도 테두리도 세로선도 없다.
+              라벨 13px 회색 · 값 15px 먹색. 사이트의 표가 셋이던 것을 하나로
+              모은 결과다(회사 개요 표도 같이 바꿨다).
 
-              42개 값을 전부 재니 가장 긴 것이 282px("경첩 · 잠금 구조 (부품
-              보충 · 지그 점검 시 개방)")이고 라벨은 68px("거칠기 등급")가
-              최대였다. 한 행에 두 쌍이 들어간다.
+              히어로 "주요 사양" 카드가 specs 앞 네 줄을 가져가므로 여기는
+              slice(4) 로 **뒤 두 줄**만 쓴다. 두 쌍뿐이라 sm 부터 2열로 놓아
+              한 줄에 담는다(연락처 표가 여섯 칸을 2열로 접는 것과 같다).
 
-              앞 세 줄은 히어로 "주요 사양" 카드가 가져가므로 여기서는
-              slice(3) 으로 뒤 세 줄만 쓴다. 세 쌍이라 한 열(두 칸)이다 —
-              한때 여섯 줄을 두 쌍씩 놓아 네 칸으로 만들었는데, 세 쌍이 되면
-              마지막 한 쌍이 빈 칸을 둘 남긴다. 표 높이는 어느 쪽이든 세 행
-              168px 로 같다.
+              ⚠️ 라벨 폭이 w-16(64px), sm 부터 w-20(80px)이다. 42개 값을 전부
+                 쟀을 때 가장 긴 라벨이 68px("거칠기 등급")라 들어간다. 라벨을
+                 바꿀 때 이 80px 를 넘기지 말 것.
 
-              라벨 칸 9rem(144px) — 가장 긴 라벨 68px("거칠기 등급")에 글상자
-              104px 로 여유가 있다. 남는 값 21개의 최대 폭이 282px 라 dd 칸
-              (1440 944px, 768 542px)에서 당연히 한 줄이다. 640 미만은 dt/dd
-              세로 스택이다.
+              ⚠️ dt/dd 를 div 로 묶는다(한때 Fragment 였다). 격자 직계여야
+                 한다는 접근성 검사(dlitem)는 **div 그룹화를 허용한다** —
+                 연락처 표가 같은 구조로 접근성 100 을 받는다. 히어로 사양
+                 표는 격자 칸이 곧 셀이라 거기는 Fragment 그대로다.
 
-              격자선은 셀마다 border-b 다. 위 예시 규격표의 divide-y 와 같은
-              방식이라 두 표의 선 굵기가 같아진다.
+              ── 아래는 이 표가 테두리 + 회색 라벨 칸 격자이던 때의 기록이다.
 
-              ⚠️ 한때 gap-px + bg-line(격자 틈에 바탕이 비치게)이었는데 그
-                 선이 위 표보다 굵어 보였다. 재 보니 테두리는 0.8px, 격자 틈은
-                 1px 다 — 틈은 테두리처럼 스냅되지 않아 안티앨리어싱 없이
-                 또렷하게 떨어지고, bg-line 이 dl 전체 배경이라 칸 높이가
-                 소수점에서 모자라면 그 잔여분이 선에 더해진다. dt|dd 세로선과
-                 만나는 교차점은 흰 여백 없는 1px 십자가 되고, 회색 라벨 칸과
-                 흰 값 칸 사이를 지나는 탓에 같은 선이 "흐렸다 진했다" 한다.
-
-              ⚠️ 그때 "셀마다 border-b 를 주면 마지막 행에서 바깥 테두리와
-                 겹쳐 이중선이 되고, 그 마지막 행이 폭마다 달라져 끌 수가
-                 없다" 고 적어 두었는데, 그건 여섯 줄을 두 쌍씩 2열로 놓던
-                 때의 이야기다. 지금은 세 쌍 한 열이라 마지막 행이 늘 마지막
-                 쌍이고, sm 미만 1열에서도 마지막 dd 하나다 — 인덱스로 정확히
-                 끌 수 있다(오시는 길 연락처 표가 같은 방법을 쓴다).
-
-              dt/dd 는 격자 직계여야 한다(접근성 검사 dlitem). 그래서 묶는
-              div 대신 Fragment 를 쓴다. */}
-          {/* 바깥 테두리가 border 다. gap-px + bg-line 은 칸 사이 선만
-              만드는데, 값 칸이 흰색이고 섹션 바탕도 흰색이라 가장자리가
-              어디서 끝나는지 보이지 않았다 — 표가 잘린 것처럼 읽혔다.
-
-              ⚠️ 한때 p-px(바깥 1px 패딩에 bg-line 이 비치게)로 테두리를
-                 만들었는데, 반경 16px 짜리 둥근 모서리에서 그 1px 가 곡선을
-                 따라 가늘어져 끊긴 것처럼 보였다. border 는 border-radius 를
-                 따라 그려지는 표준 테두리라 모서리에서 끊기지 않는다.
-                 위 예시 규격표도 border-line 이라 두 표가 같은 방식이 된다. */}
-          <dl className="grid overflow-hidden rounded-2xl border border-line sm:grid-cols-[9rem_minmax(0,1fr)]">
-            {product.specs.slice(4).map((spec, i, all) => (
-              <Fragment key={spec.label}>
-                {/* 패딩이 px-4 py-3 인 것은 위 예시 규격표와 맞추기 위해서다.
-                    한때 px-5 py-4 라 행 높이가 55px 였는데(위 표는 44px),
-                    그 11px 차이에 라벨 열의 회색 띠가 더해져 표가 두껍고
-                    가로선도 굵어 보였다. 선 자체는 전부터 1px 로 같았다.
-
-                    dd 에서 leading-relaxed 도 걷었다. 패딩만 맞췄더니 47px 로
-                    3px 가 남았는데, 줄높이가 1.625(22.75px)라 위 표의 기본
-                    1.25rem(20px)보다 높았던 탓이다. 지금 값은 모두 한 줄이라
-                    넉넉한 줄높이가 필요 없다 — 두 줄짜리 값이 생기면 그때
-                    되살리고 위 표와 높이가 갈리는 것을 받아들인다. */}
-                <dt
-                  className={`bg-surface px-4 py-3 text-sm font-bold text-ink ${
-                    i === all.length - 1 ? "" : "border-b border-line"
-                  }`}
-                >
+              · 한 행에 두 쌍을 넣던 배치였다. 그 전에는 행마다 flex 인데 dd 에
+                flex-1 이 없어, 1088px 표에서 dt 176 + dd 125px 를 쓰고 787px 가
+                빈 채 값이 행마다 다른 곳(125~322px)에서 끝났다.
+              · 가장 긴 값이 282px("경첩 · 잠금 구조 (부품 보충 · 지그 점검 시
+                개방)")라 1440 의 dd 칸(944px)에서 한 줄이었다. 지금도 그렇다.
+              · 격자 틈(gap-px + bg-line)으로 선을 만들면 테두리(0.8px)보다
+                굵어 보였다 — 틈은 스냅되지 않아 또렷하게 1px 로 떨어지고,
+                회색 라벨 칸과 흰 값 칸 사이를 지나며 "흐렸다 진했다" 했다.
+                지금은 선이 전부 border 라 그 문제가 없다.
+              · p-px 로 바깥 테두리를 만들면 반경 16px 모서리에서 1px 가 곡선을
+                따라 가늘어져 끊겨 보였다. **지금은 바깥 테두리 자체가 없다.** */}
+          <dl className="mt-8 grid border-t border-line sm:grid-cols-2 sm:gap-x-12">
+            {product.specs.slice(4).map((spec) => (
+              <div
+                key={spec.label}
+                className="flex items-center gap-4 border-b border-line py-4"
+              >
+                <dt className="w-16 shrink-0 text-[13px] font-bold text-muted sm:w-20">
                   {spec.label}
                 </dt>
-                <dd
-                  className={`bg-white px-4 py-3 text-sm text-ink-soft sm:border-l sm:border-line ${
-                    i === all.length - 1 ? "" : "border-b border-line"
-                  }`}
-                >
+                <dd className="text-[15px] leading-relaxed text-ink">
                   {spec.value}
                 </dd>
-              </Fragment>
+              </div>
             ))}
           </dl>
 
