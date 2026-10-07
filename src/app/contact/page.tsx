@@ -9,7 +9,7 @@ import { site, telHref } from "@/data/site";
 export const metadata: Metadata = {
   title: "문의하기",
   description:
-    "파츠피더 제작 문의. 공급할 부품의 종류와 필요한 공급 속도를 알려 주시면 제작 가능 여부와 예상 납기를 회신드립니다.",
+    "파츠피더 제작 문의. 공급할 부품의 종류와 필요한 공급 속도를 알려 주시면 설계 방향과 예상 납기를 회신드립니다.",
 };
 
 export default function ContactPage() {
@@ -31,11 +31,17 @@ export default function ContactPage() {
 
           ⚠️ "예상 납기" 로는 못 늘린다 — 글 폭이 573.8px 가 되어 위에 적은
              13px 초과가 그대로 재현된다. 검색 설명 쪽은 폭 제약이 없어
-             "예상" 을 붙여 두었다(회신이 확정 납기가 아니라는 뜻이 산다). */}
+             "예상" 을 붙여 두었다(회신이 확정 납기가 아니라는 뜻이 산다).
+
+          ⚠️ "제작 가능 여부와" 였던 자리가 "설계 방향과" 다(세 자 짧다).
+             앞말이 "못 만드는 것도 있다" 로 읽힌다는 말을 들어 걷었다 —
+             만드는 것은 전제로 두고 **무엇을 어떻게** 만 알린다. 같은 뜻의
+             말이 ContactCTA 본문과 company.ts 의 process 01 output 에도
+             있어 함께 고쳤다. */}
       <PageHero
         eyebrow="CONTACT"
         title="문의하기"
-        lead="샘플이나 도면 한 장이면 됩니다. 제작 가능 여부와 납기를 회신드립니다."
+        lead="샘플이나 도면 한 장이면 됩니다. 설계 방향과 납기를 회신드립니다."
       />
 
       <div className="py-14 sm:py-20">

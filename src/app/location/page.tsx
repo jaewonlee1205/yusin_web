@@ -11,15 +11,26 @@ export const metadata: Metadata = {
   description: `${site.name} 위치 안내. ${site.address.road}`,
 };
 
-const query = encodeURIComponent(site.address.jibun);
-
 /**
- * 지도는 API 키가 필요 없는 구글 지도 embed를 쓴다.
- * 네이버·카카오 지도는 정식 연동에 키가 필요해 검색 링크로 대신한다.
+ * 지도는 API 키가 필요 없는 구글 지도 embed 를 쓴다.
+ *
+ * ⚠️ q 에 **좌표**를 넘긴다. 한때 지번 문자열(site.address.jibun)을 검색어로
+ *    넘겼는데, 구글이 검색 결과를 찾으면 지도 왼쪽 위에 "1288-2 / 대한민국
+ *    경기도 시흥시 정왕동 1288-2 / [지도에서 열기][길찾기]" 흰 카드를 띄운다.
+ *    좌표에는 그 카드가 붙지 않는다. 네 가지를 그려서 비교한 결과다 —
+ *
+ *      지번 검색 z=16   흰 카드 뜸 + 주변 상점 핀 10개 넘음  (한때 이것)
+ *      q=좌표   z=17   카드 없음, 핀만
+ *      ll=좌표  z=17   핀이 사라지는 대신 "지도에서 열기" 버튼이 뜬다
+ *      q=좌표   z=18   카드 없음 + "동우디지털파크" 건물 라벨이 보인다  <- 지금
+ *
+ * ⚠️ z=18 이다. 16 에서는 주변 상점(타이어프로.88순대국.모스크…)이 열 개 넘게
+ *    뜨고, 18 이면 그것들이 밀려나는 대신 건물 이름이 보인다. 더 당기면 큰길
+ *    맥락이 사라진다.
  *
  * TODO: 도로명 주소가 확정되면 site.address 를 고치고 지도 위치를 확인할 것.
  */
-const MAP_SRC = `https://maps.google.com/maps?q=${query}&z=16&hl=ko&output=embed`;
+const MAP_SRC = `https://maps.google.com/maps?q=${site.coords.lat},${site.coords.lng}&z=18&hl=ko&output=embed`;
 
 /**
  * 표의 칸은 컴포넌트 안에서 만든다(아래 cells). 전화와 운영 시간이 값을
@@ -277,7 +288,12 @@ export default function LocationPage() {
                 title={`${site.name} 위치 지도`}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="block h-[320px] w-full border-0 sm:h-[400px] lg:aspect-[3/1] lg:h-auto"
+                /* saturate-50 — 구글 기본 색(초록 공원 · 주황 상점 · 파란 물)이
+                   사이트의 회색 톤과 겉돈다. 절반으로 낮추면 배경이 가라앉으면서
+                   위치 핀의 빨강은 알아볼 만큼 남는다.
+                   ⚠️ contrast.brightness 를 더하지 말 것 — 도로명과 상호 글자가
+                      흐려져 길을 못 읽는다. */
+                className="block h-[320px] w-full border-0 saturate-50 sm:h-[400px] lg:aspect-[3/1] lg:h-auto"
               />
             </Reveal>
           </div>

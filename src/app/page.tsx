@@ -33,8 +33,8 @@ const STATS = [
   { value: products.length, count: true, unit: "종 제품", note: "피더 전 라인업" },
 ];
 
-/* "자세히 보기 / 전체 보기" 버튼. 오시는 길의 지도앱 버튼, 영상자료의
-   "영상 더 보기" 와 같은 모양이다. */
+/* "자세히 보기 / 전체 보기" 버튼. 영상자료의 "영상 더 보기" 와 같은
+   모양이다. (오시는 길의 지도앱 버튼도 같은 꼴이었는데 그 블록이 걷혔다.) */
 const BTN =
   "group inline-flex items-center gap-2 rounded-xl border border-line bg-white px-5 py-3.5 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand";
 
@@ -461,7 +461,7 @@ export default function Home() {
               as="li"
               key={p.step}
               delay={i * 80}
-              className="relative rounded-2xl bg-white p-6 shadow-card"
+              className="rounded-2xl bg-white p-6 shadow-card"
             >
               {/* 번호 + 제목. 번호는 제목 **위** 별도 줄에 작게 선다.
 
@@ -488,12 +488,47 @@ export default function Home() {
 
                   ⚠️ aria-hidden 을 떼지 말 것. 순서는 ol / li 가 이미 전하므로
                      시각 보조다(/contact 주석과 같은 이유). */}
-              <p
-                aria-hidden="true"
-                className="text-xs font-bold tracking-[0.08em] tabular-nums text-brand"
-              >
-                {p.step}
-              </p>
+              <div className="flex items-center justify-between gap-2">
+                <p
+                  aria-hidden="true"
+                  className="text-xs font-bold tracking-[0.08em] tabular-nums text-brand"
+                >
+                  {p.step}
+                </p>
+                {/* 다음 단계가 있다는 표식. 번호 13px 뒤의 빈 자리를 쓴다.
+
+                    ⚠️ 한때 카드 **밖**에 절대배치였다(-right-[18px] 로 틈
+                       한가운데, lg 부터만). 카드 안으로 들어오면서 두 가지가
+                       달라졌다 — (1) 옆 카드를 가리키는 것이 아니라 "다음이
+                       있다" 는 표식이라 **모든 폭에서** 띄운다(밖에 있을 때는
+                       2열에서 2->3 이 줄바꿈이라 엉뚱한 곳을 가리켰다),
+                       (2) 카드의 relative 가 필요 없어져 함께 걷었다.
+
+                    ⚠️ 꺾쇠 둘이다. 사이트의 버튼 화살표는 전부 선(M5 12h14) +
+                       화살촉인데, 같은 카드 바닥에 체크가 있고 위에 또 그 그림을
+                       두면 기호가 섞인다. 꺾쇠 계열은 겹치지 않는다.
+
+                    ⚠️ 레드로 바꾸지 말 것. 아래 주석의 "카드 안 레드가 셋 —
+                       번호 · 기간 칩 · 체크 — 여기에 넷째를 더하지 말 것" 이
+                       그대로 적용된다. text-line 이 사이트에서 가장 연한 선색이다. */}
+                {i < process.length - 1 && (
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                    className="shrink-0 text-line"
+                  >
+                    <path d="m7 6 6 6-6 6" />
+                    <path d="m14 6 6 6-6 6" />
+                  </svg>
+                )}
+              </div>
               <h3 className="mt-1.5 text-base font-bold text-ink">{p.title}</h3>
               {/* 점 목록 셋. 한때 박스 안이 긴 문장 하나였는데, 글상자가
                   좁아 3~4줄로 눌려 읽혔다. 지금은 단계마다 할 일 셋이 한 줄씩
@@ -605,39 +640,11 @@ export default function Home() {
                      생각이라면 그때 비교한 넷을 또 비교하지 말고, 위 배지가
                      /contact 와 통일되어 있다는 점부터 볼 것.
 
-                  ⚠️ 카드의 relative 를 걷지 말 것. 아래 화살표가 -right-[18px]
-                     로 카드 밖에 걸쳐 있어 그 기준점이 필요하다. overflow-hidden
-                     을 주면 그 부분이 잘린다. */}
+                  (한때 "카드의 relative 를 걷지 말 것 — 화살표가 -right-[18px]
+                  로 카드 밖에 걸쳐 있다" 가 여기 있었다. 그 화살표를 번호 줄
+                  안으로 옮기면서 기준점이 필요 없어져 relative 를 걷었다.
+                  다시 카드 밖에 무언가를 걸치려면 그때 되살린다.) */}
 
-              {/* 카드 사이를 잇는 화살표. 넷이 나란히 서 있을 뿐 단계가
-                  이어지는 표시가 없어 심심했다.
-
-                  -right-[18px] 가 틈 한가운데다 — 카드 간격이 gap-4(16px)이고
-                  화살표가 20px 이라 16/2 + 20/2 = 18 이다.
-
-                  lg 부터만 띄운다. 2열(sm)에서는 1→2 는 가로인데 2→3 은 줄이
-                  바뀌어, 화살표가 엉뚱한 곳을 가리킨다.
-
-                  장식이라 aria-hidden 이다. 순서는 ol 과 숫자가 이미 전한다. */}
-              {i < process.length - 1 && (
-                <span
-                  aria-hidden="true"
-                  className="absolute -right-[18px] top-1/2 hidden -translate-y-1/2 text-muted/50 lg:flex"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M9 6l6 6-6 6" />
-                  </svg>
-                </span>
-              )}
             </Reveal>
           ))}
         </ol>

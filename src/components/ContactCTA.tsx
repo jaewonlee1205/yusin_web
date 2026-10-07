@@ -69,6 +69,12 @@ export default function ContactCTA() {
                 (/contact 배너는 그 뒤 "샘플이나 도면 한 장이면 됩니다" 로
                 다시 써서 지금은 겹치지 않는다.)
 
+                ⚠️ "만들 수 있는지" 라고 쓰지 말 것. 한때 그랬는데 "못 만드는
+                   것도 있다" 로 읽힌다는 말을 들었다. 만드는 것은 전제로 두고
+                   **어떻게 · 얼마나** 만 알린다. 같은 뜻의 말이 네 자리에 있어
+                   함께 고쳤다 — company.ts 의 process 01 output, /contact 의
+                   배너 lead 와 검색 설명, README 자료 요청 16번.
+
                 폭 제한(max-w-sm + md:max-w-none)은 글이 길던 때의 장치다.
                 지금은 한 문장뿐이라 320~1440 어느 폭에서도 한 줄이고, 캡이
                 걸리는 640~767 에서도 자연 폭(366px)이 캡(384px)보다 좁아
@@ -79,7 +85,7 @@ export default function ContactCTA() {
                  짜리 토막이 됐다. 캡으로는 못 막던 문제인데, 문장을 하나
                  줄이면서 같이 사라졌다.) */}
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/70 sm:text-base md:max-w-none">
-              만들 수 있는지, 얼마나 걸리는지 정리해 회신드립니다.
+              어떻게 만들지, 얼마나 걸리는지 정리해 회신드립니다.
             </p>
           </Reveal>
 
