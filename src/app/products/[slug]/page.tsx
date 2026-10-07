@@ -327,6 +327,66 @@ export default async function ProductDetailPage({
             </Reveal>
           ))}
         </ul>
+
+        {/* KPI 넷. 값 - 라벨 - 조건 세 줄이 가로로 선다.
+
+            특징 아래에 둔다. 위 카드 넷이 "그래서 무엇이 되는지" 를 산문으로
+            말하고 나면, 같은 것을 숫자로 한 번 더 받는 자리다. 아래 사양
+            섹션으로 넘어가기 전에 와야 한다 — 거기는 형식별 규격이라 결이
+            다르다.
+
+            ⚠️ 섹션을 따로 만들지 않는다. 이 섹션이 bg-surface, 아래 사양이
+               bg-white 라 그 사이에 섹션을 끼우면 둘 중 하나와 배경이 붙어
+               경계가 사라진다. 안에 두면 "이 특징들이 내는 수치" 로 한
+               덩어리로 읽히고 섹션 수도 그대로다.
+
+            border-t 가 위 카드 묶음과 가른다. 홈 PERFORMANCE 는 위가 영상
+            이라 경계가 저절로 생기지만 여기는 흰 카드 격자라, 선이 없으면
+            KPI 가 카드의 일부로 보였다. pt-10 과 mt-12 로 선 위아래를 비슷하게
+            띄운다.
+
+            ⚠️ dl 이 아니라 ul 이다. 홈에서 dl/dt/dd 로 짰다가 Lighthouse
+               접근성이 96 으로 떨어졌다(definition-list 미통과) — dl 의 자식
+               div 안에는 dt 와 dd 만 올 수 있는데 조건 줄이 p 라 섞인 탓이다.
+               여기도 줄이 셋이고 용어-정의 쌍이 아니다.
+
+            칸 사이 세로 구분선은 lg 부터만 긋는다. 1열.2열에서는 선이 뜻을
+            잃는다.
+
+            ⚠️ 선 색이 border-line 이 아니라 border-ink/10 이다. 이 섹션이
+               bg-surface 라 line(229,231,235)은 바탕과 1.155:1 밖에 안 돼
+               확대해 보면 거의 사라진다(Footer.tsx 에 같은 측정이 있다 —
+               "흰 바탕이 사라지면 너무 흐려 안 보인다"). ink/10 이면
+               1.220:1 이고, 홈이 흰 바탕에서 line 으로 내는 세기(1.238:1)와
+               거의 같다. 즉 색만 바꿔 **같은 세기를 지킨 것**이다.
+               흰 섹션으로 옮기면 border-line 으로 되돌린다.
+
+            ⚠️ lg:pl-7 을 두지 말 것. 가운데 정렬에서는 왼쪽 패딩만 있으면
+               글 덩어리가 오른쪽으로 밀린다. 칸 사이는 lg:gap-7 이 벌린다.
+
+            ⚠️ StatCounter 를 쓰지 않는다. value 가 "7,200" 처럼 쉼표가 있고
+               "2~3" 처럼 범위여서 숫자로 셀 수 없다. */}
+        <ul className="mt-12 grid gap-8 border-t border-ink/10 pt-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-7 lg:text-center">
+          {product.kpis.map((kpi, i) => (
+            <Reveal
+              as="li"
+              key={kpi.label}
+              delay={i * 80}
+              className={i > 0 ? "lg:border-l lg:border-ink/10" : ""}
+            >
+              <p className="text-[34px] font-extrabold leading-none tracking-tight tabular-nums text-ink">
+                {kpi.value}
+                <span className="ml-0.5 text-lg font-bold text-brand">
+                  {kpi.unit}
+                </span>
+              </p>
+              <p className="mt-2.5 text-sm font-bold text-ink">{kpi.label}</p>
+              <p className="mt-1.5 text-xs leading-relaxed text-muted">
+                {kpi.note}
+              </p>
+            </Reveal>
+          ))}
+        </ul>
       </Section>
 
       <Section size="compact" eyebrow="SPECIFICATIONS" title="제작 사양">
