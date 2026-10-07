@@ -488,29 +488,12 @@ export default function Home() {
 
                   ⚠️ aria-hidden 을 떼지 말 것. 순서는 ol / li 가 이미 전하므로
                      시각 보조다(/contact 주석과 같은 이유). */}
-              <div className="flex items-baseline justify-between gap-2">
-                <p
-                  aria-hidden="true"
-                  className="text-xs font-bold tracking-[0.08em] tabular-nums text-brand"
-                >
-                  {p.step}
-                </p>
-                {/* 소요 기간. 번호와 양 끝으로 갈라 세워 빈 오른쪽을 메운다 —
-                    한때 번호 13px 뒤가 통째로 비어 카드가 헐겁게 읽혔다.
-
-                    ⚠️ aria-hidden 을 주지 말 것. 번호와 달리 **읽어야 뜻이
-                       통하는 정보**다(번호는 ol/li 가 순서를 이미 전한다).
-
-                    ⚠️ 네 기간의 합이 홈 PERFORMANCE 의 "2~4주 설계 → 납품" 과
-                       어긋나면 안 된다. company.ts 의 process 주석에 계산이
-                       있다. 그 섹션이 바로 위라 한 화면에서 둘 다 보인다.
-
-                    items-baseline — 둘 다 12px 이지만 굵기가 달라 글자
-                    밑선으로 맞춘다. */}
-                <p className="text-xs font-medium tabular-nums text-muted">
-                  {p.duration}
-                </p>
-              </div>
+              <p
+                aria-hidden="true"
+                className="text-xs font-bold tracking-[0.08em] tabular-nums text-brand"
+              >
+                {p.step}
+              </p>
               <h3 className="mt-1.5 text-base font-bold text-ink">{p.title}</h3>
               {/* 점 목록 셋. 한때 박스 안이 긴 문장 하나였는데, 글상자가
                   좁아 3~4줄로 눌려 읽혔다. 지금은 단계마다 할 일 셋이 한 줄씩
@@ -539,21 +522,42 @@ export default function Home() {
                 ))}
               </ul>
 
-              {/* 이 단계가 끝나면 고객에게 가는 것.
+              {/* 카드 바닥 한 줄 — **얼마나 걸리고 무엇을 받는가.**
 
-                  위 점 목록이 "무엇을 하는가" 라면 여기는 "그래서 무엇을
-                  받는가" 다. 둘이 겹치지 않게 쓴다 — 02 의 "설비 레이아웃 도면
-                  작성"(그리는 일)과 "레이아웃 도면 확인"(고객이 보는 일)처럼
-                  축이 다르다. company.ts 의 process 주석 참고.
+                  기간이 한때 위 번호 줄 오른쪽에 평문으로 서 있었다. 번호 13px
+                  뒤의 빈 자리를 메우기는 했지만 "01 … 1~2일" 이 양 끝으로 멀어
+                  둘이 한 정보로 읽히지 않았고, 아래 산출물과도 따로 놀았다.
+                  둘은 같은 축이다 — 이 단계가 **얼마나** 걸려 **무엇을** 내놓는가.
+                  그래서 한 줄로 묶었다.
+
+                  화살표(→)를 걷었다. 카드 사이를 잇는 연결 화살표(아래 20px
+                  SVG)와 같은 그림이라 "다음 단계로" 와 "이것을 받는다" 가 한
+                  화면에서 같은 기호를 쓰고 있었다.
 
                   가로선으로 끊는다. 점 목록과 같은 결로 이어 두면 항목이 넷인
                   것처럼 읽힌다 — 이것은 목록의 일부가 아니라 그 결과다.
 
-                  화살표는 글자 →(U+2192)다. SVG 로 두면 카드 사이 연결
-                  화살표(아래 20px SVG)와 같은 그림이 되어 뜻이 섞인다. */}
-              <div className="mt-4 flex items-center gap-1.5 border-t border-line pt-3">
-                <span aria-hidden="true" className="font-bold text-brand">
-                  →
+                  ⚠️ 기간 칩이 연한 레드다. 위 번호 주석의 "다시 원으로 돌아가지
+                     말 것" 과 부딪치지 않는다 — 그 경고는 **제목과 가로로
+                     경쟁하던 원형 배지**를 두고 한 말이고, 이 칩은 (1) 원이
+                     아니라 rounded-md 고 (2) 가로선 아래라 제목과 경쟁하지
+                     않으며 (3) bg-brand/8 로 /contact 배지(bg-brand/10)보다
+                     연하다. 회색 칩 · 레드 칩 · 테두리 칩 · 세로 막대 넷을
+                     그려서 고른 것이다.
+
+                  ⚠️ rounded-full 을 쓰지 않는다. 그 생김새는 제품 상세의 분류
+                     배지와 적용 분야 칩이 쓰는 것이라, 알약으로 두면 성격이
+                     다른 칩이 한 사이트에서 같은 모양이 된다.
+
+                  ⚠️ 둘 다 aria-hidden 을 주지 않는다. 번호(ol/li 가 순서를
+                     이미 전한다)와 달리 읽어야 뜻이 통하는 정보다.
+
+                  ⚠️ 네 기간의 합이 홈 PERFORMANCE 의 "2~4주 설계 → 납품" 과
+                     어긋나면 안 된다. company.ts 의 process 주석에 계산이
+                     있다. 그 섹션이 바로 위라 한 화면에서 둘 다 보인다. */}
+              <div className="mt-4 flex items-center gap-2 border-t border-line pt-3">
+                <span className="shrink-0 rounded-md bg-brand/8 px-2 py-0.5 text-[11px] font-bold tabular-nums text-brand">
+                  {p.duration}
                 </span>
                 <span className="text-xs text-muted">{p.output}</span>
               </div>

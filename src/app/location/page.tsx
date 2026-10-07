@@ -169,46 +169,33 @@ export default function LocationPage() {
 
       <div className="py-14 sm:py-20">
         <Container>
-          {/* 지도가 전폭으로 눕고 연락처가 그 아래 선다.
+          {/* 연락처가 위, 지도가 그 아래 전폭으로 눕는다.
 
-              정렬을 두 번 바꿨다. 처음엔 이 꼴이었는데 지도가 1088x462 라
-              1440 화면에서 바닥이 863px 였고, 전화번호를 보려면 반드시 한 번
-              굴려야 했다. 그래서 2열(지도 약 620px + 연락처)로 좁혔다.
+              순서를 세 번 바꿨다. 처음엔 지도가 위였는데 1088x462 라 1440
+              화면에서 바닥이 863px 였고, 전화번호를 보려면 반드시 한 번 굴려야
+              했다. 그래서 2열(지도 약 620px + 연락처)로 좁혔고, 다시 전폭
+              1열로 돌아오면서 세로를 두 군데서 줄였다 — 지도를 3:1 로 눕혀
+              478 -> 363px, 표를 2열 x 3행으로 접어 382 -> 207px.
 
-              다시 전폭으로 돌아오면서 세로를 두 군데서 줄여 그 문제를 덜었다
-              — 지도를 3:1 로 눕혀 478 -> 363px, 표를 2열 x 3행으로 접어
-              382 -> 207px. 지도를 크게 보이려면 이만큼이 한계다.
+              지금은 연락처가 먼저라 그 스크롤 문제 자체가 없다. 그래도 위
+              압축은 그대로 둔다 — 지도가 세로를 덜 쓸수록 연락처와 함께
+              한 화면에 들어오고, 3:1 은 지도를 크게 보이려는 쪽의 한계다.
 
-              lg 미만에서는 지도가 고정 높이로 서고 표가 1열로 떨어진다. */}
+              lg 미만에서는 표가 1열로 떨어지고 지도가 고정 높이로 선다. */}
           <div className="flex flex-col gap-10">
-            {/* lg 부터 3:1 이다(1088x363) — 홈 PERFORMANCE 영상과 같은
-                비율로 가로로 시원하게 눕는다. 한때 칸 높이를 받는 lg:flex +
-                lg:min-h-[25rem] 였는데, 그건 오른쪽에 연락처가 있어 행 높이를
-                그쪽이 정하던 2열 배치에서 쓰던 방식이다.
+            {/* Section 컴포넌트를 쓰지 않는다. 생김새만 Section 의 제목
+                블록과 맞춘다.
 
-                lg 미만은 고정 높이다 — 좁은 폭에서 3:1 로 두면 지도가 너무
-                납작해져 길이 안 보인다.
-
-                아래 표와 함께 테두리로 선다(2D). 그림자로 띄우면 지도.표가
-                입체로 읽혀 자료를 읽는 자리에 맞지 않고, 한쪽만 바꾸면
-                위아래로 선 둘의 결이 갈린다. */}
-            <Reveal className="overflow-hidden rounded-2xl border border-line">
-              <iframe
-                src={MAP_SRC}
-                title={`${site.name} 위치 지도`}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="block h-[320px] w-full border-0 sm:h-[400px] lg:aspect-[3/1] lg:h-auto"
-              />
-            </Reveal>
-
-            {/* Section 컴포넌트를 쓰지 않는다. 그쪽은 제목을 항상 맨 위에
-                놓는데, 오시는 길에 온 사람은 위치부터 보므로 지도가 먼저
-                와야 한다. 생김새만 Section 의 제목 블록과 맞춘다.
+                ⚠️ 한때 근거가 "Section 은 제목을 항상 맨 위에 놓는데 여기는
+                   지도가 먼저 와야 한다" 였다. 순서가 뒤집혀 그 말은 더 이상
+                   맞지 않지만, 바꾸지 않는 이유는 따로 있다 — Section 은
+                   py-16 sm:py-24 를 제 몫으로 갖는데 여기는 바깥 div 가 이미
+                   py-14 sm:py-20 을 쓰고 gap-10 으로 둘을 띄운다. 갈아타면
+                   세로가 한 번 더 붙는다. 간격을 이 페이지가 직접 쥐고 있다.
 
                 제목은 "연락처" 다. "오시는 길" 로 하면 바로 위 h1 과 같은
                 말을 두 번 하게 된다. */}
-            <Reveal delay={90}>
+            <Reveal>
               <p className="text-xs font-bold tracking-[0.08em] text-brand">
                 CONTACT
               </p>
@@ -268,6 +255,30 @@ export default function LocationPage() {
                   </div>
                 ))}
               </dl>
+            </Reveal>
+
+            {/* lg 부터 3:1 이다(1088x363) — 홈 PERFORMANCE 영상과 같은
+                비율로 가로로 시원하게 눕는다. 한때 칸 높이를 받는 lg:flex +
+                lg:min-h-[25rem] 였는데, 그건 오른쪽에 연락처가 있어 행 높이를
+                그쪽이 정하던 2열 배치에서 쓰던 방식이다.
+
+                lg 미만은 고정 높이다 — 좁은 폭에서 3:1 로 두면 지도가 너무
+                납작해져 길이 안 보인다.
+
+                위 표와 함께 테두리로 선다(2D). 그림자로 띄우면 지도.표가
+                입체로 읽혀 자료를 읽는 자리에 맞지 않고, 한쪽만 바꾸면
+                위아래로 선 둘의 결이 갈린다.
+
+                ⚠️ delay={90} 이다. 이 블록이 아래에 있으므로 위 연락처(0)보다
+                   늦게 떠야 한다 — 순서를 다시 바꾸면 이 숫자도 함께 뒤집는다. */}
+            <Reveal delay={90} className="overflow-hidden rounded-2xl border border-line">
+              <iframe
+                src={MAP_SRC}
+                title={`${site.name} 위치 지도`}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="block h-[320px] w-full border-0 sm:h-[400px] lg:aspect-[3/1] lg:h-auto"
+              />
             </Reveal>
           </div>
         </Container>

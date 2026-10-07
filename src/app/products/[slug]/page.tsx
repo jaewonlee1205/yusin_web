@@ -110,59 +110,69 @@ export default async function ProductDetailPage({
             <ProductGallery images={product.images} />
 
             <div className="lg:flex lg:flex-col">
-              {/* 분류 배지(왼쪽)와 YUSIN 마크(오른쪽)가 한 줄이다.
+              {/* 분류 배지. 이 줄에는 배지 하나뿐이다.
 
-                  마크를 여기 둔 것은 **세로를 한 픽셀도 쓰지 않기 위해서**다.
-                  이 칸은 468px 에 묶여 있고, 아래 버튼의 mt-7(28px)이
-                  "사양 표 바닥 383.9px vs 사진 바닥 384px" 를 맞추려고 0.1px
-                  정밀도로 골라진 값이다(그 주석 참고). 흐름에 블록을 하나라도
-                  더하면 그 줄 맞춤이 깨진다. 배지 줄에 넣으면 행 높이가 배지
-                  30px 그대로라 변화가 0 이다.
+                  ⚠️⚠️ self-start 를 걷지 말 것. 이 칸이 lg 에서 flex-col 이라
+                        교차축 stretch 가 걸려, 없으면 배지가 칸 폭까지 늘어난다
+                        (실측 512px -> self-start 를 주면 93px).
 
-                  ⚠️ 제품명(h1) 안에 넣지 말 것. company/page.tsx 가 "사이트에서
-                     글 안에 이미지를 넣는 유일한 자리 … 다른 제목으로 번지지
-                     않게 한다 — 번지면 한글 표기 규칙이 무너진다" 고 적어 두었다.
-                     여기는 글이 아니라 배지 옆 별도 요소라 그 금지에 걸리지 않는다.
+                        inline-flex 로는 막지 못한다. flex 자식이 되는 순간
+                        inline-flex 는 flex 로 블록화되므로 display 가 아니라
+                        align-self 를 끊어야 한다. 한때 마크와 한 줄이던 시절
+                        부모가 items-center 인 flex 행이라 이 값이 필요 없어
+                        걷었는데, 마크가 제목 줄로 내려가며 다시 필요해졌다. */}
+              <p className="inline-flex self-start items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-bold tracking-[0.1em] text-ink-soft">
+                <span
+                  aria-hidden="true"
+                  className="h-1.5 w-1.5 rounded-full bg-brand"
+                />
+                {product.category}
+              </p>
 
-                  배지의 self-start 는 걷었다. 그 줄은 이 칸이 lg 에서 flex-col
-                  이라 inline-flex 배지가 칸 폭(440~512px)까지 늘어나는 것을
-                  막던 값인데, 이제 부모가 items-center 인 flex 행이라 배지가
-                  저절로 내용 폭(93px)으로 선다. */}
-              <div className="flex items-center justify-between gap-4">
-                <p className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-bold tracking-[0.1em] text-ink-soft">
-                  <span
-                    aria-hidden="true"
-                    className="h-1.5 w-1.5 rounded-full bg-brand"
-                  />
-                  {product.category}
-                </p>
-                {/* YUSIN 워드마크만 쓴다(logo-mark.png). 전체 로고는 같은 화면
-                    헤더에 이미 서 있어, 바로 아래 또 놓으면 같은 것을 두 번
-                    읽는다.
+              {/* 배너가 없으므로 제품명이 h1 이다. 검색에도 이쪽이 맞다.
+                  오른쪽 끝에 YUSIN 워드마크가 함께 선다.
 
-                    h-6(24px, 폭 97px)이라 배지(93x30px)와 거의 같은 덩어리가
-                    되어 양 끝이 균형을 이룬다.
+                  ⚠️ 한때 마크가 **위 배지 줄** 오른쪽 끝에 있었다. 배지와
+                     양 끝으로 갈라 세운 탓에 둘 사이가 폭에 따라 251~499px 비어,
+                     "오른쪽에 뭔가 더 있어야 할 것 같은" 자리가 됐고 24px 짜리가
+                     70% 농도로 흐릿하게 떠 장식도 정보도 아니었다. 제목 줄로
+                     내리니 36px 제품명과 32px 마크가 무게를 나눠 갖는다.
 
-                    ⚠️ 32px 를 넘기지 말 것. 이 파일은 손상된 PPT 래스터에서
-                       잘라낸 129x32 라 확대하면 뭉갠다(README 자료 요청 5번 —
-                       벡터 원본을 받으면 다시 뽑는다).
+                  ⚠️ h1 **안**에 넣지 말 것. company/page.tsx 가 "사이트에서 글
+                     안에 이미지를 넣는 유일한 자리 … 다른 제목으로 번지지 않게
+                     한다 — 번지면 한글 표기 규칙이 무너진다" 고 적어 두었다.
+                     이것은 h1 의 **형제**라 그 금지에 걸리지 않는다.
 
-                    alt 를 비운다. 헤더 로고가 이미 회사명을 읽어 주므로 여기서
-                    또 읽으면 중복이고, 이 자리에서 뜻을 나르는 것은 옆의
-                    분류 배지와 아래 제품명이다. */}
+                  ⚠️ 세로가 늘지 않는다. 제목 줄 높이를 h1 이 정하고(40px),
+                     마크는 32px 라 그 안에 든다 — 1280.1440 에서 사양 표 바닥과
+                     버튼 바닥이 **0px** 그대로인 것을 재서 확인했다. 아래 버튼의
+                     mt-7 은 "표 바닥 383.9 vs 사진 바닥 384" 를 0.1px 정밀도로
+                     맞춘 값이라 이 줄이 한 픽셀이라도 자라면 깨진다. 마크를
+                     키우려거든 먼저 h1 높이(40px)를 보라.
+
+                  ⚠️ 32px 가 상한이다. 이 파일은 손상된 PPT 래스터에서 잘라낸
+                     129x32 라 그보다 키우면 뭉갠다 — h-8 은 원본 크기 그대로라
+                     확대가 0 이다(h-6 은 오히려 0.75배 축소였다).
+                     README 자료 요청 5번: 벡터 원본을 받으면 다시 뽑는다.
+
+                  워드마크만 쓴다. 전체 로고는 같은 화면 헤더에 이미 서 있어,
+                  바로 아래 또 놓으면 같은 것을 두 번 읽는다.
+
+                  alt 를 비운다. 헤더 로고가 이미 회사명을 읽어 주므로 여기서
+                  또 읽으면 중복이고, 이 자리에서 뜻을 나르는 것은 위의 분류
+                  배지와 제품명이다. */}
+              <div className="mt-4 flex items-center justify-between gap-4">
+                <h1 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+                  {product.name}
+                </h1>
                 <Image
                   src="/images/logo-mark.png"
                   alt=""
                   width={129}
                   height={32}
-                  className="h-6 w-auto shrink-0 opacity-70"
+                  className="h-8 w-auto shrink-0 opacity-75"
                 />
               </div>
-
-              {/* 배너가 없으므로 제품명이 h1 이다. 검색에도 이쪽이 맞다. */}
-              <h1 className="mt-4 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-                {product.name}
-              </h1>
               <p className="mt-2 text-sm font-medium uppercase tracking-[0.08em] text-muted">
                 {product.nameEn}
               </p>
