@@ -359,32 +359,66 @@ export default async function ProductDetailPage({
                글 덩어리를 떼어 놓으려고 넓게 뒀던 값이다.
 
             아이콘은 aria-hidden 이다. 목록이라는 사실은 ul/li 가 전달한다. */}
-        <ul className="grid gap-6 lg:grid-cols-2">
+        {/* ⚠️ **1열이다.** 카드가 가로로 길고 사진이 오른쪽 작은 칸에 선다.
+
+            한때 2열 격자(lg:grid-cols-2)에 사진이 카드 **위** 전폭 16:9 였다.
+            "점 목록 오른쪽 남는 공간에 작게" 라는 요청을 두 번 받고서야 1열로
+            눕혔는데, 2열에서는 그 배치가 **실제로 불가능했기** 때문이다 —
+
+              폭        글상자   가장 긴 항목   남는 폭
+              768       607      335           272
+              1024      378      335           **43**   <- 사진이 못 들어간다
+              1280.1440 450      335           115
+
+            1024 가 2열인데 Container 가 945px 뿐이라 768(1열)보다도 좁다.
+            거기서 43px 밖에 안 남아 사진을 옆에 두면 56개 항목이 전부 두 줄이
+            된다(products.ts features 주석의 길이 규칙이 통째로 깨진다).
+
+            1열로 눕히면 글상자가 1024 에서 703px, 1280 에서 846px 가 되어
+            **56개가 전부 한 줄로 남는다.** 덤으로 섹션이 1330 -> 1052px 로
+            짧아진다 — 사진이 전폭 299px 에서 160px 칸으로 줄기 때문이다.
+
+            ⚠️ 2열로 되돌리려면 위 표를 먼저 볼 것. 사진을 카드 위로 되돌리지
+               않는 한 1024 에서 글이 깨진다. */}
+        <ul className="grid gap-4">
           {product.features.map((f, i) => (
             <Reveal as="li" key={f.title} delay={i * 70} className="h-full">
-              <div className="grid h-full grid-rows-[auto_1fr] overflow-hidden rounded-2xl bg-white shadow-card">
-                {/* 사진은 카드 **위**에 전폭으로 깔린다(적용 분야 카드와 같은 꼴).
+              <div className="grid h-full overflow-hidden rounded-2xl bg-white shadow-card md:grid-cols-[minmax(0,1fr)_10rem]">
+                {/* 사진은 글 **오른쪽** 160px 칸이다. **768 부터다.**
 
-                    ⚠️ 오른쪽에 두지 말 것. "점 목록 옆 여백에" 라는 요청이었지만
-                       1024 에서 글상자가 366px 이고 가장 긴 글이 323px 라 43px
-                       밖에 안 남는다 — 사진을 옆으로 빼면 56개 항목이 전부 두
-                       줄이 된다. 위에 두면 글상자 폭이 그대로다.
+                    ⚠️ md 미만에서는 격자가 1열로 떨어지므로 order 를 md: 로
+                       묶는다 — 좁은 화면에서는 사진이 글 **위**에 선다(적용
+                       분야 카드와 같은 꼴이고, 가로로 두면 글 칸이 남지 않는다).
+
+                    ⚠️ **sm(640)이 아니라 md(768)이다.** 640 에서 옆에 두면
+                       Container 가 560px 뿐이라 사진 160 을 떼고 패딩 · 체크를
+                       빼면 글상자가 318px 가 된다 — 가장 긴 항목이 335px 라
+                       32칸 중 5칸이 두 줄이 되고 카드 높이가 셋으로 갈렸다
+                       (실측). 768 이면 글상자가 446px 라 전부 한 줄이다.
+
+                    ⚠️ aspect 가 없다. 카드 높이는 글이 정하고 사진이
+                       object-cover 로 그 높이를 채운다 — 비율을 고정하면 글이
+                       짧은 카드와 긴 카드의 높이가 갈린다. min-h-[8rem] 은
+                       sm 미만(1열)에서 사진이 납작해지지 않게 하는 바닥값이다.
 
                     카드가 rounded-2xl + overflow-hidden 이라 사진에 따로 모서리를
                     주지 않는다. bg-surface 는 사진이 뜨기 전 자리를 지킨다.
 
-                    ⚠️ 사진은 유신이 찍은 것이 아니다 — products.ts 의 features
-                       주석과 scripts/fetch-feature-photos.mjs 참고. */}
-                <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface">
+                    ⚠️ 28장 가운데 **두 장만** 유신 영상에서 뽑은 것이다
+                       (bowl-feeder-4 · urethane-coating-4,
+                       scripts/capture-video-frames.mjs). 나머지 26장은 Pexels
+                       스톡이다 — products.ts 의 features 주석과
+                       scripts/fetch-feature-photos.mjs 참고. */}
+                <div className="relative min-h-[8rem] w-full overflow-hidden bg-surface md:order-2">
                   <Image
                     src={f.photo}
                     alt={f.photoAlt}
                     fill
-                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    sizes="(min-width: 768px) 160px, 100vw"
                     className="object-cover"
                   />
                 </div>
-                <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3.5 p-6">
+                <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3.5 p-6 md:order-1">
                 <svg
                   width="20"
                   height="20"
@@ -545,8 +579,9 @@ export default async function ProductDetailPage({
         {/* 모델별 예시 규격표.
 
             ⚠️⚠️ 이 수치는 유신이 확인해 준 값이 아니다. 업계에서 쓰는 축과
-                 일반값으로 짜 넣은 예시이고, 그래서 **표를 읽기 전에** 보이게
-                 안내 줄을 표 위에 둔다(아래에 두면 다 읽은 뒤에야 보인다).
+                 일반값으로 짜 넣은 예시다. 그 사실을 적은 안내 박스는 **아래
+                 구동 · 옵션 목록 다음**에 있다 — 한동안 "표를 읽기 전에 보여야
+                 한다" 는 이유로 표 위에 두었는데, 내려 달라는 요청에 옮겼다.
                  자세한 내력은 products.ts 의 specTable 주석에 있다.
 
             가로 스크롤은 표에만 건다. 열이 다섯이라 좁은 폭에서는 밀어서
@@ -556,32 +591,6 @@ export default async function ProductDetailPage({
             비교가 전달되지 않는다. th 에 scope 를 준다. */}
         {product.specTable && (
           <Reveal className="mb-8">
-            <div className="flex items-start gap-2.5 rounded-xl bg-surface px-4 py-3">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-                className="mt-0.5 shrink-0 text-muted"
-              >
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 16v-4M12 8h.01" />
-              </svg>
-              <p className="text-[13px] leading-relaxed text-ink-soft">
-                {/* &nbsp; 넷이다. HTML 은 연속 공백을 하나로 접으므로
-                    보통 공백으로는 벌릴 수 없다(홈 ABOUT US 박스가 쓰는 것과
-                    같은 방법이다). 1~5칸을 찍어 비교했다 — 1~2칸은 라벨이
-                    설명에 붙어 읽히고, 5칸은 두 덩어리로 갈라진다. */}
-                <b className="font-bold text-ink">예시 규격</b>&nbsp;&nbsp;&nbsp;&nbsp;실제
-                값은 공급할 부품에 따라 산출합니다. {product.specTable.caption}
-              </p>
-            </div>
-
             {/* 오시는 길 연락처 표와 같은 결이다 — 선뿐이고 바탕도 테두리도
                 없다. 바꾼 것은 셋이다: 바깥 border 와 rounded-2xl 을 걷고
                 border-t 한 줄로, 머리의 bg-surface 회색 띠를 걷고 border-b
@@ -687,9 +696,53 @@ export default async function ProductDetailPage({
             ))}
           </dl>
 
-          {/* 한때 이 아래에 "위 규격은 예시입니다 …" 안내 박스가 하나 더
-              있었다. 표 위 안내가 생기면서 같은 말이 두 번이 되어 걷었다 —
-              먼저 읽히는 쪽을 남긴다. */}
+          {/* ⚠️ "예시 규격" 안내가 **표 아래**다.
+
+              두 번 뒤집힌 자리다. 처음에는 표 아래에 있었고(그때는 같은 말을
+              하는 박스가 위아래로 둘이었다), 그 다음 "수치가 예시라는 것을
+              표를 읽기 전에 알아야 한다" 는 이유로 위로 올렸다가, 아래로
+              내려 달라는 요청에 지금 자리가 됐다.
+
+              ⚠️ **박스를 지우지 말 것.** 자리는 바뀌어도 사실은 그대로다 —
+                 위 규격표의 수치는 유신이 확인해 준 값이 아니라 업계 일반값
+                 으로 짜 넣은 예시다(products.ts 의 specTable 주석). 그 사실을
+                 적은 곳은 화면에서 여기 하나뿐이다.
+
+              mt-8 은 위 구동 · 옵션 목록과의 간격이다.
+
+              ⚠️ specTable 이 있는 제품에만 그린다. 글이 "위 규격표의 값은
+                 예시다" 라는 뜻이라, 규격표가 없으면 가리킬 것이 없다.
+                 (표를 그리는 위 블록도 같은 조건을 쓴다 — 조건이 둘로
+                 나뉜 것은 그 사이에 구동 · 옵션 목록이 끼어서다.) */}
+          {product.specTable && (
+          <div className="mt-8">
+          <div className="flex items-start gap-2.5 rounded-xl bg-surface px-4 py-3">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className="mt-0.5 shrink-0 text-muted"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4M12 8h.01" />
+            </svg>
+            <p className="text-[13px] leading-relaxed text-ink-soft">
+              {/* &nbsp; 넷이다. HTML 은 연속 공백을 하나로 접으므로
+                  보통 공백으로는 벌릴 수 없다(홈 ABOUT US 박스가 쓰는 것과
+                  같은 방법이다). 1~5칸을 찍어 비교했다 — 1~2칸은 라벨이
+                  설명에 붙어 읽히고, 5칸은 두 덩어리로 갈라진다. */}
+              <b className="font-bold text-ink">예시 규격</b>&nbsp;&nbsp;&nbsp;&nbsp;실제
+              값은 공급할 부품에 따라 산출합니다. {product.specTable.caption}
+            </p>
+          </div>
+          </div>
+          )}
         </Reveal>
 
         <h3 className="mt-12 text-lg font-bold text-ink">적용 분야</h3>

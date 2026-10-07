@@ -12,7 +12,8 @@
     "app-photos": "node scripts/fetch-application-photos.mjs",
     "process-photos": "node scripts/fetch-process-photos.mjs",
     "feature-photos": "node scripts/fetch-feature-photos.mjs",
-    "philosophy-photos": "node scripts/fetch-philosophy-photos.mjs"
+    "philosophy-photos": "node scripts/fetch-philosophy-photos.mjs",
+    "video-frames": "node scripts/capture-video-frames.mjs"
   },
   "dependencies": {
     "next": "16.3.6",

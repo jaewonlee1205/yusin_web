@@ -26,6 +26,14 @@
  * 카드가 작다는 것도 잊지 말 것(가장 넓을 때 사진 350x197px). 피사체가
  * 프레임을 채우지 않으면 그 크기에서 무엇인지 읽히지 않는다.
  *
+ * ⚠️⚠️ **이 스크립트를 돌리면 영상 프레임 여섯 장이 스톡으로 되돌아간다.**
+ *      connector · appliance · linear-transfer · vibrator-bowl · hopper-bulk ·
+ *      cover-metal 여섯 칸은 지금 유신 촬영 영상에서 뽑은 프레임이 덮고 있다
+ *      (scripts/capture-video-frames.mjs). 파일 이름이 같아서다.
+ *
+ *      그러니 이 스크립트 뒤에는 반드시 한 번 더 돌린다:
+ *        npm run app-photos && npm run video-frames
+ *
  * 사진을 바꾸거나 분야를 늘린 뒤에는:  npm run app-photos
  */
 import { mkdir, writeFile } from "node:fs/promises";

@@ -537,54 +537,16 @@ export default function Home() {
                 )}
               </div>
               <h3 className="mt-1.5 text-base font-bold text-ink">{p.title}</h3>
-              {/* 공정 사진.
+              {/* 제목 바로 아래 한 줄 — **얼마나 걸리고 무엇을 받는가.**
 
-                  한때 여기 점 목록 셋이 있었다("부품 샘플 또는 도면 접수" 식).
-                  글로만 늘어놓으니 네 카드가 비슷해 보여, 사진으로 바꿨다.
+                  ⚠️ 한때 이 줄이 카드 **맨 아래**(사진 다음)에 있었다. 사진을
+                     마지막으로 보내 달라는 요청에 자리를 맞바꿨다 — 지금은
+                     "번호 -> 제목 -> 기간 · 산출물 -> 사진" 순이다. 글로 된
+                     정보가 먼저 끝나고 사진이 카드를 닫는다.
 
-                  ⚠️ 카드 패딩 안에 둔다(-mx-6 으로 넘기지 않는다). 넘기면 카드
-                     모서리와 사진 모서리가 겹쳐 면이 두 겹으로 읽힌다 — 점
-                     목록이 회색 박스를 거부하던 것과 같은 이유다. 사진이
-                     212px 로 작아지는 것은 그 대가로 받는다.
-
-                  ⚠️ rounded-xl 이다. 카드가 rounded-2xl 이라 안쪽은 한 단계
-                     작아야 두 모서리가 같은 곡률로 겹쳐 보이지 않는다.
-
-                  bg-surface 는 사진이 뜨기 전 자리를 지킨다. 첫 화면 밖이라
-                  next/image 가 lazy 로 받는다.
-
-                  ⚠️ 사진은 유신이 찍은 것이 아니다 — company.ts 의 process
-                     주석과 scripts/fetch-process-photos.mjs 참고. */}
-              <div className="relative mt-4 aspect-video overflow-hidden rounded-xl bg-surface">
-                <Image
-                  src={p.photo}
-                  alt={p.photoAlt}
-                  fill
-                  sizes="(min-width: 1024px) 260px, (min-width: 640px) 50vw, 100vw"
-                  className="object-cover"
-                />
-                {/* 사진 위 자막. 제품 구동 영상(ProductVideo)과 홈 영상 카드가
-                    쓰는 그 꼴이다 — 파란 그라데이션 위에 흰 글 한 줄.
-
-                    ⚠️ <Image> 가 아니라 **칸**의 자식이다. 그래야 사진이 아직
-                       안 떴거나 못 받았을 때도 띠가 남는다.
-
-                    ⚠️ 글이 한 줄이어야 한다. 가장 좁은 1024 에서 사진이 176px,
-                       자막 글상자가 152px 뿐이라 12px 로 약 12자다. 네 줄의
-                       길이 규칙은 company.ts 의 summary 주석에 있다.
-
-                    px-3 pb-2.5 pt-8 — 영상 자막(px-5 pb-5 pt-12)보다 작다.
-                    사진 높이가 99~119px 라 같은 패딩을 주면 절반을 덮는다.
-
-                    pointer-events-none — 누를 것이 없다. */}
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/40 to-transparent px-3 pb-2.5 pt-8">
-                  <p className="text-xs font-medium leading-snug text-white">
-                    {p.summary}
-                  </p>
-                </div>
-              </div>
-
-              {/* 카드 바닥 한 줄 — **얼마나 걸리고 무엇을 받는가.**
+                     아래 "가로선으로 끊는다" 는 그대로 유효하다. 선이 제목과
+                     이 줄을 가르던 것에서, 제목 묶음과 사진을 가르는 것으로
+                     역할만 넓어졌다.
 
                   기간이 한때 위 번호 줄 오른쪽에 평문으로 서 있었다. 번호 13px
                   뒤의 빈 자리를 메우기는 했지만 "01 … 1~2일" 이 양 끝으로 멀어
@@ -655,6 +617,57 @@ export default function Home() {
                 <span className="rounded-md bg-surface px-2 py-0.5 text-[11px] font-semibold leading-relaxed text-ink-soft">
                   {p.output}
                 </span>
+              </div>
+
+              {/* 공정 사진. **카드의 맨 아래다.**
+
+                  한때 제목과 기간 줄 사이에 있었는데, 마지막으로 보내 달라는
+                  요청에 내렸다. mt-4 는 그대로다 — 위가 제목이었을 때나 기간
+                  줄일 때나 같은 간격이다.
+
+                  한때 여기 점 목록 셋이 있었다("부품 샘플 또는 도면 접수" 식).
+                  글로만 늘어놓으니 네 카드가 비슷해 보여, 사진으로 바꿨다.
+
+                  ⚠️ 카드 패딩 안에 둔다(-mx-6 으로 넘기지 않는다). 넘기면 카드
+                     모서리와 사진 모서리가 겹쳐 면이 두 겹으로 읽힌다 — 점
+                     목록이 회색 박스를 거부하던 것과 같은 이유다. 사진이
+                     212px 로 작아지는 것은 그 대가로 받는다.
+
+                  ⚠️ rounded-xl 이다. 카드가 rounded-2xl 이라 안쪽은 한 단계
+                     작아야 두 모서리가 같은 곡률로 겹쳐 보이지 않는다.
+
+                  bg-surface 는 사진이 뜨기 전 자리를 지킨다. 첫 화면 밖이라
+                  next/image 가 lazy 로 받는다.
+
+                  ⚠️ 사진은 유신이 찍은 것이 아니다 — company.ts 의 process
+                     주석과 scripts/fetch-process-photos.mjs 참고. */}
+              <div className="relative mt-4 aspect-video overflow-hidden rounded-xl bg-surface">
+                <Image
+                  src={p.photo}
+                  alt={p.photoAlt}
+                  fill
+                  sizes="(min-width: 1024px) 260px, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover"
+                />
+                {/* 사진 위 자막. 제품 구동 영상(ProductVideo)과 홈 영상 카드가
+                    쓰는 그 꼴이다 — 파란 그라데이션 위에 흰 글 한 줄.
+
+                    ⚠️ <Image> 가 아니라 **칸**의 자식이다. 그래야 사진이 아직
+                       안 떴거나 못 받았을 때도 띠가 남는다.
+
+                    ⚠️ 글이 한 줄이어야 한다. 가장 좁은 1024 에서 사진이 176px,
+                       자막 글상자가 152px 뿐이라 12px 로 약 12자다. 네 줄의
+                       길이 규칙은 company.ts 의 summary 주석에 있다.
+
+                    px-3 pb-2.5 pt-8 — 영상 자막(px-5 pb-5 pt-12)보다 작다.
+                    사진 높이가 99~119px 라 같은 패딩을 주면 절반을 덮는다.
+
+                    pointer-events-none — 누를 것이 없다. */}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/40 to-transparent px-3 pb-2.5 pt-8">
+                  <p className="text-xs font-medium leading-snug text-white">
+                    {p.summary}
+                  </p>
+                </div>
               </div>
 
               {/* ⚠️ 한때 여기에 카드 오른쪽 위를 덮는 56px 워터마크 번호가

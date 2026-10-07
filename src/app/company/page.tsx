@@ -53,33 +53,36 @@ export default function CompanyPage() {
         lead={`1992년부터 ${yearsInBusiness}년, 파츠피더 한 분야에만 집중해 온 전문 제조사입니다.`}
       />
 
-      {/* 회사 소개글 */}
+      {/* 회사 소개글 + 경영이념 패널 */}
       {/*
-        Section 에 eyebrow·title 을 넘기지 않고 직접 그린다.
+        Section 에 eyebrow·title 을 넘기지 않고 직접 그린다. 이유가 둘이다.
 
-        ⚠️ 근거가 바뀌었다. 한때는 "Section 이 제목을 children 위 별도 블록에
-           그려서 오른쪽 경영이념 패널이 제목보다 106px 아래에서 시작한다 —
-           제목을 그리드 안에 넣어야 패널 윗변이 제목과 맞는다" 였는데, 그
-           패널을 독립 섹션(아래 PHILOSOPHY)으로 빼내면서 그 말은 무효가 됐다.
+        하나는 Section 이 제목을 children 위의 **별도 블록**(mb-10 sm:mb-14)에
+        그린다는 것이다. 그러면 오른쪽 경영이념 패널이 제목보다 106px 아래에서
+        시작한다 — 제목을 그리드 안에 넣어야 패널 윗변이 제목과 맞는다.
 
-           그런데도 Section 의 eyebrow·title 을 못 쓰는 이유는 따로 있다 —
-           **h2 안에 로고 이미지가 들어간다**(아래 intro.title.brand 를 YUSIN
-           마크로 대신한다). Section 의 title 은 string 만 받는다.
+        다른 하나는 **h2 안에 로고 이미지가 들어간다**는 것이다(아래
+        intro.title.brand 를 YUSIN 마크로 대신한다). Section 의 title 은
+        string 만 받는다.
+
+        ⚠️ 한동안 이 섹션이 1열(max-w-3xl)이었다. 경영이념 패널을 독립 네이비
+           섹션으로 빼냈던 때인데, "이준희 옆에 넣으려 했지 밑에다가 크게 만들
+           생각은 없었다" 는 말에 패널을 여기로 되돌렸다. 그 라운드에 사진이
+           들어왔으므로 지금은 패널 안에 56px 썸네일이 함께 있다.
 
         eyebrow·h2 클래스는 src/components/Section.tsx 에서 그대로 옮겨 온 것이다.
         거기 타이포가 바뀌면 이 페이지도 같이 고쳐야 한다.
-
-        ⚠️ max-w-3xl(768px)로 묶는다. 한때는 lg:grid-cols-[1.3fr_1fr] 의 왼쪽
-           칸이라 폭이 저절로 잡혔는데, 패널이 빠져 1열이 되면서 그냥 두면
-           한 줄이 1152px 까지 늘어난다. 읽는 글에는 너무 길다.
       */}
       <Section>
-        <div className="max-w-3xl">
-          <Reveal className="mb-3">
-            <p className="text-xs font-bold tracking-[0.08em] text-brand">
-              ABOUT
-            </p>
-          </Reveal>
+        <Reveal className="mb-3">
+          <p className="text-xs font-bold tracking-[0.08em] text-brand">ABOUT</p>
+        </Reveal>
+        {/* items-start 를 쓰지 않는다. 그리드 기본값(stretch)이라야 패널이 칸
+            높이를 채워 아랫변까지 본문 끝과 맞는다. 윗변은 행이 제목에서
+            시작하므로 stretch 로도 그대로 맞는다. */}
+        <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:gap-x-16">
+          {/* 그리드 칸이 곧 Reveal 이다 — 래퍼를 덧대면 칸이 하나 더 생겨
+              패널 아랫변 정렬이 깨진다. */}
           <Reveal>
             {/* 마지막 낱말을 로고의 YUSIN 마크로 대신한다.
 
@@ -124,20 +127,25 @@ export default function CompanyPage() {
           </Reveal>
 
           {/*
-            대표이사 서명.
+            대표이사 서명. 그리드의 둘째 행에 두고 첫 칸에만 놓는다.
 
-            ⚠️ 한때 그리드의 둘째 행 첫 칸이었다(lg:col-start-1 lg:row-start-2).
-               오른쪽 경영이념 패널이 stretch 로 따라 늘어나 네이비 빈 공간이
-               145px 까지 벌어지는 것을 막던 배치인데, 그 패널을 독립 섹션으로
-               빼내면서 행을 나눌 이유가 없어졌다. 지금은 소개글 바로 아래다 —
-               그리드가 주던 gap-10 을 mt-10 이 대신한다.
+            ⚠️ 왼쪽 칸 **안**에 넣지 말 것. 그러면 칸이 길어지고 오른쪽 패널이
+               stretch 로 따라 늘어나 네이비 빈 공간이 145px 까지 벌어진다.
+               행을 나누면 패널은 본문 행 높이만 채워 아랫변이 본문 마지막
+               줄과 그대로 맞는다.
+
+               (패널을 독립 섹션으로 빼냈던 동안에는 이 자리 지정을 걷고 mt-10
+               으로 띄웠다. 패널이 돌아오면서 함께 되살렸다.)
+
+            DOM 순서는 소개글 -> 서명 -> 패널이라 좁은 화면에서 한 단으로
+            쌓여도 읽는 순서가 맞다.
 
             오른쪽은 이름을 붓글씨 글꼴로 그린 장식이라 aria-hidden 을 건다 —
             안 걸면 스크린리더가 "이준희"를 두 번 읽는다.
           */}
           <Reveal
             delay={140}
-            className="mt-10 flex items-baseline gap-4 border-t border-line pt-6"
+            className="flex items-baseline gap-4 border-t border-line pt-6 lg:col-start-1 lg:row-start-2"
           >
             <span className="text-sm font-bold text-ink">
               대표이사 {site.ceo}
@@ -155,90 +163,85 @@ export default function CompanyPage() {
             </span>
           </Reveal>
 
+          {/* 경영이념 패널.
+
+              ⚠️ 라벨을 한글로 둔 것은 의도다 — 섹션 eyebrow 가 이미 영문
+                 (ABOUT)이라 패널 안에 MANAGEMENT PHILOSOPHY 를 또 두면 한
+                 섹션에 영문 라벨이 둘이 된다.
+
+              ⚠️ 한 라운드 동안 이것이 독립 네이비 섹션이었다(PHILOSOPHY,
+                 2열 카드에 16:9 사진과 파란 그라데이션 자막). "이준희 옆에
+                 넣으려 했지 밑에다가 크게 만들 생각은 없었다" 는 말에
+                 되돌렸고, 그때 들어온 사진은 **56px 썸네일**로 남겼다.
+
+              ⚠️ 썸네일이 56px 인 데는 이유가 있다. 패널 안쪽이 1024 에서
+                 319px 뿐이라(p-7 기준) 그보다 키우면 글 칸이 남지 않는다.
+                 56 + gap 14 = 70px 를 쓰고 글에 249px 가 남는다.
+
+              ⚠️ 자막 그라데이션은 여기 없다. 56px 사진 위에는 글을 얹을 수
+                 없어서다 — caption 이 사진 **옆**의 글이 됐다. 그래서
+                 company.ts 의 "어느 폭에서나 한 줄" 규칙도 걷었다(두 줄이
+                 되어도 괜찮다).
+
+              ⚠️ dl 이 아니라 ul 이다. 한때 dt/dd 쌍이었는데 사진이 들어오면서
+                 한 항목이 "사진 + 제목 + 글" 셋이 됐다. dl 의 자식 div 안에는
+                 dt 와 dd 만 올 수 있어 접근성 검사(definition-list)가 걸린다 —
+                 제품 상세 KPI 가 같은 이유로 ul 이다. */}
+          <Reveal
+            as="aside"
+            delay={80}
+            className="rounded-2xl bg-navy-deep p-7 sm:p-8 lg:col-start-2 lg:row-start-1"
+          >
+            <p className="text-xs font-bold tracking-[0.08em] text-brand-light">
+              경영이념
+            </p>
+            <p className="mt-3 text-xl font-bold leading-snug text-white sm:text-2xl">
+              {philosophyMotto}
+            </p>
+            <ul className="mt-6 space-y-4 border-t border-white/15 pt-6">
+              {philosophy.map((item) => (
+                <li key={item.title} className="flex items-center gap-3.5">
+                  {/* bg-navy 는 사진이 뜨기 전 자리를 지킨다. 패널이
+                      navy-deep 이라 한 단계 밝은 navy 가 칸으로 보인다. */}
+                  <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-navy">
+                    <Image
+                      src={item.photo}
+                      alt={item.photoAlt}
+                      fill
+                      sizes="56px"
+                      className="object-cover"
+                    />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-sm font-bold text-brand-light">
+                      {item.title}
+                    </span>
+                    <span className="mt-0.5 block text-[13px] leading-snug text-white/75">
+                      {item.caption}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
         </div>
       </Section>
 
-      {/* 경영이념.
-
-          ⚠️ 한때 위 ABOUT 섹션 2열 그리드의 **오른쪽 네이비 패널**이었다
-             (rounded-2xl bg-navy-deep p-7, 제목 아래 dl 로 두 항목이 세로로
-             쌓였다). 좌우로 가르고 각각 사진을 넣어 달라는 요청에 독립 섹션
-             으로 빼냈다 — 그 패널 안에서는 **사진이 들어가지 않는다.** 재 보면
-             패널 안쪽이 1024 에서 319px 뿐이라, 좌우로 가르면 한 칸이 151px 이고
-             16:9 사진이 85px 가 된다. 그 폭에 자막까지 얹으면 글이 사진을 덮는다
-             (홈 PROCESS 자막이 152px 칸에서 12자가 한계였다).
-
-             섹션으로 빼내니 한 칸이 1280 에서 564px, 사진이 317px 다.
-
-          ⚠️ 그 대가로 ABOUT 섹션이 1열이 됐다. 오른쪽 1fr 칸이 비기 때문이다.
-             요청에 없던 변화지만 패널을 빼면 피할 수 없다 — 되돌린다면 위
-             max-w-3xl 과 서명의 mt-10 도 함께 본다.
-
-          ⚠️ 흰 섹션 사이에 네이비가 끼는 것이 이 섹션의 또 다른 몫이다.
-             아래 OVERVIEW 가 연락처 표 디자인으로 바뀌면서 tone="surface" 를
-             걷어야 했는데(선뿐인 표라 회색 바탕에서 선이 사라진다), 그러면
-             ABOUT 과 OVERVIEW 가 둘 다 흰 섹션이 되어 맞붙는다. 이 섹션이
-             그 사이에 선다. **색을 바꾸거나 자리를 옮기면 OVERVIEW 도 같이
-             본다.**
-
-          eyebrow 가 영문(PHILOSOPHY)이다. 패널이던 때는 "섹션 eyebrow 가 이미
-          ABOUT 이라 패널 안에 영문을 또 두면 한 섹션에 영문 라벨이 둘이 된다"
-          는 이유로 한글 "경영이념" 을 썼는데, 제 섹션이 되면서 그 제약이
-          사라졌다 — 사이트의 다른 모든 섹션이 영문 eyebrow + 한글 제목이다. */}
-      <Section
-        tone="navy"
-        eyebrow="PHILOSOPHY"
-        title="경영이념"
-        lead={philosophyMotto}
-      >
-        <ul className="grid gap-6 sm:grid-cols-2">
-          {philosophy.map((item, i) => (
-            <Reveal
-              as="li"
-              key={item.title}
-              delay={i * 90}
-              /* bg-white/5 — 네이비 위에서 칸 경계만 겨우 보이는 정도다. 더
-                 올리면 카드가 상자로 읽혀 섹션이 무거워진다. */
-              className="overflow-hidden rounded-2xl bg-white/5"
-            >
-              <p className="px-6 pt-6 text-sm font-bold text-brand-light">
-                {item.title}
-              </p>
-              <div className="relative mt-4 aspect-video w-full bg-navy">
-                <Image
-                  src={item.photo}
-                  alt={item.photoAlt}
-                  fill
-                  sizes="(min-width: 640px) 50vw, 100vw"
-                  className="object-cover"
-                />
-                {/* 사진 위 자막. 홈 PROCESS 카드 · 제품 구동 영상과 같은 꼴이다
-                    — 파란 그라데이션 위에 흰 글 한 줄.
-
-                    ⚠️ <Image> 가 아니라 **칸**의 자식이다. 그래야 사진이 아직
-                       안 떴거나 못 받았을 때도 띠가 남는다.
-
-                    ⚠️ 글이 한 줄이어야 한다. 길이 규칙은 company.ts 의
-                       philosophy 주석에 있다(1024 의 428px 가 최악).
-
-                    px-5 pb-4 pt-12 — 홈 PROCESS(px-3 pb-2.5 pt-8)보다 크다.
-                    거기는 사진이 99~119px 인데 여기는 234~317px 라, 같은
-                    패딩을 쓰면 자막이 사진 구석에 붙어 보인다.
-
-                    pointer-events-none — 누를 것이 없다. */}
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/40 to-transparent px-5 pb-4 pt-12">
-                  <p className="text-sm font-medium leading-snug text-white">
-                    {item.caption}
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </ul>
-      </Section>
-
       {/* 회사 개요 */}
-      <Section eyebrow="OVERVIEW" title="회사 개요">
+      {/* ⚠️ border-t 가 있다. 이 섹션도 위 ABOUT 도 **흰 섹션**이라 그냥 두면
+             둘이 맞붙어 경계가 사라진다.
+
+             한 라운드 동안 그 사이에 네이비 PHILOSOPHY 섹션이 서 있어서 이
+             선이 필요 없었는데, 그 섹션을 ABOUT 패널로 되돌리면서 다시
+             맞붙게 됐다. tone="surface" 로 가르는 길은 막혀 있다 — 아래 표가
+             선뿐이라 회색 바탕에서 border-line 이 대비 1.15:1 로 사라진다.
+
+             선 색이 아래 표와 같은 border-line 이라 결이 맞는다. */}
+      <Section
+        eyebrow="OVERVIEW"
+        title="회사 개요"
+        className="border-t border-line"
+      >
         {/*
           한 줄에 한 항목. **오시는 길 연락처 표와 같은 디자인이다** — 선뿐인
           목록(border-t 한 줄 + 행마다 border-b)이고 바탕도 그림자도 테두리도
@@ -251,13 +254,27 @@ export default function CompanyPage() {
              맞붙지는 않는다 — 그 섹션을 빼거나 색을 바꾸면 여기도 다시 본다.
 
           ⚠️ 라벨 폭이 w-16(64px), sm 부터 w-20(80px)이다. 13px bold 로 가장
-             긴 라벨이 56.6px("제작 품목")이고 열셋 모두 80px 미만이라 들어간다.
+             긴 라벨이 56.6px("제작 품목")이고 열한 행 모두 80px 미만이라 들어간다.
              **라벨을 바꿀 때 이 80px 를 넘기지 말 것**(연락처 표도 같은 값이고
              거기 "사업자등록번호"(84px)는 못 들어간다고 적혀 있다).
 
-          ⚠️ 2열로 접지 않는다. 연락처 표는 여섯 칸이라 lg:grid-cols-2 로
-             접는데 여기는 열셋이고 "회사명 → 설립 → 자본금 …" 순서가 뜻을
-             가져, 접으면 읽는 차례가 좌우로 갈린다.
+          ⚠️ **lg(1024)부터 짧은 행을 2열로 짝짓는다.** 그 아래에서는 1열이다 —
+             640 에서 접어 보니 한 칸의 값 자리가 160px 뿐이라 회사명(229px)
+             부터 두 줄이 됐다(실측). 오시는 길 연락처 표도 같은 이유로
+             lg:grid-cols-2 다.
+
+          ⚠️ 값이 긴 세 행(소재지 · 주 사업 ·
+             제작 품목)은 데이터의 wide 플래그로 전폭(sm:col-span-2)에 둔다.
+
+             전부 접으면 그 셋이 두 줄이 된다 — 2열 한 칸의 글상자가 424px
+             인데 소재지가 435px, 주 사업이 457px 다(실측). 제작 품목은
+             346px 라 들어가지만 짝이 없어 전폭으로 둔다.
+
+             ⚠️ 순서는 여전히 뜻을 갖는다 — 회사 자체(회사명 · 설립연도 ·
+                자본금 · 대표) -> 어떻게 닿나(소재지 · 대표번호 · 팩스 ·
+                이메일 · 홈페이지) -> 무엇을 하나(주 사업 · 제작 품목).
+                짝이 그 묶음 **안에서만** 지어지므로 차례가 깨지지 않는다.
+                행을 더하거나 뺄 때 이 짝이 묶음을 넘지 않는지 본다.
 
           ── 아래는 이 표가 흰 카드 + 세로 구분선이던 때의 기록이다.
              되돌릴 일이 있으면 그때 측정값이 여기 남아 있다.
@@ -278,11 +295,11 @@ export default function CompanyPage() {
           · "sm:w-28 을 쓰면 안 된다(dt 폭이 고정돼 격자 열 설정을 덮어쓴다)"
             는 **무효다.** 격자가 아니라 flex 이므로 w-* 가 바로 그 방식이다.
         */}
-        <dl className="grid border-t border-line">
+        <dl className="grid border-t border-line lg:grid-cols-2 lg:gap-x-12">
           {/* 행 자체를 Reveal 로 만든다(as="div") — 래퍼가 끼면 dl > div > dt/dd
               구조가 깨진다. 45ms 씩 밀어 표가 한 줄씩 채워지게 한다.
               (연락처 표는 dl 전체가 한 겹의 Reveal 이다. 거기는 여섯 칸이고
-              여기는 열셋이라 한 줄씩 채워지는 편이 길이를 덜 느끼게 한다.) */}
+              여기는 열한 행이라 한 줄씩 채워지는 편이 길이를 덜 느끼게 한다.) */}
           {overview.map((row, i) => (
             <Reveal
               key={row.label}
@@ -291,7 +308,9 @@ export default function CompanyPage() {
                  맨 위에 붙어 보였다(중심이 37px 위). 연락처 표도 같은 이유로
                  items-center 를 쓴다 — 거기는 2열 격자 행의 높이를 두 칸이
                  나눠 갖기 때문이고, 여기는 값 자체가 여러 줄이기 때문이다. */
-              className="flex items-center gap-4 border-b border-line py-4"
+              className={`flex items-center gap-4 border-b border-line py-4 ${
+                row.wide ? "lg:col-span-2" : ""
+              }`}
             >
               <dt className="w-16 shrink-0 text-[13px] font-bold text-muted sm:w-20">
                 {row.label}
