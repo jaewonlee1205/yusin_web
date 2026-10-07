@@ -75,8 +75,8 @@ export const videos: Video[] = [
 원본 촬영본에서 아래 명령으로 만듭니다. 원본은 저장소에 두지 않습니다.
 
 ```bash
-# 영상 (MAH07514.MP4 의 119초 지점부터 9초)
-ffmpeg -ss 119 -t 9 -i MAH07514.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 28 -preset slow -g 60 -movflags +faststart   -vf scale=1280:720 public/videos/hero.mp4
+# 영상 (MAH07514.MP4 의 114초 지점부터 9초)
+ffmpeg -ss 114 -t 9 -i MAH07514.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 28 -preset slow -g 60 -movflags +faststart   -vf scale=1280:720 public/videos/hero.mp4
 
 # 포스터 (영상 첫 프레임). 영상이 뜨기 전과 '움직임 줄이기'에서 이게 보입니다.
 ffmpeg -ss 0 -i public/videos/hero.mp4 -frames:v 1   -c:v libwebp -quality 72 public/images/hero-poster.webp
@@ -84,24 +84,36 @@ ffmpeg -ss 0 -i public/videos/hero.mp4 -frames:v 1   -c:v libwebp -quality 72 pu
 
 - `-an` 무음 — 소리가 있으면 브라우저가 자동재생을 막습니다
 - `-movflags +faststart` — 메타데이터를 앞에 두어 받는 즉시 재생됩니다
-- **구간은 눈으로 고르지 말고 수치로 고릅니다.** 배경이라 화면이 흔들리면
-  눈에 거슬리고, PERFORMANCE 섹션에서는 밝게 보이므로 흔들림과 빈 트랙이
-  그대로 드러납니다. 아래 명령으로 1초 단위 흔들림을 재고, 9초 윈도의 평균이
-  가장 낮은 곳을 고릅니다.
+- **구간은 눈으로 고르지 말고 수치로 고릅니다.** 조건이 셋입니다 —
+  ① 흔들리지 않을 것 ② 사람·물체가 안 들어올 것 ③ 피더가 돌고 있을 것.
+  배경이라 화면이 흔들리면 눈에 거슬리고, PERFORMANCE 섹션에서는 밝게 보이므로
+  흔들림도 지나가는 사람도 그대로 드러납니다.
 
   ```bash
-  # 값이 낮을수록 조용합니다 (인접 프레임 차이의 밝기 평균)
+  # (1) 흔들림 — 값이 낮을수록 조용합니다 (인접 프레임 차이의 밝기 평균)
   ffmpeg -i MAH07514.MP4 -vf "scale=320:-1,tblend=all_mode=difference,signalstats,metadata=print:key=lavfi.signalstats.YAVG:file=diff.txt" -f null -
+
+  # (2) 사람·물체 유입 — 가장자리만 따로 잽니다
+  #     전체 평균으로는 발처럼 작은 것이 안 잡힙니다(평균을 3도 못 낮춥니다)
+  ffmpeg -i MAH07514.MP4 -vf "scale=640:-1,crop=iw*0.28:ih:iw*0.72:0,signalstats,metadata=print:key=lavfi.signalstats.YAVG:file=edge_right.txt" -f null -
+  # 왼쪽 crop=iw*0.2:ih:0:0 · 아래 crop=iw:ih*0.25:0:ih*0.75 도 같은 식으로
+  # 조용한 구간의 기준선보다 6 이상 어두워지는 지점이 "무언가 들어온" 때입니다
+
+  # (3) 마지막은 반드시 눈으로 — 0.5초 간격 콘택트 시트
+  ffmpeg -ss 114 -t 9 -i MAH07514.MP4 -vf "fps=2,scale=300:-1,tile=6x3" -frames:v 1 sheet.jpg
   ```
 
-  | 시작 | 9초 평균 | 구간 내 최대 | |
-  |---|---|---|---|
-  | 19초 | 6.15 | 7.16 | 중간에 공급이 끊깁니다 |
-  | 110초 | 5.83 | 13.09 | **앞 3초가 카메라 이동입니다**(10.3·9.9·13.1) |
-  | 119초 | 2.90 | 3.25 | 현재 구간 — 전 구간이 고르게 조용합니다 |
+  | 시작 | 9초 평균 | 구간 내 최대 | 사람 | |
+  |---|---|---|---|---|
+  | 19초 | 6.15 | 7.16 | — | 중간에 공급이 끊깁니다 |
+  | 110초 | 5.83 | 13.09 | — | **앞 3초가 카메라 이동입니다**(10.3·9.9·13.1) |
+  | 119초 | 2.90 | 3.25 | **있음** | 오른쪽 가장자리에 바지와 신발(123.5초~) |
+  | 114초 | 3.02 | 3.43 | 없음 | 현재 구간 |
 
-  110초를 쓸 때는 눈으로 "카메라가 고정됐다"고 봤는데 틀렸습니다. 수치가
-  아니면 3초짜리 이동을 놓칩니다.
+  두 번 틀렸습니다. 110초는 눈으로 "카메라가 고정됐다"고 봐서, 119초는
+  흔들림만 재고 화면에 무엇이 들어오는지는 안 봐서입니다. 세 면이 모두 깨끗한
+  9초 윈도는 **시작 111~114.5초** 하나뿐이었고, 그중 흔들림이 가장 낮은 곳이
+  114초입니다.
 
   값이 너무 낮은 곳(102~105초의 2.2~2.7)은 피더가 보이지 않는 직진 트랙
   장면입니다 — **조용하면서 피더가 돌고 있는** 구간이어야 합니다
