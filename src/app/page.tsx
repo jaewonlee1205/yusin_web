@@ -34,9 +34,21 @@ const STATS = [
 ];
 
 /* "자세히 보기 / 전체 보기" 버튼. 영상자료의 "영상 더 보기" 와 같은
-   모양이다. (오시는 길의 지도앱 버튼도 같은 꼴이었는데 그 블록이 걷혔다.) */
+   모양이다. (오시는 길의 지도앱 버튼도 같은 꼴이었는데 그 블록이 걷혔다.)
+
+   ⚠️ 글자뿐이다. 한때 오른쪽에 화살표(M5 12h14 + 화살촉)가 붙어 있었는데
+      걷어 달라는 요청에 넷에서 모두 뺐다 — 테두리 상자가 이미 누를 곳임을
+      말하므로 화살표는 같은 말을 두 번 하는 꼴이었다. 제품 목록 사이드바의
+      "제작 문의" 버튼이 먼저 같은 처리를 받았다.
+
+      group 과 gap-2 도 함께 걷었다. group 은 화살표의
+      group-hover:translate-x-1 하나만 쓰던 것이고, gap 은 자식이 글자
+      하나뿐이면 할 일이 없다.
+
+   ⚠️ 홈 PROCESS 카드 안의 화살표는 **다른 것이다.** 거기는 "다음 단계가
+      있다" 는 표식이라 그대로 둔다. */
 const BTN =
-  "group inline-flex items-center gap-2 rounded-xl border border-line bg-white px-5 py-3.5 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand";
+  "inline-flex items-center rounded-xl border border-line bg-white px-5 py-3.5 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand";
 
 export default function Home() {
   return (
@@ -386,21 +398,6 @@ export default function Home() {
           /* VIDEO.CLIENTS.PROCESS 와 같은 자리.같은 꼴이다. */
           <Link href="/products" className={BTN}>
             제품 전체 보기
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-              className="shrink-0 transition-transform group-hover:translate-x-1"
-            >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
           </Link>
         }
       >
@@ -431,21 +428,6 @@ export default function Home() {
              "제작" 쪽이 맥락에도 맞는다. */
           <Link href="/contact" className={BTN}>
             제작 문의하기
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-              className="shrink-0 transition-transform group-hover:translate-x-1"
-            >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
           </Link>
         }
       >
@@ -714,21 +696,6 @@ export default function Home() {
                나가는 "더 보기" 라 역할이 다르다. */
             <Link href="/videos" className={BTN}>
               영상 전체 보기
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-                className="shrink-0 transition-transform group-hover:translate-x-1"
-              >
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
             </Link>
           }
         >
@@ -777,21 +744,6 @@ export default function Home() {
              같은 성격의 두 섹션이 달라 보였다. */
           <Link href="/clients" className={BTN}>
             거래처 전체 보기
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-              className="shrink-0 transition-transform group-hover:translate-x-1"
-            >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
           </Link>
         }
       >

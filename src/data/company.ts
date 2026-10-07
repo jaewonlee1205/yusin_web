@@ -124,8 +124,15 @@ export const overview: {
   // 등기부·사업자등록증과 대조할 일이 생기면 위 숫자가 정확한 금액이다.
   { label: "자본금", value: "12억원" },
   { label: "대표", value: "이 준 희" },
-  // 대표번호를 맨 위에 두고 나머지 회선을 아래로 쌓는다.
-  { label: "대표번호", value: [site.tel, ...site.telExtra], link: "tel" },
+  // ⚠️ 대표번호 **하나만** 적는다. 한때 추가 회선 둘(telExtra)을 아래로
+  //    쌓아 세 줄이었는데, 그 둘이 오시는 길 연락처 표에도 그대로 있어 같은
+  //    번호가 사이트에 두 번 나왔다. 회사 개요가 답할 것은 "대표로 어디에
+  //    걸면 되나" 하나다.
+  //
+  //    ⚠️ site.telExtra 를 지우지 말 것. 두 곳이 쓴다 —
+  //       src/app/location/page.tsx (오시는 길 연락처)
+  //       src/app/page.tsx 의 구조화 데이터 telephone 배열
+  { label: "대표번호", value: site.tel, link: "tel" },
   { label: "팩스", value: site.fax },
   { label: "이메일", value: site.email, link: "mailto" },
   // 연락 수단의 끝이다. site.url 을 그대로 쓰므로 도메인을 바꾸면 여기도
