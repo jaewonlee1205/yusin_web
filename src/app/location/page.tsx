@@ -4,6 +4,7 @@ import ContactCTA from "@/components/ContactCTA";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
+import { NaverIcon } from "@/components/icons";
 import { site, telHref } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -207,16 +208,13 @@ export default function LocationPage() {
               <h2 className="mt-3 text-2xl font-bold tracking-tight text-ink sm:text-4xl">
                 연락처
               </h2>
-              {/* 제목 아래 한 줄. 참고한 webprosoft.kr "찾아오시는길" 이
-                  제목 다음에 안내 문장을 한 줄 두는 짜임이다.
-
-                  ⚠️ 위 배너의 lead("샘플을 들고 오시면 현장에서 함께
-                     검토합니다. 방문 전 연락 바랍니다.")와 같은 말을 하지
-                     않는다. 그쪽은 "와서 무엇이 되는가" 이고 여기는 아래
-                     목록이 무엇인지를 말한다. */}
-              <p className="mt-4 text-base leading-relaxed text-ink-soft">
-                방문에 필요한 연락처와 찾아오시는 길을 안내해 드립니다.
-              </p>
+              {/* ⚠️ 제목 아래 안내 한 줄을 두지 않는다. 참고한
+                     webprosoft.kr "찾아오시는길" 짜임을 따라 "방문에 필요한
+                     연락처와 찾아오시는 길을 안내해 드립니다" 를 넣었던
+                     적이 있는데, 위 배너가 이미 "샘플을 들고 오시면 현장에서
+                     함께 검토합니다. 방문 전 연락 바랍니다." 를 말하고 있어
+                     한 화면에서 두 번 안내하는 꼴이었다. 아래 목록이
+                     무엇인지는 "연락처" 라는 제목으로 충분하다. */}
 
               {/* 연락처 목록.
 
@@ -241,9 +239,20 @@ export default function LocationPage() {
                 {cells.map((cell) => (
                   <div
                     key={cell.label}
-                    className="flex gap-4 border-b border-line py-4"
+                    /* ⚠️ items-center 다. 이 dl 이 lg:grid-cols-2 라 같은
+                       격자 행의 두 칸이 높이를 나눠 갖는데, flex 의 기본값
+                       stretch 가 dt.dd 를 그 높이만큼 늘리고 글자는 맨 위에
+                       붙는다. 1440 에서 "주차" 는 값이 한 줄인데도 옆
+                       "운영 시간"(두 줄) 때문에 행이 86px 라, 그 꼭대기에
+                       떠 있었다. 가운데로 두면 한 줄 값이 31px(=86/2-12)에
+                       선다.
+
+                       같은 이유로 dt 의 pt-0.5 를 걷었다. 글을 살짝 내려
+                       값 첫 줄에 맞추던 값인데, 가운데 정렬에서는 그만큼
+                       아래로 밀린다. */
+                    className="flex items-center gap-4 border-b border-line py-4"
                   >
-                    <dt className="w-16 shrink-0 pt-0.5 text-[13px] font-bold text-muted sm:w-20">
+                    <dt className="w-16 shrink-0 text-[13px] font-bold text-muted sm:w-20">
                       {cell.label}
                     </dt>
                     <dd className="text-[15px] leading-relaxed text-ink">
@@ -276,8 +285,10 @@ export default function LocationPage() {
                   카카오맵은 넣지 않는다 — 정식 연동에 키가 필요하고, 검색
                   링크로 대신하면 네이버 쪽과 정확도가 갈린다. */}
               <div className="mt-10 flex flex-col gap-5 rounded-2xl bg-surface p-6 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex gap-4">
-                  <p className="w-16 shrink-0 pt-0.5 text-[13px] font-bold text-muted sm:w-20">
+                {/* 위 연락처 행과 같은 이유로 items-center 다 — 값이 두 줄
+                    이라 그냥 두면 라벨이 위에 붙는다. */}
+                <div className="flex items-center gap-4">
+                  <p className="w-16 shrink-0 text-[13px] font-bold text-muted sm:w-20">
                     대중교통
                   </p>
                   <p className="text-[15px] leading-relaxed text-ink">
@@ -291,10 +302,19 @@ export default function LocationPage() {
                   href={site.naverPlace}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-ink shadow-card transition-colors hover:text-brand"
+                  /* 테두리로 선다(2D). 한때 shadow-card 였는데, 회색 상자
+                     위에 흰 버튼이 그림자로 떠 있어 입체로 읽혔다. 호버도
+                     색만 바꾼다 — 떠오르거나 그림자가 짙어지면 2D 로 바꾼
+                     뜻이 사라진다.
+
+                     글은 "길찾기" 한 낱말이다. "네이버 지도로 길찾기" 는
+                     189px 였는데 104px 로 준다 — 어디로 가는지는 왼쪽의 녹색
+                     N 아이콘이 말한다. 끝에 있던 화살표도 뺐다. 아이콘이
+                     왼쪽에 서면 글자를 기호 둘이 앞뒤로 감싸 번잡하다. */
+                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-line bg-white px-5 py-3 text-sm font-bold text-ink transition-colors hover:border-ink/20 hover:text-brand"
                 >
-                  네이버 지도로 길찾기
-                  <span aria-hidden="true">→</span>
+                  <NaverIcon className="shrink-0 text-[#03C75A]" />
+                  길찾기
                 </a>
               </div>
             </Reveal>
