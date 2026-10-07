@@ -22,7 +22,7 @@ const query = encodeURIComponent(site.address.jibun);
 const MAP_SRC = `https://maps.google.com/maps?q=${query}&z=16&hl=ko&output=embed`;
 
 /**
- * 표의 칸은 컴포넌트 안에서 만든다(아래 cells). 전화.주소.운영 시간이 값을
+ * 표의 칸은 컴포넌트 안에서 만든다(아래 cells). 전화와 운영 시간이 값을
  * 두 줄로 그려야 해서 문자열 배열로는 담기지 않는다.
  *
  * ⚠️ 칸이 여섯인 것은 2열 x 3행 격자에 꼭 맞추기 위해서다. 일곱이면 한 칸이
@@ -32,9 +32,14 @@ const MAP_SRC = `https://maps.google.com/maps?q=${query}&z=16&hl=ko&output=embed
  * 방법이 아니었고, 대표 이름은 연락처이긴 해도 "오시는 길" 에서 찾는 것이
  * 아니었다. 주차는 이 페이지에 온 사람이 주소 다음으로 궁금해하는 것이다.
  *
- * ⚠️ 한때 "도로명" 이 따로 한 행이었다. 같은 주소의 다른 표기일 뿐이라 주소
- *    칸의 둘째 줄로 합쳤다 — 전화 칸이 쓰는 "값 + 보조값 한 줄" 과 같은
- *    꼴이고, 덕분에 칸이 일곱에서 여섯으로 떨어져 2열에 맞는다.
+ * ⚠️ 도로명(정왕천로 197)은 화면에 넣지 않는다. 한때 따로 한 행이었고 그
+ *    다음에는 주소 칸의 둘째 줄이었는데, 주소 윗줄이 이미 건물명까지
+ *    말하고 바로 위에 지도가 있어 같은 곳을 두 번 적는 줄이었다.
+ *    값은 site.address.roadName 에 남아 있다 — 호수가 확인되면 road 를
+ *    그 도로명으로 갈아 끼울 때 쓴다(site.ts TODO 1).
+ *
+ *    다시 넣지 말 것. "2열에 맞추려면 여섯 칸" 이라는 조건만 보고 빈
+ *    자리를 찾으면 여기가 먼저 눈에 띈다.
  *
  * ⚠️ 한때 "내비게이션 | 동우디지털파크로 검색" 행이 있었다. 표의 다른 칸은
  *    모두 값인데 거기만 쓰는 방법을 일러 주는 안내문이라 결이 달랐다.
@@ -90,19 +95,10 @@ export default function LocationPage() {
         </>
       ),
     },
-    {
-      label: "주소",
-      /* 윗줄이 지번, 아랫줄이 도로명이다. 도로명주소 DB 에서 지번 1288-2 =
-         정왕천로 197 = 동우디지털파크로 확인했고 네이버 플레이스와도 같다
-         (site.ts 의 naverPlace 주석). 호수 표기만 아직 확인이 안 돼
-         site.address.road 는 지번 그대로 둔다. */
-      body: (
-        <>
-          <span className="block">{site.address.road}</span>
-          <span className="mt-1 block text-muted">{site.address.roadName}</span>
-        </>
-      ),
-    },
+    /* 이름은 road 지만 담긴 값은 지번이다 — 호수 표기가 확인되면 도로명으로
+       바꾼다(site.ts TODO 1). 건물명(동우디지털파크)과 호수가 그 안에 이미
+       들어 있어 이 칸 하나로 충분하다. */
+    { label: "주소", body: site.address.road },
     /* 팩스는 걸 수 없어 링크가 없다(헤더.푸터.CTA와 같은 규칙). */
     { label: "팩스", body: <span className="tabular-nums">{site.fax}</span> },
     {
