@@ -90,7 +90,12 @@ export function NaverIcon({ className = "shrink-0" }: { className?: string }) {
 }
 
 /**
- * 오시는 길 길찾기 버튼의 카카오 마크.
+ * 카카오 마크.
+ *
+ * ⚠️ 지금 아무 데서도 쓰지 않는다. 오시는 길의 길찾기 버튼이 네이버 하나만
+ *    쓰기 때문이다 — 카카오맵은 정식 연동에 키가 필요하고, 검색 링크로
+ *    대신하면 place id 로 거는 네이버 쪽과 정확도가 갈린다. 아래 모양을
+ *    고르느라 들인 품이 있어 지우지 않고 둔다. 키를 받으면 그대로 쓴다.
  *
  * 카카오"맵" 전용 단색 심볼은 어디에도 없다. simple-icons 의 kakao 는 소문자
  * 워드마크라 가로로 길어 이 크기에서 안 읽히고, kakaotalk 은 둥근 사각형
@@ -102,7 +107,7 @@ export function NaverIcon({ className = "shrink-0" }: { className?: string }) {
  *
  * 잉크가 viewBox 를 거의 꽉 채운다(19.5x18.1 / 24). NaverIcon 은 광학 보정
  * viewBox 때문에 0.78 배로 들어가므로, 둘을 나란히 둘 때는 부르는 쪽에서
- * 상자 크기를 달리 줘 잉크를 맞춘다(location/page.tsx 의 mark 참고).
+ * 상자 크기를 달리 줘 잉크를 맞춰야 한다.
  */
 export function KakaoIcon({ className = "shrink-0" }: { className?: string }) {
   return (

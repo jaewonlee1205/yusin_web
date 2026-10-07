@@ -25,8 +25,9 @@ const MAP_SRC = `https://maps.google.com/maps?q=${query}&z=16&hl=ko&output=embed
  * 표의 칸은 컴포넌트 안에서 만든다(아래 cells). 전화와 운영 시간이 값을
  * 두 줄로 그려야 해서 문자열 배열로는 담기지 않는다.
  *
- * ⚠️ 칸이 여섯인 것은 2열 x 3행 격자에 꼭 맞추기 위해서다. 일곱이면 한 칸이
- *    비고 그 자리에서 테두리가 끊긴다. 칸을 더하거나 뺄 때 이 수를 본다.
+ * 칸 수는 자유롭다. 2열 목록이 행 우선으로 흐르고 선이 칸마다 붙으므로,
+ * 홀수여도 마지막 한 칸이 왼쪽에 서고 끝날 뿐 테두리가 끊기지 않는다.
+ * (한때 2열 x 3행 격자라 여섯에 묶여 있었다 — 그때는 일곱이면 빈 칸이 생겼다.)
  *
  * 마지막 칸은 두 번 바뀌었다. 사업자번호는 거래 서류에 적는 값이지 연락하는
  * 방법이 아니었고, 대표 이름은 연락처이긴 해도 "오시는 길" 에서 찾는 것이
@@ -49,14 +50,17 @@ const MAP_SRC = `https://maps.google.com/maps?q=${query}&z=16&hl=ko&output=embed
  *    <-> 20-1.11-A.11-B) 확인 없이 적으면 방문객이 헤맨다. README 자료 요청
  *    표 16번에 적어 뒀다.
  *
- * ⚠️ 라벨 칸이 좁다. dt 가 sm:w-28(112px) 에 좌우 패딩 16px 씩이라 글이 쓸 수
- *    있는 폭이 80px 다 — 14px bold 로 "운영 시간" 이 68px, "사업자등록번호"
- *    는 90px 라 넘친다. 라벨을 바꿀 때 이 80px 를 넘기지 말 것.
+ * ⚠️ 라벨 칸이 좁다. dt 가 w-16(64px), sm 부터 w-20(80px) 이다 — 13px bold
+ *    로 "운영 시간" 이 63px 라 sm 부터 한 줄이고 그 아래에서는 두 줄이 된다.
+ *    "사업자등록번호"(84px)는 어디서도 안 들어간다. 라벨을 바꿀 때 이 80px 를
+ *    넘기지 말 것. 아래 대중교통 블록의 라벨도 같은 폭을 쓴다.
  */
 
 export default function LocationPage() {
-  /* 표의 여섯 칸. 이 순서가 그대로 배치가 된다 —
-     왼쪽 열(전화.주소.팩스)을 다 채우고 오른쪽 열(이메일.주차.운영 시간).
+  /* 연락처 여섯 칸. lg 2열에서 행 우선으로 흐른다 —
+       전화 | 주소
+       팩스 | 이메일
+       주차 | 운영 시간
 
      "언제 가면 되나"(운영 시간)가 맨 끝인 이유: 어디로.어떻게를 먼저 읽고
      그것이 뒤따르는 순서가 자연스럽다. */
@@ -203,68 +207,96 @@ export default function LocationPage() {
               <h2 className="mt-3 text-2xl font-bold tracking-tight text-ink sm:text-4xl">
                 연락처
               </h2>
+              {/* 제목 아래 한 줄. 참고한 webprosoft.kr "찾아오시는길" 이
+                  제목 다음에 안내 문장을 한 줄 두는 짜임이다.
 
-              {/* 테두리로 선다(2D). 한때 shadow-card 로 떠 있었는데, 표는
-                  떠 있는 카드가 아니라 읽는 자료다 — 제품 상세의 사양 표와
-                  같은 1px line 테두리로 맞춘다. 칸 사이 선도 같은 색이라
-                  바깥과 안쪽이 한 벌로 읽힌다.
+                  ⚠️ 위 배너의 lead("샘플을 들고 오시면 현장에서 함께
+                     검토합니다. 방문 전 연락 바랍니다.")와 같은 말을 하지
+                     않는다. 그쪽은 "와서 무엇이 되는가" 이고 여기는 아래
+                     목록이 무엇인지를 말한다. */}
+              <p className="mt-4 text-base leading-relaxed text-ink-soft">
+                방문에 필요한 연락처와 찾아오시는 길을 안내해 드립니다.
+              </p>
 
-                  사이트의 다른 shadow-card(제품 카드.적용 분야.영상 카드.
-                  PROCESS 카드)는 그대로 둔다 — 그쪽은 떠 있는 카드가 맞다.
+              {/* 연락처 목록.
 
-                  lg 부터 2열 x 3행으로 접힌다. 지도가 전폭이 되면서 표도
-                  1088px 를 받는데, 한 줄짜리 값(팩스.주차)을 그 폭에 늘어놓으면
-                  라벨과 값만 왼쪽에 몰리고 오른쪽이 텅 빈다. 접으면 높이도
-                  382 -> 207px 로 준다. 지도가 3:1 로 눕는 폭(lg)과 같은 지점
-                  에서 접는다 — md 로 당기면 768~1024 에서 지도만 세로로 서고
-                  표만 2열이 되어 결이 갈린다.
+                  ⚠️ 테두리 상자와 회색 라벨 칸을 걷은 자리다. 한때 제품 상세
+                     사양 표와 같은 꼴(바깥 테두리 + bg-surface 라벨 칸 +
+                     칸 사이 선)이었는데, 값이 여섯뿐인 자리에 표의 틀까지
+                     두니 무거웠다. 제품 상세는 값이 21개라 격자가 맞고
+                     여기는 목록이 맞다 — 히어로 "주요 사양" 카드가 같은
+                     이유로 표에서 박스로 바뀐 적이 있다.
 
-                  grid-flow-col + 행 셋이라 DOM 순서대로 왼쪽 열(전화.주소.
-                  팩스)을 다 채우고 오른쪽 열(이메일.주차.운영 시간)로 넘어간다.
-                  행 우선이면 전화와 주소가 좌우로 갈라져 읽는 순서가 끊긴다.
+                  라벨은 13px 회색, 값은 15px 먹색이다. 굵기가 아니라 크기와
+                  색으로 가른다 — 둘 다 굵게 하면 어디부터 값인지 흐려진다.
 
-                  ⚠️ 행 높이는 [auto_auto_auto] 다. grid-rows-3 은
-                     repeat(3, minmax(0,1fr)) 로 펴져 세 행이 똑같아지는데,
-                     그러면 한 줄짜리 팩스가 두 줄짜리 주소와 같은 89px 가 되고
-                     표가 아니라 격자로 보인다(268px). auto 면 행마다 그 행에서
-                     가장 큰 칸이 높이를 정한다.
+                  lg 부터 2열이다. 행 우선(grid-flow-row 기본)이라 선이
+                  행마다 가로로 이어진다. 열 우선으로 돌리면 왼쪽 열 셋이
+                  먼저 차면서 선이 열마다 끊겨 표처럼 보인다 — 표를 걷으려고
+                  고친 자리에서 다시 표가 된다.
 
-                  행 높이를 나눠 갖던 flex-1/flex-auto 는 걷었다 — 지도가 더는
-                  표 높이를 따라오지 않으므로 남는 높이가 없다. */}
-              <dl className="mt-7 grid overflow-hidden rounded-2xl border border-line lg:grid-flow-col lg:grid-cols-2 lg:grid-rows-[auto_auto_auto]">
-                {cells.map((cell, i) => (
-                  /* 테두리는 인덱스로 준다.
-                       i === 5   항상 마지막 칸 — 아래 선 없음
-                       i === 2   1열에서는 중간이라 아래 선이 필요하고,
-                                 2열에서는 왼쪽 열의 마지막이라 없앤다
-                       i < 3     왼쪽 열 — 2열일 때만 오른쪽 선 */
+                  dl/dt/dd 는 그대로다. 라벨-값은 용어-정의가 맞고, 접근성
+                  검사(dlitem)가 dt.dd 를 dl 직계로 요구한다. 생김새만 바뀐다. */}
+              <dl className="mt-8 grid border-t border-line lg:grid-cols-2 lg:gap-x-12">
+                {cells.map((cell) => (
                   <div
                     key={cell.label}
-                    className={`flex flex-col sm:flex-row ${
-                      i === 5
-                        ? ""
-                        : i === 2
-                          ? "border-b border-line lg:border-b-0"
-                          : "border-b border-line"
-                    } ${i < 3 ? "lg:border-r lg:border-line" : ""}`}
+                    className="flex gap-4 border-b border-line py-4"
                   >
-                    {/* 라벨은 칸 높이 가운데. 값이 여러 줄인 칸에서 맨 위에
-                        붙어 보였다. bg-surface 칸은 그대로 칸을 다 채운다.
-
-                        패딩이 px-4 py-3 인 것은 제품 상세의 사양 표와 맞추기
-                        위해서다. 한때 px-5 py-4 에 dd 가 leading-relaxed 라
-                        한 줄 칸이 56px 였는데(사양 표는 44px), 자료를 읽는
-                        표 둘의 두께가 서로 달랐다. 45px 로 내려 1px 차이만
-                        남는다 — 이쪽은 sm:flex 라 줄 상자 계산이 다르다. */}
-                    <dt className="bg-surface px-4 py-3 text-sm font-bold text-ink sm:flex sm:w-28 sm:shrink-0 sm:items-center">
+                    <dt className="w-16 shrink-0 pt-0.5 text-[13px] font-bold text-muted sm:w-20">
                       {cell.label}
                     </dt>
-                    <dd className="px-4 py-3 text-sm text-ink-soft sm:flex sm:flex-col sm:justify-center">
+                    <dd className="text-[15px] leading-relaxed text-ink">
                       {cell.body}
                     </dd>
                   </div>
                 ))}
               </dl>
+
+              {/* 대중교통.
+
+                  ⚠️⚠️ 역 이름만 적는다. 노선 번호도, 건물 앞 정류장 이름도,
+                        도보 시간도 적지 않는다 — 확인된 값이 없다.
+                        노선은 자료마다 갈리고(1광명.25.8856 <-> 20-1.11-A.
+                        11-B), 정류장 이름은 부동산 사이트 한 곳이 "서진클러치
+                        230m · 대덕전자 321m" 라 적었을 뿐 한글 표기를 확인할
+                        다른 출처가 없다. 틀린 것을 적으면 방문객이 헤맨다.
+
+                        정왕역만 확실하다 — 시화공단을 지나는 시내버스
+                        (20-1 · 11-A · 28-29)가 모두 거기서 출발한다.
+                        README 자료 요청 16번에 받을 것을 적어 뒀다.
+
+                  그래서 나머지 몫은 길찾기 버튼이 한다. 지도앱이 실시간
+                  경로를 붙여 주므로 우리가 적는 어떤 안내보다 정확하다.
+
+                  ⚠️ 한때 이 링크가 위 표의 한 "행" 이었다. 표의 다른 행은 모두
+                     값인데 거기만 나가는 링크라 결이 달랐다. 지금은 표 밖의
+                     별도 블록이라 그 문제가 없다.
+
+                  카카오맵은 넣지 않는다 — 정식 연동에 키가 필요하고, 검색
+                  링크로 대신하면 네이버 쪽과 정확도가 갈린다. */}
+              <div className="mt-10 flex flex-col gap-5 rounded-2xl bg-surface p-6 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex gap-4">
+                  <p className="w-16 shrink-0 pt-0.5 text-[13px] font-bold text-muted sm:w-20">
+                    대중교통
+                  </p>
+                  <p className="text-[15px] leading-relaxed text-ink">
+                    수인 · 분당선 정왕역
+                    <span className="mt-1 block text-[13px] text-muted">
+                      역에서 시화공단 방면 시내버스 환승
+                    </span>
+                  </p>
+                </div>
+                <a
+                  href={site.naverPlace}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-ink shadow-card transition-colors hover:text-brand"
+                >
+                  네이버 지도로 길찾기
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
             </Reveal>
           </div>
         </Container>

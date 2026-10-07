@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
 import { notFound } from "next/navigation";
@@ -108,21 +109,54 @@ export default async function ProductDetailPage({
             <ProductGallery images={product.images} />
 
             <div className="lg:flex lg:flex-col">
-              {/* 분류 배지. 점 하나로 레드를 아주 좁게만 쓴다.
+              {/* 분류 배지(왼쪽)와 YUSIN 마크(오른쪽)가 한 줄이다.
 
-                  self-start 가 필요하다. 이 칸이 lg 에서 flex-col 이라 플렉스
-                  칸의 기본 align-items:stretch 가 걸리는데, 그러면 inline-flex
-                  짜리인 이 배지가 내용 폭(93px)이 아니라 칸 폭(1024 에서 440,
-                  1280 이상에서 512px)까지 늘어난다. 같은 칸의 다른 자식은
-                  블록이라 늘어나는 것이 맞고, 배지만 내용 크기로 둔다.
-                  lg 미만에서는 부모가 플렉스가 아니라 이 한 줄이 무시된다. */}
-              <p className="inline-flex self-start items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-bold tracking-[0.1em] text-ink-soft">
-                <span
-                  aria-hidden="true"
-                  className="h-1.5 w-1.5 rounded-full bg-brand"
+                  마크를 여기 둔 것은 **세로를 한 픽셀도 쓰지 않기 위해서**다.
+                  이 칸은 468px 에 묶여 있고, 아래 버튼의 mt-7(28px)이
+                  "사양 표 바닥 383.9px vs 사진 바닥 384px" 를 맞추려고 0.1px
+                  정밀도로 골라진 값이다(그 주석 참고). 흐름에 블록을 하나라도
+                  더하면 그 줄 맞춤이 깨진다. 배지 줄에 넣으면 행 높이가 배지
+                  30px 그대로라 변화가 0 이다.
+
+                  ⚠️ 제품명(h1) 안에 넣지 말 것. company/page.tsx 가 "사이트에서
+                     글 안에 이미지를 넣는 유일한 자리 … 다른 제목으로 번지지
+                     않게 한다 — 번지면 한글 표기 규칙이 무너진다" 고 적어 두었다.
+                     여기는 글이 아니라 배지 옆 별도 요소라 그 금지에 걸리지 않는다.
+
+                  배지의 self-start 는 걷었다. 그 줄은 이 칸이 lg 에서 flex-col
+                  이라 inline-flex 배지가 칸 폭(440~512px)까지 늘어나는 것을
+                  막던 값인데, 이제 부모가 items-center 인 flex 행이라 배지가
+                  저절로 내용 폭(93px)으로 선다. */}
+              <div className="flex items-center justify-between gap-4">
+                <p className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-bold tracking-[0.1em] text-ink-soft">
+                  <span
+                    aria-hidden="true"
+                    className="h-1.5 w-1.5 rounded-full bg-brand"
+                  />
+                  {product.category}
+                </p>
+                {/* YUSIN 워드마크만 쓴다(logo-mark.png). 전체 로고는 같은 화면
+                    헤더에 이미 서 있어, 바로 아래 또 놓으면 같은 것을 두 번
+                    읽는다.
+
+                    h-6(24px, 폭 97px)이라 배지(93x30px)와 거의 같은 덩어리가
+                    되어 양 끝이 균형을 이룬다.
+
+                    ⚠️ 32px 를 넘기지 말 것. 이 파일은 손상된 PPT 래스터에서
+                       잘라낸 129x32 라 확대하면 뭉갠다(README 자료 요청 5번 —
+                       벡터 원본을 받으면 다시 뽑는다).
+
+                    alt 를 비운다. 헤더 로고가 이미 회사명을 읽어 주므로 여기서
+                    또 읽으면 중복이고, 이 자리에서 뜻을 나르는 것은 옆의
+                    분류 배지와 아래 제품명이다. */}
+                <Image
+                  src="/images/logo-mark.png"
+                  alt=""
+                  width={129}
+                  height={32}
+                  className="h-6 w-auto shrink-0 opacity-70"
                 />
-                {product.category}
-              </p>
+              </div>
 
               {/* 배너가 없으므로 제품명이 h1 이다. 검색에도 이쪽이 맞다. */}
               <h1 className="mt-4 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
@@ -490,9 +524,23 @@ export default async function ProductDetailPage({
               (1440 944px, 768 542px)에서 당연히 한 줄이다. 640 미만은 dt/dd
               세로 스택이다.
 
-              격자선은 gap-px + bg-line 이다. 셀마다 border-b 를 주면 마지막
-              행에서 바깥 테두리와 겹쳐 이중선이 되고, 그 "마지막 행" 이
-              폭마다 달라져 끌 수가 없다.
+              격자선은 셀마다 border-b 다. 위 예시 규격표의 divide-y 와 같은
+              방식이라 두 표의 선 굵기가 같아진다.
+
+              ⚠️ 한때 gap-px + bg-line(격자 틈에 바탕이 비치게)이었는데 그
+                 선이 위 표보다 굵어 보였다. 재 보니 테두리는 0.8px, 격자 틈은
+                 1px 다 — 틈은 테두리처럼 스냅되지 않아 안티앨리어싱 없이
+                 또렷하게 떨어지고, bg-line 이 dl 전체 배경이라 칸 높이가
+                 소수점에서 모자라면 그 잔여분이 선에 더해진다. dt|dd 세로선과
+                 만나는 교차점은 흰 여백 없는 1px 십자가 되고, 회색 라벨 칸과
+                 흰 값 칸 사이를 지나는 탓에 같은 선이 "흐렸다 진했다" 한다.
+
+              ⚠️ 그때 "셀마다 border-b 를 주면 마지막 행에서 바깥 테두리와
+                 겹쳐 이중선이 되고, 그 마지막 행이 폭마다 달라져 끌 수가
+                 없다" 고 적어 두었는데, 그건 여섯 줄을 두 쌍씩 2열로 놓던
+                 때의 이야기다. 지금은 세 쌍 한 열이라 마지막 행이 늘 마지막
+                 쌍이고, sm 미만 1열에서도 마지막 dd 하나다 — 인덱스로 정확히
+                 끌 수 있다(오시는 길 연락처 표가 같은 방법을 쓴다).
 
               dt/dd 는 격자 직계여야 한다(접근성 검사 dlitem). 그래서 묶는
               div 대신 Fragment 를 쓴다. */}
@@ -505,8 +553,8 @@ export default async function ProductDetailPage({
                  따라 가늘어져 끊긴 것처럼 보였다. border 는 border-radius 를
                  따라 그려지는 표준 테두리라 모서리에서 끊기지 않는다.
                  위 예시 규격표도 border-line 이라 두 표가 같은 방식이 된다. */}
-          <dl className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-[9rem_minmax(0,1fr)]">
-            {product.specs.slice(3).map((spec) => (
+          <dl className="grid overflow-hidden rounded-2xl border border-line sm:grid-cols-[9rem_minmax(0,1fr)]">
+            {product.specs.slice(3).map((spec, i, all) => (
               <Fragment key={spec.label}>
                 {/* 패딩이 px-4 py-3 인 것은 위 예시 규격표와 맞추기 위해서다.
                     한때 px-5 py-4 라 행 높이가 55px 였는데(위 표는 44px),
@@ -518,10 +566,18 @@ export default async function ProductDetailPage({
                     1.25rem(20px)보다 높았던 탓이다. 지금 값은 모두 한 줄이라
                     넉넉한 줄높이가 필요 없다 — 두 줄짜리 값이 생기면 그때
                     되살리고 위 표와 높이가 갈리는 것을 받아들인다. */}
-                <dt className="bg-surface px-4 py-3 text-sm font-bold text-ink">
+                <dt
+                  className={`bg-surface px-4 py-3 text-sm font-bold text-ink ${
+                    i === all.length - 1 ? "" : "border-b border-line"
+                  }`}
+                >
                   {spec.label}
                 </dt>
-                <dd className="bg-white px-4 py-3 text-sm text-ink-soft">
+                <dd
+                  className={`bg-white px-4 py-3 text-sm text-ink-soft sm:border-l sm:border-line ${
+                    i === all.length - 1 ? "" : "border-b border-line"
+                  }`}
+                >
                   {spec.value}
                 </dd>
               </Fragment>
