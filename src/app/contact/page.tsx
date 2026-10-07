@@ -139,8 +139,12 @@ export default function ContactPage() {
                     {site.email}
                   </a>
                   {/* 연락처 표를 걷으면서 이 페이지에서 영업시간이 사라졌다.
-                      한 줄만 남긴다 — 전화를 걸기 전에 보는 값이다. */}
-                  <p className="mt-3 text-[13px] leading-relaxed text-muted">
+                      한 줄만 남긴다 — 전화를 걸기 전에 보는 값이다.
+
+                      가운데 정렬이다. 바로 위 전화.이메일 버튼이 가운데라
+                      이 줄만 왼쪽이면 축이 어긋나 보였다. 제목("문의처")은
+                      왼쪽 그대로다 — 그쪽은 섹션 제목이다. */}
+                  <p className="mt-3 text-center text-[13px] leading-relaxed text-muted">
                     {site.hours.weekday} · {site.hours.holiday}
                   </p>
                 </div>
