@@ -49,24 +49,44 @@ export default function VideoEmbed({
   const watchUrl = `https://www.youtube.com/watch?v=${video.id}`;
   const poster = `/images/videos/${video.id}.webp`;
 
-  // Reveal 과 같은 패턴이다. 한 번 들어오면 관찰을 끊는다 — 오르내릴 때마다
-  // 영상을 다시 받을 이유가 없다.
+  // 한 번 들어오면 관찰을 끊는다 — 오르내릴 때마다 영상을 다시 받을 이유가
+  // 없다.
   useEffect(() => {
     if (!isPreview) return;
     const el = ref.current;
     if (!el) return;
 
+    // ⚠️ '움직임 줄이기' 를 켠 사람에게는 아예 받지 않는다. globals.css 는
+    //    .hero-video 를 display:none 으로 **숨기기만** 해서, 그대로 두면
+    //    보이지도 않는 1MB 를 내려받는다. 정지컷은 아래 Image 가 맡는다.
+    if (
+      typeof matchMedia !== "undefined" &&
+      matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
     // IntersectionObserver 가 없으면 영상을 걸지 않는다. 아래 썸네일이
     // 그대로 남으므로 빈 칸이 되지는 않는다.
     if (typeof IntersectionObserver === "undefined") return;
 
+    // ⚠️ rootMargin 아래쪽이 **양수**다. 화면에 닿기 400px 전에 받기 시작한다
+    //    — 보통 스크롤 속도로 0.3~0.5초 먼저이고, 7초짜리 1MB 를 받기
+    //    시작하기에 충분하다.
+    //
+    //    한때 "0px 0px -10% 0px" + threshold 0.2 였다. 음수 rootMargin 은
+    //    관찰 영역을 **줄이므로**, 요소가 이미 화면에 들어오고도 20% 가
+    //    보이고 아래 10% 안쪽까지 와야 발화했다. 거기서 비로소 받기 시작하니
+    //    첫 스크롤에서 0.1~0.2초 멈췄다 재생되는 것처럼 보였다.
+    //    Reveal 쪽 값(-12% / 0.05)을 따라 쓴 것이 잘못이었다 — 그쪽은
+    //    "보일 때 나타나면" 되고, 여기는 "보이기 전에 받아야" 한다.
     const io = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
         setInView(true);
         io.disconnect();
       },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0.2 }
+      { rootMargin: "0px 0px 400px 0px", threshold: 0 }
     );
 
     io.observe(el);
@@ -101,7 +121,10 @@ export default function VideoEmbed({
             muted
             loop
             playsInline
-            preload="none"
+            /* inView 가 된 시점에는 어차피 받을 파일이다. none 은 "요소는
+                 있지만 아직 받지 마라" 라서 한 박자를 더 늦춘다. 첫 화면
+               전송량과는 무관하다 — 이 요소의 마운트 자체가 inView 뒤다. */
+            preload="auto"
           >
             <source src={video.preview} type="video/mp4" />
           </video>

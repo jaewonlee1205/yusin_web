@@ -45,16 +45,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ko" className={`${notoSansKr.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
-{/* 홈 히어로 배경 영상의 정지컷. 영상이 뜨기 전까지 이게 보이므로
-            미리 알려 LCP를 앞당긴다. 영상 자체는 preload 하지 않는다 —
-            첫 화면 페인트가 늦어진다.
-            (React가 이 link 태그를 <head>로 끌어올린다) */}
-        <link
-          rel="preload"
-          as="image"
-          href="/images/hero-poster.webp"
-          fetchPriority="high"
-        />
         {/* 스크롤 리빌은 opacity:0 에서 시작한다. JS가 막히면 내용이 영영
             안 보이므로 되돌려 준다. */}
         <noscript>

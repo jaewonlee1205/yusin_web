@@ -41,6 +41,21 @@ const BTN =
 export default function Home() {
   return (
     <>
+      {/* 히어로 배경 영상의 정지컷. 영상이 뜨기 전까지 이게 보이므로 미리
+          알려 LCP 를 앞당긴다. 영상 자체는 preload 하지 않는다 — 첫 화면
+          페인트가 늦어진다. (React 가 이 link 태그를 <head> 로 끌어올린다)
+
+          ⚠️ 한때 layout.tsx 에 있었다. 레이아웃은 열 페이지 전부에 붙으므로,
+             이 그림을 쓰지 않는 제품 상세.영상자료.오시는 길에서도 47KB 를
+             fetchPriority="high" 로 헛받았다 — 바로 그 자리에서 정작 받아야
+             할 제품 사진.구동 영상과 대역을 다퉜다. 홈에만 둔다. */}
+      <link
+        rel="preload"
+        as="image"
+        href="/images/hero-poster.webp"
+        fetchPriority="high"
+      />
+
       {/* 1. Hero — 헤더를 뺀 한 화면에 지표 줄까지 전부 들어가야 한다.
           화면이 낮아지면 패딩·글자·이미지가 clamp()로 같이 줄어든다. */}
       <section className="hero-screen relative flex flex-col overflow-hidden bg-navy-deep">
