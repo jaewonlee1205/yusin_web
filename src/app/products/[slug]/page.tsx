@@ -110,61 +110,55 @@ export default async function ProductDetailPage({
             <ProductGallery images={product.images} />
 
             <div className="lg:flex lg:flex-col">
-              {/* 분류 배지. 이 줄에는 배지 하나뿐이다.
+              {/* 분류 배지(왼쪽)와 YUSIN 워드마크(오른쪽)가 한 줄이다.
 
-                  ⚠️⚠️ self-start 를 걷지 말 것. 이 칸이 lg 에서 flex-col 이라
-                        교차축 stretch 가 걸려, 없으면 배지가 칸 폭까지 늘어난다
-                        (실측 512px -> self-start 를 주면 93px).
+                  ⚠️ 마크를 세 번 옮겼다 — 배지 줄 24px -> 제목 줄 32px ->
+                     다시 배지 줄 32px. 문제는 **자리가 아니라 크기**였다.
+                     24px 짜리가 70% 농도로 흐릿해, 배지와 양 끝에 설 무게가
+                     없으니 그 사이 251~499px 가 "뭔가 더 있어야 할 빈 곳" 으로
+                     보였다. 32px · 75% 면 93x30px 배지와 덩어리가 맞아 양 끝이
+                     균형을 이룬다. **다시 24px 로 줄이지 말 것.**
 
-                        inline-flex 로는 막지 못한다. flex 자식이 되는 순간
-                        inline-flex 는 flex 로 블록화되므로 display 가 아니라
-                        align-self 를 끊어야 한다. 한때 마크와 한 줄이던 시절
-                        부모가 items-center 인 flex 행이라 이 값이 필요 없어
-                        걷었는데, 마크가 제목 줄로 내려가며 다시 필요해졌다. */}
-              <p className="inline-flex self-start items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-bold tracking-[0.1em] text-ink-soft">
-                <span
-                  aria-hidden="true"
-                  className="h-1.5 w-1.5 rounded-full bg-brand"
-                />
-                {product.category}
-              </p>
+                  ⚠️ self-start 를 주지 않는다. 그 값은 이 줄이 flex 행이
+                     아니던 시절, 배지가 lg:flex-col 의 교차축 stretch 로 칸
+                     폭(512px)까지 늘어나는 것을 막던 것이다. 지금은 부모가
+                     flex **행**이라 stretch 축이 세로로 바뀌어 가로가 늘지
+                     않고, 오히려 self-start 를 두면 items-center 를 이겨
+                     배지가 마크와 세로 중앙이 안 맞는다.
+                     (줄을 다시 쪼개면 그때는 self-start 가 필요하다)
 
-              {/* 배너가 없으므로 제품명이 h1 이다. 검색에도 이쪽이 맞다.
-                  오른쪽 끝에 YUSIN 워드마크가 함께 선다.
-
-                  ⚠️ 한때 마크가 **위 배지 줄** 오른쪽 끝에 있었다. 배지와
-                     양 끝으로 갈라 세운 탓에 둘 사이가 폭에 따라 251~499px 비어,
-                     "오른쪽에 뭔가 더 있어야 할 것 같은" 자리가 됐고 24px 짜리가
-                     70% 농도로 흐릿하게 떠 장식도 정보도 아니었다. 제목 줄로
-                     내리니 36px 제품명과 32px 마크가 무게를 나눠 갖는다.
-
-                  ⚠️ h1 **안**에 넣지 말 것. company/page.tsx 가 "사이트에서 글
-                     안에 이미지를 넣는 유일한 자리 … 다른 제목으로 번지지 않게
-                     한다 — 번지면 한글 표기 규칙이 무너진다" 고 적어 두었다.
-                     이것은 h1 의 **형제**라 그 금지에 걸리지 않는다.
-
-                  ⚠️ 세로가 늘지 않는다. 제목 줄 높이를 h1 이 정하고(40px),
-                     마크는 32px 라 그 안에 든다 — 1280.1440 에서 사양 표 바닥과
-                     버튼 바닥이 **0px** 그대로인 것을 재서 확인했다. 아래 버튼의
-                     mt-7 은 "표 바닥 383.9 vs 사진 바닥 384" 를 0.1px 정밀도로
-                     맞춘 값이라 이 줄이 한 픽셀이라도 자라면 깨진다. 마크를
-                     키우려거든 먼저 h1 높이(40px)를 보라.
+                  ⚠️ 세로가 거의 늘지 않는다. 이 줄이 배지 30px -> 마크 32px 로
+                     2px 자라지만, 1280.1440 에서는 사양 표의 lg:mt-auto 가 그
+                     2px 를 흡수해 **표 바닥도 버튼 바닥도 변화 0** 이다.
+                     1024 에서는 표와 사진이 **함께** 2.4px 밀려 둘의 관계
+                     (-84.1px)가 그대로다. 재서 확인했다. 아래 버튼의 mt-7 은
+                     "표 바닥 383.9 vs 사진 바닥 384" 를 0.1px 정밀도로 맞춘
+                     값이니, 마크를 더 키우려거든 이 셈을 먼저 다시 하라.
 
                   ⚠️ 32px 가 상한이다. 이 파일은 손상된 PPT 래스터에서 잘라낸
                      129x32 라 그보다 키우면 뭉갠다 — h-8 은 원본 크기 그대로라
                      확대가 0 이다(h-6 은 오히려 0.75배 축소였다).
                      README 자료 요청 5번: 벡터 원본을 받으면 다시 뽑는다.
 
+                  ⚠️ 제품명(h1) 안에 넣지 말 것. company/page.tsx 가 "사이트에서
+                     글 안에 이미지를 넣는 유일한 자리 … 다른 제목으로 번지지
+                     않게 한다 — 번지면 한글 표기 규칙이 무너진다" 고 적어 두었다.
+                     여기는 글이 아니라 배지 옆 별도 요소라 그 금지에 걸리지 않는다.
+
                   워드마크만 쓴다. 전체 로고는 같은 화면 헤더에 이미 서 있어,
                   바로 아래 또 놓으면 같은 것을 두 번 읽는다.
 
                   alt 를 비운다. 헤더 로고가 이미 회사명을 읽어 주므로 여기서
-                  또 읽으면 중복이고, 이 자리에서 뜻을 나르는 것은 위의 분류
-                  배지와 제품명이다. */}
-              <div className="mt-4 flex items-center justify-between gap-4">
-                <h1 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-                  {product.name}
-                </h1>
+                  또 읽으면 중복이고, 이 자리에서 뜻을 나르는 것은 옆의 분류
+                  배지와 아래 제품명이다. */}
+              <div className="flex items-center justify-between gap-4">
+                <p className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-bold tracking-[0.1em] text-ink-soft">
+                  <span
+                    aria-hidden="true"
+                    className="h-1.5 w-1.5 rounded-full bg-brand"
+                  />
+                  {product.category}
+                </p>
                 <Image
                   src="/images/logo-mark.png"
                   alt=""
@@ -173,6 +167,11 @@ export default async function ProductDetailPage({
                   className="h-8 w-auto shrink-0 opacity-75"
                 />
               </div>
+
+              {/* 배너가 없으므로 제품명이 h1 이다. 검색에도 이쪽이 맞다. */}
+              <h1 className="mt-4 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+                {product.name}
+              </h1>
               <p className="mt-2 text-sm font-medium uppercase tracking-[0.08em] text-muted">
                 {product.nameEn}
               </p>

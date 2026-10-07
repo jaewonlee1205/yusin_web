@@ -549,8 +549,24 @@ export default function Home() {
                      배지와 적용 분야 칩이 쓰는 것이라, 알약으로 두면 성격이
                      다른 칩이 한 사이트에서 같은 모양이 된다.
 
-                  ⚠️ 둘 다 aria-hidden 을 주지 않는다. 번호(ol/li 가 순서를
-                     이미 전한다)와 달리 읽어야 뜻이 통하는 정보다.
+                  산출물이 한때 text-muted 회색 평문이었다. 또렷한 레드 칩 옆에
+                  서니 묻혀, 카드에서 가장 나중에 읽히는 정보가 됐다. 지금은
+                  체크와 font-semibold text-ink 로 받는다.
+
+                  ⚠️ 체크는 **사이트에 이미 있는 그림**이다. 같은
+                     path d="M20 6 9 17l-5-5" 를 제품 특징 카드(20px ·
+                     strokeWidth 3)와 문의 완료 화면(26px)이 쓴다. 여기는 13px
+                     이라 strokeWidth 를 3.2 로 올렸다 — 작은 상자에서 3 은
+                     가늘다. 다른 그림으로 바꾸지 말 것.
+
+                  ⚠️ 카드 안 레드가 셋이 된다 — 번호(12px 글자) · 기간 칩(8%
+                     바탕) · 체크(13px 선). globals.css 의 "레드는 면적을 좁게"
+                     를 지키는 선이다: 셋 다 점에 가깝고, 면은 칩 바탕 하나뿐이며
+                     그마저 8% 다. 여기에 넷째를 더하지 말 것.
+
+                  ⚠️ 기간과 산출물에 aria-hidden 을 주지 않는다(체크만 준다).
+                     번호(ol/li 가 순서를 이미 전한다)와 달리 읽어야 뜻이
+                     통하는 정보다.
 
                   ⚠️ 네 기간의 합이 홈 PERFORMANCE 의 "2~4주 설계 → 납품" 과
                      어긋나면 안 된다. company.ts 의 process 주석에 계산이
@@ -559,7 +575,23 @@ export default function Home() {
                 <span className="shrink-0 rounded-md bg-brand/8 px-2 py-0.5 text-[11px] font-bold tabular-nums text-brand">
                   {p.duration}
                 </span>
-                <span className="text-xs text-muted">{p.output}</span>
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                  className="ml-0.5 shrink-0 text-brand"
+                >
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+                <span className="text-xs font-semibold text-ink">
+                  {p.output}
+                </span>
               </div>
 
               {/* ⚠️ 한때 여기에 카드 오른쪽 위를 덮는 56px 워터마크 번호가
