@@ -463,34 +463,38 @@ export default function Home() {
               delay={i * 80}
               className="relative rounded-2xl bg-white p-6 shadow-card"
             >
-              {/* 번호 배지 + 제목.
+              {/* 번호 + 제목. 번호는 제목 **위** 별도 줄에 작게 선다.
 
-                  ⚠️ /contact 의 "도입 프로세스" 배지와 **같은 언어, 다른
-                     크기**다. 원 · 연한 레드 바탕 · 레드 숫자 · tabular-nums 가
-                     같고 크기만 32 / 24px 로 갈린다 — 여기는 가로 카드라
-                     글상자가 212px 이고, 거기는 세로 목록이라 287~319px 뿐이라
-                     32px 원이 과하다. 같은 데이터(company.ts 의 process)를 두
-                     자리에 쓰므로 한쪽을 고칠 때 다른 쪽도 본다.
+                  ⚠️ 동그라미로 네 번 시도하고 접었다. 56px 워터마크는 제목만큼
+                     무거워 답답했고, 24px 원은 반대로 허전했고, 그 사이인
+                     32px 도 "동그라미 자체가 어색하다" 였다. 크기 문제가
+                     아니었다 — 번호를 제목과 **같은 줄**에 세우면 둘이 가로로
+                     경쟁하고, 원이 그 경쟁을 키운다. 바탕을 깐 원 넷이 카드마다
+                     왼쪽에 떠 있는 것도 레드를 한 점에만 쓰는 이 사이트에서
+                     면적이 과했다.
 
-                  크기는 56 -> 24 -> 32px 로 두 번 옮겼다. 56px 워터마크는
-                  제목만큼 무거워 답답했고, 24px 는 반대로 허전했다. 32px 가
-                  그 사이다 — 카드 높이가 158 -> 166px 로 넷 다 같고 제목은
-                  모두 한 줄이다.
+                     지금은 12px 레드 글자 넷뿐이라 레드 면적이 가장 좁고,
+                     "번호 -> 제목 -> 할 일 셋" 이 위에서 아래로 한 방향으로
+                     읽힌다. 다시 원으로 돌아가지 말 것.
 
-                  {p.step}("01")이 아니라 {i + 1} 이다 — 24px 원에 두 글자는
-                  빽빽하다. step 필드는 key 로 남는다.
+                  ⚠️ /contact 의 "도입 프로세스" 는 24px 원 배지 **그대로**다.
+                     거기는 세로 목록이고 글상자가 287~319px 뿐이라 결이 다르다.
+                     같은 데이터(company.ts 의 process)를 두 자리에 쓰므로
+                     한쪽을 고칠 때 다른 쪽도 보되, **생김새는 이제 다르다.**
+
+                  p.step 이 이미 "01"~"04" 다 — 한때 {i + 1} 로 다시 셌는데
+                  (24px 원에 두 글자가 빽빽해서였다) 이제 자리가 넉넉해
+                  데이터에 있는 값을 그대로 쓴다.
 
                   ⚠️ aria-hidden 을 떼지 말 것. 순서는 ol / li 가 이미 전하므로
                      시각 보조다(/contact 주석과 같은 이유). */}
-              <div className="flex items-center gap-2.5">
-                <span
-                  aria-hidden="true"
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand/10 text-[13px] font-bold tabular-nums text-brand"
-                >
-                  {i + 1}
-                </span>
-                <h3 className="text-base font-bold text-ink">{p.title}</h3>
-              </div>
+              <p
+                aria-hidden="true"
+                className="text-xs font-bold tracking-[0.08em] tabular-nums text-brand"
+              >
+                {p.step}
+              </p>
+              <h3 className="mt-1.5 text-base font-bold text-ink">{p.title}</h3>
               {/* 점 목록 셋. 한때 박스 안이 긴 문장 하나였는데, 글상자가
                   좁아 3~4줄로 눌려 읽혔다. 지금은 단계마다 할 일 셋이 한 줄씩
                   선다.
@@ -599,7 +603,29 @@ export default function Home() {
             </Link>
           }
         >
-          <ul className="grid gap-6 sm:grid-cols-2 sm:gap-8">
+          {/* ⚠️ 2열이 **lg(1024)** 부터다. /videos 격자(sm)와 다르고, 일부러다.
+
+                 자막이 영상 위에 겹치므로 영상이 작아지면 자막이 영상을
+                 덮는다. sm(640)에서 2열이면 카드가 264px, 영상 높이가 149px
+                 뿐이어서 두 줄 자막(113px)이 **76%** 를 가렸다. lg 로 미루면
+                 640 에서 1열 561px(영상 315px)이 되어 자막이 한 줄로 앉고
+                 26% 만 덮는다. 폭별로 쟀다 —
+
+                   320  1열  영상 149px  자막 2줄  63%
+                   390  1열       189        2줄  50%
+                   640  1열       315        1줄  26%
+                   768  1열       387        1줄  21%
+                  1024  2열       257        1줄  37%
+                  1440  2열       297        1줄  32%
+
+                 제품 상세 구동 영상이 같은 폭에서 24~30% 이니 결이 맞는다.
+                 320.390 은 두 줄이지만 거기도 제품 상세가 74% 이므로 그보다
+                 낫다. note 를 깎아 한 줄로 만들 수도 있으나 그 글은 /videos
+                 카드(글상자 486px)가 함께 쓰므로 거기가 허전해진다.
+
+                 값: 640~1023 에서 영상 두 장이 세로로 쌓여 섹션이 약 550px
+                 길어진다. 그 구간에서 영상이 149 -> 315px 로 커지는 값이다. */}
+          <ul className="grid gap-6 lg:grid-cols-2 lg:gap-8">
             {featuredVideos.map((v, i) => (
               <Reveal as="li" key={v.id} delay={i * 70}>
                 {/* preview — 화면에 들어오면 소리 없이 자동으로 돈다.
