@@ -218,7 +218,18 @@ export default function CompanyPage() {
                       navy-deep 이라 한 단계 밝은 navy 가 칸으로 보인다.
                       rounded-lg 는 패널(rounded-2xl)보다 두 단계 작다 — 작은
                       칸에 같은 반경을 주면 모서리만 눈에 띈다. */}
-                  <div className="relative mt-2.5 aspect-video w-full overflow-hidden rounded-lg bg-navy">
+                  {/* ⚠️ 4:3 이다(한때 16:9). 사진 아래 여백을 줄여 달라는
+                      요청에 세로를 키웠다 —
+
+                        폭        16:9      4:3       남던 여백 -> 지금
+                        1024      153x86    153x115   105px -> 76px
+                        1280.1440 185x104   185x138    20px ->   0px
+
+                      ⚠️ 더 키우지 않는 이유가 둘이다. 1:1 로 하면 1280 에서
+                         패널이 388px 로 60px 길어져 ABOUT 본문 행까지 밀고,
+                         flex-1 로 남는 자리를 꽉 채우면 1024 에서 153x191 이
+                         되어 16:9 원본의 55%가 잘린다. 둘 다 재 봤다. */}
+                  <div className="relative mt-2.5 aspect-[4/3] w-full overflow-hidden rounded-lg bg-navy">
                     <Image
                       src={item.photo}
                       alt={item.photoAlt}

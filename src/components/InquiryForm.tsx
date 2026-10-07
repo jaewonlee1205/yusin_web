@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CATEGORIES } from "@/data/products";
 import { site } from "@/data/site";
 import { InquiryError, submitInquiry } from "@/lib/inquiry";
@@ -94,10 +94,50 @@ const boxLabel =
  *         줄 안다. 숨기는 방식을 바꿀 때마다 직접 눌러서 확인한다.
  */
 const boxAgree = `mt-0.5 ${boxBase}`;
+/**
+ * 문의 분야 "전체 선택" 상자. 분야 칸과 같은 모양에 **중간 상태**가 더해진다.
+ *
+ * peer-indeterminate: 는 일부만 골랐을 때다 — 바탕을 네이비로 채우되 체크
+ * 대신 가로줄을 보인다. indeterminate 는 HTML 속성이 아니라 DOM 프로퍼티라
+ * 컴포넌트에서 ref + useEffect 로 세운다.
+ */
+const boxAll =
+  `${boxBase} peer-indeterminate:border-navy peer-indeterminate:bg-navy ` +
+  "peer-indeterminate:[&>span]:block";
 
 export default function InquiryForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
+
+  /**
+   * 고른 문의 분야. **"전체 선택" 때문에 상태를 들였다.**
+   *
+   * 그 전까지 분야 체크박스는 비제어였다(DOM 이 상태를 들고 handleSubmit 이
+   * FormData.getAll 로 읽었다). 전체 선택은 "열 개가 다 켜졌는가" 를 알아야
+   * 하므로 React 가 그 목록을 쥐어야 한다.
+   *
+   * ⚠️ handleSubmit 의 data.getAll("category") 는 **그대로 둔다.** 제어
+   *    컴포넌트여도 DOM 의 checked 가 이 상태를 따르므로 FormData 가 그대로
+   *    읽는다. 합치는 자리를 한 곳에 두는 편이 낫다.
+   *
+   * ⚠️ 제출이 성공하면 form.reset() 만으로는 안 비워진다 — 제어 컴포넌트는
+   *    상태가 진실이다. setPicked([]) 를 함께 부른다.
+   */
+  const [picked, setPicked] = useState<string[]>([]);
+  const allOn = picked.length === TOPICS.length;
+  const someOn = picked.length > 0 && !allOn;
+
+  /* 일부만 골랐을 때 전체 선택을 중간 상태로 둔다. indeterminate 는 HTML
+     속성이 아니라 DOM 프로퍼티라 ref 로만 세울 수 있다. */
+  const allRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (allRef.current) allRef.current.indeterminate = someOn;
+  }, [someOn]);
+
+  const toggle = (topic: string) =>
+    setPicked((prev) =>
+      prev.includes(topic) ? prev.filter((x) => x !== topic) : [...prev, topic],
+    );
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -123,6 +163,7 @@ export default function InquiryForm() {
       });
       setStatus("success");
       form.reset();
+      setPicked([]);
     } catch (err) {
       setStatus("error");
       setError(
@@ -267,6 +308,58 @@ export default function InquiryForm() {
               체크박스 그룹에 HTML required 를 쓰지 말 것. 브라우저는 그것을
               "이 칸 하나가 필수" 로 읽어, 열 개 모두에 걸면 전부 체크해야
               제출된다(이 폼은 noValidate 를 끄지 않아 브라우저 검증이 돈다). */}
+          {/* 격자 **첫 칸**이 전체 선택이다.
+
+              ⚠️ name 을 주지 않는다. name="category" 를 붙이면 메일 본문
+                 "문의분야" 에 "전체 선택" 이라는 값이 섞여 들어간다.
+
+              ⚠️ 분야 칸과 **같은 네모 상자**를 쓴다(boxBase). 다른 모양을
+                 주면 격자 안에서 혼자 튄다. 대신 라벨을 늘 굵게 둬서, 고르지
+                 않은 상태에서도 분야 이름과 성격이 다르다는 것을 보인다.
+
+              ⚠️ 그래도 첫 칸이라 **"전체 선택" 이 분야 이름처럼 읽힐 수 있다.**
+                 거슬리면 fieldset 의 legend 줄 오른쪽으로 옮긴다 — 거기면
+                 격자가 열 칸 그대로고 "목록을 조종하는 장치" 라는 것이 자리로
+                 드러난다.
+
+              peer-indeterminate: 는 일부만 골랐을 때다. 상자 안에 체크 대신
+              가로줄이 뜬다(위 useEffect 가 그 프로퍼티를 세운다). */}
+          <label className="flex cursor-pointer items-center gap-2.5 py-1">
+            <input
+              ref={allRef}
+              type="checkbox"
+              checked={allOn}
+              onChange={() => setPicked(allOn ? [] : [...TOPICS])}
+              className="peer sr-only"
+              aria-label="문의 분야 전체 선택"
+            />
+            <span className={boxAll}>
+              <svg
+                width="11"
+                height="11"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+                className="hidden"
+              >
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              {/* 중간 상태의 가로줄. 체크와 같은 자리에 겹쳐 두고 둘 중
+                  하나만 보이게 한다. */}
+              <span
+                aria-hidden="true"
+                className="hidden h-[2px] w-[9px] rounded-full bg-white"
+              />
+            </span>
+            <span className="text-sm font-semibold leading-snug text-ink">
+              전체 선택
+            </span>
+          </label>
+
           {TOPICS.map((t) => (
             <label
               key={t}
@@ -278,6 +371,8 @@ export default function InquiryForm() {
                 type="checkbox"
                 name="category"
                 value={t}
+                checked={picked.includes(t)}
+                onChange={() => toggle(t)}
                 className="peer sr-only"
               />
               <span className={boxBase}>
@@ -345,12 +440,15 @@ export default function InquiryForm() {
               <path d="M20 6 9 17l-5-5" />
             </svg>
           </span>
-          <span>
+          {/* ⚠️ 고르면 **첫 줄만** 굵어진다(위 문의 분야 라벨과 같은 처리).
+              아래 작은 고지 문구까지 같이 굵어지면 두 줄이 한 덩어리로
+              무거워진다 — 거기는 text-xs text-muted 그대로 둔다. */}
+          <span className="transition-colors peer-checked:font-semibold peer-checked:text-ink">
             개인정보 수집·이용에 동의합니다.
             {/* 고지 요건(항목.목적.기간)을 그대로 담되 사람 말로 적는다.
                 앞의 "수집 항목: … 이용 목적: … 보유 기간: …" 은 글폭이
                 547.7px 라 529.3px 글상자를 18.4px 넘겨 두 줄이었다. */}
-            <span className="mt-1.5 block text-xs leading-relaxed text-muted">
+            <span className="mt-1.5 block text-xs font-normal leading-relaxed text-muted">
               회사명·담당자명·연락처·이메일을 문의 응대와 견적 회신에 쓰고, 3년
               뒤 파기합니다.
             </span>
