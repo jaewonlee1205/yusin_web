@@ -88,8 +88,29 @@ export default function ProductVideo({
             <source src={video.src} type="video/mp4" />
           </video>
         )}
+
+        {/* 설명은 영상 위 하단에 겹친다. 한때 영상 아래 회색 한 줄이었는데,
+            큰 영상 다음에 작은 글씨가 왼쪽에 홀로 떠 글과 그림이 따로 놀았다.
+
+            ⚠️ <video> 가 아니라 **칸**의 자식이다. 그래야 '움직임 줄이기' 에서
+               영상이 display:none 이 되어도 뒤에 깔린 정지컷 위에 설명이
+               그대로 남는다.
+
+            ⚠️ 흰 글씨가 읽히는 것은 그라데이션 덕이다. 일곱 편의 하단 22%
+               띠 밝기를 재니 Y 89.9~116.4 였고(가장 밝은 것이 방음커버),
+               거기에 navy-deep/85 를 덮으면 Y 29 로 떨어져 흰 글씨 대비가
+               약 16:1 이 된다(AAA 7:1 의 두 배). 영상이 돌아도 그 띠 안의
+               최대-최소 차이가 27 뿐이라 흔들리지 않는다.
+               영상을 갈아 끼울 때 하단이 더 밝으면 다시 잰다.
+
+            pointer-events-none — 누를 것이 없는 장식 영상이라 마우스를
+            가로채지 않는다. */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/40 to-transparent px-5 pb-5 pt-12 sm:px-6 sm:pb-6">
+          <p className="text-[13px] font-medium leading-relaxed text-white sm:text-sm">
+            {video.note}
+          </p>
+        </div>
       </div>
-      <p className="mt-4 text-sm leading-relaxed text-muted">{video.note}</p>
     </Reveal>
   );
 }

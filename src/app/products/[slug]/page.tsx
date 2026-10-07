@@ -424,6 +424,44 @@ export default async function ProductDetailPage({
         </ul>
       </Section>
 
+      {/* 구동 영상 — 제품 특징 바로 다음이다.
+
+          특징(카드 넷 + KPI 띠)이 "무엇을 하고 얼마나 되는가" 를 말하고 나면
+          그것이 실제로 도는 모습을 보여 주는 자리다. 한때 제작 사양 다음에
+          있었는데, 규격표를 다 읽고 난 뒤라 늦었다.
+
+          ⚠️ 섹션 배경을 함께 옮겼다. 네 섹션을 완전히 번갈이로 둘 수는 없다
+             — SPECIFICATIONS 를 surface 로 만들면 그 안의 "예시 규격" 안내
+             박스.규격표 thead.사양 표 라벨 칸이 모두 bg-surface 라 배경에
+             묻힌다. 그래서 붙는 자리를 한 군데로 줄였다.
+
+               FEATURES        surface
+               IN OPERATION    white     <- 여기
+               SPECIFICATIONS  white     <- 위와 붙는다 (유일)
+               OTHER PRODUCTS  surface   <- 회색으로 바꿔 ProductCard 를 살린다
+
+             붙는 둘은 제목(eyebrow + h2)이 뚜렷하고 영상 섹션은 아래가
+             비어 있어, 경계가 흐려도 구분된다.
+
+          전폭 한 편이고 lg 부터 3:1 이다 — 홈 PERFORMANCE 와 같은 언어다.
+          16/9 로 두면 1088px 폭에서 612px 라 화면을 다 먹는다.
+
+          ⚠️ 버튼도 호버 반응도 없다. 누를 것이 없는 장식 영상이다
+             (VideoEmbed 머리 주석에 내력이 있다 — 버튼을 달았더니 "눌러야
+             재생되는 것" 처럼 읽혔다).
+
+          ⚠️ Image 와 .hero-video 는 짝이다. globals.css 의
+             prefers-reduced-motion 블록이 .hero-video 를 display:none 으로
+             숨기므로, 움직임을 끈 사람에게는 뒤에 깔린 이 정지컷이 보인다.
+             둘 중 하나만 두지 말 것. */}
+      <Section
+        size="compact"
+        eyebrow="IN OPERATION"
+        title="구동 영상"
+      >
+        <ProductVideo video={product.video} />
+      </Section>
+
       <Section size="compact" eyebrow="SPECIFICATIONS" title="제작 사양">
         {/* 모델별 예시 규격표.
 
@@ -665,33 +703,15 @@ export default async function ProductDetailPage({
           격자고 여기는 두세 장이라 테두리와 그림자만으로도 카드가 선다.
 
           섹션은 약 609 -> 648px 가 된다. */}
-      {/* 구동 영상 — 제작 사양과 다른 제품 사이다.
-
-          섹션 배경이 surface -> white -> surface -> white 로 번갈아 간다
-          (특징 / 사양 / 영상 / 다른 제품). 영상을 사양 섹션 안에 넣으면
-          거기가 규격표.사양표.적용 분야로 이미 길어 묻힌다.
-
-          전폭 한 편이고 lg 부터 3:1 이다 — 홈 PERFORMANCE 와 같은 언어다.
-          16/9 로 두면 1088px 폭에서 612px 라 화면을 다 먹는다.
-
-          ⚠️ 버튼도 호버 반응도 없다. 누를 것이 없는 장식 영상이다
-             (VideoEmbed 머리 주석에 내력이 있다 — 버튼을 달았더니 "눌러야
-             재생되는 것" 처럼 읽혔다).
-
-          ⚠️ Image 와 .hero-video 는 짝이다. globals.css 의
-             prefers-reduced-motion 블록이 .hero-video 를 display:none 으로
-             숨기므로, 움직임을 끈 사람에게는 뒤에 깔린 이 정지컷이 보인다.
-             둘 중 하나만 두지 말 것. */}
+      {/* 회색이다. 흰 카드(ProductCard)가 회색 위에서 또렷해지고, 바로 위
+          SPECIFICATIONS 와도 갈린다 — 특징 카드가 회색 섹션에 놓인 것과 같은
+          이유다. */}
       <Section
         tone="surface"
         size="compact"
-        eyebrow="IN OPERATION"
-        title="구동 영상"
+        eyebrow="OTHER PRODUCTS"
+        title="다른 제품"
       >
-        <ProductVideo video={product.video} />
-      </Section>
-
-      <Section size="compact" eyebrow="OTHER PRODUCTS" title="다른 제품">
         {/* 간격은 가로.세로 모두 24px 다. 한때 lg:gap-x-16 xl:gap-x-36
             (144px)이었는데, 카드 셋이 멀찍이 떨어져 한 묶음으로 안 읽혔다.
             사이트의 다른 카드 격자와 같은 값으로 맞춘다(FEATURES gap-6,

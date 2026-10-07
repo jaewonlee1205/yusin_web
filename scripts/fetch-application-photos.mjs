@@ -62,12 +62,6 @@ const PHOTOS = [
     quality: 55,
   },
   {
-    out: "vial",
-    // https://www.pexels.com/photo/transparent-glass-vials-in-a-blue-tray-6129873/
-    url: "https://images.pexels.com/photos/6129873/pexels-photo-6129873.jpeg",
-    position: "center",
-  },
-  {
     out: "cosmetic",
     // https://www.pexels.com/photo/empty-amber-bottles-with-black-caps-6693882/
     // 세로 사진이고 위쪽 1/3 이 빈 배경이라 아래를 남긴다.
