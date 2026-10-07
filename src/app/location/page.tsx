@@ -4,12 +4,6 @@ import ContactCTA from "@/components/ContactCTA";
 import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
-import { KakaoIcon, NaverIcon } from "@/components/icons";
-
-/* 지도 앱 버튼 둘이 같은 꼴이다. 글자는 ink-soft + medium — 회색 상자 안에서
-   가장 진한 글자가 되지 않게 낮춘 값이다(그 자리 주석 참고). */
-const MAP_BTN =
-  "inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-line bg-white px-4 py-3 text-sm font-medium text-ink-soft transition-colors hover:border-ink/20 hover:text-ink";
 import { site, telHref } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -52,14 +46,22 @@ const MAP_SRC = `https://maps.google.com/maps?q=${query}&z=16&hl=ko&output=embed
  *    모두 값인데 거기만 쓰는 방법을 일러 주는 안내문이라 결이 달랐다.
  *    건물명은 주소 칸에 이미 들어 있다.
  *
- * ⚠️ 대중교통 칸도 일부러 넣지 않았다. 노선이 자료마다 엇갈려(1광명.25.8856
- *    <-> 20-1.11-A.11-B) 확인 없이 적으면 방문객이 헤맨다. README 자료 요청
- *    표 16번에 적어 뒀다.
+ * ⚠️ 대중교통 안내는 이 페이지에 **아예 두지 않는다.** 한때 표 아래에 회색
+ *    박스로 "수인·분당선 정왕역 / 시화공단 방면 시내버스 환승" 과 네이버·
+ *    카카오 길찾기 버튼을 두었는데, 걷어 달라는 요청에 통째로 뺐다.
+ *
+ *    역 이름 말고는 적을 것이 애초에 없기도 했다 — 노선이 자료마다 엇갈리고
+ *    (1광명.25.8856 <-> 20-1.11-A.11-B) 건물 앞 정류장 이름은 확인할 출처가
+ *    한 곳뿐이라, 틀리게 적으면 방문객이 헤맨다. 길찾기는 위 구글 지도와
+ *    푸터의 네이버 지도 링크가 맡는다.
+ *
+ *    다시 넣는다면 site.ts 의 coords 와 icons.tsx 의 KakaoIcon 이 그대로
+ *    남아 있다(둘 다 그 주석에 "지금은 쓰이지 않는다" 를 적어 뒀다).
  *
  * ⚠️ 라벨 칸이 좁다. dt 가 w-16(64px), sm 부터 w-20(80px) 이다 — 13px bold
  *    로 "운영 시간" 이 63px 라 sm 부터 한 줄이고 그 아래에서는 두 줄이 된다.
  *    "사업자등록번호"(84px)는 어디서도 안 들어간다. 라벨을 바꿀 때 이 80px 를
- *    넘기지 말 것. 아래 대중교통 블록의 라벨도 같은 폭을 쓴다.
+ *    넘기지 말 것.
  */
 
 export default function LocationPage() {
@@ -266,94 +268,6 @@ export default function LocationPage() {
                   </div>
                 ))}
               </dl>
-
-              {/* 대중교통.
-
-                  ⚠️⚠️ 역 이름만 적는다. 노선 번호도, 건물 앞 정류장 이름도,
-                        도보 시간도 적지 않는다 — 확인된 값이 없다.
-                        노선은 자료마다 갈리고(1광명.25.8856 <-> 20-1.11-A.
-                        11-B), 정류장 이름은 부동산 사이트 한 곳이 "서진클러치
-                        230m · 대덕전자 321m" 라 적었을 뿐 한글 표기를 확인할
-                        다른 출처가 없다. 틀린 것을 적으면 방문객이 헤맨다.
-
-                        정왕역만 확실하다 — 시화공단을 지나는 시내버스
-                        (20-1 · 11-A · 28-29)가 모두 거기서 출발한다.
-                        README 자료 요청 16번에 받을 것을 적어 뒀다.
-
-                  그래서 나머지 몫은 길찾기 버튼이 한다. 지도앱이 실시간
-                  경로를 붙여 주므로 우리가 적는 어떤 안내보다 정확하다.
-
-                  ⚠️ 한때 이 링크가 위 표의 한 "행" 이었다. 표의 다른 행은 모두
-                     값인데 거기만 나가는 링크라 결이 달랐다. 지금은 표 밖의
-                     별도 블록이라 그 문제가 없다.
-
-                  카카오맵은 넣지 않는다 — 정식 연동에 키가 필요하고, 검색
-                  링크로 대신하면 네이버 쪽과 정확도가 갈린다. */}
-              <div className="mt-10 flex flex-col gap-5 rounded-2xl bg-surface p-6 sm:flex-row sm:items-center sm:justify-between">
-                {/* 위 연락처 행과 같은 이유로 items-center 다 — 값이 두 줄
-                    이라 그냥 두면 라벨이 위에 붙는다. */}
-                <div className="flex items-center gap-4">
-                  <p className="w-16 shrink-0 text-[13px] font-bold text-muted sm:w-20">
-                    대중교통
-                  </p>
-                  <p className="text-[15px] leading-relaxed text-ink">
-                    수인 · 분당선 정왕역
-                    <span className="mt-1 block text-[13px] text-muted">
-                      역에서 시화공단 방면 시내버스 환승
-                    </span>
-                  </p>
-                </div>
-                {/* 지도 앱 둘. 국내에서 길찾기에 실제로 쓰이는 둘이다.
-
-                    네이버는 place id(site.naverPlace)로, 카카오는 좌표
-                    (site.coords)로 건다 — 카카오맵 길찾기 주소가
-                    /link/to/{이름},{위도},{경도} 꼴이라 좌표가 있어야 한다.
-                    T맵은 넣지 않는다. 범용 웹 주소가 없어 PC 에서는 아무
-                    일도 일어나지 않는다.
-
-                    테두리로 선다(2D). 한때 shadow-card 였는데, 회색 상자 위에
-                    흰 버튼이 그림자로 떠 있어 입체로 읽혔다. 호버도 색만
-                    바꾼다 — 떠오르거나 그림자가 짙어지면 2D 로 바꾼 뜻이
-                    사라진다.
-
-                    ⚠️ 글자가 text-ink + bold 가 아니다. 그러면 회색 상자 안에서
-                       가장 진한 글자가 되어 "대중교통 / 정왕역" 보다 먼저 눈에
-                       들었다 — 주인공이 뒤바뀐다. ink-soft + medium 으로
-                       낮췄다(시안 넷을 그려 비교했다).
-
-                    ⚠️ 글이 "길찾기" 가 아니라 앱 이름이다. 버튼이 둘이 되면
-                       어느 쪽을 누를지를 글이 말해야 한다 — 16px 아이콘만으로는
-                       네이버.카카오 구분이 약하다.
-
-                    ⚠️ 아이콘 상자 크기가 다르다(네이버 16 / 카카오 17px).
-                       둘 다 viewBox 안에서 잉크가 꽉 차지 않는데 그 비율이
-                       달라서다 — 재 보니 네이버가 0.781, 카카오가 0.747 이다.
-                       상자를 같게 두면 카카오 심볼이 1.3px 작아 보인다.
-                       16 x 0.781 = 12.5px 에 맞추려고 카카오를 17px 로 줬다
-                       (17 x 0.747 = 12.7px). 아이콘을 바꾸면 다시 잰다. */}
-                <div className="flex shrink-0 gap-2">
-                  <a
-                    href={site.naverPlace}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={MAP_BTN}
-                  >
-                    <NaverIcon className="h-4 w-4 shrink-0 text-[#03C75A]" />
-                    네이버 지도
-                  </a>
-                  <a
-                    href={`https://map.kakao.com/link/to/${encodeURIComponent(
-                      site.name
-                    )},${site.coords.lat},${site.coords.lng}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={MAP_BTN}
-                  >
-                    <KakaoIcon className="h-[17px] w-[17px] shrink-0 text-[#3C1E1E]" />
-                    카카오맵
-                  </a>
-                </div>
-              </div>
             </Reveal>
           </div>
         </Container>

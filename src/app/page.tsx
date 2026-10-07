@@ -488,12 +488,29 @@ export default function Home() {
 
                   ⚠️ aria-hidden 을 떼지 말 것. 순서는 ol / li 가 이미 전하므로
                      시각 보조다(/contact 주석과 같은 이유). */}
-              <p
-                aria-hidden="true"
-                className="text-xs font-bold tracking-[0.08em] tabular-nums text-brand"
-              >
-                {p.step}
-              </p>
+              <div className="flex items-baseline justify-between gap-2">
+                <p
+                  aria-hidden="true"
+                  className="text-xs font-bold tracking-[0.08em] tabular-nums text-brand"
+                >
+                  {p.step}
+                </p>
+                {/* 소요 기간. 번호와 양 끝으로 갈라 세워 빈 오른쪽을 메운다 —
+                    한때 번호 13px 뒤가 통째로 비어 카드가 헐겁게 읽혔다.
+
+                    ⚠️ aria-hidden 을 주지 말 것. 번호와 달리 **읽어야 뜻이
+                       통하는 정보**다(번호는 ol/li 가 순서를 이미 전한다).
+
+                    ⚠️ 네 기간의 합이 홈 PERFORMANCE 의 "2~4주 설계 → 납품" 과
+                       어긋나면 안 된다. company.ts 의 process 주석에 계산이
+                       있다. 그 섹션이 바로 위라 한 화면에서 둘 다 보인다.
+
+                    items-baseline — 둘 다 12px 이지만 굵기가 달라 글자
+                    밑선으로 맞춘다. */}
+                <p className="text-xs font-medium tabular-nums text-muted">
+                  {p.duration}
+                </p>
+              </div>
               <h3 className="mt-1.5 text-base font-bold text-ink">{p.title}</h3>
               {/* 점 목록 셋. 한때 박스 안이 긴 문장 하나였는데, 글상자가
                   좁아 3~4줄로 눌려 읽혔다. 지금은 단계마다 할 일 셋이 한 줄씩
@@ -521,6 +538,25 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
+
+              {/* 이 단계가 끝나면 고객에게 가는 것.
+
+                  위 점 목록이 "무엇을 하는가" 라면 여기는 "그래서 무엇을
+                  받는가" 다. 둘이 겹치지 않게 쓴다 — 02 의 "설비 레이아웃 도면
+                  작성"(그리는 일)과 "레이아웃 도면 확인"(고객이 보는 일)처럼
+                  축이 다르다. company.ts 의 process 주석 참고.
+
+                  가로선으로 끊는다. 점 목록과 같은 결로 이어 두면 항목이 넷인
+                  것처럼 읽힌다 — 이것은 목록의 일부가 아니라 그 결과다.
+
+                  화살표는 글자 →(U+2192)다. SVG 로 두면 카드 사이 연결
+                  화살표(아래 20px SVG)와 같은 그림이 되어 뜻이 섞인다. */}
+              <div className="mt-4 flex items-center gap-1.5 border-t border-line pt-3">
+                <span aria-hidden="true" className="font-bold text-brand">
+                  →
+                </span>
+                <span className="text-xs text-muted">{p.output}</span>
+              </div>
 
               {/* ⚠️ 한때 여기에 카드 오른쪽 위를 덮는 56px 워터마크 번호가
                      있었다(text-[56px] font-extrabold text-brand/30). 목록 글이
