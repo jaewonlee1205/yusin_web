@@ -128,36 +128,53 @@ export default async function ProductDetailPage({
                      않는다" 를 따른다. 왼쪽 갤러리 사진도 그림자가 없어 둘이
                      나란히 같은 결로 선다.
 
-                  ⚠️⚠️ **사진과의 줄 맞춤은 이 구조에서 포기했다.** 카드 패딩
-                        (48px)과 사양 행 박스가 함께 들어오면서 카드가 438.4px
-                        이 됐고, 큰 사진(384px)보다 **54.4px 길다.** 1280 이상은
-                        Container 가 최대 폭이라 더 넓어져도 그대로다.
+                  ⚠️⚠️⚠️ **카드 바닥 = 큰 사진 바닥, 버튼 바닥 = 썸네일 줄 바닥.**
+                          이 화면의 기준이다. lg:flex-1 이 카드를 남은 높이까지
+                          늘리고, 아래 버튼의 mt-7 이 그 밑을 맞춘다.
 
-                        사양이 판 하나(174px)이던 한 라운드 동안은 383.9 vs 384
-                        로 맞았다. "전체를 한 네모로" 가 되면서 그 자리에 더는
-                        들어가지 않는다. 억지로 맞추려면 패딩.행 높이.행 간격을
-                        모두 깎아야 30px 남짓인데, 그러면 카드가 빡빡해진다 —
-                        **그 대가가 더 크다고 봤다.** 재서 고른 것이지 놓친 것이
-                        아니다.
+                          한 라운드 동안 이것을 **포기했었다.** 카드 패딩 48px
+                          (sm:p-6)과 사양 네 줄이 함께 들어와 카드가 438.4px 로
+                          사진(384)보다 54.4px 길었고, 나는 "대가가 더 크다" 고
+                          적고 넘어갔다. 사용자가 바로 그 점을 짚었다 — "큰
+                          이미지보다 더 밑으로 내려간 느낌이야". 맞추는 쪽이
+                          옳았다.
 
-                  ⚠️ 그래도 **lg:flex-1 은 남겨 둔다.** 지금은 내용이 칸보다
-                     커서 일을 하지 않지만, 사양이 줄거나 요약이 짧아지면
-                     카드를 칸 높이까지 늘려 준다. 1024 에서는 실제로 그렇게
-                     작동해 칸 바닥이 왼쪽과 맞는다. 카드 **안쪽**의
-                     lg:mt-auto 와 한 쌍이다.
+                          1280 에서 잰 값으로 지금은 이렇게 떨어진다 —
+
+                            고정 168.5  테두리 1.6 + 배지 줄 29.6 + h1 16+40
+                                        + nameEn 8+20 + 요약 24+29.3
+                            패딩  40    p-5 상하
+                            사양 146.5  행 43.5 x 3 + 간격 8 x 2
+                            여백  29    요약 mb-6 24 + flex-1 이 채우는 5.1
+                            ---------
+                                 384    = 큰 사진 높이
+
+                  ⚠️⚠️ **패딩이 p-5 다. sm:p-6 로 되돌리지 말 것** — 8px 만 늘어도
+                        카드가 사진을 넘어선다. 사양을 네 줄로 늘릴 때도 같다
+                        (한 줄이 51.5px 이라 그대로는 들어가지 않는다).
+
+                  ⚠️ 카드 **안쪽**의 lg:mt-auto 와 한 쌍이다. flex-1 이 카드를
+                     늘리면 그 auto 가 남는 높이를 요약과 사양 사이로 보낸다 —
+                     요약 아래 여백이 24 가 아니라 29px 인 까닭이다.
 
                   ⚠️ 패딩이 값 칸을 좁힌다. 1024(두 칸이 가장 좁은 곳)에서 사양
                      값이 한 줄로 남는지가 이 패딩의 상한이다. 키우려거든 먼저
                      1024 에서 일곱 제품을 다 재라. */}
-              <div className="rounded-2xl border border-line bg-white p-5 sm:p-6 lg:flex lg:flex-1 lg:flex-col">
+              <div className="rounded-2xl border border-line bg-white p-5 lg:flex lg:flex-1 lg:flex-col">
                 {/* 분류 배지(왼쪽)와 YUSIN 워드마크(오른쪽)가 한 줄이다.
 
                     ⚠️ 마크를 네 번 매만졌다 — 배지 줄 24px -> 제목 줄 32px ->
                        다시 배지 줄 32px -> 28px. 문제는 **자리가 아니라 크기**
                        였다. 24px 짜리가 70% 농도로 흐릿해, 배지와 양 끝에 설
                        무게가 없으니 그 사이 251~499px 가 "뭔가 더 있어야 할 빈
-                       곳" 으로 보였다. 28px · 75% 면 93x30px 배지와 덩어리가
-                       맞는다.
+                       곳" 으로 보였다. 28px 이 93x30px 배지와 덩어리가 맞는다.
+
+                       ⚠️ **농도를 주지 않는다(한때 opacity-75 였다).** 흐리게
+                          둔 것은 이 줄이 **흰 배경 위에 그냥 놓여 있던** 때의
+                          판단이다. 지금은 테두리 있는 흰 카드 안이라 카드가
+                          이미 마크를 한 번 가둬 주고, 거기에 농도까지 낮추면
+                          바래 보인다. "흐리게 처리 안 해도 될 것 같다" 는 말을
+                          들었다.
 
                        **24px 로 되돌리지 말 것**(무게가 없어진다). 32px 도 쓰지
                        않는다 — 배지(30px)보다 커서 줄 높이를 마크가 정하게 되고,
@@ -208,7 +225,7 @@ export default async function ProductDetailPage({
                     alt=""
                     width={129}
                     height={32}
-                    className="h-7 w-auto shrink-0 opacity-75"
+                    className="h-7 w-auto shrink-0"
                   />
                 </div>
 
@@ -299,9 +316,20 @@ export default async function ProductDetailPage({
                             것이 246px("스테인리스, 알루미늄 (부품 특성에 따라
                             선정)")이고, 값 칸이 가장 좁아지는 곳이 1024 다.
                             **바깥 카드의 패딩이 그 칸을 더 좁혔다** — 사양 글을
-                            늘릴 때 반드시 1024 에서 다시 잰다. */}
+                            늘릴 때 반드시 1024 에서 다시 잰다.
+
+                      ⚠️⚠️⚠️ **세 줄이다(네 줄이 아니다).** 카드 바닥을 큰 사진에
+                              맞추려고 줄였다 — 네 줄이면 51.5px 넘쳐 사진과
+                              어긋난다(위 카드 주석의 셈 참고). 한 라운드 동안
+                              네 줄이었고, 그 어긋남을 지적받아 되돌린 것이다.
+
+                      ⚠️⚠️⚠️ **아래 SPECIFICATIONS 의 slice(3) 을 반드시 같이 본다.**
+                              한쪽만 바꾸면 specs[3] 이 한 페이지에 **두 번
+                              나오거나 아예 사라진다.** 실제로 그 버그가 있었고,
+                              이번이 그 경고가 쓰인 두 번째다. specs 는 일곱
+                              제품 모두 여섯 줄이라 3 + 3 으로 갈린다. */}
                   <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-y-2">
-                    {product.specs.slice(0, 4).map((spec) => (
+                    {product.specs.slice(0, 3).map((spec) => (
                       <Fragment key={spec.label}>
                         <dt className="flex items-center gap-2.5 whitespace-nowrap rounded-l-xl bg-surface py-3 pl-4 pr-4 text-13 font-bold text-ink">
                           <span
@@ -329,9 +357,13 @@ export default async function ProductDetailPage({
                   640 미만은 flex-col 이라 이미 전폭이다.
 
                   위 간격이 32 가 아니라 28px(mt-7)인 이유는 줄 맞춤이다. 칸
-                  바닥이 468, 버튼이 56.1px 이므로 28px 를 두면 표 바닥이
+                  바닥이 468, 버튼이 56.1px 이므로 28px 를 두면 **카드 바닥**이
                   468 - 56.1 - 28 = 383.9 로 떨어져 큰 사진 바닥(384)과 0.1px
-                  차이가 된다. 32px 면 379.9 로 4px 어긋난다. */}
+                  차이가 된다. 32px 면 379.9 로 4px 어긋난다.
+
+                  ⚠️ 한때 이 자리가 카드가 아니라 사양 표였다("표 바닥" 이라고
+                     적혀 있었다). 셈은 그대로이고 **맞추는 상대만 카드로**
+                     바뀌었다. */}
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/contact/"
@@ -783,7 +815,7 @@ export default async function ProductDetailPage({
               · p-px 로 바깥 테두리를 만들면 반경 16px 모서리에서 1px 가 곡선을
                 따라 가늘어져 끊겨 보였다. **지금은 바깥 테두리 자체가 없다.** */}
           <dl className="mt-8 grid border-t border-line sm:grid-cols-2 sm:gap-x-12">
-            {product.specs.slice(4).map((spec) => (
+            {product.specs.slice(3).map((spec) => (
               <div
                 key={spec.label}
                 className="flex items-center gap-4 border-b border-line py-4"
