@@ -527,20 +527,6 @@ export default function Home() {
 
             ⚠️ items-start 다. 표(약 300px)와 맵(약 390px)의 높이가 달라
                stretch 로 두면 짧은 쪽이 늘어나 표 행 사이가 벌어진다. */}
-      {/* ⚠️⚠️ **표 · 축 · 맵을 한 카드가 감싼다.** 한때 테두리가 맵 박스
-                하나뿐이라, 표는 선만 있는 목록으로 허공에 뜨고 맵만 상자에
-                담겨 "서로 따로따로라 통일감이 없다" 는 말을 들었다.
-
-           ⚠️ **shadow-card 다(테두리가 아니다).** 홈의 카드 언어가 그것이다 —
-              ProductCard · VideoCard 가 둘 다 rounded-2xl bg-white shadow-card.
-              /location 이 border 를 쓰는 것은 거기가 자료 페이지라서이고,
-              홈에서는 선을 하나 줄이는 쪽이 미니멀하다.
-
-           ⚠️ 섹션 배경을 tone="surface" 로 바꾸지 말 것. 홈 리듬이
-              흰 -> 회색(PRODUCTS) -> **흰** -> 회색(VIDEO) -> 흰이라, 여기를
-              회색으로 하면 회색이 셋 연속이 된다. 흰 위의 흰 카드 + 그림자로
-              충분히 떠 보인다. */}
-      <div className="rounded-2xl bg-white p-6 shadow-card sm:p-8">
         {/* ⚠️⚠️ **items-start 를 쓰지 않는다**(기본 stretch). 오른쪽 맵 칸이
                   왼쪽 표와 같은 높이를 받아야 하기 때문이다 — 한때
                   xl:items-start 라 표 297px 옆에 맵 칸이 395px 로 서서
@@ -688,10 +674,28 @@ export default function Home() {
 
               ⚠️ 영역 크기는 company.ts 의 POSITIONING_IDEAL 에 있다. 점
                  좌표와 함께 봐야 하므로 한 곳에 뒀다. */}
-          {/* ⚠️ delay={90} 이다 — 왼쪽 표(0) 다음에 올라온다. 좌우 배치라
-                 읽는 방향과 같다. 위아래로 떨어지는 폭(xl 미만)에서도 표가
-                 먼저 보이므로 순서가 맞다. */}
-          <Reveal delay={90} className="flex flex-col">
+          {/* ⚠️⚠️ **카드가 맵 영역에만 붙는다.** 축 둘(대응 · 가격)과 그래프가
+                    한 덩어리로 읽혀야 한다 — 그것이 "통일감" 으로 요청받은
+                    범위다. 왼쪽 표는 **카드 밖**에 선뿐인 목록으로 남는다.
+
+                    한 라운드 동안 표까지 감싸는 큰 카드였는데, 그러면 묶이는
+                    것이 "섹션 전체" 라 축과 맵이 여전히 따로 놀았다.
+                    **다시 바깥으로 넓히지 말 것.**
+
+               ⚠️ 카드 클래스를 **Reveal 자체에** 붙인다. 래퍼 div 를 덧대면
+                  격자 자식이 그 래퍼가 되어 "맵이 표 높이를 따라가는"
+                  stretch 가 깨진다.
+
+               ⚠️ shadow-card 다(테두리가 아니다). 홈의 카드 언어가 그것이다 —
+                  ProductCard · VideoCard 가 둘 다 rounded-2xl bg-white
+                  shadow-card.
+
+               ⚠️ delay={90} — 왼쪽 표(0) 다음에 올라온다. 좌우 배치라 읽는
+                  방향과 같고, 위아래로 떨어지는 폭에서도 표가 먼저다. */}
+          <Reveal
+            delay={90}
+            className="flex flex-col rounded-2xl bg-white p-5 shadow-card sm:p-6"
+          >
             {/* 세로축 · 맵 · 가로축을 **한 격자**에 넣는다.
 
                 ⚠️⚠️ **가로축이 맵과 같은 격자 열(2열)에 있어야 한다.** 한때
@@ -707,7 +711,7 @@ export default function Home() {
                 ⚠️ flex-1 이다. 바깥 격자가 stretch 라 이 칸이 왼쪽 표와 같은
                    높이를 받고, 그 높이를 세로축.맵(1fr)과 가로축(auto)이
                    나눠 쓴다. 표가 길어지든 짧아지든 맵이 저절로 따라온다. */}
-            <div className="grid flex-1 grid-cols-[2.5rem_1fr] grid-rows-[1fr_auto] gap-3">
+            <div className="grid flex-1 grid-cols-[auto_1fr] grid-rows-[1fr_auto] gap-3">
               {/* 세로축 — 화살표 ↑ / 칩 / 화살표 ↓
 
                   ⚠️⚠️ **칩이 세로로 선다**([writing-mode:vertical-rl] —
@@ -739,33 +743,48 @@ export default function Home() {
 
                         ⚠️ gap 값은 **가로축과 같아야 한다**(지금 둘 다 gap-8).
                            한쪽만 고치면 두 축이 짝으로 안 보인다. */}
-              <div className="flex flex-col items-center justify-center gap-8">
+              {/* ⚠️⚠️⚠️ **화살표까지 한 알약 안에 있다.** 알약이 글자만 감싸고
+                           화살표가 밖에 따로 서 있던 때가 있는데, "화살표하고
+                           대응 / 가격이 서로 독립된 느낌" 이라는 말을 들었다.
+                           바탕을 축 전체에 깔면 **한 덩어리**가 된다.
+
+                  ⚠️⚠️ **아래 가로축과 구성이 똑같아야 한다** — 패딩 + 화살표 +
+                        gap + 두 글자 + gap + 화살표. 그래야 두 축의 **길이가
+                        저절로 같아진다.**
+
+                  ⚠️⚠️ **place-self-center 가 꼭 있어야 한다.** 격자 자식은
+                        기본이 stretch 라, 이게 없으면 알약이 **칸 전체로
+                        늘어난다** — 세로축은 맵 높이만큼, 가로축은 맵 폭만큼
+                        길어져 둘의 길이가 완전히 달라진다. 한 번 빠뜨렸다가
+                        화면에서 잡았다. justify-center 로는 안 된다(그건
+                        알약 **안쪽** 내용을 가운데 두는 것이다).
+
+                        한때 알약 둘의 **비율만** 1.86 : 1 로 맞췄는데, 길이가
+                        66 vs 52 로 달라 "대응이 더 길어 보인다" 는 말을 들었다.
+                        비율이 아니라 **길이와 두께**를 맞춰야 한다.
+
+                  ⚠️⚠️ **leading-none 이 두께를 맞춘다.** 그것 없이는 세로쓰기
+                        글자의 가로 두께(line-height 기준 약 26px)가 가로축
+                        글자의 높이(18px)보다 커서 세로축만 두꺼워진다.
+                        주면 둘 다 화살표 16px 가 두께를 정한다.
+
+                  ⚠️⚠️ **px 와 py 가 뒤바뀐 것처럼 보이는데 맞다.** Tailwind v4 의
+                        px-* 와 py-* 는 **논리 속성**(padding-inline /
+                        padding-block)이라, writing-mode:vertical-rl 에서는 글이
+                        흐르는 방향이 세로가 되어 둘의 뜻이 90도 돌아간다 —
+
+                          py-4    화면에서 **위아래** 패딩 (알약을 길게)
+                          px-1.5  화면에서 **좌우** 패딩 (알약을 얇게)
+
+                        한 번 반대로 넣었다가 알약이 **가로로 누운** 것을 화면에서
+                        잡았다. 값을 고칠 때 이 뒤바뀜을 먼저 떠올릴 것.
+
+                        ⚠️ 바깥 div 는 writing-mode 가 없으므로 **거기 쓰는
+                           px/py 는 평범하게 동작한다.** 뒤바뀌는 것은
+                           writing-mode 가 걸린 span 뿐이다. */}
+              <div className="flex flex-col items-center gap-4 place-self-center rounded-full bg-surface px-1.5 py-4">
                 <AxisArrow className="rotate-[-90deg]" />
-                {/* ⚠️⚠️ **py-8 이다. py-3 이 아니다.** 같은 rounded-full 인데
-                          가로 칩은 알약으로 보이고 이 칩만 **원**으로 보인 적이
-                          있다 — 반경이 아니라 **치수** 때문이었다.
-
-                            가로 "가격"  52 x 28  = 1.86 : 1  알약
-                            세로 "대응"  44 x 42  = 1.05 : 1  거의 원  <- 문제
-                            세로 "대응"  44 x 82  = 1.86 : 1  알약     <- 지금
-
-                          rounded-full 을 rounded-lg 로 바꾸지 말 것. 그러면
-                          가로 칩까지 각지게 만들어야 하는데 그쪽은 그대로가
-                          좋다는 평가를 받았다. 글자가 늘거나 줄면 패딩을 다시
-                          재서 비율 1.8~1.9 를 맞춘다.
-
-                    ⚠️⚠️ **px 와 py 가 뒤바뀐 것처럼 보이는데 맞다.** Tailwind v4 의
-                          px-* 와 py-* 는 **논리 속성**(padding-inline / padding-block)
-                          이라, writing-mode:vertical-rl 에서는 **글이 흐르는
-                          방향이 세로**가 되어 둘의 뜻이 90도 돌아간다 —
-
-                            px-5  ->  화면에서 **위아래** 패딩 (칩을 길게)
-                            py-2  ->  화면에서 **좌우** 패딩 (칩을 얇게)
-
-                          한 번 px-2 py-8 로 넣었다가 칩이 **가로로 누운 알약**이
-                          되는 것을 화면에서 잡았다. 값을 고칠 때 이 뒤바뀜을
-                          먼저 떠올릴 것. */}
-                <span className="rounded-full bg-surface px-5 py-2 text-13 font-bold text-ink-soft [writing-mode:vertical-rl]">
+                <span className="text-13 font-bold leading-none text-ink-soft [writing-mode:vertical-rl]">
                   대응
                 </span>
                 <AxisArrow className="rotate-90" />
@@ -781,11 +800,14 @@ export default function Home() {
 
                         한때 전 폭 4/3 이었는데 1024 에서 960 x 720px 짜리
                         거대한 상자가 됐다. 중간 구간을 빼먹으면 그 꼴이 된다. */}
-              {/* ⚠️ **테두리가 없고 반경이 한 단계 작다**(xl 12px). 바깥에
-                     큰 카드가 생겼으므로 상자가 둘이면 겹쳐 보인다 —
-                     bg-surface 회색만으로 흰 카드 안에서 충분히 구분된다.
-                     중첩된 상자의 반경을 같게 두면 바깥.안쪽 모서리가 평행해
-                     어색하다(경영이념 패널이 같은 규칙을 쓴다). */}
+              {/* ⚠️ **테두리가 없고 반경이 한 단계 작다**(xl 12px). 이 칸을
+                     감싸는 카드(위 Reveal)가 있으므로 상자가 둘이면 겹쳐
+                     보인다 — bg-surface 회색만으로 흰 카드 안에서 충분히
+                     구분된다. 중첩된 상자의 반경을 같게 두면 바깥.안쪽
+                     모서리가 평행해 어색하다(경영이념 패널이 같은 규칙을 쓴다).
+
+                  ⚠️ 축 알약도 같은 bg-surface 다. 맵과 축이 **같은 회색**이라
+                     카드 안에서 한 덩어리로 읽힌다 — 색을 가르지 말 것. */}
               <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-surface sm:aspect-[5/2] xl:aspect-auto">
                 <div
                   aria-hidden="true"
@@ -853,11 +875,16 @@ export default function Home() {
                   두기 위한 것이다(위 격자 주석 참고). */}
               <div aria-hidden="true" />
 
-              {/* 가로축 — 화살표 ← / 칩 / 화살표 →. 세로축과 **같은 꼴**이라
-                  둘이 한 쌍으로 읽힌다. */}
-              <div className="flex items-center justify-center gap-8">
+              {/* 가로축. **위 세로축과 구성이 똑같다** — 패딩 + 화살표 + gap +
+                  두 글자 + gap + 화살표. 한쪽만 고치면 두 축의 길이가 어긋나
+                  "하나가 더 길어 보인다" 는 말이 다시 나온다.
+
+                  ⚠️ 여기는 writing-mode 가 없어 px/py 가 평범하게 동작한다 —
+                     위 세로축과 값이 뒤집혀 보이는 것이 정상이다
+                     (가로 px-4 py-1.5  <->  세로 px-1.5 py-4). */}
+              <div className="flex items-center gap-4 place-self-center rounded-full bg-surface px-4 py-1.5">
                 <AxisArrow className="rotate-180" />
-                <span className="rounded-full bg-surface px-3.5 py-1 text-13 font-bold text-ink-soft">
+                <span className="text-13 font-bold leading-none text-ink-soft">
                   가격
                 </span>
                 <AxisArrow />
@@ -865,7 +892,6 @@ export default function Home() {
             </div>
           </Reveal>
         </div>
-      </div>
       </Section>
 
       {/* 6. 제품 영상 — videos.ts가 비어 있으면 통째로 렌더하지 않는다.
