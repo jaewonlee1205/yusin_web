@@ -180,46 +180,57 @@ export default function LocationPage() {
 
       <div className="py-14 sm:py-20">
         <Container>
-          {/* 지도가 위, 연락처가 그 아래로 눕는다. 둘 다 전폭 1열이다.
+          {/* 제목 → **지도와 연락처가 한 카드**로 눕는다. 전폭 1열이다.
 
-              순서를 **네 번** 바꿨다.
+              배치를 **다섯 번** 바꿨다.
 
-                1) 지도가 위  — 1088x462 라 1440 에서 바닥이 863px 였고,
-                                전화번호를 보려면 반드시 한 번 굴려야 했다
-                2) 2열        — 지도 약 620px + 오른쪽 연락처
+                1) 지도가 위   — 1088x462 라 1440 에서 바닥이 863px 였고,
+                                 전화번호를 보려면 반드시 한 번 굴려야 했다
+                2) 2열         — 지도 약 620px + 오른쪽 연락처
                 3) 연락처가 위 — 다시 전폭 1열. 그 스크롤 문제가 사라졌다
-                4) 지도가 위  — 지금. 요청이다
+                4) 지도가 위   — 요청이다. 제목도 지도 위로 올렸다
+                5) **한 카드** — 지금. 지도와 표를 한 테두리 안에 넣었다
 
-              ⚠️ 1번의 스크롤 문제로 **되돌아간 것이 아니다.** 그때와 다른 점이
-                 둘 있다 — 지도를 3:1 로 눕혀 462 -> 363px 가 됐고(99px), 표를
-                 2열 x 3행으로 접어 382 -> 207px 가 됐다(175px). 세로를 274px
-                 덜 쓰므로 1440 에서 연락처 첫 줄이 첫 화면 안에 들어온다.
-                 그래도 전화번호가 **배너 바로 아래**에 있던 3)보다는 낮다.
+              ⚠️ 5번의 이유. 4번에서 "지도 바로 밑에 표가 오는 게 부자연스럽다"
+                 는 말을 들었다. 원인은 **순서가 아니라 재질**이었다 — 지도는
+                 사방 테두리 + rounded-2xl 인 **카드**인데 표는 선만 있는
+                 **평평한 목록**이라, 카드 밑변이 끝난 40px 뒤에 성격이 다른
+                 블록이 시작했다. 한 테두리로 묶으면 "붙어 있는 둘" 이 아니라
+                 **한 덩어리**가 된다.
 
-                 그래서 위 압축은 절대 되돌리지 말 것 — 지도를 다시 세우거나
-                 표를 1열로 펴면 1번 상태가 그대로 돌아온다.
+              ⚠️⚠️ 1번의 스크롤 문제로 **되돌아간 것이 아니다.** 그때와 다른
+                    점이 셋이다 — 지도를 3:1 로 눕혀 462 -> 364px 가 됐고,
+                    표를 2열 x 3행으로 접어 382 -> 230px 가 됐고, 이번에
+                    지도.표 사이 gap-10(40px)이 **카드 안의 선 1px** 로 줄었다.
 
-              lg 미만에서는 지도가 고정 높이로 서고 표가 1열로 떨어진다. */}
+                    위 압축은 절대 되돌리지 말 것 — 지도를 다시 세우거나,
+                    표를 1열로 펴거나, 카드를 다시 쪼개면 1번으로 돌아간다.
+
+              ⚠️ 1440 실측(변경 전 -> 후) —
+                   표 첫 줄의 화면 좌표   940 -> 900px
+                   카드(지도+표) 바닥    1169 -> 1129px
+                   페이지 전체           1892 -> 1852px
+                 900px 뷰포트에서 연락처 첫 줄이 **경계에 닿는다.** 세로를
+                 40px 만 더 써도 다시 첫 화면 밖으로 나간다. */}
           <div className="flex flex-col gap-10">
             {/* Section 컴포넌트를 쓰지 않는다. 생김새만 Section 의 제목
                 블록과 맞춘다.
 
                 ⚠️ 한때 **지도가 제목보다 먼저** 왔고, 그것이 Section 을 쓰지
                    못하는 첫째 근거였다(Section 은 제목을 늘 children 위에
-                   놓는다). 지금은 제목 → 지도 → 표 순이라 그 근거는 사라졌다.
+                   놓는다). 지금은 제목 → 카드 순이라 그 근거는 사라졌다.
                    그래도 Section 으로 갈아타지 않는 **둘째 근거는 그대로**다 —
                    Section 이 py-16 sm:py-24 를 제 몫으로 갖는데 여기는 바깥
-                   div 가 이미 py-14 sm:py-20 을 쓰고 gap-10 으로 셋을 띄운다.
+                   div 가 이미 py-14 sm:py-20 을 쓰고 gap-10 으로 둘을 띄운다.
                    갈아타면 세로가 한 번 더 붙는다. 간격을 이 페이지가 직접
                    쥐고 있다.
 
                 제목이 "위치 및 연락처" 다. 한때 "연락처" 였는데, 그때는 이
                 블록이 지도 **아래**에 있어 표만 덮으면 됐다. 지금은 제목이
-                지도까지 덮으므로 "연락처" 로는 반쪽만 말한다. "오시는 길" 은
-                쓸 수 없다 — 바로 위 h1 이 그 말이다.
+                지도와 표를 **한 카드로** 덮으므로 "연락처" 로는 반쪽만
+                말한다. "오시는 길" 은 쓸 수 없다 — 바로 위 h1 이 그 말이다.
 
-                ⚠️ delay 가 없다(0). 셋 중 맨 위라 가장 먼저 떠야 한다.
-                   순서를 바꾸면 지도(90) · 표(150)와 함께 다시 매긴다. */}
+                ⚠️ delay 가 없다(0). 아래 카드(90)보다 먼저 떠야 한다. */}
             <Reveal>
               <p className="text-xs font-bold tracking-[0.08em] text-brand">
                 FIND US
@@ -229,133 +240,153 @@ export default function LocationPage() {
               </h2>
             </Reveal>
 
-            {/* lg 부터 3:1 이다(1088x363) — 홈 PERFORMANCE 영상과 같은
-                비율로 가로로 시원하게 눕는다. 한때 칸 높이를 받는 lg:flex +
-                lg:min-h-[25rem] 였는데, 그건 오른쪽에 연락처가 있어 행 높이를
-                그쪽이 정하던 2열 배치에서 쓰던 방식이다.
+            {/* ⚠️⚠️ **지도와 연락처가 한 Reveal(한 카드) 안에 있다.** 한때
+                      Reveal 이 셋(제목 0 · 지도 90 · 표 150)이었는데, 한
+                      덩어리의 일부가 따로 올라오면 묶은 뜻이 사라진다.
+                      지금은 둘이다 — 제목(0) · 카드(90).
 
-                lg 미만은 고정 높이다 — 좁은 폭에서 3:1 로 두면 지도가 너무
-                납작해져 길이 안 보인다.
+                ⚠️ 카드가 bg-white 다. 안쪽 지도 칸만 bg-surface 다(아래).
 
-                아래 표와 함께 테두리로 선다(2D). 그림자로 띄우면 지도.표가
-                입체로 읽혀 자료를 읽는 자리에 맞지 않고, 한쪽만 바꾸면
-                위아래로 선 둘의 결이 갈린다.
-
-                ⚠️ delay={90} 이다. 제목(0) 다음, 표(150) 앞이다 — 셋이 위에서
-                   아래로 차례로 올라온다. 순서를 바꾸면 세 숫자를 함께 뒤집는다. */}
-            {/* ⚠️ relative + bg-surface 가 아래 플레이스홀더의 바탕이다.
-                   iframe 은 loading="lazy" 라 화면에 가까워져야 받기
-                   시작하는데, 그동안 **빈 칸**이 떴다 — 320~400px 짜리
-                   흰 구멍이다.
-
-                ⚠️ iframe 에 bg-white 를 준다. 안 주면 iframe 이 투명해서
-                   지도가 떠도 뒤의 글자가 비쳐 보인다. */}
+                테두리로 선다(2D). 그림자로 띄우면 자료를 읽는 자리에 맞지
+                않는다 — 사이트의 다른 표(제품 사양 · 회사 개요)도 전부
+                선뿐이다. */}
             <Reveal
               delay={90}
-              className="relative overflow-hidden rounded-2xl border border-line bg-surface"
+              className="overflow-hidden rounded-2xl border border-line bg-white"
             >
-              <div
-                aria-hidden="true"
-                /* ⚠️ text-ink-soft 다. text-muted(#6b7280)를 이 바탕
-                   (bg-surface #f6f7f9)에 올리면 실측 **4.03:1** 로 WCAG
-                   AA(4.5:1)에 못 미친다 — 픽셀 히스토그램으로 쟀다.
-                   ink-soft(#414751)는 약 8.9:1 이다. */
-                className="absolute inset-0 flex items-center justify-center text-13 text-ink-soft"
-              >
-                지도를 불러오는 중…
-              </div>
-              {/* ⚠️⚠️ 길찾기가 **지도 밖에** 있어야 한다. 이 페이지는
-                     "샘플을 들고 오시면 현장에서 함께 검토합니다" 라고
-                     해 놓고 가는 법을 주지 않았다. 게다가 키보드로는
-                     390px 에서 **Tab 네 번째**에 지도 iframe 이 걸리고,
-                     그 안에서 여섯 번을 더 눌러야 아래 연락처로 내려간다
-                     — 재서 확인했다. 이 링크가 그 우회로다.
+              {/* lg 부터 3:1 이다(1088x363) — 홈 PERFORMANCE 영상과 같은
+                  비율로 가로로 시원하게 눕는다. 한때 칸 높이를 받는 lg:flex +
+                  lg:min-h-[25rem] 였는데, 그건 오른쪽에 연락처가 있어 행
+                  높이를 그쪽이 정하던 2열 배치에서 쓰던 방식이다.
 
-                  ⚠️ z-10 이 필요하다. 위 플레이스홀더와 아래 iframe 사이에
-                     끼어 있어 그냥 두면 iframe 이 덮는다. */}
-              <a
-                href={site.naverPlace}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="absolute right-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-lg bg-white/95 px-3 py-2 text-13 font-semibold text-ink shadow-card backdrop-blur transition hover:text-brand active:scale-95"
-              >
-                길찾기
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  lg 미만은 고정 높이다 — 좁은 폭에서 3:1 로 두면 지도가 너무
+                  납작해져 길이 안 보인다.
+
+                  ⚠️⚠️ **relative 와 bg-surface 가 이 div 에 있다.** 한때 둘이
+                        Reveal(카드)에 있었는데, 카드가 표까지 감싸게 되면서
+                        아래 플레이스홀더의 absolute inset-0 과 길찾기 링크의
+                        absolute right-3 top-3 가 **표까지 포함한 카드 전체**를
+                        기준으로 잡히게 됐다. 지도 칸이 기준이어야 한다.
+
+                  ⚠️ bg-surface 는 플레이스홀더의 바탕이다. iframe 이
+                     loading="lazy" 라 화면에 가까워져야 받기 시작하는데,
+                     그동안 **빈 칸**이 떴다 — 320~400px 짜리 흰 구멍이다. */}
+              <div className="relative bg-surface">
+                <div
                   aria-hidden="true"
-                  className="shrink-0"
+                  /* ⚠️ text-ink-soft 다. text-muted(#6b7280)를 이 바탕
+                     (bg-surface #f6f7f9)에 올리면 실측 **4.03:1** 로 WCAG
+                     AA(4.5:1)에 못 미친다 — 픽셀 히스토그램으로 쟀다.
+                     ink-soft(#414751)는 약 8.9:1 이다. */
+                  className="absolute inset-0 flex items-center justify-center text-13 text-ink-soft"
                 >
-                  <path d="M7 17 17 7" />
-                  <path d="M8 7h9v9" />
-                </svg>
-                <span className="sr-only">네이버 지도에서 열기 (새 창)</span>
-              </a>
+                  지도를 불러오는 중…
+                </div>
+                {/* ⚠️⚠️ 길찾기가 **지도 밖에** 있어야 한다. 이 페이지는
+                       "샘플을 들고 오시면 현장에서 함께 검토합니다" 라고
+                       해 놓고 가는 법을 주지 않았다. 게다가 키보드로는
+                       390px 에서 **Tab 네 번째**에 지도 iframe 이 걸리고,
+                       그 안에서 여섯 번을 더 눌러야 아래 연락처로 내려간다
+                       — 재서 확인했다. 이 링크가 그 우회로다.
 
-              <iframe
-                src={MAP_SRC}
-                title={`${site.name} 위치 지도`}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                /* saturate-50 — 구글 기본 색(초록 공원 · 주황 상점 · 파란 물)이
-                   사이트의 회색 톤과 겉돈다. 절반으로 낮추면 배경이 가라앉으면서
-                   위치 핀의 빨강은 알아볼 만큼 남는다.
-                   ⚠️ contrast.brightness 를 더하지 말 것 — 도로명과 상호 글자가
-                      흐려져 길을 못 읽는다. */
-                className="relative block h-[320px] w-full border-0 bg-white saturate-50 sm:h-[400px] lg:aspect-[3/1] lg:h-auto"
-              />
-            </Reveal>
+                    ⚠️ z-10 이 필요하다. 위 플레이스홀더와 아래 iframe 사이에
+                       끼어 있어 그냥 두면 iframe 이 덮는다. */}
+                <a
+                  href={site.naverPlace}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute right-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-lg bg-white/95 px-3 py-2 text-13 font-semibold text-ink shadow-card backdrop-blur transition hover:text-brand active:scale-95"
+                >
+                  길찾기
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                    className="shrink-0"
+                  >
+                    <path d="M7 17 17 7" />
+                    <path d="M8 7h9v9" />
+                  </svg>
+                  <span className="sr-only">네이버 지도에서 열기 (새 창)</span>
+                </a>
 
-            {/* ⚠️ 표만 든 Reveal 이다. 제목은 **지도 위**로 올라갔다
-                   (위쪽 블록 참고). delay 150 — 제목(0) · 지도(90) 다음이다. */}
-            <Reveal delay={150}>
-              {/* ⚠️ 제목 아래 안내 한 줄을 두지 않는다. 참고한
-                     webprosoft.kr "찾아오시는길" 짜임을 따라 "방문에 필요한
-                     연락처와 찾아오시는 길을 안내해 드립니다" 를 넣었던
-                     적이 있는데, 위 배너가 이미 "샘플을 들고 오시면 현장에서
-                     함께 검토합니다. 방문 전 연락 바랍니다." 를 말하고 있어
-                     한 화면에서 두 번 안내하는 꼴이었다. 아래 목록이
-                     무엇인지는 "연락처" 라는 제목으로 충분하다. */}
+                <iframe
+                  src={MAP_SRC}
+                  title={`${site.name} 위치 지도`}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  /* saturate-50 — 구글 기본 색(초록 공원 · 주황 상점 · 파란 물)이
+                     사이트의 회색 톤과 겉돈다. 절반으로 낮추면 배경이 가라앉으면서
+                     위치 핀의 빨강은 알아볼 만큼 남는다.
+                     ⚠️ contrast.brightness 를 더하지 말 것 — 도로명과 상호 글자가
+                        흐려져 길을 못 읽는다. */
+                  className="relative block h-[320px] w-full border-0 bg-white saturate-50 sm:h-[400px] lg:aspect-[3/1] lg:h-auto"
+                />
+              </div>
 
-              {/* 연락처 목록.
+              {/* 연락처 목록. **지도와 같은 카드 안**이다.
 
                   ⚠️ 테두리 상자와 회색 라벨 칸을 걷은 자리다. 한때 제품 상세
                      사양 표와 같은 꼴(바깥 테두리 + bg-surface 라벨 칸 +
                      칸 사이 선)이었는데, 값이 여섯뿐인 자리에 표의 틀까지
                      두니 무거웠다. 히어로 "주요 사양" 카드도 같은 이유로
-                     표에서 박스로 바뀐 적이 있다.
+                     표에서 박스로 바뀐 적이 있다. **지금 바깥 테두리는 이
+                     표의 것이 아니라 지도와 공유하는 카드의 것이다.**
 
-                  ⚠️ **이 표가 사이트의 기준 디자인이 됐다.** 제품 상세 사양
-                     표(구동 · 옵션)와 회사 개요 표를 여기에 맞춰 통일해
-                     달라는 요청에, 그 둘이 아래 className 을 그대로 가져갔다.
-                     여기를 고치면 그 둘도 같이 본다 —
+                  ⚠️ border-t 가 **지도와 표를 가르는 선**이다. 한때 이 선이
+                     표의 머리였는데, 카드 안으로 들어오면서 둘 사이의
+                     구분선을 겸한다. 걷으면 지도 아래가 그대로 글로 이어진다.
+
+                  ⚠️⚠️ **마지막 행의 border-b 를 끈다**(아래 두 arbitrary
+                        variant). 카드 바닥 테두리와 1px 간격으로 겹쳐 2중
+                        선이 됐다. 1열에서는 마지막 한 칸, lg 2열에서는
+                        마지막 **두** 칸이다.
+
+                        ⚠️ 이 둘은 **칸이 짝수**임을 전제한다(지금 여섯).
+                           홀수로 바꾸면 lg 에서 nth-last-child(2) 가 마지막
+                           행이 아니라 그 위 행의 오른쪽 칸을 잡는다 — 칸
+                           수를 바꾸면 이 선택자를 반드시 다시 볼 것.
+                           (위 cells 주석의 "칸 수는 자유롭다" 는 그래서
+                           더는 무조건 참이 아니다.)
+
+                  ⚠️⚠️ **좌우 패딩이 dl 이 아니라 행에 있다**(px-5 sm:px-7).
+                        행에 주면 border-b 가 패딩까지 덮어 **선이 카드
+                        전폭**으로 남는다. dl 에 주면 선이 좌우로 끊겨 카드
+                        안에 떠 보인다 — 제품 상세 사양표의 "첫 열만 pl-0" 과
+                        같은 발상이다.
+
+                  ⚠️ 그래서 lg:gap-x-12(48px)를 **걷었다.** 행 패딩 28 x 2 가
+                     그 일을 대신해 2열 가운데 틈이 56px 다(전에는 48px).
+                     게다가 gap 이 0 이라 왼쪽.오른쪽 칸의 border-b 가 맞닿아
+                     **선이 가운데에서 끊기지 않는다** — 전에는 48px 틈에서
+                     잘려 있었다.
+
+                  ⚠️ **이 표가 사이트의 기준 디자인이다.** 제품 상세 사양 표
+                     (구동 · 옵션)와 회사 개요 표가 같은 꼴을 가져갔다 —
                        src/app/products/[slug]/page.tsx  (SPECIFICATIONS)
                        src/app/company/page.tsx          (OVERVIEW)
-                     한때 "제품 상세는 값이 21개라 격자가 맞고 여기는 목록이
-                     맞다" 고 적어 두었는데, 그 표는 지금 값이 14개(2 x 7제품)
-                     이고 디자인도 이쪽으로 왔다.
+                     **그 둘은 그대로 둔다.** 조건이 다르다 — 그쪽은 카드
+                     **밖**이라 마지막 행의 border-b 가 표의 꼬리를 맺는
+                     유일한 선이고, 여기는 카드 **안**이라 카드 바닥 테두리가
+                     그 일을 한다. 바뀐 것은 담는 그릇뿐이고 **글자 크기 ·
+                     색 · 라벨 폭 · 행 높이는 셋이 그대로 같다.**
 
                   라벨은 13px 회색, 값은 15px 먹색이다. 굵기가 아니라 크기와
                   색으로 가른다 — 둘 다 굵게 하면 어디부터 값인지 흐려진다.
 
                   lg 부터 2열이다. 행 우선(grid-flow-row 기본)이라 선이
                   행마다 가로로 이어진다. 열 우선으로 돌리면 왼쪽 열 셋이
-                  먼저 차면서 선이 열마다 끊겨 표처럼 보인다 — 표를 걷으려고
-                  고친 자리에서 다시 표가 된다.
+                  먼저 차면서 선이 열마다 끊겨 표처럼 보인다.
 
                   dl/dt/dd 는 그대로다. 라벨-값은 용어-정의가 맞고, 접근성
-                  검사(dlitem)가 dt.dd 를 dl 직계로 요구한다. 생김새만 바뀐다. */}
-              {/* ⚠️ mt-8 을 걷었다. 제목이 바로 위에 있던 때의 간격인데,
-                     지금은 제목이 지도 위로 가고 이 Reveal 에 표만 남아
-                     바깥 div 의 gap-10(40px)이 지도와의 사이를 띄운다.
-                     두면 72px 이 된다. */}
-              <dl className="grid border-t border-line lg:grid-cols-2 lg:gap-x-12">
+                  검사(dlitem)가 dt.dd 를 dl 직계로 요구한다. */}
+              <dl className="grid border-t border-line [&>*:last-child]:border-b-0 lg:grid-cols-2 lg:[&>*:nth-last-child(2)]:border-b-0">
                 {cells.map((cell) => (
                   <div
                     key={cell.label}
@@ -369,8 +400,11 @@ export default function LocationPage() {
 
                        같은 이유로 dt 의 pt-0.5 를 걷었다. 글을 살짝 내려
                        값 첫 줄에 맞추던 값인데, 가운데 정렬에서는 그만큼
-                       아래로 밀린다. */
-                    className="flex items-center gap-4 border-b border-line py-4"
+                       아래로 밀린다.
+
+                       ⚠️ px-5 sm:px-7 이 **행에** 있다(위 dl 주석 참고).
+                          dl 로 옮기면 선이 카드 전폭을 잃는다. */
+                    className="flex items-center gap-4 border-b border-line px-5 py-4 sm:px-7"
                   >
                     <dt className="w-16 shrink-0 text-13 font-bold text-muted sm:w-20">
                       {cell.label}

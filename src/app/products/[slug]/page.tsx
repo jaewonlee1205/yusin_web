@@ -668,9 +668,17 @@ export default async function ProductDetailPage({
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-line">
+                {/* ⚠️ 선이 **tbody 의 divide-y 가 아니라 tr 의 border-b** 다.
+                       divide-y 는 행 **사이**에만 선을 그어 마지막 행
+                       (YS-600) 아래가 비었다 — thead 는 border-b 로 선을
+                       갖는데 꼬리만 없어 표가 바닥에서 풀려 보였다.
+                       행에 직접 주면 마지막 행도 받는다.
+
+                    ⚠️ 아래 "구동 · 옵션" dl 은 mt-8 border-t 라 32px 떨어져
+                       있다 — 이 선과 겹치지 않는다. */}
+                <tbody>
                   {product.specTable.rows.map((row) => (
-                    <tr key={row[0]}>
+                    <tr key={row[0]} className="border-b border-line">
                       {row.map((cell, i) => (
                         <td
                           key={i}

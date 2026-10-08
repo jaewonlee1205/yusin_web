@@ -211,7 +211,15 @@ export default function CompanyPage() {
             <ul className="mt-6 grid grid-cols-2 gap-3 border-t border-white/15 pt-6">
               {philosophy.map((item) => (
                 <li key={item.title}>
-                  <p className="text-sm font-bold text-brand-light">
+                  {/* ⚠️ text-center 다 — 제목과 아래 자막 둘 다. 한동안 왼쪽
+                         정렬이었는데, 둘이 사진 칸(aspect-[3/2] w-full)과 같은
+                         폭을 쓰므로 왼쪽에 붙으면 사진은 칸을 가득 채우고
+                         글만 한쪽으로 쏠려 **축이 둘**로 보였다. 가운데로
+                         두면 사진.제목.자막이 한 축에 선다.
+
+                      ⚠️ 세로 치수는 1px 도 안 바뀐다. 아래 aspect-[3/2] 와
+                         mt-2.5 를 건드리지 말 것(패널 높이 근거가 거기 있다). */}
+                  <p className="text-center text-sm font-bold text-brand-light">
                     {item.title}
                   </p>
                   {/* bg-navy 는 사진이 뜨기 전 자리를 지킨다. 패널이
@@ -259,7 +267,7 @@ export default function CompanyPage() {
 
                         pointer-events-none — 누를 것이 없다. */}
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/40 to-transparent px-3 pb-2 pt-6">
-                      <p className="text-xs font-medium leading-snug text-white">
+                      <p className="text-center text-xs font-medium leading-snug text-white">
                         {item.caption}
                       </p>
                     </div>

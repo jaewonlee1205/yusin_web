@@ -503,32 +503,50 @@ export default function InquiryForm() {
         </p>
       )}
 
-      <button
-        type="submit"
-        disabled={status === "submitting"}
-        aria-busy={status === "submitting"}
-        /* ⚠️ disabled: 가 active: 를 이기도록 둔다 — Tailwind 는 소스 순서를
-             따르므로 disabled 계열이 뒤에 와야 보내는 중에 눌려도 안 줄어든다. */
-        className="h-14 w-full rounded-xl bg-brand text-17 font-bold text-white transition hover:bg-brand-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100"
-      >
-        {status === "submitting" ? "전송 중…" : "문의 보내기"}
-      </button>
+      {/* ⚠️⚠️ 버튼과 안내가 **한 div 로 묶여 있다.** 폼이 space-y-7 인데
+                Tailwind v4 의 space-y 는 :not(:last-child) 에 margin-bottom 을
+                주므로, 버튼이 받은 28px 와 안내의 mt-3(12px)가 **더해져
+                40px** 였다 — 실측값이다. 버튼 아래 빈 덩어리가 61px
+                (간격 40 + 글 21)나 되어 버튼이 "너무 밑에 있다" 고 읽혔다.
 
-      {/* ⚠️ 버튼 **아래**다. 한동안 위에 있었고 "급하시면 031-434-0065" 가
-             함께 붙어 있었는데, 전화를 걷어 달라는 요청에 빼면서 자리도
-             옮겼다 — 전화가 빠지면 이 줄은 망설이는 사람을 붙드는 **안심
-             장치**가 아니라 보낸 뒤의 **기대치**가 된다. 버튼 앞에 둘
-             이유가 사라진다.
+                묶음은 폼의 last-child 라 margin 을 안 받고, 안쪽 space-y-3 가
+                12px 하나만 준다. 33px 로 줄어 안내가 버튼에 붙고 버튼이
+                종착점으로 또렷해진다.
 
-          ⚠️ 버튼은 이 페이지의 시각적 종착점이다. 그 바로 위에 회색 작은
-             글이 끼면 버튼으로 가던 시선이 한 번 끊긴다.
+             ⚠️ 그래서 안내의 **mt-3 를 지웠다.** 되살리면 space-y-3 에
+                더해져 다시 벌어진다. 둘을 다시 풀어 폼의 직계로 되돌리는
+                것도 같은 결과가 된다 — 묶음을 유지할 것.
 
-          ⚠️ 전화번호는 **제출 실패 문구에는 그대로 있다.** 그쪽은 "전화로
-             연락 부탁드립니다" 라고 해 놓고 번호가 없던 것을 고친 자리라
-             성격이 다르다 — 거기서는 번호가 유일한 출구다. */}
-      <p className="mt-3 text-center text-13 leading-relaxed text-muted">
-        영업일 기준 1~2일 내에 회신드립니다.
-      </p>
+             ⚠️ 동의 블록 ↔ 버튼 28px 은 **그대로 둔다.** 폼의 다른 필드
+                간격이 모두 28px 이라 여기만 줄이면 리듬이 깨진다. */}
+      <div className="space-y-3">
+        <button
+          type="submit"
+          disabled={status === "submitting"}
+          aria-busy={status === "submitting"}
+          /* ⚠️ disabled: 가 active: 를 이기도록 둔다 — Tailwind 는 소스 순서를
+               따르므로 disabled 계열이 뒤에 와야 보내는 중에 눌려도 안 줄어든다. */
+          className="h-14 w-full rounded-xl bg-brand text-17 font-bold text-white transition hover:bg-brand-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100"
+        >
+          {status === "submitting" ? "전송 중…" : "문의 보내기"}
+        </button>
+
+        {/* ⚠️ 버튼 **아래**다. 한동안 위에 있었고 "급하시면 031-434-0065" 가
+               함께 붙어 있었는데, 전화를 걷어 달라는 요청에 빼면서 자리도
+               옮겼다 — 전화가 빠지면 이 줄은 망설이는 사람을 붙드는 **안심
+               장치**가 아니라 보낸 뒤의 **기대치**가 된다. 버튼 앞에 둘
+               이유가 사라진다.
+
+            ⚠️ 버튼은 이 페이지의 시각적 종착점이다. 그 바로 위에 회색 작은
+               글이 끼면 버튼으로 가던 시선이 한 번 끊긴다.
+
+            ⚠️ 전화번호는 **제출 실패 문구에는 그대로 있다.** 그쪽은 "전화로
+               연락 부탁드립니다" 라고 해 놓고 번호가 없던 것을 고친 자리라
+               성격이 다르다 — 거기서는 번호가 유일한 출구다. */}
+        <p className="text-center text-13 leading-relaxed text-muted">
+          영업일 기준 1~2일 내에 회신드립니다.
+        </p>
+      </div>
     </form>
   );
 }
