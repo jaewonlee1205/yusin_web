@@ -398,7 +398,25 @@ export default function Home() {
       </Section>
 
       {/* 4. 제품 라인업 */}
+      {/* ⚠️ 회색 면이 위 흰 섹션 **위로 얹힌다**(-mt + 둥근 위 모서리).
+             색이 번갈아 서기만 하던 경계에 겹이 생긴다. VIDEO 섹션도 같은
+             값을 쓴다 — 회색 면 둘이 같은 규칙이어야 우연으로 안 보인다.
+
+          ⚠️ 끌어올린 만큼 위 섹션의 아래 여백이 가려진다. 폭 일곱 종에서
+             잰 값 —
+
+               폭      -mt    반경   위 내용과의 거리
+               ~639    32px   32px   24px (제품 라인업) / 58px (제품 영상)
+               640~    48px   40px   40px              / 74px
+
+             어느 폭에서도 위 섹션 내용에 닿지 않는다. Section 의 pb 를
+             줄이면 이 거리를 다시 잴 것.
+
+          ⚠️ 반경은 -mt 를 넘지 않게 둔다. 지금은 좁은 폭에서 32 = 32 로
+             같고 sm 부터 40 < 48 이다. 반경이 더 커도 잘리지는 않지만,
+             둥근 부분이 겹침 영역을 넘어 위 섹션 안쪽까지 올라간다. */}
       <Section
+        className="-mt-8 rounded-t-[2rem] sm:-mt-12 sm:rounded-t-[2.5rem]"
         tone="surface"
         eyebrow="PRODUCTS"
         title="제품 라인업"
@@ -413,7 +431,30 @@ export default function Home() {
             칸만 남고, 홈에서 제품을 "훑어보는" 자리가 제품 목록 페이지와
             같아진다. 앞 셋은 배열 순서 그대로다 — 볼피더가 본체, 직진피더가
             이송, 진동기가 구동부로 피더 한 벌의 뼈대다. */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* ⚠️ lg 부터 **첫 칸이 넓다**(1.2fr : 1fr : 1fr). 균등 3등분이
+               아니다 — 셋에 위계가 있기 때문이다. 바로 위 주석에 적힌 대로
+               "볼피더가 본체, 직진피더가 이송, 진동기가 구동부" 이고
+               볼피더가 주력이다. 첫 칸을 넓히면 그 순서가 눈으로 읽힌다.
+
+            ⚠️⚠️ **lg:items-start 가 꼭 있어야 한다.** 사진 칸이
+                  aspect-[4/3] 이라 폭이 넓어지면 높이도 같이 커지는데,
+                  격자 기본값(stretch)으로 두면 세 카드가 **가장 큰 카드
+                  높이로 맞춰진다**. 그러면 사진이 작은 둘은 글 아래에
+                  49px 짜리 흰 자리가 남는다 — 찍어 보니 눈에 거슬렸다.
+
+                  items-start 로 각자 제 높이를 갖게 하면 1280 에서
+                  412 / 363 / 363px 이다. 위쪽 선이 맞아 있어 어수선하지
+                  않고, 아래가 어긋나는 것이 비대칭의 의도다.
+
+            ⚠️ ProductCard 의 h-full 은 여기서 일을 하지 않는다(stretch 가
+               아니라 늘어날 일이 없다). /products 와 상세 "다른 제품" 의
+               균등 격자에서 쓰인다 — 지우지 말 것.
+
+            ⚠️ 비율(1.2fr)을 바꾸면 폭 일곱 종에서 다시 잴 것.
+
+            ⚠️ sm(2열)과 그 아래(1열)는 균등 그대로다. 두 칸에서 한쪽만
+               넓히면 짝이 안 맞고, 한 칸에서는 뜻이 없다. */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr] lg:items-start">
           {products.slice(0, 3).map((product, i) => (
             <Reveal key={product.slug} delay={i * 70}>
               <ProductCard product={product} />
@@ -691,9 +732,18 @@ export default function Home() {
       </Section>
 
       {/* 6. 제품 영상 — videos.ts가 비어 있으면 통째로 렌더하지 않는다.
-             여기는 맛보기 두 편만 걸고 나머지는 /videos 에서 본다. */}
+             여기는 맛보기 두 편만 걸고 나머지는 /videos 에서 본다.
+
+          ⚠️ 회색 면이 위 흰 섹션 **위로 얹힌다**(-mt + 둥근 위 모서리).
+             PRODUCTS 와 **같은 값**이다 — 회색 면 둘이 같은 규칙이어야
+             우연이 아니라 체계로 읽힌다.
+
+          ⚠️⚠️ {... && (} 바로 뒤에 JSX 주석을 두지 말 것. 주석과
+                <Section> 이 **자식 둘**이 되어 "Expected '</', got 'ident'"
+                로 빌드가 깨진다. 설명은 이 바깥 주석에 적는다. */}
       {featuredVideos.length > 0 && (
         <Section
+          className="-mt-8 rounded-t-[2rem] sm:-mt-12 sm:rounded-t-[2.5rem]"
           tone="surface"
           eyebrow="VIDEO"
           title="제품 영상"
