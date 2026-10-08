@@ -13,9 +13,9 @@
  * access key는 공개돼도 안전하다. 등록된 수신 이메일로만 전달되며,
  * 키만으로는 수신 주소를 바꾸거나 기존 문의를 읽을 수 없다.
  *
- * ⚠️⚠️ **전송은 FormData 로 한다(JSON 아님).** 까닭은 아래 submitInquiry 안에
- *       적어 뒀다 — 요약하면 JSON 은 CORS preflight 를 부르고 그 preflight 가
- *       간헐적으로 막혀 "될 때 있고 안 될 때 있는" 증상이 났다.
+ * ⚠️⚠️ **전송은 JSON 으로 한다(FormData 아님).** 필드 이름이 한글이기 때문이다 —
+ *       까닭은 아래 submitInquiry 안에 적어 뒀다. 한때 FormData 로 바꿨다가
+ *       받은 메일의 라벨이 "ÍšŒì‚¬ëª…" 처럼 전부 깨졌다.
  */
 
 export type InquiryPayload = {
@@ -76,47 +76,57 @@ export async function submitInquiry(payload: InquiryPayload): Promise<void> {
         ? topics[0]
         : `${topics[0]} 외 ${topics.length - 1}건`;
 
-  /* ⚠️⚠️⚠️ **FormData 로 보낸다. JSON 으로 되돌리지 말 것.**
-             web3forms 공식 예제는 Content-Type: application/json 을 쓰는데,
-             그러면 CORS **preflight(OPTIONS)** 가 발생하고 **그 preflight 가
-             간헐적으로 차단된다.** 브라우저가 preflight 결과를 캐시하므로 한 번
-             통과하면 한동안 성공하고 만료되면 다시 실패해서, "될 때 있고 안 될
-             때 있다" 는 증상이 됐다.
+  /* ⚠️⚠️⚠️ **JSON 으로 보낸다. FormData 로 바꾸지 말 것.**
+             까닭은 **필드 이름이 한글**이라서다. multipart/form-data 는 필드
+             이름을 `Content-Disposition: form-data; name="회사명"` 이라는
+             **HTTP 헤더**에 싣는데, 헤더는 Latin-1 이 기본이라 web3forms 가
+             UTF-8 로 디코딩하지 않는다. 그래서 받은 메일의 라벨이 깨졌다 —
 
-             실측으로 가렸다 — 같은 페이지(https://yusin.co.kr)에서 두 방식을
-             나란히 호출하고 콘솔 오류를 비교했다 —
+               회사명    ->  ÍšŒì‚¬ëª…
+               담당자    ->  Ë‹´ë‹¹ìž
+               문의내용  ->  Ë¬¸ì ˜ë‚´ìš©
 
-               JSON      "Response to preflight request doesn't pass access
-                          control check"        -> preflight 단계에서 막힘
-               FormData  "No 'Access-Control-Allow-Origin' header is present"
-                                                -> preflight 가 없고 POST 가
-                                                   서버에 **도달**했다
+             **값과 제목은 멀쩡했다**(파트 본문은 UTF-8 로 처리된다). 라벨만
+             깨지는 것이 이 증상의 특징이다. JSON 은 body 전체가 UTF-8 이고
+             키도 본문 안에 있어 그런 일이 없다.
 
-             FormData 는 Content-Type 이 multipart/form-data 로 자동 설정돼
-             **CORS simple request** 가 되고, 그래서 preflight 가 아예 발생하지
-             않는다.
+      ⚠️ JSON 이라 CORS **preflight(OPTIONS)** 가 생기는 것은 사실이고,
+         **그것은 문제가 아니다.** 한때 그 preflight 를 "될 때 있고 안 될 때
+         있는" 증상의 원인으로 의심해 FormData 로 바꿨는데, 진단이 틀렸고 대신
+         메일 라벨을 깨뜨렸다.
 
-      ⚠️ **headers 를 주지 말 것.** 하나라도 직접 넣으면(특히 Content-Type)
-         simple request 조건이 깨져 preflight 가 되살아난다. Accept 도 넣지
-         않는다 — 없어도 web3forms 는 JSON 을 돌려준다.
+      ⚠️⚠️ **CORS 에러로 보이면 거의 rate limit 이다.** web3forms 는 429 에
+            CORS 헤더를 붙이지 않아, JS 가 상태 코드를 읽지 못하고 브라우저
+            콘솔에 "No 'Access-Control-Allow-Origin' header is present" 로
+            뜬다. 제한은 **IP 단위**다 — 같은 휴대폰에서 와이파이로는 실패하고
+            모바일 데이터로는 성공하는 것으로 가렸다.
+            **전송 방식이나 CORS 설정을 고치려 들지 말 것.**
 
-      ⚠️ 필드 이름은 JSON 때와 같다. web3forms 는 FormData 의 모든 칸을 메일
-         본문에 그대로 넣는다(access_key · subject · from_name 만 예약 필드). */
-  const form = new FormData();
-  form.append("access_key", ACCESS_KEY);
-  form.append(
-    "subject",
-    `[홈페이지 문의] ${payload.company || payload.name} - ${subjectTopic}`
-  );
-  form.append("from_name", "유신 F.A 시스템 홈페이지");
-  form.append("회사명", payload.company);
-  form.append("담당자", payload.name);
-  form.append("연락처", payload.phone);
-  form.append("이메일", payload.email);
-  form.append("문의분야", payload.category || "선택 안 함");
-  form.append("문의내용", payload.message);
+      ⚠️⚠️⚠️ **개발 중 실제 전송 테스트를 반복하지 말 것.** 사무실 IP가 한
+              시간 막히고 **같은 네트워크의 사용자까지 함께 막힌다.** 실제로
+              그렇게 만들어 놓고 코드를 범인으로 몰았다. 폼 UI 는 status 를
+              손으로 바꿔 확인하고, 전송은 배포 후 사용자가 한 번 눌러 본다.
 
-  const res = await fetch(ENDPOINT, { method: "POST", body: form });
+      ⚠️ 필드 이름이 그대로 메일 본문의 라벨이 된다 — access_key · subject ·
+         from_name 만 web3forms 의 예약 필드다. */
+  const res = await fetch(ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      access_key: ACCESS_KEY,
+      subject: `[홈페이지 문의] ${payload.company || payload.name} - ${subjectTopic}`,
+      from_name: "유신 F.A 시스템 홈페이지",
+      회사명: payload.company,
+      담당자: payload.name,
+      연락처: payload.phone,
+      이메일: payload.email,
+      문의분야: payload.category || "선택 안 함",
+      문의내용: payload.message,
+    }),
+  });
 
   if (!res.ok) {
     throw new InquiryError(

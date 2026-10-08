@@ -218,50 +218,73 @@ export default async function ProductDetailPage({
                   dt/dd 는 dl 직계여야 한다(접근성 검사 dlitem). 묶는 div 대신
                   Fragment 를 쓴다 — 아래 사양 표와 같은 이유다. */}
               <div className="mt-6 lg:mt-auto">
-                {/* 홈 "부품 자동정렬 공급기" 섹션의 박스 셋과 같은 언어다 —
-                    bg-surface 박스 + 레드 점 + 굵은 라벨. 히어로가 흰 바탕이라
-                    회색 박스가 또렷하다.
+                {/* ⚠️⚠️ **회색 판 하나다. 행마다 박스로 되돌리지 말 것.**
+                       한때 네 행이 각각 bg-surface 박스였고(dt 가 왼쪽 모서리,
+                       dd 가 오른쪽 모서리를 나눠 가졌다) gap-y-2(8px)로 떨어져
+                       있었다. "큰 네모 박스 하나로 감싸서 통일감을 주고 싶다,
+                       토스 스타일로 미니멀하게" 라는 말에 판 하나로 바꿨다 —
+                       박스 넷은 **넷으로 끊겨** 보인다. 홈 POSITIONING 에서
+                       "행 칩 다섯 -> 열 띠 하나" 로 간 것과 같은 판단이다.
 
-                    한때 아래 "제작 사양" 표와 같은 격자 표였다(gap-px +
-                    bg-line 격자선, dt bg-surface / dd bg-white). 사양이 세
-                    줄뿐인 자리에 표의 틀까지 두니 무거웠다. 아래 표는 값이
-                    21개라 격자가 맞고, 여기는 박스 셋이 맞다.
+                    ⚠️ **행 간격이 16px(gap-y-4)인 것이 핵심이다.** 배경 박스가
+                       없어지면 행을 가르는 것이 여백뿐이다. 전의 8px 을 그대로
+                       두면 네 줄이 한 덩어리로 뭉쳐 읽힌다.
+
+                    ⚠️ **테두리를 더하지 말 것.** /location 연락처 표는 흰 카드 +
+                       border-line 으로 서는데, 여기는 판 자체가 회색이라
+                       테두리 없이도 히어로의 흰 바탕에서 또렷하다. 두 안을
+                       그려서 회색 판을 골랐다.
+
+                    ⚠️ **이 판 안에 회색을 또 넣지 말 것.** InquiryForm 성공
+                       화면의 선례다 — 회색 박스 안의 회색 띠는 보이지 않는다.
+                       강조가 필요하면 글자 굵기나 레드 점으로 한다.
+
+                    ⚠️ 레드 점은 **유지한다.** 판으로 합치면서 행 구분이 약해진
+                       만큼 점이 각 행의 시작을 짚어 준다. 사이트 규칙 "레드는
+                       면적을 좁게 — CTA.라벨.강조선에만" 에 어긋나지 않는다.
+
+                    ⚠️ gap-x-4(16px)는 전에 dt 가 pr-4 로 갖고 있던 값이다.
+                       pr-2(8px)이던 때 **가장 긴 라벨만** 값에 달라붙어
+                       보였다 — 열이 auto 라 그 라벨이 열 폭을 정하고, 짧은
+                       라벨은 남는 만큼 더 벌어지기 때문이다(방음커버에서
+                       "소음 저감" 8px vs "구성" 36px). 20px 은 짧은 라벨이
+                       48px 까지 벌어져 한 판 안의 편차가 커진다.
 
                     dl/dt/dd 와 Fragment 는 그대로다 — 사양은 "용어-정의" 이고,
-                    dt.dd 는 dl 직계여야 접근성 검사(dlitem)를 통과한다. 한 행이
-                    하나의 박스로 보이게 dt 가 왼쪽 모서리를, dd 가 오른쪽
-                    모서리를 나눠 가진다.
+                    dt.dd 는 dl 직계여야 접근성 검사(dlitem)를 통과한다. 또
+                    grid-cols-[auto_minmax(0,1fr)] 의 셀로 직접 놓여야 라벨 열이
+                    자동 폭을 갖는다. **div 로 묶으면 그 격자가 무너진다.**
 
-                    ⚠️ 값 셋은 1024 이상에서 모두 한 줄이다(가장 긴 것이
-                       "스테인리스, 알루미늄 (부품 특성에 따라 선정)"). 라벨이
-                       같은 줄에 서면서 값 칸이 그만큼 좁아지므로, 사양 글을
+                    ⚠️ dd 의 flex items-center 를 빼지 말 것 — dt 가 점 때문에
+                       flex 라, 값 쪽에서 빼면 두 셀의 세로 중앙이 어긋난다.
+
+                    ⚠️ 값은 1024 에서 한 줄이어야 한다. 13px 로 가장 긴 것이
+                       246px("스테인리스, 알루미늄 (부품 특성에 따라 선정)")이고
+                       값 칸이 가장 좁아지는 곳이 1024 다. 판의 p-5(sm 이상
+                       p-6)와 gap-x-4 가 그 칸을 전보다 좁히므로, 사양 글을
                        늘릴 때 1024 에서 다시 재야 한다.
 
-                    높이는 198px 다(행 47 x 4 + 간격 8 x 3). 이 칸이
-                    lg:mt-auto 로 아래 정렬이라, 행이 늘어도 1280 이상에서는
-                    표 바닥과 갤러리 사진 바닥의 줄 맞춤이 그대로다(어긋남 0).
+                    높이는 174px 다(안쪽 여백 24 x 2 + 행 19.5 x 4 + 간격
+                    16 x 3). 640 미만은 p-5 라 166px 다. 박스 넷이던 때는
+                    198px 였다.
 
-                    ⚠️ 1024 에서만 표가 갤러리보다 길어진다(세 줄일 때 12px,
-                       네 줄이면 64px). 그 폭은 두 칸이 좁아 원래도 어긋나 있던
-                       자리다. */}
-                <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-y-2">
+                    ⚠️ 이 칸이 lg:mt-auto 로 아래 정렬이고 표 바닥이 **버튼에서
+                       역산**되므로(아래 mt-7 주석 참고), 판 높이가 바뀌어도
+                       줄 맞춤은 그대로다. 24px 이 줄었는데도 1280.1440 에서
+                       판 바닥 383.9 vs 사진 바닥 384 로 **0.1px 그대로**이고,
+                       버튼 바닥과 썸네일 줄 바닥은 468 로 **딱 맞는다.**
+                       재서 확인했다 — mt-7 을 건드리지 말 것. */}
+                <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-4 rounded-2xl bg-surface p-5 sm:p-6">
                   {product.specs.slice(0, 4).map((spec) => (
                     <Fragment key={spec.label}>
-                      {/* ⚠️ pr-4(16px)다. pr-2(8px)이던 때 **가장 긴 라벨만**
-                             값에 달라붙어 보였다 — 열이 auto 라 그 라벨이 열
-                             폭을 정하고, 짧은 라벨은 남는 만큼 더 벌어지기
-                             때문이다(방음커버에서 "소음 저감" 8px vs "구성"
-                             36px). 8 · 16 · 20px 을 그려서 골랐다. 20px 은
-                             짧은 라벨이 48px 까지 벌어져 한 표 안의 편차가
-                             커진다. */}
-                      <dt className="flex items-center gap-2.5 whitespace-nowrap rounded-l-xl bg-surface py-3 pl-4 pr-4 text-13 font-bold text-ink">
+                      <dt className="flex items-center gap-2.5 whitespace-nowrap text-13 font-bold text-ink">
                         <span
                           aria-hidden="true"
                           className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
                         />
                         {spec.label}
                       </dt>
-                      <dd className="flex items-center rounded-r-xl bg-surface py-3 pr-4 text-13 leading-snug text-ink-soft">
+                      <dd className="flex items-center text-13 leading-snug text-ink-soft">
                         {spec.value}
                       </dd>
                     </Fragment>
