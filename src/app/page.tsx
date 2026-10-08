@@ -566,7 +566,18 @@ export default function Home() {
                  칸이 안 바뀐다. 래퍼를 하나 더 두면 grid 자식이 그 래퍼가 되어
                  overflow-x-auto 가 칸 밖으로 밀린다. */}
           <Reveal className="overflow-x-auto [mask-image:linear-gradient(to_right,#000_calc(100%-36px),transparent)] sm:[mask-image:none]">
-            <table className="w-full min-w-[34rem] border-collapse text-center text-sm">
+            {/* ⚠️⚠️ **border-separate 다(collapse 가 아니다).** 유신 열을
+                      세로 띠로 감싸는데, collapse 에서는 **셀의 border-radius 가
+                      렌더되지 않아** 띠의 위아래 모서리를 둥글릴 수 없다.
+
+                      ⚠️⚠️ separate 에서는 **tr 의 border 가 렌더되지 않는다.**
+                            그래서 행 선을 전부 **각 셀(th · td)** 로 옮겼다.
+                            collapse 로 되돌리려면 그 선들을 다시 tr 로 모아야
+                            한다 — 안 그러면 선이 두 겹으로 보인다.
+
+                      border-spacing-0 이라 보기에는 collapse 와 거의 같다.
+                      세로선이 없고 가로선은 행마다 하나뿐이라 겹칠 일도 없다. */}
+            <table className="w-full min-w-[34rem] border-separate border-spacing-0 text-center text-sm">
               <thead>
                 <tr>
                   <th
@@ -579,7 +590,12 @@ export default function Home() {
                     <th
                       key={group}
                       scope="col"
-                      className="whitespace-nowrap border-b border-line px-3 py-3 text-13 font-bold text-muted"
+                      /* ⚠️ 유신 열(i === 0)에서 **세로 띠가 시작된다** —
+                           bg-brand/[0.06] 과 위쪽 모서리만 둥근 rounded-t-lg.
+                           띠는 아래 tbody 의 같은 열로 끊김 없이 이어진다. */
+                      className={`whitespace-nowrap border-b border-line px-3 py-3 text-13 font-bold text-muted ${
+                        i === 0 ? "rounded-t-lg bg-brand/[0.06]" : ""
+                      }`}
                     >
                       {/* ⚠️⚠️ 첫 열(유신)은 **글자가 아니라 YUSIN 로고**다.
                                 맵 점 라벨과 같은 파일(logo-mark.webp)을 쓴다.
@@ -610,12 +626,23 @@ export default function Home() {
                   ))}
                 </tr>
               </thead>
-              <tbody>
+              {/* ⚠️ 마지막 행에서 **띠의 아래 모서리**를 둥글린다.
+                     nth-child(2)가 유신 열이다 — 첫 셀은 th scope="row"(항목
+                     열)이므로 2번째다. **열 순서를 바꾸면 이 선택자도 함께 볼 것.**
+
+                  ⚠️ 아래 tr 에 border 를 주지 말 것 — border-separate 에서는
+                     렌더되지 않는다(위 table 주석 참고). 선은 각 셀이 그린다.
+
+                  ⚠️⚠️ map 의 화살표 함수가 여는 괄호 **바로 뒤에 JSX 주석을
+                        두지 말 것.** 자식이 둘이 되어 "Expected '</', got
+                        'ident'" 로 빌드가 깨진다 — 이 주석을 거기 뒀다가
+                        겪었다. 설명은 이렇게 바깥으로 모은다. */}
+              <tbody className="[&>tr:last-child>td:nth-child(2)]:rounded-b-lg">
                 {positioning.map((row) => (
-                  <tr key={row.item} className="border-b border-line">
+                  <tr key={row.item}>
                     <th
                       scope="row"
-                      className="whitespace-nowrap px-3 py-3.5 text-13 font-bold text-muted"
+                      className="whitespace-nowrap border-b border-line px-3 py-3.5 text-13 font-bold text-muted"
                     >
                       {row.item}
                     </th>
@@ -659,9 +686,28 @@ export default function Home() {
                            ⚠️ ink-soft 는 사이트가 **이미 쓰는 색**이다 —
                               /location 연락처 표의 값, 지도 플레이스홀더 글자가
                               그것이다. 새 색을 만든 것이 아니다. */
-                        className={`whitespace-nowrap px-3 py-3.5 ${
+                        /* ⚠️⚠️ 유신 열(i === 0)이 **세로 띠**다. 머리행 th 에서
+                                 시작해 여기를 지나 마지막 행에서 아래 모서리가
+                                 둥글어진다(tbody 의 arbitrary variant).
+
+                                 ⚠️ 한 라운드 동안 **행마다 칩 다섯 개**였다.
+                                    "열 형태로 감싸고 싶었다, 행 말고" 라는 말에
+                                    띠로 바꿨다. 칩으로 되돌리지 말 것 — 행 칩은
+                                    다섯 덩어리로 끊겨 보이고, 열 띠는 하나로
+                                    이어져 "이 열이 우리" 가 한눈에 읽힌다.
+
+                                 ⚠️ 배경이 bg-brand/[0.06] 이다. 맵의 "이상적"
+                                    영역과 **똑같은 톤**이라 섹션 안에서 "유신" 을
+                                    가리키는 색이 표와 맵에서 하나로 묶인다.
+                                    **글자색으로는 빨강을 두 번 되돌렸지만
+                                    배경은 다르다** — 그때 문제는 글자가 튀는
+                                    것이었고 6% 배경은 훨씬 은은하다.
+
+                           ⚠️ border-b 가 **셀에** 있다. border-separate 라 tr
+                              에 주면 렌더되지 않는다(위 table 주석 참고). */
+                        className={`whitespace-nowrap border-b border-line px-3 py-3.5 ${
                           i === 0
-                            ? "text-15 font-bold text-ink-soft"
+                            ? "bg-brand/[0.06] text-15 font-bold text-ink-soft"
                             : "text-muted"
                         }`}
                       >
