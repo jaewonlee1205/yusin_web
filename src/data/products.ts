@@ -526,6 +526,23 @@ export const feederDefinition = {
  *    부품 없음" 이 1024(칸 248px)에서 한 줄로 들어간다 — 글을 늘리면 다시
  *    재야 한다.
  */
+/**
+ * 설계 → 납품 납기.
+ *
+ * ⚠️⚠️ **상수로 빼 둔 까닭이 있다.** 이 값이 홈에서 **두 번** 나온다 —
+ *       아래 performanceKpis(PERFORMANCE 띠)와 company.ts 의 positioning
+ *       (POSITIONING 비교표)이다. 한쪽만 고치면 같은 화면에 납기가 둘이 된다.
+ *       **여기 한 곳만 고치면 둘 다 따라온다.**
+ *
+ * ⚠️ company.ts 의 process(도입 단계별 기간) 넷의 합도 이 범위 안에 들어야
+ *    한다 — 그쪽 주석에 계산이 적혀 있다(01 1~2일 + 02 3~5일 + 03 1~2주 +
+ *    04 2~3일 = 1.9~3.4주). 이 값을 바꾸면 그 넷도 함께 본다.
+ */
+export const LEAD_TIME = { value: "2~4", unit: "주" } as const;
+
+/** 화면에 한 덩어리로 쓸 때("2~4주"). 비교표가 쓴다. */
+export const leadTimeText = LEAD_TIME.value + LEAD_TIME.unit;
+
 export const performanceKpis: Kpi[] = [
   {
     value: "99",
@@ -545,7 +562,13 @@ export const performanceKpis: Kpi[] = [
     label: "연속 가동",
     note: "전자석 구동 · 마모 부품 없음",
   },
-  { value: "2~4", unit: "주", label: "설계 → 납품", note: "표준 사양 기준" },
+  /* ⚠️ 값이 LEAD_TIME 에서 온다 — 위 주석 참고. 여기에 글자를 직접 쓰지 말 것. */
+  {
+    value: LEAD_TIME.value,
+    unit: LEAD_TIME.unit,
+    label: "설계 → 납품",
+    note: "표준 사양 기준",
+  },
 ];
 
 export const products: Product[] = [

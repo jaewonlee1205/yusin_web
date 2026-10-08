@@ -419,6 +419,11 @@ export default function InquiryForm() {
         </div>
       </fieldset>
 
+      {/* ⚠️ 한때 mb-10(40px)이었다. 동의 블록을 아래로 떼어 "입력" 과
+             "제출" 의 경계를 만들려던 것인데, 화면에서 보니 **이 간격만
+             혼자 커서** 다른 필드와 리듬이 어긋났다. 폼 전체 28px 로
+             되돌렸다 — 묶음은 아래 동의 블록의 mb-4(16px) 하나로 충분히
+             보인다. */}
       <div>
         <label htmlFor="message" className={label}>
           문의 내용
@@ -435,7 +440,14 @@ export default function InquiryForm() {
         />
       </div>
 
-      <div className="rounded-xl bg-surface p-5">
+      {/* ⚠️ **mb-4(16px)** 다. 폼의 다른 간격(28px)보다 좁아 동의와 버튼이
+             한 묶음으로 읽힌다 — 동의는 입력 항목이 아니라 **버튼의 전제
+             조건**이기 때문이다(체크하지 않으면 전송이 막힌다).
+
+          ⚠️ 한때 위 문의 내용에 mb-10(40px)을 함께 걸어 "입력 / 제출" 경계를
+             두 간격으로 만들었는데, 그 40px 만 혼자 커 보여 걷었다. 지금은
+             이 16px 하나가 묶음을 만든다. */}
+      <div className="mb-4 rounded-xl bg-surface p-5">
         <label className="flex cursor-pointer items-start gap-3 text-sm text-ink-soft">
           <input
             type="checkbox"
@@ -491,7 +503,10 @@ export default function InquiryForm() {
           ref={errorRef}
           tabIndex={-1}
           role="alert"
-          className="rounded-xl bg-brand/5 px-4 py-3.5 text-sm text-brand-dark outline-none"
+          /* ⚠️ text-center 다. 왼쪽 정렬이면 두 줄째가 반쯤 비어 상자
+               안에서 글이 한쪽으로 쏠려 보였다. 전화번호가 문장 끝에 붙어
+               있어 더 그랬다. */
+          className="rounded-xl bg-brand/5 px-4 py-3.5 text-center text-sm text-brand-dark outline-none"
         >
           {error}{" "}
           <a
@@ -519,34 +534,34 @@ export default function InquiryForm() {
 
              ⚠️ 동의 블록 ↔ 버튼 28px 은 **그대로 둔다.** 폼의 다른 필드
                 간격이 모두 28px 이라 여기만 줄이면 리듬이 깨진다. */}
-      <div className="space-y-3">
-        <button
-          type="submit"
-          disabled={status === "submitting"}
-          aria-busy={status === "submitting"}
-          /* ⚠️ disabled: 가 active: 를 이기도록 둔다 — Tailwind 는 소스 순서를
-               따르므로 disabled 계열이 뒤에 와야 보내는 중에 눌려도 안 줄어든다. */
-          className="h-14 w-full rounded-xl bg-brand text-17 font-bold text-white transition hover:bg-brand-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100"
-        >
-          {status === "submitting" ? "전송 중…" : "문의 보내기"}
-        </button>
+      {/* ⚠️⚠️ 버튼이 폼의 **마지막 요소**다. 그 아래에 아무것도 두지 않는다.
 
-        {/* ⚠️ 버튼 **아래**다. 한동안 위에 있었고 "급하시면 031-434-0065" 가
-               함께 붙어 있었는데, 전화를 걷어 달라는 요청에 빼면서 자리도
-               옮겼다 — 전화가 빠지면 이 줄은 망설이는 사람을 붙드는 **안심
-               장치**가 아니라 보낸 뒤의 **기대치**가 된다. 버튼 앞에 둘
-               이유가 사라진다.
+                "영업일 기준 1~2일 내에 회신드립니다" 한 줄이 여기 있었고,
+                자리를 세 번 옮겼다 — 버튼 **위**(전화번호와 함께) ->
+                버튼 **아래** 맨글씨 -> 버튼 아래 회색 알약(시계 아이콘).
+                마지막까지도 "디자인이 아쉽다" 는 말을 들었고, **지워 달라는
+                요청에 통째로 걷었다.**
 
-            ⚠️ 버튼은 이 페이지의 시각적 종착점이다. 그 바로 위에 회색 작은
-               글이 끼면 버튼으로 가던 시선이 한 번 끊긴다.
+                같은 약속이 **제출 성공 화면에 그대로 있다**(위 handleSubmit
+                성공 블록의 "영업일 기준 1~2일 내에 담당자가 연락드리겠습니다").
+                정보가 사라진 것이 아니다.
 
-            ⚠️ 전화번호는 **제출 실패 문구에는 그대로 있다.** 그쪽은 "전화로
-               연락 부탁드립니다" 라고 해 놓고 번호가 없던 것을 고친 자리라
-               성격이 다르다 — 거기서는 번호가 유일한 출구다. */}
-        <p className="text-center text-13 leading-relaxed text-muted">
-          영업일 기준 1~2일 내에 회신드립니다.
-        </p>
-      </div>
+             ⚠️ 다시 넣고 싶어지면 그 세 시도를 먼저 볼 것. 버튼은 이 페이지의
+                시각적 종착점이고, 그 뒤에 무엇을 두든 종착점이 흐려진다.
+
+             ⚠️ 전화번호는 **제출 실패 문구에는 그대로 있다.** 그쪽은 "전화로
+                연락 부탁드립니다" 라고 해 놓고 번호가 없던 것을 고친 자리라
+                성격이 다르다 — 거기서는 번호가 유일한 출구다. */}
+      <button
+        type="submit"
+        disabled={status === "submitting"}
+        aria-busy={status === "submitting"}
+        /* ⚠️ disabled: 가 active: 를 이기도록 둔다 — Tailwind 는 소스 순서를
+             따르므로 disabled 계열이 뒤에 와야 보내는 중에 눌려도 안 줄어든다. */
+        className="h-14 w-full rounded-xl bg-brand text-17 font-bold text-white transition hover:bg-brand-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100"
+      >
+        {status === "submitting" ? "전송 중…" : "문의 보내기"}
+      </button>
     </form>
   );
 }

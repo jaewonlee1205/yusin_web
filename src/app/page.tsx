@@ -8,7 +8,12 @@ import MagneticLink from "@/components/MagneticLink";
 import ParallaxLayer from "@/components/ParallaxLayer";
 import ProductVideo from "@/components/ProductVideo";
 import Section from "@/components/Section";
-import { process } from "@/data/company";
+import {
+  POSITIONING_GROUPS,
+  POSITIONING_IDEAL,
+  positioning,
+  positioningMap,
+} from "@/data/company";
 import ClientGrid from "@/components/ClientGrid";
 import Reveal from "@/components/Reveal";
 import ScrollCue from "@/components/ScrollCue";
@@ -468,272 +473,353 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* 5. 제작 프로세스 */}
+      {/* 5. 포지셔닝 — 유신이 어디에 서 있는가
+
+          ⚠️⚠️ **한때 여기가 PROCESS(문의부터 납품까지) 4카드였다.** "모든
+                피더회사가 이 프로세스라 특별한 게 없다" 는 말에 걷었다.
+                맞는 지적이다 — 접수 → 설계 → 가공 → 납품은 업계 공통이라
+                그 자리에 두면 홈에서 **구별이 되는 자리 하나를 공통 정보에
+                내준다.**
+
+                도입 프로세스 자체는 /contact 에 그대로 있다(company.ts 의
+                process 를 거기서 쓴다). 정보가 사라진 것이 아니라 자리를
+                옮긴 것이다.
+
+          ⚠️ **홈에 숫자를 쓰는 자리가 둘이 됐다.** 위 PERFORMANCE 띠(99% ·
+             7,200회/분 · 24시간 · 2~4주)와 여기다. 역할이 갈린다 —
+               PERFORMANCE   **제품**이 무엇을 하는가   4열 가로 · 가운데 정렬 ·
+                                                       세로선 · 큰 숫자
+               POSITIONING   **회사**가 어디에 서 있나   표 + 2축 맵
+             생김새를 비슷하게 만들지 말 것. 큰 숫자를 4열로 늘어놓는 순간
+             같은 섹션이 둘이 된다.
+
+          ⚠️⚠️⚠️ **경쟁군 두 열의 값은 유신 측 검수를 받아야 한다.** company.ts
+                   의 positioning 주석에 까닭과 지켜야 할 규칙 둘을 적어 뒀다
+                   (회사 이름을 쓰지 않는다 · 수치는 유신 열에만). */}
       <Section
-        eyebrow="PROCESS"
-        title="문의부터 납품까지"
+        eyebrow="POSITIONING"
+        title="유신이 있는 자리"
         action={
-          /* 제작 과정을 읽은 다음이 문의로 가기 가장 자연스러운 자리다.
-             VIDEO.CLIENTS 섹션의 "전체 보기" 와 같은 꼴이다.
+          /* PROCESS 때부터 있던 버튼이다. 그때 근거는 "제작 과정을 읽은 다음이
+             문의로 가기 자연스러운 자리" 였는데, 지금은 **비교표로 믿음을 준
+             다음**이라 더 맞는다.
 
              글자가 "견적 문의하기" 가 아닌 것은 히어로 버튼이 이미 그 말을
              쓰고 있어서다. 한 페이지에 같은 글자 버튼이 둘이면 눌러 본 것을
-             또 누르게 된다. 여기는 바로 위에서 제작 과정을 읽은 자리라
-             "제작" 쪽이 맥락에도 맞는다. */
+             또 누르게 된다.
+
+             ⚠️ /company 로 바꾸지 말 것. 홈 본문에 회사소개 링크를 **일부러
+                두지 않았다** — 위 PERFORMANCE 주석에 "그 동선은 헤더.푸터
+                메뉴에 있다" 고 적혀 있다. */
           <Link href="/contact" className={BTN}>
             제작 문의하기
           </Link>
         }
       >
-        {/* 떨어진 그림자 카드다. 사이트의 카드 언어가 rounded-2xl +
-            shadow-card 이므로 여기도 같은 모양으로 둔다.
+        {/* 표 + 맵이 **한 줄**로 선다.
 
-            (한때 "바로 위 유신의 강점 섹션과 겹치지 않게" 라고 적어 두었는데,
-            그 섹션을 걷어내 더는 해당되지 않는다.)
+            ⚠️⚠️ **xl(1280) 부터다. lg(1024)가 아니다.** 1024 는 Container 가
+                  945px 뿐이라 좌우로 쪼개면 표가 550px 가 되는데, 네 열에
+                  가장 긴 값("전담 부서 · 현장 방문", 13px 로 약 150px)을
+                  담으려면 630px 는 있어야 한다. 1280(Container 1088)에서
+                  표가 1.35fr 를 받아 약 620px 다 — 거기서 겨우 선다.
+                  이 비율을 바꾸면 1280 에서 네 열이 줄바꿈되는지 다시 잴 것.
 
-            숫자는 brand 다. 네이비 위에서 쓰던 brand-light(#ff6b5e)는 흰
-            바탕에서 3.0:1 로 떨어진다(brand #d5261e 는 5.1:1). */}
-        <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {process.map((p, i) => (
-            <Reveal
-              as="li"
-              key={p.step}
-              delay={i * 80}
-              className="rounded-2xl bg-white p-6 shadow-card"
-            >
-              {/* 번호 + 제목. 번호는 제목 **위** 별도 줄에 작게 선다.
+            ⚠️ items-start 다. 표(약 300px)와 맵(약 390px)의 높이가 달라
+               stretch 로 두면 짧은 쪽이 늘어나 표 행 사이가 벌어진다. */}
+        {/* ⚠️⚠️ **items-start 를 쓰지 않는다**(기본 stretch). 오른쪽 맵 칸이
+                  왼쪽 표와 같은 높이를 받아야 하기 때문이다 — 한때
+                  xl:items-start 라 표 297px 옆에 맵 칸이 395px 로 서서
+                  "그래프가 표보다 훨씬 커 보인다" 는 말을 들었다.
+                  맵 안쪽에서 flex-1 이 그 높이를 나눠 쓴다. */}
+        <div className="grid gap-10 xl:grid-cols-[1.35fr_1fr] xl:gap-12">
+          {/* ── 비교표 ──
 
-                  ⚠️ 동그라미로 네 번 시도하고 접었다. 56px 워터마크는 제목만큼
-                     무거워 답답했고, 24px 원은 반대로 허전했고, 그 사이인
-                     32px 도 "동그라미 자체가 어색하다" 였다. 크기 문제가
-                     아니었다 — 번호를 제목과 **같은 줄**에 세우면 둘이 가로로
-                     경쟁하고, 원이 그 경쟁을 키운다. 바탕을 깐 원 넷이 카드마다
-                     왼쪽에 떠 있는 것도 레드를 한 점에만 쓰는 이 사이트에서
-                     면적이 과했다.
+              ⚠️⚠️ **회사 개요 표(/company OVERVIEW) · 오시는 길 연락처 표와
+                    같은 결이다** — 선뿐이고 바탕색이 없다. 한 라운드 동안
+                    유신 열에 bg-surface 회색 띠를 깔았는데, "크게 강조된다는
+                    느낌이 안 든다" 는 말을 들었다. 맞는 지적이다. 회색
+                    배경은 강조 수단 가운데 **가장 약하고**, 폼의 비활성
+                    칸에서도 쓰는 색이라 "꺼진 열" 로도 읽힌다.
 
-                     지금은 12px 레드 글자 넷뿐이라 레드 면적이 가장 좁고,
-                     "번호 -> 제목 -> 할 일 셋" 이 위에서 아래로 한 방향으로
-                     읽힌다. 다시 원으로 돌아가지 말 것.
+                    지금은 셋을 겹쳐 쓴다 —
+                      크기   유신 15px   /  나머지 14px
+                      굵기   bold       /  보통
+                      색     ink        /  muted
+                    여기에 머리 칸 아래 **brand 밑줄 2px** 하나를 더한다.
+                    크기 차이가 가장 세게 먹는다.
 
-                  ⚠️ /contact 의 "도입 프로세스" 는 24px 원 배지 **그대로**다.
-                     거기는 세로 목록이고 글상자가 287~319px 뿐이라 결이 다르다.
-                     같은 데이터(company.ts 의 process)를 두 자리에 쓰므로
-                     한쪽을 고칠 때 다른 쪽도 보되, **생김새는 이제 다르다.**
+              ⚠️ brand 는 그 밑줄에만 쓴다. 사이트 규칙이 "레드는 면적을
+                 좁게 — CTA · 라벨 · **강조선**에만" 이라 선은 되고 배경은
+                 안 된다. 유신 열에 연한 레드를 깔고 싶어질 때 이 줄을 볼 것.
 
-                  p.step 이 이미 "01"~"04" 다 — 한때 {i + 1} 로 다시 셌는데
-                  (24px 원에 두 글자가 빽빽해서였다) 이제 자리가 넉넉해
-                  데이터에 있는 값을 그대로 쓴다.
+              ⚠️ 모든 칸이 가운데 정렬이다(첫 열 포함). 항목 글자가
+                 "가격대"~"부품 변경" 으로 짧아 가운데가 어색하지 않다.
 
-                  ⚠️ aria-hidden 을 떼지 말 것. 순서는 ol / li 가 이미 전하므로
-                     시각 보조다(/contact 주석과 같은 이유). */}
-              <div className="flex items-center justify-between gap-2">
-                <p
-                  aria-hidden="true"
-                  className="text-xs font-bold tracking-[0.08em] tabular-nums text-brand"
-                >
-                  {p.step}
-                </p>
-                {/* 다음 단계가 있다는 표식. 번호 13px 뒤의 빈 자리를 쓴다.
+              ⚠️ 가로 스크롤 + 오른쪽 페이드 마스크는 **제품 상세 사양표가
+                 쓰는 것과 같은 장치**다. min-w-[34rem]은 네 열이 줄바꿈
+                 없이 서는 최소 폭이다(가운데 정렬이라 패딩이 줄어 36 -> 34rem).
 
-                    ⚠️ 한때 카드 **밖**에 절대배치였다(-right-[18px] 로 틈
-                       한가운데, lg 부터만). 카드 안으로 들어오면서 두 가지가
-                       달라졌다 — (1) 옆 카드를 가리키는 것이 아니라 "다음이
-                       있다" 는 표식이라 **모든 폭에서** 띄운다(밖에 있을 때는
-                       2열에서 2->3 이 줄바꿈이라 엉뚱한 곳을 가리켰다),
-                       (2) 카드의 relative 가 필요 없어져 함께 걷었다.
-
-                    ⚠️ **사이트 공통 화살표**다(선 M5 12h14 + 화살촉). 제작
-                       문의하기 버튼 · "더 보기" 링크 · 사이드바가 쓰는 그
-                       그림이라 한 사이트에서 "이어진다" 는 뜻이 한 가지 모양을
-                       갖는다.
-
-                       한때 겹친 꺾쇠 둘(m7 6 6 6-6 6 + m14 6 6 6-6 6)이었다.
-                       그때 이유는 "같은 카드 **바닥에 체크**가 있어 위에 또 그
-                       그림을 두면 기호가 섞인다" 였는데, 그 체크를 걷고 회색
-                       산출물 박스로 바꾸면서 전제가 사라졌다. 겹친 꺾쇠가
-                       빽빽해 보인다는 말도 있었다.
-
-                       ⚠️ 체크를 되살린다면 이 선택도 함께 다시 본다.
-
-                    ⚠️ 레드로 바꾸지 말 것. 아래 주석의 "카드 안 레드가 둘 —
-                       번호 · 기간 칩 — 여기에 셋째를 더하지 말 것" 이
-                       그대로 적용된다.
-
-                    ⚠️ text-muted 다. 한때 text-line 이었는데 흰 카드 위에서
-                       대비가 1.2:1 이라 거의 보이지 않았다. muted 는 4.8:1 로
-                       또렷하면서도 레드 번호보다 먼저 읽히지는 않는다
-                       (line · muted/50 · muted · ink/25 를 그려서 골랐다). */}
-                {i < process.length - 1 && (
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                    className="shrink-0 text-muted"
+              ⚠️ th scope 가 둘이다 — 머리행은 col, 각 행의 항목 이름은 row. */}
+          {/* ⚠️ div 가 아니라 **Reveal** 이다. 래퍼를 덧대지 않고 격자 자식
+                 자체를 바꾼 것 — Reveal 이 className 을 그대로 받으므로 격자
+                 칸이 안 바뀐다. 래퍼를 하나 더 두면 grid 자식이 그 래퍼가 되어
+                 overflow-x-auto 가 칸 밖으로 밀린다. */}
+          <Reveal className="overflow-x-auto [mask-image:linear-gradient(to_right,#000_calc(100%-36px),transparent)] sm:[mask-image:none]">
+            <table className="w-full min-w-[34rem] border-collapse text-center text-sm">
+              <thead>
+                <tr>
+                  <th
+                    scope="col"
+                    className="whitespace-nowrap border-b border-line px-3 py-3 text-13 font-bold text-muted"
                   >
-                    <path d="M5 12h14" />
-                    <path d="m12 5 7 7-7 7" />
-                  </svg>
-                )}
-              </div>
-              <h3 className="mt-1.5 text-base font-bold text-ink">{p.title}</h3>
-              {/* 제목 바로 아래 한 줄 — **얼마나 걸리고 무엇을 받는가.**
+                    항목
+                  </th>
+                  {POSITIONING_GROUPS.map((group, i) => (
+                    <th
+                      key={group}
+                      scope="col"
+                      className="whitespace-nowrap border-b border-line px-3 py-3 text-13 font-bold text-muted"
+                    >
+                      {/* ⚠️⚠️ 첫 열(유신)은 **글자가 아니라 YUSIN 로고**다.
+                                맵 점 라벨과 같은 파일(logo-mark.webp)을 쓴다.
 
-                  ⚠️ 한때 이 줄이 카드 **맨 아래**(사진 다음)에 있었다. 사진을
-                     마지막으로 보내 달라는 요청에 자리를 맞바꿨다 — 지금은
-                     "번호 -> 제목 -> 기간 · 산출물 -> 사진" 순이다. 글로 된
-                     정보가 먼저 끝나고 사진이 카드를 닫는다.
+                            ⚠️ 한때 여기에 brand 밑줄 2px 가 있었다. 로고가
+                               들어오고 아래 값이 네이비가 되면서 **밑줄 없이도
+                               열이 구분돼** 걷었다 — 빨간 선까지 있으면 한 열에
+                               강조가 셋이 된다.
 
-                     아래 "가로선으로 끊는다" 는 그대로 유효하다. 선이 제목과
-                     이 줄을 가르던 것에서, 제목 묶음과 사진을 가르는 것으로
-                     역할만 넓어졌다.
+                            ⚠️ scope="col" 을 지우지 말 것. 스크린리더가 각 칸을
+                               "유신 F.A / 사내 21종 55대" 로 읽는 근거다.
+                               로고의 alt 가 그 이름을 전한다.
 
-                  기간이 한때 위 번호 줄 오른쪽에 평문으로 서 있었다. 번호 13px
-                  뒤의 빈 자리를 메우기는 했지만 "01 … 1~2일" 이 양 끝으로 멀어
-                  둘이 한 정보로 읽히지 않았고, 아래 산출물과도 따로 놀았다.
-                  둘은 같은 축이다 — 이 단계가 **얼마나** 걸려 **무엇을** 내놓는가.
-                  그래서 한 줄로 묶었다.
+                            ⚠️ 높이가 h-4(16px)다 — 머리행 글자가 13px 라 그에
+                               맞췄다. 맵 점 라벨은 h-3.5 로 한 단계 작다. */}
+                      {i === 0 ? (
+                        <Image
+                          src="/images/logo-mark.webp"
+                          alt={group}
+                          width={129}
+                          height={32}
+                          className="mx-auto h-4 w-auto"
+                        />
+                      ) : (
+                        group
+                      )}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {positioning.map((row) => (
+                  <tr key={row.item} className="border-b border-line">
+                    <th
+                      scope="row"
+                      className="whitespace-nowrap px-3 py-3.5 text-13 font-bold text-muted"
+                    >
+                      {row.item}
+                    </th>
+                    {row.values.map((value, i) => (
+                      <td
+                        key={POSITIONING_GROUPS[i]}
+                        /* ⚠️⚠️ 유신 열이 **brand(#d5261e) 빨강**이다. 흰 바탕
+                                 대비 5.1:1 로 AA 를 넘는다(globals.css 주석에
+                                 그 측정이 있다).
 
-                  화살표(→)를 걷었다. 카드 사이를 잇는 연결 화살표(아래 20px
-                  SVG)와 같은 그림이라 "다음 단계로" 와 "이것을 받는다" 가 한
-                  화면에서 같은 기호를 쓰고 있었다.
+                                 ⚠️ **사이트의 "레드는 면적을 좁게" 규칙을 알고
+                                    어긴 자리다.** 한 라운드 동안 네이비였는데,
+                                    머리의 YUSIN 로고와 맵의 "이상적" 이 이미
+                                    빨강이라 **한 섹션에 포인트 색이 둘**이 됐다.
+                                    색을 하나로 모으는 쪽이 낫다고 판단했다.
+                                    "레드가 넓다" 는 생각이 들면 이 줄을 먼저 볼 것.
 
-                  가로선으로 끊는다. 점 목록과 같은 결로 이어 두면 항목이 넷인
-                  것처럼 읽힌다 — 이것은 목록의 일부가 아니라 그 결과다.
+                                 ⚠️ brand-dark(#b41f18)가 아니다. 그 색은 맵의
+                                    "이상적" **전용**이다 — 거기는 brand 6% 음영
+                                    위라 brand 로는 4.37:1 밖에 안 나와 어두운
+                                    쪽이 필요했다. 흰 바탕인 여기는 brand 가 더
+                                    선명하다.
 
-                  ⚠️ 기간 칩이 연한 레드다. 위 번호 주석의 "다시 원으로 돌아가지
-                     말 것" 과 부딪치지 않는다 — 그 경고는 **제목과 가로로
-                     경쟁하던 원형 배지**를 두고 한 말이고, 이 칩은 (1) 원이
-                     아니라 rounded-md 고 (2) 가로선 아래라 제목과 경쟁하지
-                     않으며 (3) bg-brand/8 로 /contact 배지(bg-brand/10)보다
-                     연하다. 회색 칩 · 레드 칩 · 테두리 칩 · 세로 막대 넷을
-                     그려서 고른 것이다.
+                           ⚠️ 크기(15 vs 14)와 굵기(700 vs 400) 차이는 그대로다 —
+                              색 하나에만 기대지 않는다. */
+                        className={`whitespace-nowrap px-3 py-3.5 ${
+                          i === 0
+                            ? "text-15 font-bold text-brand"
+                            : "text-muted"
+                        }`}
+                      >
+                        {value}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Reveal>
 
-                  ⚠️ rounded-full 을 쓰지 않는다. 그 생김새는 제품 상세의 분류
-                     배지와 적용 분야 칩이 쓰는 것이라, 알약으로 두면 성격이
-                     다른 칩이 한 사이트에서 같은 모양이 된다.
+          {/* ── 2축 맵 ──
 
-                  산출물이 한때 text-muted 회색 평문이었다. 또렷한 레드 칩 옆에
-                  서니 묻혀, 카드에서 가장 나중에 읽히는 정보가 됐다. 그 뒤로
-                  레드 체크 + font-semibold text-ink 를 거쳐, 지금은 **기간 칩과
-                  같은 꼴의 회색 박스**다.
+              ⚠️⚠️ **"이상적" 영역이 이 그림의 전부다.** 한 라운드 동안 점
+                    셋과 십자 축선뿐이었는데 "뭐가 뭔지 모르겠다 · 시각적으로
+                    좋다는 게 안 느껴진다" 는 말을 들었다. 점만 흩어 놓으면
+                    **어디가 좋은 자리인지**를 그림이 말하지 않는다.
 
-                  ⚠️ 체크 아이콘을 다시 넣지 말 것. 13px · strokeWidth 3.2 로
-                     사이트 공통 그림(path d="M20 6 9 17l-5-5", 제품 특징 카드와
-                     문의 완료 화면이 쓴다)을 줄여 놓았던 자리인데, 기간처럼
-                     박스로 감싸 달라는 요청에 걷었다. 박스가 생기면 아이콘은
-                     한 쌍 안에서 세 번째 요소가 되어 오히려 줄을 흩는다.
+                    왼쪽 위(싸고 사내에서 다 되는 쪽)를 brand 4% 로 칠하고
+                    "이상적" 이라 쓰면, 유신 점이 그 안에 들어가고 나머지
+                    둘은 밖에 남는 것이 한눈에 보인다.
 
-                  ⚠️ 카드 안 레드가 **둘**이다 — 번호(12px 글자) · 기간 칩(8%
-                     바탕). 체크가 빠지면서 셋에서 줄었다. globals.css 의
-                     "레드는 면적을 좁게" 를 지키는 선이다: 둘 다 점에 가깝고,
-                     면은 칩 바탕 하나뿐이며 그마저 8% 다. **여기에 셋째를
-                     더하지 말 것** — 산출물 박스를 레드로 바꾸는 것이 가장
-                     그럴듯한 유혹이고, 그러면 가로선 아래가 전부 레드가 된다.
+              ⚠️ **십자 축선을 걷었다.** 사분면을 나누는 선과 영역 음영이
+                 겹치면 둘 다 흐려진다. 축 방향은 아래위 글자가 말한다.
 
-                  ⚠️ 기간과 산출물에 aria-hidden 을 주지 않는다. 번호(ol/li 가
-                     순서를 이미 전한다)와 달리 읽어야 뜻이 통하는 정보다.
+              ⚠️ 영역 크기는 company.ts 의 POSITIONING_IDEAL 에 있다. 점
+                 좌표와 함께 봐야 하므로 한 곳에 뒀다. */}
+          {/* ⚠️ delay={90} 이다 — 왼쪽 표(0) 다음에 올라온다. 좌우 배치라
+                 읽는 방향과 같다. 위아래로 떨어지는 폭(xl 미만)에서도 표가
+                 먼저 보이므로 순서가 맞다. */}
+          <Reveal delay={90} className="flex flex-col">
+            {/* 세로축 · 맵 · 가로축을 **한 격자**에 넣는다.
 
-                  ⚠️ 네 기간의 합이 홈 PERFORMANCE 의 "2~4주 설계 → 납품" 과
-                     어긋나면 안 된다. company.ts 의 process 주석에 계산이
-                     있다. 그 섹션이 바로 위라 한 화면에서 둘 다 보인다. */}
-              <div className="mt-4 flex items-center gap-2 border-t border-line pt-3">
-                <span className="shrink-0 rounded-md bg-brand/8 px-2 py-0.5 text-11 font-bold tabular-nums text-brand">
-                  {p.duration}
+                ⚠️⚠️ **가로축이 맵과 같은 격자 열(2열)에 있어야 한다.** 한때
+                      가로축 줄이 오른쪽 칸 **전체 폭**(세로축 + 간격 + 맵)에
+                      걸쳐 있어 왼쪽 화살표가 **맵 박스 바깥**에서 시작했다 —
+                      "저렴이 네모 그래프 밖으로 나가서 보기 어렵다" 는 말을
+                      들은 자리다. 격자로 묶으면 좌우 끝이 1px 도 어긋날 수 없다.
+
+                      w-10 같은 폭을 세로축과 가로축 자리에 **따로 적는 방식을
+                      쓰지 말 것** — 한쪽만 고치면 다시 어긋난다. 폭은 아래
+                      grid-cols 한 곳에서만 정해진다.
+
+                ⚠️ flex-1 이다. 바깥 격자가 stretch 라 이 칸이 왼쪽 표와 같은
+                   높이를 받고, 그 높이를 세로축.맵(1fr)과 가로축(auto)이
+                   나눠 쓴다. 표가 길어지든 짧아지든 맵이 저절로 따라온다. */}
+            <div className="grid flex-1 grid-cols-[2.5rem_1fr] grid-rows-[1fr_auto] gap-3">
+              {/* 세로축 — 화살표 ↑ / 칩 / 화살표 ↓
+
+                  ⚠️⚠️ **칩이 세로로 선다**([writing-mode:vertical-rl] —
+                        글자가 똑바로 선 채 위에서 아래로 읽힌다). 가로로 두면
+                        "현장 대응" 이 좁은 칸에서 두 줄로 깨지고, 칸을
+                        넓히면 맵이 그만큼 좁아진다. 세로로 세우면 칸이
+                        40px 면 충분하고 **글자 수 제약도 사라진다.**
+                        (지금은 2글자라 짧지만, 길어져도 칸을 안 넓혀도 된다.)
+
+                  ⚠️⚠️ **rotate-180 을 더하지 말 것.** 라틴 문자를 아래에서
+                        위로 읽히게 하는 흔한 트릭인데, 한글은 vertical-rl
+                        에서 이미 **똑바로 선다.** 거기에 180도를 더하면
+                        "현장 대응" 이 "응대 장현" 처럼 **글자가 거꾸로 뒤집힌다**
+                        — 한 번 그렇게 넣었다가 화면에서 잡았다.
+
+                  ⚠️ 글자(넓음 / 좁음)를 다시 넣지 말 것. 화살표만으로 방향이
+                     읽히고, 글자를 더하면 축이 다시 복잡해진다 — 걷어 달라는
+                     요청으로 지운 것이다.
+
+                  ⚠️ justify-between 이라 맵 높이가 바뀌어도 위.가운데.아래가
+                     저절로 벌어진다. 고정 간격을 주지 말 것. */}
+              {/* ⚠️ 패딩을 주지 말 것. py-1 이 있던 동안 세로축 화살표가
+                     맵 위아래 끝보다 **4px 안쪽**에 섰다 — 가로축은 0px 라
+                     둘이 어긋났다. 실측해서 걷었다. */}
+              {/* ⚠️⚠️ **justify-center + gap 이다. justify-between 이 아니다.**
+                        between 이면 화살표가 맵 양 끝에 0px 로 딱 붙는데,
+                        그러면 칩에서 너무 멀어 축 하나로 안 읽힌다. 가운데로
+                        모으되 칩에 밀착시키지도 않는다.
+
+                        ⚠️ gap 값은 **가로축과 같아야 한다**(지금 둘 다 gap-8).
+                           한쪽만 고치면 두 축이 짝으로 안 보인다. */}
+              <div className="flex flex-col items-center justify-center gap-8">
+                <AxisArrow className="rotate-[-90deg]" />
+                <span className="rounded-full bg-surface px-2 py-3 text-13 font-bold text-ink-soft [writing-mode:vertical-rl]">
+                  대응
                 </span>
-                {/* 산출물도 기간 칩과 **같은 치수의 박스**다(rounded-md px-2
-                    py-0.5 text-11). 색만 다르다 — 기간은 bg-brand/8 에
-                    레드 글자, 산출물은 bg-surface 에 ink-soft 다.
-
-                    ⚠️ 한때 이 앞에 레드 체크 아이콘이 있고 글자만 놓여
-                       있었다(ml-0.5 shrink-0 text-brand, M20 6 9 17l-5-5).
-                       기간처럼 박스로 감싸 달라는 요청에 아이콘을 걷고 박스를
-                       줬다 — 두 값이 같은 꼴이 되니 "며칠에 무엇이 나온다" 가
-                       한 쌍으로 읽힌다.
-
-                    ⚠️ shrink-0 을 주지 않는다. 글이 기간보다 길어("설계 방향 ·
-                       납기 회신") 좁은 폭에서 줄바꿈이 필요하다 — 박스가 두
-                       줄을 그대로 감싼다. 기간 쪽만 shrink-0 이다. */}
-                <span className="rounded-md bg-surface px-2 py-0.5 text-11 font-semibold leading-relaxed text-ink-soft">
-                  {p.output}
-                </span>
+                <AxisArrow className="rotate-90" />
               </div>
 
-              {/* 공정 사진. **카드의 맨 아래다.**
+              {/* ⚠️⚠️ 비율이 **세 구간**이다. 맵이 xl 부터는 표 옆에 서서
+                        **표 높이를 따라가고**(aspect 를 푼다), 그 아래에서는
+                        전폭이라 비율이 높이를 정한다 —
 
-                  한때 제목과 기간 줄 사이에 있었는데, 마지막으로 보내 달라는
-                  요청에 내렸다. mt-4 는 그대로다 — 위가 제목이었을 때나 기간
-                  줄일 때나 같은 간격이다.
+                          ~640   4/3    점 셋이 세로로 흩어진다
+                          640~   5/2    전폭이라 납작해야 한다
+                          1280~  auto   표 높이에 맞춘다
 
-                  한때 여기 점 목록 셋이 있었다("부품 샘플 또는 도면 접수" 식).
-                  글로만 늘어놓으니 네 카드가 비슷해 보여, 사진으로 바꿨다.
-
-                  ⚠️ 카드 패딩 안에 둔다(-mx-6 으로 넘기지 않는다). 넘기면 카드
-                     모서리와 사진 모서리가 겹쳐 면이 두 겹으로 읽힌다 — 점
-                     목록이 회색 박스를 거부하던 것과 같은 이유다. 사진이
-                     212px 로 작아지는 것은 그 대가로 받는다.
-
-                  ⚠️ rounded-xl 이다. 카드가 rounded-2xl 이라 안쪽은 한 단계
-                     작아야 두 모서리가 같은 곡률로 겹쳐 보이지 않는다.
-
-                  bg-surface 는 사진이 뜨기 전 자리를 지킨다. 첫 화면 밖이라
-                  next/image 가 lazy 로 받는다.
-
-                  ⚠️ 사진은 유신이 찍은 것이 아니다 — company.ts 의 process
-                     주석과 scripts/fetch-process-photos.mjs 참고. */}
-              <div className="relative mt-4 aspect-video overflow-hidden rounded-xl bg-surface">
-                <Image
-                  src={p.photo}
-                  alt={p.photoAlt}
-                  fill
-                  sizes="(min-width: 1024px) 260px, (min-width: 640px) 50vw, 100vw"
-                  className="object-cover"
+                        한때 전 폭 4/3 이었는데 1024 에서 960 x 720px 짜리
+                        거대한 상자가 됐다. 중간 구간을 빼먹으면 그 꼴이 된다. */}
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-line bg-surface sm:aspect-[5/2] xl:aspect-auto">
+                <div
+                  aria-hidden="true"
+                  className="absolute left-0 top-0 bg-brand/[0.06]"
+                  style={{
+                    width: `${POSITIONING_IDEAL.width}%`,
+                    height: `${POSITIONING_IDEAL.height}%`,
+                  }}
                 />
-                {/* 사진 위 자막. 제품 구동 영상(ProductVideo)과 홈 영상 카드가
-                    쓰는 그 꼴이다 — 파란 그라데이션 위에 흰 글 한 줄.
+                {/* ⚠️⚠️ **brand-dark 다. brand 도, 불투명도를 준 것도 안 된다.**
+                        이 글자는 영역 음영(brand 6% on surface = #f4eaec) 위에
+                        올라가므로 흰 바탕일 때보다 대비가 낮다. 실측 —
 
-                    ⚠️ <Image> 가 아니라 **칸**의 자식이다. 그래야 사진이 아직
-                       안 떴거나 못 받았을 때도 띠가 남는다.
+                          text-brand/70   #de615c   2.98:1   X  (Lighthouse 가 잡음)
+                          text-brand      #d5261e   4.37:1   X  아슬하게 미달
+                          text-brand-dark #b41f18   5.70:1   O
 
-                    ⚠️ 글이 한 줄이어야 한다. 가장 좁은 1024 에서 사진이 176px,
-                       자막 글상자가 152px 뿐이라 12px 로 약 12자다. 네 줄의
-                       길이 규칙은 company.ts 의 summary 주석에 있다.
+                        12px bold 라 WCAG 의 "큰 글자" 예외(3:1)도 못 받는다.
+                        영역 음영을 진하게 바꾸면 이 값을 다시 잴 것. */}
+                <span className="absolute left-4 top-3.5 text-xs font-bold text-brand-dark">
+                  이상적
+                </span>
 
-                    px-3 pb-2.5 pt-8 — 영상 자막(px-5 pb-5 pt-12)보다 작다.
-                    사진 높이가 99~119px 라 같은 패딩을 주면 절반을 덮는다.
+                {positioningMap.map((point) => (
+                  <div
+                    key={point.label}
+                    className="absolute -translate-x-1/2 translate-y-1/2 text-center"
+                    style={{ left: `${point.x}%`, bottom: `${point.y}%` }}
+                  >
+                    {/* ⚠️ 유신만 레드이고 한 단계 크다. ring 은 점을 키우지
+                           않고 무게만 더한다. */}
+                    <span
+                      aria-hidden="true"
+                      className={`mx-auto block rounded-full ${
+                        point.self
+                          ? "h-3.5 w-3.5 bg-brand ring-4 ring-brand/15"
+                          : "h-2.5 w-2.5 bg-muted"
+                      }`}
+                    />
+                    {/* ⚠️⚠️ 유신만 **로고**다(logo-mark.webp — 빨강 YUSIN
+                              워드마크, 129x32). 글자로 "유신 F.A" 라고 쓰면
+                              옆 둘과 같은 무게인데, 로고는 그것 하나로
+                              "우리" 라고 말한다.
 
-                    pointer-events-none — 누를 것이 없다. */}
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/40 to-transparent px-3 pb-2.5 pt-8">
-                  <p className="text-xs font-medium leading-snug text-white">
-                    {p.summary}
-                  </p>
-                </div>
+                          ⚠️ alt 를 비우지 말 것. 점 라벨이라 이름이 읽혀야
+                             한다 — 장식이 아니다. */}
+                    {point.self ? (
+                      <Image
+                        src="/images/logo-mark.webp"
+                        alt={point.label}
+                        width={129}
+                        height={32}
+                        className="mx-auto mt-2 h-3.5 w-auto"
+                      />
+                    ) : (
+                      <span className="mt-2 block whitespace-nowrap text-xs text-muted">
+                        {point.label}
+                      </span>
+                    )}
+                  </div>
+                ))}
               </div>
 
-              {/* ⚠️ 한때 여기에 카드 오른쪽 위를 덮는 56px 워터마크 번호가
-                     있었다(text-[56px] font-extrabold text-brand/30). 목록 글이
-                     짧아 그 자리가 비어 카드가 헐겁게 읽히던 것을 메우려던
-                     것이고, 모양 넷(원형 배지 · 상단 레드 띠 · …)과 농도
-                     넷(brand/18 · /30 · /45 · line/70)을 비교해 고른 값이었다.
+              {/* 1열 2행 — 세로축 아래의 빈 자리. 가로축을 맵과 같은 열에
+                  두기 위한 것이다(위 격자 주석 참고). */}
+              <div aria-hidden="true" />
 
-                     걷은 이유는 그 숫자가 제목만큼 무거워 **부담스럽다**는
-                     것이다 — 메우려던 문제보다 생긴 문제가 컸다. 다시 넣을
-                     생각이라면 그때 비교한 넷을 또 비교하지 말고, 위 배지가
-                     /contact 와 통일되어 있다는 점부터 볼 것.
-
-                  (한때 "카드의 relative 를 걷지 말 것 — 화살표가 -right-[18px]
-                  로 카드 밖에 걸쳐 있다" 가 여기 있었다. 그 화살표를 번호 줄
-                  안으로 옮기면서 기준점이 필요 없어져 relative 를 걷었다.
-                  다시 카드 밖에 무언가를 걸치려면 그때 되살린다.) */}
-
-            </Reveal>
-          ))}
-        </ol>
+              {/* 가로축 — 화살표 ← / 칩 / 화살표 →. 세로축과 **같은 꼴**이라
+                  둘이 한 쌍으로 읽힌다. */}
+              <div className="flex items-center justify-center gap-8">
+                <AxisArrow className="rotate-180" />
+                <span className="rounded-full bg-surface px-3.5 py-1 text-13 font-bold text-ink-soft">
+                  가격
+                </span>
+                <AxisArrow />
+              </div>
+            </div>
+          </Reveal>
+        </div>
       </Section>
 
       {/* 6. 제품 영상 — videos.ts가 비어 있으면 통째로 렌더하지 않는다.
@@ -852,6 +938,42 @@ export default function Home() {
         }}
       />
     </>
+  );
+}
+
+/**
+ * POSITIONING 맵의 축 화살표. 기본은 오른쪽이고 className 의 rotate-* 로 돌린다
+ * (위쪽 -90deg · 아래쪽 90deg · 왼쪽 180deg).
+ *
+ * ⚠️ 유니코드 글리프(↑ ← →)를 쓰지 않는 까닭: 폰트마다 굵기와 크기가 달라
+ *    네 방향이 제각각으로 보인다. 같은 SVG 를 돌리면 넷이 똑같다.
+ *
+ * ⚠️ **사이트 공통 화살표**다(선 M5 12h14 + 화살촉). 아래 ArrowRight ·
+ *    ContactCTA · NavPanel · ProductCard 가 쓰는 그 그림이라, 한 사이트에서
+ *    "방향" 이 한 모양을 갖는다. 다른 모양(꺾쇠 등)으로 바꾸지 말 것.
+ *
+ * ⚠️ 동그라미로 감싸지 않는다. 원이 붙으면 버튼처럼 보여 "누를 수 있나" 로
+ *    읽히고, 축 넷에 원이 생기면 미니멀과 멀어진다.
+ *
+ * ⚠️ aria-hidden 이다 — 방향의 뜻은 옆에 선 칩 글자가 전한다.
+ */
+function AxisArrow({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={`shrink-0 text-muted ${className}`}
+    >
+      <path d="M5 12h14" />
+      <path d="m12 5 7 7-7 7" />
+    </svg>
   );
 }
 

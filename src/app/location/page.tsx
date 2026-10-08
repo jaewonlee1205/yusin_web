@@ -76,52 +76,67 @@ const MAP_SRC = `https://maps.google.com/maps?q=${site.coords.lat},${site.coords
  */
 
 export default function LocationPage() {
-  /* 연락처 여섯 칸. lg 2열에서 행 우선으로 흐른다 —
-       전화 | 주소
-       팩스 | 이메일
-       주차 | 운영 시간
+  /* 연락처 여섯 칸. lg 2열에서 행 우선으로 흐르고, wide 인 둘은 전폭이다 —
+
+       전화 | 팩스
+       이메일 | 주차
+       주소      (전폭)
+       운영 시간 (전폭)
+
+     ⚠️⚠️ **2열 행이 먼저, 전폭 행이 나중이다.** 한때 주소가 맨 위였는데
+           (지도에서 눈을 뗀 다음 처음 찾는 값이라는 이유였다), 그러면
+           리듬이 **1 - 2 - 2 - 1** 로 되돌아와 "1줄 2줄이 섞여 이상하다" 는
+           말을 들었다. 지금은 **2 - 2 - 1 - 1** 로 한 방향으로 흐른다.
+           배치 리듬이 값 하나의 순서보다 먼저다 — 주소는 전폭이라 어디에
+           있든 눈에 띈다.
+
+     ⚠️⚠️ **주소가 wide 인 까닭.** 2열 칸에서는 한 줄에 436px 가 필요한데
+           391px 밖에 없어 늘 2줄이었다(1440 실측). 표가 1줄로 정렬되는 쪽이
+           보기 좋다는 요청에 전폭으로 뺐다 — 전폭이면 1088px 라 넉넉하다.
+           주소를 깎아 줄이는 길도 있었지만 호수가 둘(A동 201호, 323~324호)
+           이라 정보가 사라진다.
+
+     ⚠️⚠️ **운영 시간도 wide 여야 한다.** 전폭을 하나만 쓰면 2열에 남는 칸이
+           다섯(홀수)이 되고, 마지막 행에 칸이 **하나만** 서서 그 행의 선이
+           왼쪽 절반에서 끊긴다 — 계단처럼 보인다. 전폭 둘 + 2열 넷이면
+           네 행이 모두 꽉 찬다.
+
+           ⚠️ 그래서 칸을 더하거나 뺄 때 **wide 가 아닌 칸의 수가 짝수**여야
+              한다. 아래 dl 의 border-b 선택자도 "마지막 칸이 전폭" 을
+              전제한다.
+
+     ⚠️ 주소가 맨 위인 것은 바로 위가 지도여서다 — 지도에서 눈을 떼고 처음
+        찾는 값이 주소다. 한때 전화가 먼저였는데, 그때는 주소가 2열 오른쪽
+        칸이라 같은 행에서 나란히 보였다.
 
      "언제 가면 되나"(운영 시간)가 맨 끝인 이유: 어디로.어떻게를 먼저 읽고
      그것이 뒤따르는 순서가 자연스럽다. */
-  const cells: { label: string; body: ReactNode }[] = [
+  const cells: { label: string; body: ReactNode; wide?: boolean }[] = [
     {
       label: "전화",
-      /* 대표번호는 ink-soft(주소.팩스.이메일과 같은 색), 추가 회선은 한 단계
-         연한 muted 다. 크기는 둘 다 표의 다른 값과 같은 14px 로 둔다.
+      /* ⚠️⚠️ **대표번호 하나만 그린다.** 한때 아래에 추가 회선 둘
+               (site.telExtra — 031-434-7241~2 · 031-318-0052)을 muted 로
+               한 줄 더 쌓았는데, 그 줄 때문에 이 칸이 **2줄**이 되어 표의
+               행 높이가 갈렸다. 표가 1줄로 정렬되는 쪽이 보기 좋다는
+               요청에 뺐다.
 
-         site.ts 는 대표번호(tel)와 추가 회선(telExtra)을 나눠 두는데, 세
-         번호를 똑같이 쌓으면 그 구분이 묻혀 어디로 걸어야 하는지가 화면에서
-         사라진다. 가르는 수단은 색 하나다 — 한동안 크기(15px)와
-         굵기(semibold)까지 함께 썼는데, 그러면 표 안에 글자 크기가
-         13/14/15px 세 가지가 되고 그중 둘만 굵어 눈이 두 번 멈췄다. */
+               ⚠️ site.telExtra 데이터는 **지우지 말 것.** 홈 page.tsx 의
+                  JSON-LD 가 telephone: [site.tel, ...site.telExtra] 로
+                  검색엔진에 넘긴다 — 화면에서만 빠졌지 사이트가 가진
+                  번호가 줄어든 것이 아니다.
+
+               ⚠️ 되살린다면 행 높이가 다시 갈린다는 것을 알고 할 것.
+                  (주소도 1440 에서 2줄이라, 지금은 여섯 행 중 주소만
+                  2줄이다.) */
       body: (
-        <>
-          <a
-            href={telHref(site.tel)}
-            className="block tabular-nums text-ink-soft transition-colors hover:text-brand"
-          >
-            {site.tel}
-          </a>
-          <span className="mt-1 block text-muted">
-            {site.telExtra.map((number, i) => (
-              <span key={number}>
-                {i > 0 && " · "}
-                <a
-                  href={telHref(number)}
-                  className="tabular-nums transition-colors hover:text-brand"
-                >
-                  {number}
-                </a>
-              </span>
-            ))}
-          </span>
-        </>
+        <a
+          href={telHref(site.tel)}
+          className="block tabular-nums text-ink-soft transition-colors hover:text-brand"
+        >
+          {site.tel}
+        </a>
       ),
     },
-    /* 이름은 road 지만 담긴 값은 지번이다 — 호수 표기가 확인되면 도로명으로
-       바꾼다(site.ts TODO 1). 건물명(동우디지털파크)과 호수가 그 안에 이미
-       들어 있어 이 칸 하나로 충분하다. */
-    { label: "주소", body: site.address.road },
     /* 팩스는 걸 수 없어 링크가 없다(헤더.푸터.CTA와 같은 규칙). */
     { label: "팩스", body: <span className="tabular-nums">{site.fax}</span> },
     {
@@ -136,6 +151,10 @@ export default function LocationPage() {
       ),
     },
     { label: "주차", body: site.parking },
+    /* 이름은 road 지만 담긴 값은 지번이다 — 호수 표기가 확인되면 도로명으로
+       바꾼다(site.ts TODO 1). 건물명(동우디지털파크)과 호수가 그 안에 이미
+       들어 있어 이 칸 하나로 충분하다. */
+    { label: "주소", body: site.address.road, wide: true },
     {
       label: "운영 시간",
       /* CTA와 푸터에도 같은 값이 나오지만 그 둘은 모든 페이지에 깔리는 사이트
@@ -143,13 +162,33 @@ export default function LocationPage() {
 
          한때 이 아래 "길찾기 | 네이버 지도 · 카카오맵" 칸이 하나 더 있었다.
          표의 다른 칸은 모두 값인데 거기만 나가는 링크 둘이라 결이 달랐다.
-         지도앱으로 가는 길은 푸터에 남아 있다. */
+         지도앱으로 가는 길은 푸터에 남아 있다.
+
+         ⚠️⚠️ **한 줄이다.** 한때 weekday 와 holiday 를 block 둘로 쌓아
+               2줄이었는데, 위 전화와 같은 이유로(표를 1줄로 정렬) 한 줄에
+               넣었다. 휴무는 괄호에 담고 muted 로 한 단계 낮춘다 — 색
+               구분은 쌓여 있을 때와 같다.
+
+               ⚠️ 괄호를 쓰는 까닭: 가운뎃점으로 이으면 값 안의 "토·일요일" 과
+                  섞여 어디가 경계인지 흐려진다.
+
+               ⚠️⚠️ **site.ts 의 hours 를 합치지 말 것.** 그 두 값은 세 화면이
+                     먹는다 — /location · ContactCTA · Footer. 데이터를 합치면
+                     나머지 둘이 함께 바뀐다. 합치는 일은 **여기 화면에서만**
+                     한다.
+
+               한 줄 폭은 약 281px 다(두 값 269px + 괄호). 1440 의 오른쪽 칸은
+               주소가 391px 까지 쓰므로 들어가고, 1024(327px)도 들어간다.
+               390 에서는 dd 가 228px 라 다시 2줄이 된다 — 모바일은 어쩔 수 없다. */
       body: (
         <>
-          <span className="block tabular-nums">{site.hours.weekday}</span>
-          <span className="mt-1 block text-muted">{site.hours.holiday}</span>
+          <span className="tabular-nums">{site.hours.weekday}</span>
+          <span className="text-muted"> ({site.hours.holiday})</span>
         </>
       ),
+      /* 전폭이다 — 위 배열 주석의 "운영 시간도 wide 여야 한다" 참고.
+         값이 넘쳐서가 아니라 **마지막 행을 꽉 채우기 위해서**다. */
+      wide: true,
     },
   ];
 
@@ -343,17 +382,17 @@ export default function LocationPage() {
                      표의 머리였는데, 카드 안으로 들어오면서 둘 사이의
                      구분선을 겸한다. 걷으면 지도 아래가 그대로 글로 이어진다.
 
-                  ⚠️⚠️ **마지막 행의 border-b 를 끈다**(아래 두 arbitrary
-                        variant). 카드 바닥 테두리와 1px 간격으로 겹쳐 2중
-                        선이 됐다. 1열에서는 마지막 한 칸, lg 2열에서는
-                        마지막 **두** 칸이다.
+                  ⚠️⚠️ **마지막 칸의 border-b 를 끈다**([&>*:last-child]).
+                        카드 바닥 테두리와 1px 간격으로 겹쳐 2중 선이 됐다.
 
-                        ⚠️ 이 둘은 **칸이 짝수**임을 전제한다(지금 여섯).
-                           홀수로 바꾸면 lg 에서 nth-last-child(2) 가 마지막
-                           행이 아니라 그 위 행의 오른쪽 칸을 잡는다 — 칸
-                           수를 바꾸면 이 선택자를 반드시 다시 볼 것.
-                           (위 cells 주석의 "칸 수는 자유롭다" 는 그래서
-                           더는 무조건 참이 아니다.)
+                        ⚠️ **마지막 칸이 전폭(wide)이라 이 하나로 끝난다.**
+                           한때 lg:[&>*:nth-last-child(2)] 가 함께 있었다 —
+                           2열에서 마지막 행이 두 칸이던 때다. 지금은 운영
+                           시간이 전폭이라 그 칸 하나가 곧 마지막 행이다.
+
+                           ⚠️ 마지막 칸을 전폭이 아닌 것으로 바꾸면 이
+                              선택자를 다시 짜야 한다(2열에서 마지막 행의
+                              **두** 칸을 꺼야 한다).
 
                   ⚠️⚠️ **좌우 패딩이 dl 이 아니라 행에 있다**(px-5 sm:px-7).
                         행에 주면 border-b 가 패딩까지 덮어 **선이 카드
@@ -386,7 +425,7 @@ export default function LocationPage() {
 
                   dl/dt/dd 는 그대로다. 라벨-값은 용어-정의가 맞고, 접근성
                   검사(dlitem)가 dt.dd 를 dl 직계로 요구한다. */}
-              <dl className="grid border-t border-line [&>*:last-child]:border-b-0 lg:grid-cols-2 lg:[&>*:nth-last-child(2)]:border-b-0">
+              <dl className="grid border-t border-line [&>*:last-child]:border-b-0 lg:grid-cols-2">
                 {cells.map((cell) => (
                   <div
                     key={cell.label}
@@ -404,7 +443,9 @@ export default function LocationPage() {
 
                        ⚠️ px-5 sm:px-7 이 **행에** 있다(위 dl 주석 참고).
                           dl 로 옮기면 선이 카드 전폭을 잃는다. */
-                    className="flex items-center gap-4 border-b border-line px-5 py-4 sm:px-7"
+                    className={`flex items-center gap-4 border-b border-line px-5 py-4 sm:px-7 ${
+                      cell.wide ? "lg:col-span-2" : ""
+                    }`}
                   >
                     <dt className="w-16 shrink-0 text-13 font-bold text-muted sm:w-20">
                       {cell.label}
