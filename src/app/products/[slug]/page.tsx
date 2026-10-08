@@ -123,10 +123,29 @@ export default async function ProductDetailPage({
                         홈 page.tsx 880 과 company 227 의 "감싸는 카드가 있으면
                         안쪽은 bg-surface 회색만으로 충분히 구분된다".
 
-                  ⚠️ 그림자가 아니라 **테두리로 선다.** /location 주석의 "자료를
-                     읽는 자리는 테두리(2D)로 선다 — 그림자로 띄우면 맞지
-                     않는다" 를 따른다. 왼쪽 갤러리 사진도 그림자가 없어 둘이
-                     나란히 같은 결로 선다.
+                  ⚠️⚠️ **shadow-card 로 뜬다(테두리가 아니다).** 왼쪽 큰 사진이
+                        ProductGallery 에서 이미 shadow-card 를 쓰고 있어,
+                        나란히 선 둘이 같은 언어라야 짝이 된다.
+
+                        한 라운드 동안 border border-line 이었고 "테두리로만
+                        포인트가 된 것 같다, 3D 로 띄어진 느낌이면 좋겠다" 는
+                        말을 들었다. 그때 나는 /location 의 "자료를 읽는 자리는
+                        테두리(2D)로 선다" 를 가져다 쓰면서 **사진 쪽을 확인하지
+                        않았고**, 주석에 "왼쪽 갤러리 사진도 그림자가 없다" 고
+                        사실과 다르게 적기까지 했다.
+
+                        /location 의 그 규칙은 **사진 없이 홀로 서는 표**의
+                        것이다. 여기는 제품 사진과 짝을 이루는 자리라 조건이
+                        다르다.
+
+                  ⚠️ **shadow-raised 로 올리지 말 것.** 사이트의 호버 언어다
+                     (ProductCard.VideoCard). 정적으로 쓰면 위계가 흔들리고,
+                     사진(shadow-card)보다 세면 오른쪽만 떠 보인다. 세기를
+                     올릴 일이 생기면 **사진과 카드를 함께** 올린다.
+
+                  ⚠️ 테두리와 그림자를 같이 두지 않는다 — ProductCard 주석의
+                     "테두리를 걷었으므로 shadow-card 가 윤곽을 맡는다" 가
+                     사이트의 규칙이다.
 
                   ⚠️⚠️⚠️ **카드 바닥 = 큰 사진 바닥, 버튼 바닥 = 썸네일 줄 바닥.**
                           이 화면의 기준이다. lg:flex-1 이 카드를 남은 높이까지
@@ -160,7 +179,7 @@ export default async function ProductDetailPage({
                   ⚠️ 패딩이 값 칸을 좁힌다. 1024(두 칸이 가장 좁은 곳)에서 사양
                      값이 한 줄로 남는지가 이 패딩의 상한이다. 키우려거든 먼저
                      1024 에서 일곱 제품을 다 재라. */}
-              <div className="rounded-2xl border border-line bg-white p-5 lg:flex lg:flex-1 lg:flex-col">
+              <div className="rounded-2xl bg-white p-5 shadow-card lg:flex lg:flex-1 lg:flex-col">
                 {/* 분류 배지(왼쪽)와 YUSIN 워드마크(오른쪽)가 한 줄이다.
 
                     ⚠️ 마크를 네 번 매만졌다 — 배지 줄 24px -> 제목 줄 32px ->
