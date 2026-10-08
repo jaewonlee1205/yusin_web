@@ -34,11 +34,99 @@
   --shadow-card:
     0 1px 3px rgba(26, 29, 35, 0.04), 0 8px 24px rgba(26, 29, 35, 0.06);
 
+  /* 카드가 떠오를 때(hover). 거리만 키우고 **색은 shadow-card 와 같은
+     ink** 를 쓴다.
+
+     한동안 ProductCard 가 Tailwind 기본 hover:shadow-xl 을 썼다. 그 값은
+     순수 검정(rgb(0 0 0)) 기반이라, 쉴 때는 ink 그림자였다가 마우스를 올리면
+     검정 그림자로 **색이 갈렸다** — 같은 카드가 두 가지 회색을 가졌다. */
+  --shadow-raised:
+    0 2px 6px rgba(26, 29, 35, 0.06), 0 16px 40px rgba(26, 29, 35, 0.11);
+
+  /* 본문 위에 겹쳐 뜨는 판 — 내비 드롭다운 같은 것. 카드보다 멀리 띄운다.
+     카드는 지면에 놓인 것, 이것은 지면에서 들린 것이다. */
+  --shadow-overlay:
+    0 4px 12px rgba(26, 29, 35, 0.08), 0 12px 32px rgba(26, 29, 35, 0.1);
+
+  /* ⚠️ 세 단이 전부다 — card(놓임) · raised(호버) · overlay(떠 있음).
+        네 번째를 만들기 전에 이 셋 중 하나로 되는지 먼저 볼 것. 헤더가
+        스크롤될 때 쓰는 shadow-lg shadow-ink/[0.07] 은 일부러 토큰이 아니다:
+        가로 전체를 가르는 띠의 아래 선이라 상자 그림자와 역할이 다르고,
+        쓰는 자리가 한 곳이다. */
+
+  /* 기본 스케일(xs 12 · sm 14 · base 16 · lg 18 …) **사이에** 들어가는
+     여섯 단계. 임의값으로 37번 흩어져 있던 것을 모았다 —
+
+       text-10   ScrollCue 의 "SCROLL"                      1곳
+       text-11   기간·분류 칩                                 2곳
+       text-13   표 라벨(dt) · 캡션 · 작은 본문 · 배너 eyebrow   16곳
+       text-15   큰 CTA(px-6 py-4) · 데스크톱 내비 · 표 값(dd)  14곳
+       text-17   제품 소제목 · 문의 보내기 버튼                  2곳
+       text-34   큰 숫자 지표(tabular-nums)                   2곳
+
+     ⚠️ **크기로 이름 붙였다.** 역할로 묶으려 했는데 하나로 안 모인다 —
+        13 은 라벨·캡션·본문 셋이 쓰고, 15 는 버튼·내비·표값 셋이 쓴다.
+        억지 이름(--text-label 같은)을 붙이면 쓸 때마다 "이게 그 역할이
+        맞나" 를 되묻게 된다. 숫자는 거짓말을 하지 않는다.
+
+     ⚠️ px 가 아니라 rem 이다. 기본 설정(16px)에서는 전과 **한 픽셀도 다르지
+        않고**, 브라우저 글자 크기를 키운 사람에게만 함께 커진다 — px 로
+        박혀 있을 때는 그 사람 화면에서만 이 글자들이 안 커졌다.
+
+     ⚠️ 작은 쪽이 10·11·12·13·14·15·16·17·18 로 **아홉 단계**다. 많다.
+        지금은 값을 그대로 옮기기만 했다(화면을 안 바꾸는 것이 이 작업의
+        조건이었다). 단계를 줄이는 것은 따로 판단할 일이다.
+
+     ⚠️ line-height 는 주지 않는다(--text-13--line-height 같은 것). 지금
+        코드가 자리마다 leading-* 을 명시하는데, 토큰에 기본값을 달면 명시
+        안 한 곳의 줄간격이 조용히 바뀐다.
+
+     홈 히어로의 text-[clamp(...)] 다섯은 토큰이 아니다. 그쪽은 **뷰포트
+     높이(vh)** 에 매여 한 화면에 맞추는 장치라 고정 크기 스케일과 다르다. */
+  --text-10: 0.625rem;
+  --text-11: 0.6875rem;
+  --text-13: 0.8125rem;
+  --text-15: 0.9375rem;
+  --text-17: 1.0625rem;
+  --text-34: 2.125rem;
+
   --font-sans: var(--font-noto-sans-kr), "Malgun Gothic", system-ui, sans-serif;
 }
 
 :root {
   color-scheme: light;
+}
+
+/*
+  제목은 줄 길이를 고르게 나눈다(balance), 본문은 외톨이 글자를 막는다(pretty).
+
+  ⚠️ @layer base 안에 둔다. 레이어 밖에 두면 Tailwind 의 text-balance ·
+     text-pretty · text-wrap 유틸리티로 **덮을 수 없다** — utilities 레이어가
+     base 를 이기지만, 레이어 밖의 규칙은 명시도와 무관하게 레이어 안을
+     이긴다. 아래 :focus-visible 주석에 같은 함정이 적혀 있다(그쪽은 아직
+     레이어 밖이지만 거기서는 덮을 일이 없어 그대로 둔다).
+
+  ⚠️ 수동 <br> 이 있는 제목 셋은 그대로 둔다. balance 는 소프트 줄바꿈 자리만
+     고르는 것이라 강제 줄바꿈과 싸우지 않는다 —
+       src/app/page.tsx         홈 h1, 두 구절을 가르는 구조적 줄바꿈
+       src/components/ContactCTA.tsx  폭 구간별(hidden sm:block xl:hidden)
+       src/components/InquiryForm.tsx 접수 완료 문구, 두 문장
+     특히 ContactCTA 는 "1280 밑에서 끄면 575/120 토막이 된다" 는 측정이
+     주석에 적혀 있다. balance 가 그 역할을 대신하지 못한다.
+
+  한글은 word-break: keep-all 과 함께 쓴다(body 에 걸어 뒀다) — 어절 단위로
+  끊은 뒤 그 줄들을 고르게 나누는 순서다.
+*/
+@layer base {
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
 }
 
 /*

@@ -34,7 +34,10 @@ export default function BackToTop() {
       aria-label="맨 위로"
       aria-hidden={!shown}
       tabIndex={shown ? 0 : -1}
-      className={`fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-white text-ink shadow-card ring-1 ring-ink/5 transition-all duration-300 hover:bg-surface sm:bottom-7 sm:right-7 ${
+      /* ⚠️ active:duration-75 를 함께 준다. 이 버튼의 duration-300 은
+         나타났다 사라지는 연출용인데, 그 값으로 누름 반응까지 그리면
+         손가락을 떼고도 한참 뒤에 돌아온다. 누르는 동안만 빠르게. */
+      className={`fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-white text-ink shadow-card ring-1 ring-ink/5 transition-all duration-300 hover:bg-surface active:scale-95 active:duration-75 sm:bottom-7 sm:right-7 ${
         shown ? "opacity-100" : "pointer-events-none translate-y-2 opacity-0"
       }`}
     >

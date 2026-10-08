@@ -29,7 +29,7 @@ export default function ScrollCue() {
       }`}
     >
       <span className="flex flex-col items-center gap-2">
-        <span className="text-[0.625rem] font-bold uppercase tracking-[0.3em] text-white/45">
+        <span className="text-10 font-bold uppercase tracking-[0.3em] text-white/45">
           Scroll
         </span>
         <span className="relative block h-8 w-px overflow-hidden bg-white/15">

@@ -55,7 +55,7 @@ export default function PageHero({
             prefers-reduced-motion 에서는 globals.css 끝 블록이 모든
             애니메이션을 꺼 버리므로 글자가 즉시 보인다. */}
         <p
-          className="rise-quick text-[13px] font-semibold tracking-[0.02em] text-brand"
+          className="rise-quick text-13 font-semibold tracking-[0.02em] text-brand"
           style={{ animationDelay: "0ms" }}
         >
           {eyebrow}

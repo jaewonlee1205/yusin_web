@@ -305,10 +305,10 @@ export default function LocationPage() {
                        아래로 밀린다. */
                     className="flex items-center gap-4 border-b border-line py-4"
                   >
-                    <dt className="w-16 shrink-0 text-[13px] font-bold text-muted sm:w-20">
+                    <dt className="w-16 shrink-0 text-13 font-bold text-muted sm:w-20">
                       {cell.label}
                     </dt>
-                    <dd className="text-[15px] leading-relaxed text-ink">
+                    <dd className="text-15 leading-relaxed text-ink">
                       {cell.body}
                     </dd>
                   </div>

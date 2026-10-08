@@ -151,7 +151,7 @@ export default function Header() {
           <Link
             href="/"
             onClick={(e) => onSameRouteClick(e, "/")}
-            className="shrink-0 lg:justify-self-start"
+            className="shrink-0 transition-opacity hover:opacity-70 active:opacity-55 lg:justify-self-start"
             aria-label={`${site.name} 홈으로`}
           >
             {/* lg(1024~1280px)에서 h-8 을 유지하는 것은 의도다. 이 구간은 메뉴가
@@ -187,7 +187,7 @@ export default function Header() {
                     href={item.href}
                     onClick={(e) => onSameRouteClick(e, item.href)}
                     aria-current={active ? "page" : undefined}
-                    className={`rounded-lg px-2 py-2 text-[15px] font-medium transition-colors xl:px-4 ${
+                    className={`rounded-lg px-2 py-2 text-15 font-medium transition-colors xl:px-4 ${
                       active ? "text-brand" : "text-ink-soft hover:text-ink"
                     }`}
                   >
@@ -233,7 +233,7 @@ export default function Header() {
                       setOpenMenu(null);
                       onSameRouteClick(e, item.href);
                     }}
-                    className={`flex items-center gap-1.5 rounded-lg px-2 py-2 text-[15px] font-medium transition-colors xl:px-4 ${
+                    className={`flex items-center gap-1.5 rounded-lg px-2 py-2 text-15 font-medium transition-colors xl:px-4 ${
                       active ? "text-brand" : "text-ink-soft hover:text-ink"
                     }`}
                   >
@@ -246,7 +246,7 @@ export default function Header() {
                       id={panelId}
                       className="absolute left-1/2 top-full z-50 w-56 -translate-x-1/2 pt-2"
                     >
-                      <div className="overflow-hidden rounded-xl border border-line bg-white shadow-lg shadow-ink/8">
+                      <div className="overflow-hidden rounded-xl border border-line bg-white shadow-overlay">
                         <ListPanel
                           items={childrenFor(item)}
                           onNavigate={() => setOpenMenu(null)}
@@ -280,7 +280,7 @@ export default function Header() {
             </a>
             <Link
               href={headerCta.href}
-              className="rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+              className="rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98]"
             >
               {headerCta.label}
             </Link>
@@ -302,7 +302,7 @@ export default function Header() {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="2.5"
               strokeLinecap="round"
               aria-hidden="true"
             >
@@ -382,13 +382,15 @@ export default function Header() {
                   없어 레드 포인트도 없다. */}
               <a
                 href={telHref(site.tel)}
-                className="rounded-xl border border-line py-3 text-center text-sm font-semibold text-ink"
+                /* ⚠️ 휴대폰 메뉴다. hover: 를 주지 않는 것이 맞다(터치에는 호버가
+                    없다) — 대신 active: 로 누름을 보여 준다. */
+                className="rounded-xl border border-line py-3 text-center text-sm font-semibold text-ink transition active:scale-[0.98]"
               >
                 전화 {site.tel}
               </a>
               <Link
                 href="/contact"
-                className="rounded-xl bg-brand py-3 text-center text-sm font-semibold text-white"
+                className="rounded-xl bg-brand py-3 text-center text-sm font-semibold text-white transition active:scale-[0.98]"
               >
                 견적 문의
               </Link>

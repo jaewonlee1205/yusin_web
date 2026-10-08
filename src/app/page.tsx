@@ -3,6 +3,8 @@ import Link from "next/link";
 import Container from "@/components/Container";
 import ContactCTA from "@/components/ContactCTA";
 import ProductCard from "@/components/ProductCard";
+import HeroBackgroundVideo from "@/components/HeroBackgroundVideo";
+import ProductVideo from "@/components/ProductVideo";
 import Section from "@/components/Section";
 import { process } from "@/data/company";
 import ClientGrid from "@/components/ClientGrid";
@@ -48,7 +50,7 @@ const STATS = [
    ⚠️ 홈 PROCESS 카드 안의 화살표는 **다른 것이다.** 거기는 "다음 단계가
       있다" 는 표식이라 그대로 둔다. */
 const BTN =
-  "inline-flex items-center rounded-xl border border-line bg-white px-5 py-3.5 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand";
+  "inline-flex items-center rounded-xl border border-line bg-white px-5 py-3.5 text-sm font-semibold text-ink transition hover:border-brand/40 hover:text-brand active:scale-[0.98]";
 
 export default function Home() {
   return (
@@ -100,19 +102,20 @@ export default function Home() {
             sizes="100vw"
             className="object-cover"
           />
-          {/* muted 가 없으면 자동재생이 막히고, playsInline 이 없으면 모바일에서
-              전체화면으로 튄다. preload 는 metadata — 첫 화면 페인트를 안 막는다. */}
-          <video
-            className="hero-video absolute inset-0 h-full w-full object-cover"
+          {/* ⚠️ 영상은 **첫 화면이 다 그려진 뒤에** 받는다(window load).
+                 한동안 여기에 <video autoPlay preload="metadata"> 가 그대로
+                 있었고, 주석에는 "metadata — 첫 화면 페인트를 안 막는다" 고
+                 적혀 있었다. autoPlay 가 있으면 preload 값은 무시되고 전체를
+                 받는다 — 바로 위 Image 와 같은 1.59MB 가 LCP 를 맡은
+                 hero-poster.webp 와 대역을 다퉜다.
+
+              ⚠️ 위 Image(priority)를 지우지 말 것. 영상이 오기 전과 '움직임
+                 줄이기' 에서 보이는 것이 그 정지컷이다. 같은 장면이라 영상이
+                 그 위에 겹쳐 돌기 시작해도 장면이 튀지 않는다. */}
+          <HeroBackgroundVideo
+            src="/videos/hero.mp4"
             poster="/images/hero-poster.webp"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-          >
-            <source src="/videos/hero.mp4" type="video/mp4" />
-          </video>
+          />
         </div>
         {/* 배경 3 — 글자가 읽히도록 덮는 네이비 오버레이.
 
@@ -185,14 +188,14 @@ export default function Home() {
               >
                 <Link
                   href="/products"
-                  className="group inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-6 py-4 text-[15px] font-semibold text-white transition-colors hover:bg-brand-dark sm:px-8"
+                  className="group inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-6 py-4 text-15 font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:px-8"
                 >
                   제품 살펴보기
                   <ArrowRight />
                 </Link>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center justify-center rounded-xl border border-white/45 px-6 py-4 text-[15px] font-semibold text-white transition-colors hover:border-white/70 hover:bg-white/10 sm:px-8"
+                  className="inline-flex items-center justify-center rounded-xl border border-white/45 px-6 py-4 text-15 font-semibold text-white transition hover:border-white/70 hover:bg-white/10 active:scale-[0.98] sm:px-8"
                 >
                   견적 문의하기
                 </Link>
@@ -279,8 +282,18 @@ export default function Home() {
             히어로가 쓰는 영상을 그대로 건다. 볼피더가 커넥터 부품을 정렬해
             트랙으로 내보내는 10초짜리인데, 히어로에서는 opacity 0.3 에
             네이비 오버레이까지 덮여 거의 안 보인다 — 같은 파일이어도 여기서
-            밝게 돌면 다른 영상처럼 읽히고, 이미 받는 파일이라 전송량도
-            늘지 않는다.
+            밝게 돌면 다른 영상처럼 읽힌다.
+
+            ⚠️⚠️ 한동안 이 자리에 "이미 받는 파일이라 전송량도 늘지 않는다"
+                  고 적혀 있었다. **사실이 아니었다.** Lighthouse 네트워크
+                  기록을 보니 hero.mp4(1.59MB)가 **두 번** 내려와 홈 한
+                  페이지에 3.2MB 가 흘렀다 — 사이트의 CSS·JS·이미지를 전부
+                  합친 것(약 400KB)의 여덟 배다. 히어로와 이쪽이 동시에
+                  autoPlay 로 요청해 캐시가 맞물릴 틈이 없었다.
+
+                  그래서 아래를 ProductVideo 로 바꿨다. 화면에 닿기 400px
+                  전에 받으므로 히어로가 먼저 끝나고, 같은 URL 이라 캐시에서
+                  온다.
 
             1024 미만은 16/9 다 — 영상 원본과 같은 비율이라 아무 데도 잘리지
             않는다. lg 부터는 3/1 로 눕힌다. 전체 폭(1088px)에서 16/9 면
@@ -290,53 +303,25 @@ export default function Home() {
             object-cover 가 위아래를 자르지만 트랙이 화면을 가로지르는 장면
             이라 부품이 가운데 남는다 — 눈으로 확인했다.
 
-            ⚠️ Image 가 아래 깔려 있는 것은 장식이 아니다. globals.css 의
-               prefers-reduced-motion 블록이 .hero-video 를 display:none 으로
-               숨기므로, 움직임을 끈 사람에게는 이 정지컷이 보인다. 영상에서
-               뽑은 그림이라 장면이 어긋나지 않는다. 지우면 그 사람에게 빈
-               칸만 남는다. */}
-        <Reveal className="relative aspect-video overflow-hidden rounded-2xl bg-surface lg:aspect-[3/1]">
-          <Image
-            src="/images/hero-poster.webp"
-            alt="커넥터 부품을 정렬해 트랙으로 내보내는 볼피더"
-            fill
-            sizes="100vw"
-            className="object-cover"
-          />
-          <video
-            className="hero-video absolute inset-0 h-full w-full object-cover"
-            poster="/images/hero-poster.webp"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-          >
-            <source src="/videos/hero.mp4" type="video/mp4" />
-          </video>
+            ⚠️ 정지컷(poster)과 '움직임 줄이기' 처리는 ProductVideo 가
+               맡는다 — 그쪽 머리 주석에 적혀 있다. */}
+        {/* ⚠️ 제품 상세의 "구동 영상" 과 **같은 컴포넌트**다. 비율
+               (16/9, lg 3/1) · 받침색 · 정지컷 · 자막 그라데이션이 원래부터
+               한 글자도 다르지 않았고, 여기 있던 40행이 그 복사본이었다.
 
-          {/* 자막. 제목("쏟아 넣으면 한 줄로 나옵니다")이 비유라면 이쪽은
-              장면 그대로를 말한다 — 위 Image 의 alt 와 같은 사실이다.
-              제품 상세 구동 영상(ProductVideo)과 같은 꼴이다.
+            ⚠️ 정지컷의 alt 가 "" 가 된다. 전에는 "커넥터 부품을 정렬해
+               트랙으로 내보내는 볼피더" 였는데, 바로 아래 자막이 같은 사실을
+               글로 말하므로 스크린리더가 두 번 읽었다. 장식 이미지가 맞다.
 
-              ⚠️ <video> 가 아니라 **칸**의 자식이다. 그래야 '움직임 줄이기'
-                 에서 영상이 display:none 이 되어도 뒤에 깔린 정지컷 위에
-                 자막이 남는다.
-
-              ⚠️ 흰 글씨가 읽히는 것은 그라데이션 덕이다. hero.mp4 하단 띠를
-                 재니 lg 3:1 로 잘린 뒤 Y 115~122(자르기 전 127~130)인데,
-                 navy-deep/85 를 덮으면 Y 49 로 떨어져 대비가 약 12.2:1 이
-                 된다(AAA 7:1 의 1.7배). 영상을 갈아 끼울 때 하단이 더 밝으면
-                 다시 잰다.
-
-              세로는 늘지 않는다 — 영상 위에 겹치므로 아래 KPI 띠와의 간격
-              48px 가 그대로다. */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/40 to-transparent px-5 pb-5 pt-12 sm:px-6 sm:pb-6">
-            <p className="text-[13px] font-medium leading-relaxed text-white sm:text-sm">
-              볼피더가 커넥터를 한 자세로 가려 트랙으로 내보냅니다.
-            </p>
-          </div>
-        </Reveal>
+            ⚠️ note 가 자막이다. 제목("쏟아 넣으면 한 줄로 나옵니다")이
+               비유라면 이쪽은 장면 그대로를 말한다. */}
+        <ProductVideo
+          video={{
+            src: "/videos/hero.mp4",
+            poster: "/images/hero-poster.webp",
+            note: "볼피더가 커넥터를 한 자세로 가려 트랙으로 내보냅니다.",
+          }}
+        />
 
         {/* KPI 넷. 값 - 라벨 - 조건 세 줄이다.
 
@@ -376,7 +361,7 @@ export default function Home() {
               delay={i * 80}
               className={i > 0 ? "lg:border-l lg:border-line" : ""}
             >
-              <p className="text-[34px] font-extrabold leading-none tracking-tight tabular-nums text-ink">
+              <p className="text-34 font-extrabold leading-none tracking-tight tabular-nums text-ink">
                 {kpi.value}
                 <span className="ml-0.5 text-lg font-bold text-brand">
                   {kpi.unit}
@@ -589,11 +574,11 @@ export default function Home() {
                      어긋나면 안 된다. company.ts 의 process 주석에 계산이
                      있다. 그 섹션이 바로 위라 한 화면에서 둘 다 보인다. */}
               <div className="mt-4 flex items-center gap-2 border-t border-line pt-3">
-                <span className="shrink-0 rounded-md bg-brand/8 px-2 py-0.5 text-[11px] font-bold tabular-nums text-brand">
+                <span className="shrink-0 rounded-md bg-brand/8 px-2 py-0.5 text-11 font-bold tabular-nums text-brand">
                   {p.duration}
                 </span>
                 {/* 산출물도 기간 칩과 **같은 치수의 박스**다(rounded-md px-2
-                    py-0.5 text-[11px]). 색만 다르다 — 기간은 bg-brand/8 에
+                    py-0.5 text-11). 색만 다르다 — 기간은 bg-brand/8 에
                     레드 글자, 산출물은 bg-surface 에 ink-soft 다.
 
                     ⚠️ 한때 이 앞에 레드 체크 아이콘이 있고 글자만 놓여
@@ -605,7 +590,7 @@ export default function Home() {
                     ⚠️ shrink-0 을 주지 않는다. 글이 기간보다 길어("설계 방향 ·
                        납기 회신") 좁은 폭에서 줄바꿈이 필요하다 — 박스가 두
                        줄을 그대로 감싼다. 기간 쪽만 shrink-0 이다. */}
-                <span className="rounded-md bg-surface px-2 py-0.5 text-[11px] font-semibold leading-relaxed text-ink-soft">
+                <span className="rounded-md bg-surface px-2 py-0.5 text-11 font-semibold leading-relaxed text-ink-soft">
                   {p.output}
                 </span>
               </div>

@@ -254,14 +254,14 @@ export default async function ProductDetailPage({
                              36px). 8 · 16 · 20px 을 그려서 골랐다. 20px 은
                              짧은 라벨이 48px 까지 벌어져 한 표 안의 편차가
                              커진다. */}
-                      <dt className="flex items-center gap-2.5 whitespace-nowrap rounded-l-xl bg-surface py-3 pl-4 pr-4 text-[13px] font-bold text-ink">
+                      <dt className="flex items-center gap-2.5 whitespace-nowrap rounded-l-xl bg-surface py-3 pl-4 pr-4 text-13 font-bold text-ink">
                         <span
                           aria-hidden="true"
                           className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
                         />
                         {spec.label}
                       </dt>
-                      <dd className="flex items-center rounded-r-xl bg-surface py-3 pr-4 text-[13px] leading-snug text-ink-soft">
+                      <dd className="flex items-center rounded-r-xl bg-surface py-3 pr-4 text-13 leading-snug text-ink-soft">
                         {spec.value}
                       </dd>
                     </Fragment>
@@ -285,13 +285,13 @@ export default async function ProductDetailPage({
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/contact/"
-                  className="rounded-xl bg-brand px-8 py-4 text-center text-[15px] font-semibold text-white transition-colors hover:bg-brand-dark sm:flex-1"
+                  className="rounded-xl bg-brand px-8 py-4 text-center text-15 font-semibold text-white active:scale-[0.98] transition-colors hover:bg-brand-dark sm:flex-1"
                 >
                   {product.name} 견적 문의
                 </Link>
                 <Link
                   href="/products/"
-                  className="rounded-xl border border-navy/30 px-8 py-4 text-center text-[15px] font-semibold text-navy transition-colors hover:border-navy hover:bg-surface sm:flex-1"
+                  className="rounded-xl border border-navy/30 px-8 py-4 text-center text-15 font-semibold active:scale-[0.98] text-navy transition-colors hover:border-navy hover:bg-surface sm:flex-1"
                 >
                   제품 목록
                 </Link>
@@ -431,7 +431,7 @@ export default async function ProductDetailPage({
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="3"
+                  strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   aria-hidden="true"
@@ -440,7 +440,7 @@ export default async function ProductDetailPage({
                   <path d="M20 6 9 17l-5-5" />
                 </svg>
                 <div>
-                  <p className="text-[17px] font-bold leading-snug text-ink">
+                  <p className="text-17 font-bold leading-snug text-ink">
                     {f.title}
                   </p>
                   {/* 점 목록 둘. 한때 두 문장이 이어 붙은 한 덩어리였는데,
@@ -467,7 +467,7 @@ export default async function ProductDetailPage({
                           aria-hidden="true"
                           className="mt-[10px] h-1 w-1 shrink-0 rounded-full bg-brand"
                         />
-                        <span className="text-[15px] leading-relaxed text-ink-soft">
+                        <span className="text-15 leading-relaxed text-ink-soft">
                           {point}
                         </span>
                       </li>
@@ -539,7 +539,7 @@ export default async function ProductDetailPage({
               delay={i * 80}
               className={i > 0 ? "lg:border-l lg:border-ink/10" : ""}
             >
-              <p className="text-[34px] font-extrabold leading-none tracking-tight tabular-nums text-ink">
+              <p className="text-34 font-extrabold leading-none tracking-tight tabular-nums text-ink">
                 {kpi.value}
                 <span className="ml-0.5 text-lg font-bold text-brand">
                   {kpi.unit}
@@ -629,7 +629,7 @@ export default async function ProductDetailPage({
                       <th
                         key={col}
                         scope="col"
-                        className={`whitespace-nowrap py-3 pr-4 text-[13px] font-bold text-muted ${
+                        className={`whitespace-nowrap py-3 pr-4 text-13 font-bold text-muted ${
                           i === 0 ? "" : "pl-4"
                         }`}
                       >
@@ -700,10 +700,10 @@ export default async function ProductDetailPage({
                 key={spec.label}
                 className="flex items-center gap-4 border-b border-line py-4"
               >
-                <dt className="w-16 shrink-0 text-[13px] font-bold text-muted sm:w-20">
+                <dt className="w-16 shrink-0 text-13 font-bold text-muted sm:w-20">
                   {spec.label}
                 </dt>
-                <dd className="text-[15px] leading-relaxed text-ink">
+                <dd className="text-15 leading-relaxed text-ink">
                   {spec.value}
                 </dd>
               </div>
@@ -737,7 +737,7 @@ export default async function ProductDetailPage({
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
               aria-hidden="true"
@@ -746,7 +746,7 @@ export default async function ProductDetailPage({
               <circle cx="12" cy="12" r="10" />
               <path d="M12 16v-4M12 8h.01" />
             </svg>
-            <p className="text-[13px] leading-relaxed text-ink-soft">
+            <p className="text-13 leading-relaxed text-ink-soft">
               {/* &nbsp; 넷이다. HTML 은 연속 공백을 하나로 접으므로
                   보통 공백으로는 벌릴 수 없다(홈 ABOUT US 박스가 쓰는 것과
                   같은 방법이다). 1~5칸을 찍어 비교했다 — 1~2칸은 라벨이

@@ -98,7 +98,7 @@ export default function ContactCTA() {
             <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
               <Link
                 href="/contact"
-                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-6 py-4 text-[15px] font-semibold text-white transition-colors hover:bg-brand-dark sm:px-8"
+                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-6 py-4 active:scale-[0.98] text-15 font-semibold text-white transition-colors hover:bg-brand-dark sm:px-8"
               >
                 온라인 문의하기
                 <svg
@@ -120,7 +120,7 @@ export default function ContactCTA() {
               {/* 아이콘과 자릿수 정렬은 헤더 전화 링크와 같은 모양으로 맞춘다 */}
               <a
                 href={telHref(site.tel)}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/45 px-6 py-4 text-[15px] font-semibold tabular-nums text-white transition-colors hover:border-white/70 hover:bg-white/10 sm:px-8"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/45 px-6 py-4 active:scale-[0.98] text-15 font-semibold tabular-nums text-white transition-colors hover:border-white/70 hover:bg-white/10 sm:px-8"
               >
                 <PhoneIcon />
                 전화 {site.tel}

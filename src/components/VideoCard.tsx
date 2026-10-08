@@ -69,7 +69,7 @@ export default function VideoCard({
             pointer-events-none — 누를 것이 없는 장식 영상이라 마우스를
             가로채지 않는다. */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/40 to-transparent px-4 pb-4 pt-9 sm:px-5 sm:pb-5 sm:pt-10 lg:px-6 lg:pb-6 lg:pt-12">
-          <p className="text-[13px] font-medium leading-relaxed text-white sm:text-sm">
+          <p className="text-13 font-medium leading-relaxed text-white sm:text-sm">
             {video.note}
           </p>
         </div>
@@ -90,10 +90,10 @@ export default function VideoCard({
       <VideoEmbed video={video} preview={preview} />
 
       <div className="flex flex-1 flex-col border-t border-line p-5">
-        <p className="text-[15px] font-bold leading-snug text-ink">
+        <p className="text-15 font-bold leading-snug text-ink">
           {video.title}
         </p>
-        <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-ink-soft">
+        <p className="mt-1.5 flex-1 text-13 leading-relaxed text-ink-soft">
           {video.note}
         </p>
       </div>

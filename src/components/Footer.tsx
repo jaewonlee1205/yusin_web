@@ -90,12 +90,12 @@ const LINK =
      link-name 도 깨진다. 글자를 되살리든 라벨을 두든, 둘 중 하나는 반드시
      있어야 한다. */
 const CHANNEL_BUTTON =
-  "flex items-center justify-center rounded-full border border-line p-2 text-ink-soft transition-colors hover:border-navy/40 hover:text-ink";
+  "flex items-center justify-center rounded-full border border-line p-2 text-ink-soft transition hover:border-navy/40 hover:text-ink active:scale-95";
 
 /* 자간을 벌리지 않는다. 0.2em 으로 늘렸던 적이 있는데(Section 의 eyebrow 와
    맞춘 값이었다), eyebrow 는 한두 단어짜리 영문 꼬리표라 벌려도 읽히지만
    "고객지원" 같은 한글 열 제목은 자간이 벌어지면 글자가 흩어져 보인다. */
-const HEADING = "text-[13px] font-semibold text-muted";
+const HEADING = "text-13 font-semibold text-muted";
 
 /* 상단 선을 뺐다. 바로 위가 네이비 CTA 라 경계가 이미 뚜렷하고, 바탕색이
    다른 데 선까지 두면 구분이 두 겹이 된다.
@@ -122,7 +122,10 @@ export default function Footer() {
                 여백 때문에 이 열이 5px 늘어 [제품] 열과 맞춰 둔 0px 정렬이
                 깨지고, w-fit 없이 block 만 두면 링크가 열 전체 폭(1440 에서
                 373px)을 덮어 로고 오른쪽 빈 자리까지 눌린다. */}
-            <HomeLogoLink className="block w-fit" label={`${site.name} 홈으로`}>
+            <HomeLogoLink
+              className="block w-fit transition-opacity hover:opacity-70 active:opacity-55"
+              label={`${site.name} 홈으로`}
+            >
               <Image
                 src="/images/logo.png"
                 alt={site.name}

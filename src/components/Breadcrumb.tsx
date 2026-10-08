@@ -32,7 +32,7 @@ export default function Breadcrumb({
   return (
     <div className="border-b border-line bg-white/95 backdrop-blur">
       <Container>
-        <nav aria-label="현재 위치" className="py-4 text-[13px]">
+        <nav aria-label="현재 위치" className="py-4 text-13">
           <ol className="flex flex-wrap items-center gap-2">
             {trail.map((item) => (
               <li key={item.href} className="flex items-center gap-2">

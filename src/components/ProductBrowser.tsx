@@ -156,7 +156,7 @@ export default function ProductBrowser() {
                  글자 하나뿐이면 할 일이 없다. justify-center 는 남긴다. */}
           <Link
             href="/contact/"
-            className="mt-4 flex items-center justify-center rounded-xl border border-navy/30 px-4 py-2.5 text-[13px] font-semibold text-navy transition-colors hover:border-navy hover:bg-surface"
+            className="mt-4 flex items-center justify-center rounded-xl border border-navy/30 px-4 py-2.5 text-13 font-semibold text-navy transition hover:border-navy hover:bg-surface active:scale-[0.98]"
           >
             제작 문의
           </Link>

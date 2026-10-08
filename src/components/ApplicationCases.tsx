@@ -76,7 +76,7 @@ export default function ApplicationCases({
               />
             </div>
             {/* py-3 이다. 이름 한 줄이라 py-5 면 글보다 여백이 커진다. */}
-            <p className="border-t border-line px-4 py-3 text-[13px] font-bold leading-snug text-ink">
+            <p className="border-t border-line px-4 py-3 text-13 font-bold leading-snug text-ink">
               {c.name}
             </p>
           </div>

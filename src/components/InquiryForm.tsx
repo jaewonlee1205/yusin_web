@@ -179,8 +179,8 @@ export default function InquiryForm() {
       <div className="rounded-2xl bg-surface p-8 text-center sm:p-12">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-navy">
           <svg
-            width="26"
-            height="26"
+            width="24"
+            height="24"
             viewBox="0 0 24 24"
             fill="none"
             stroke="white"
@@ -468,7 +468,9 @@ export default function InquiryForm() {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="h-14 w-full rounded-xl bg-brand text-[17px] font-bold text-white transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
+        /* ⚠️ disabled: 가 active: 를 이기도록 둔다 — Tailwind 는 소스 순서를
+             따르므로 disabled 계열이 뒤에 와야 보내는 중에 눌려도 안 줄어든다. */
+        className="h-14 w-full rounded-xl bg-brand text-17 font-bold text-white transition hover:bg-brand-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100"
       >
         {status === "submitting" ? "전송 중…" : "문의 보내기"}
       </button>

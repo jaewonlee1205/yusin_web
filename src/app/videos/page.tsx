@@ -55,7 +55,7 @@ export default function VideosPage() {
             href={site.youtube}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 rounded-xl border border-line bg-white px-5 py-3.5 text-sm font-semibold text-ink transition-colors hover:border-brand/40 hover:text-brand"
+            className="inline-flex items-center gap-2.5 rounded-xl border border-line bg-white px-5 py-3.5 text-sm font-semibold text-ink transition hover:border-brand/40 hover:text-brand active:scale-[0.98]"
           >
             {/* 글자에서 "유튜브" 를 뺐다. 왼쪽 아이콘이 이미 유튜브를
                 가리키므로 뜻이 흐려지지 않고, 제목 줄에 함께 서는 자리라

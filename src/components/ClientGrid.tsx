@@ -32,7 +32,7 @@ export default function ClientGrid({
           delay={i * 25}
           className="flex h-20 items-center justify-center bg-white px-4 text-center transition-colors hover:bg-surface sm:h-24"
         >
-          <span className="text-sm font-medium leading-snug text-ink-soft sm:text-[15px]">
+          <span className="text-sm font-medium leading-snug text-ink-soft sm:text-15">
             {name}
           </span>
         </Reveal>

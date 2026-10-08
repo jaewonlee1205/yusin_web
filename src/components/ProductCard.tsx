@@ -41,7 +41,21 @@ export default function ProductCard({ product }: { product: Product }) {
          테두리까지 걷었으므로, shadow-card 가 빠지면 카드가 판에 녹는다.
          포커스 링은 globals.css 가 a·button 전부에 brand 색으로 이미 걸어
          둔다 — 여기서 또 주지 않는다. */
-      className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+      /* ⚠️ h-full 은 오늘은 아무것도 바꾸지 않는다. 격자가 stretch 라
+             Reveal(격자 항목)이 이미 줄 높이로 늘어나고, 카드 셋의 내용이
+             분류·제품명·영문명 각 한 줄로 같아서 폭 일곱 종에서 높이 편차가
+             0px 임을 재서 확인했다.
+
+             제품명이 두 줄이 되는 날을 막는 보강이다. 그때는 그 카드만 길어
+             지고 Reveal 은 늘어나는데 **안의 Link 는 안 늘어나** 나머지 카드
+             아래에 흰 자리가 남는다. 홈과 상세 "다른 제품" 이 Reveal 로
+             감싸는 쪽이고, /products 는 ProductCard 가 격자의 직접 자식이라
+             원래 영향이 없다.
+
+          ⚠️ 호버 그림자가 shadow-raised 다. 한때 Tailwind 기본
+             hover:shadow-xl 이었는데 그 값은 순수 검정 기반이라, 쉴 때의
+             shadow-card(ink)와 **색이 갈렸다.** 토큰 쪽 주석에 적어 뒀다. */
+      className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-raised active:scale-[0.99] active:duration-100"
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-white">
         <Image
@@ -83,8 +97,8 @@ export default function ProductCard({ product }: { product: Product }) {
           <span className="flex translate-y-1 items-center gap-1.5 text-sm font-bold text-white transition-transform duration-300 group-hover:translate-y-0">
             상세보기
             <svg
-              width="15"
-              height="15"
+              width="16"
+              height="16"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"

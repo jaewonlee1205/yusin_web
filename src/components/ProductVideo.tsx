@@ -5,7 +5,13 @@ import Image from "next/image";
 import Reveal from "./Reveal";
 
 /**
- * 제품 상세 "구동 영상" 한 편. 소리 없이 저절로 도는 장식 영상이다.
+ * 소리 없이 저절로 도는 장식 영상 한 편. **두 자리가 쓴다** —
+ *   제품 상세의 "구동 영상"(product-*.mp4 일곱 편)
+ *   홈 PERFORMANCE 섹션(hero.mp4)
+ *
+ * ⚠️ 홈 쪽은 한때 이 컴포넌트를 쓰지 않고 같은 마크업을 복사해 두고 있었다.
+ *    그래서 autoPlay 가 즉시 걸려 **hero.mp4(1.59MB)가 홈에서 두 번**
+ *    내려왔다(히어로 + 여기 = 3.2MB). 아래 지연 로딩이 그걸 없앤다.
  *
  * 누를 것이 없다 — 재생 버튼도, 호버 반응도. 홈 미리보기(VideoEmbed 의
  * preview 모드)와 같은 규칙이고, 그 파일 머리 주석에 내력이 있다.
@@ -96,17 +102,21 @@ export default function ProductVideo({
                영상이 display:none 이 되어도 뒤에 깔린 정지컷 위에 설명이
                그대로 남는다.
 
-            ⚠️ 흰 글씨가 읽히는 것은 그라데이션 덕이다. 일곱 편의 하단 22%
-               띠 밝기를 재니 Y 89.9~116.4 였고(가장 밝은 것이 방음커버),
-               거기에 navy-deep/85 를 덮으면 Y 29 로 떨어져 흰 글씨 대비가
-               약 16:1 이 된다(AAA 7:1 의 두 배). 영상이 돌아도 그 띠 안의
-               최대-최소 차이가 27 뿐이라 흔들리지 않는다.
+            ⚠️ 흰 글씨가 읽히는 것은 그라데이션 덕이다. 하단 22% 띠
+               밝기를 재서 navy-deep/85 를 덮은 뒤의 대비를 구했다 —
+
+                 제품 영상 일곱 편  Y  89.9~116.4 -> 29   약 16.0:1
+                 hero.mp4 (lg 3/1) Y 115~122     -> 49   약 12.2:1
+
+               둘 다 AAA(7:1)를 넘는다. 가장 밝은 것이 방음커버이고,
+               hero.mp4 는 3/1 로 잘리기 전이 Y 127~130 이다. 영상이 돌아도
+               띠 안의 최대-최소 차이가 27 뿐이라 흔들리지 않는다.
                영상을 갈아 끼울 때 하단이 더 밝으면 다시 잰다.
 
             pointer-events-none — 누를 것이 없는 장식 영상이라 마우스를
             가로채지 않는다. */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/40 to-transparent px-5 pb-5 pt-12 sm:px-6 sm:pb-6">
-          <p className="text-[13px] font-medium leading-relaxed text-white sm:text-sm">
+          <p className="text-13 font-medium leading-relaxed text-white sm:text-sm">
             {video.note}
           </p>
         </div>

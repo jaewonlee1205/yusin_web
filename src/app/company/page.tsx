@@ -356,12 +356,12 @@ export default function CompanyPage() {
                 row.wide ? "lg:col-span-2" : ""
               }`}
             >
-              <dt className="w-16 shrink-0 text-[13px] font-bold text-muted sm:w-20">
+              <dt className="w-16 shrink-0 text-13 font-bold text-muted sm:w-20">
                 {row.label}
               </dt>
               {/* tabular-nums: 대표번호와 팩스가 위아래로 붙어 있어 자릿수를
                   맞춰야 한다. 한글 값에는 아무 영향이 없다. */}
-              <dd className="text-[15px] leading-relaxed tabular-nums text-ink">
+              <dd className="text-15 leading-relaxed tabular-nums text-ink">
                 {/* 전화·이메일은 눌러서 걸고 보낼 수 있게 한다. 팩스는 걸 수
                     없어 href 가 없다 — 푸터·헤더·문의하기·오시는 길과 같은 규칙. */}
                 {(Array.isArray(row.value) ? row.value : [row.value]).map(
