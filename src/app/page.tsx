@@ -527,6 +527,20 @@ export default function Home() {
 
             ⚠️ items-start 다. 표(약 300px)와 맵(약 390px)의 높이가 달라
                stretch 로 두면 짧은 쪽이 늘어나 표 행 사이가 벌어진다. */}
+      {/* ⚠️⚠️ **표 · 축 · 맵을 한 카드가 감싼다.** 한때 테두리가 맵 박스
+                하나뿐이라, 표는 선만 있는 목록으로 허공에 뜨고 맵만 상자에
+                담겨 "서로 따로따로라 통일감이 없다" 는 말을 들었다.
+
+           ⚠️ **shadow-card 다(테두리가 아니다).** 홈의 카드 언어가 그것이다 —
+              ProductCard · VideoCard 가 둘 다 rounded-2xl bg-white shadow-card.
+              /location 이 border 를 쓰는 것은 거기가 자료 페이지라서이고,
+              홈에서는 선을 하나 줄이는 쪽이 미니멀하다.
+
+           ⚠️ 섹션 배경을 tone="surface" 로 바꾸지 말 것. 홈 리듬이
+              흰 -> 회색(PRODUCTS) -> **흰** -> 회색(VIDEO) -> 흰이라, 여기를
+              회색으로 하면 회색이 셋 연속이 된다. 흰 위의 흰 카드 + 그림자로
+              충분히 떠 보인다. */}
+      <div className="rounded-2xl bg-white p-6 shadow-card sm:p-8">
         {/* ⚠️⚠️ **items-start 를 쓰지 않는다**(기본 stretch). 오른쪽 맵 칸이
                   왼쪽 표와 같은 높이를 받아야 하기 때문이다 — 한때
                   xl:items-start 라 표 297px 옆에 맵 칸이 395px 로 서서
@@ -622,28 +636,30 @@ export default function Home() {
                     {row.values.map((value, i) => (
                       <td
                         key={POSITIONING_GROUPS[i]}
-                        /* ⚠️⚠️ 유신 열이 **brand(#d5261e) 빨강**이다. 흰 바탕
-                                 대비 5.1:1 로 AA 를 넘는다(globals.css 주석에
-                                 그 측정이 있다).
+                        /* ⚠️⚠️⚠️ **유신 열 값은 검정(ink)이다. 포인트 색을 주지
+                                    말 것.** 이 색을 네 번 바꿔 **처음으로
+                                    돌아왔다** —
 
-                                 ⚠️ **사이트의 "레드는 면적을 좁게" 규칙을 알고
-                                    어긴 자리다.** 한 라운드 동안 네이비였는데,
-                                    머리의 YUSIN 로고와 맵의 "이상적" 이 이미
-                                    빨강이라 **한 섹션에 포인트 색이 둘**이 됐다.
-                                    색을 하나로 모으는 쪽이 낫다고 판단했다.
-                                    "레드가 넓다" 는 생각이 들면 이 줄을 먼저 볼 것.
+                                      1) ink(검정)   처음
+                                      2) navy        "회색 배경은 강조가 약하다"
+                                                     는 지적에 색을 더했다
+                                      3) brand(빨강)  "로고와 이상적이 빨강인데
+                                                     값만 네이비라 포인트가 둘"
+                                      4) **ink(검정)** 지금. "빨간색 포인트 주니깐
+                                                     이상하다. 검정이 낫다"
 
-                                 ⚠️ brand-dark(#b41f18)가 아니다. 그 색은 맵의
-                                    "이상적" **전용**이다 — 거기는 brand 6% 음영
-                                    위라 brand 로는 4.37:1 밖에 안 나와 어두운
-                                    쪽이 필요했다. 흰 바탕인 여기는 brand 가 더
-                                    선명하다.
+                                    두 번 색을 줘 보고 두 번 다 되돌렸다.
+                                    까닭은 **이 섹션에 이미 레드가 넷**이기
+                                    때문이다 — 맵의 점 · YUSIN 로고 · "이상적"
+                                    글자 · 영역 음영. 표까지 색을 쓰면 어디를
+                                    봐야 할지 흩어진다.
 
-                           ⚠️ 크기(15 vs 14)와 굵기(700 vs 400) 차이는 그대로다 —
-                              색 하나에만 기대지 않는다. */
+                           ⚠️ 강조는 **크기(15 vs 14) · 굵기(700 vs 400) ·
+                              머리의 YUSIN 로고** 셋이 맡는다. 색은 그 셋을
+                              돕는 것이지 대신하는 것이 아니다. */
                         className={`whitespace-nowrap px-3 py-3.5 ${
                           i === 0
-                            ? "text-15 font-bold text-brand"
+                            ? "text-15 font-bold text-ink"
                             : "text-muted"
                         }`}
                       >
@@ -725,7 +741,31 @@ export default function Home() {
                            한쪽만 고치면 두 축이 짝으로 안 보인다. */}
               <div className="flex flex-col items-center justify-center gap-8">
                 <AxisArrow className="rotate-[-90deg]" />
-                <span className="rounded-full bg-surface px-2 py-3 text-13 font-bold text-ink-soft [writing-mode:vertical-rl]">
+                {/* ⚠️⚠️ **py-8 이다. py-3 이 아니다.** 같은 rounded-full 인데
+                          가로 칩은 알약으로 보이고 이 칩만 **원**으로 보인 적이
+                          있다 — 반경이 아니라 **치수** 때문이었다.
+
+                            가로 "가격"  52 x 28  = 1.86 : 1  알약
+                            세로 "대응"  44 x 42  = 1.05 : 1  거의 원  <- 문제
+                            세로 "대응"  44 x 82  = 1.86 : 1  알약     <- 지금
+
+                          rounded-full 을 rounded-lg 로 바꾸지 말 것. 그러면
+                          가로 칩까지 각지게 만들어야 하는데 그쪽은 그대로가
+                          좋다는 평가를 받았다. 글자가 늘거나 줄면 패딩을 다시
+                          재서 비율 1.8~1.9 를 맞춘다.
+
+                    ⚠️⚠️ **px 와 py 가 뒤바뀐 것처럼 보이는데 맞다.** Tailwind v4 의
+                          px-* 와 py-* 는 **논리 속성**(padding-inline / padding-block)
+                          이라, writing-mode:vertical-rl 에서는 **글이 흐르는
+                          방향이 세로**가 되어 둘의 뜻이 90도 돌아간다 —
+
+                            px-5  ->  화면에서 **위아래** 패딩 (칩을 길게)
+                            py-2  ->  화면에서 **좌우** 패딩 (칩을 얇게)
+
+                          한 번 px-2 py-8 로 넣었다가 칩이 **가로로 누운 알약**이
+                          되는 것을 화면에서 잡았다. 값을 고칠 때 이 뒤바뀜을
+                          먼저 떠올릴 것. */}
+                <span className="rounded-full bg-surface px-5 py-2 text-13 font-bold text-ink-soft [writing-mode:vertical-rl]">
                   대응
                 </span>
                 <AxisArrow className="rotate-90" />
@@ -741,7 +781,12 @@ export default function Home() {
 
                         한때 전 폭 4/3 이었는데 1024 에서 960 x 720px 짜리
                         거대한 상자가 됐다. 중간 구간을 빼먹으면 그 꼴이 된다. */}
-              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-line bg-surface sm:aspect-[5/2] xl:aspect-auto">
+              {/* ⚠️ **테두리가 없고 반경이 한 단계 작다**(xl 12px). 바깥에
+                     큰 카드가 생겼으므로 상자가 둘이면 겹쳐 보인다 —
+                     bg-surface 회색만으로 흰 카드 안에서 충분히 구분된다.
+                     중첩된 상자의 반경을 같게 두면 바깥.안쪽 모서리가 평행해
+                     어색하다(경영이념 패널이 같은 규칙을 쓴다). */}
+              <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-surface sm:aspect-[5/2] xl:aspect-auto">
                 <div
                   aria-hidden="true"
                   className="absolute left-0 top-0 bg-brand/[0.06]"
@@ -820,6 +865,7 @@ export default function Home() {
             </div>
           </Reveal>
         </div>
+      </div>
       </Section>
 
       {/* 6. 제품 영상 — videos.ts가 비어 있으면 통째로 렌더하지 않는다.
