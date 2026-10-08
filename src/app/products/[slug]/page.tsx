@@ -110,186 +110,213 @@ export default async function ProductDetailPage({
             <ProductGallery images={product.images} />
 
             <div className="lg:flex lg:flex-col">
-              {/* 분류 배지(왼쪽)와 YUSIN 워드마크(오른쪽)가 한 줄이다.
+              {/* ⚠️⚠️⚠️ **이 카드가 배지 줄부터 사양까지를 한 덩어리로 묶는다.**
+                       "파츠피더 여기서부터 회전 방향 여기까지 전체 네모 박스를
+                       쳐 줘" 라는 요청이다. 한 라운드 동안 사양 네 줄만 회색
+                       판으로 합쳤다가 **범위를 잘못 잡은 것**임이 드러나 이렇게
+                       바꿨다. 버튼 둘은 **카드 밖**이다 — "회전 방향 여기까지"
+                       라고 범위를 분명히 하셨다.
 
-                  ⚠️ 마크를 네 번 매만졌다 — 배지 줄 24px -> 제목 줄 32px ->
-                     다시 배지 줄 32px -> 28px. 문제는 **자리가 아니라 크기**
-                     였다. 24px 짜리가 70% 농도로 흐릿해, 배지와 양 끝에 설
-                     무게가 없으니 그 사이 251~499px 가 "뭔가 더 있어야 할 빈
-                     곳" 으로 보였다. 28px · 75% 면 93x30px 배지와 덩어리가
-                     맞는다.
+                  ⚠️⚠️ **흰 바탕 + 테두리다(회색 판이 아니다).** 안쪽 사양이
+                        bg-surface 회색 박스라, 카드까지 회색이면 그 박스들이
+                        사라져 보인다. 사이트에 같은 판단이 둘 더 있다 —
+                        홈 page.tsx 880 과 company 227 의 "감싸는 카드가 있으면
+                        안쪽은 bg-surface 회색만으로 충분히 구분된다".
 
-                     **24px 로 되돌리지 말 것**(무게가 없어진다). 32px 도 쓰지
-                     않는다 — 배지(30px)보다 커서 줄 높이를 마크가 정하게 되고,
-                     "조금 크다" 는 말을 들었다. 28px 이 그 사이다.
+                  ⚠️ 그림자가 아니라 **테두리로 선다.** /location 주석의 "자료를
+                     읽는 자리는 테두리(2D)로 선다 — 그림자로 띄우면 맞지
+                     않는다" 를 따른다. 왼쪽 갤러리 사진도 그림자가 없어 둘이
+                     나란히 같은 결로 선다.
 
-                  ⚠️ self-start 를 주지 않는다. 그 값은 이 줄이 flex 행이
-                     아니던 시절, 배지가 lg:flex-col 의 교차축 stretch 로 칸
-                     폭(512px)까지 늘어나는 것을 막던 것이다. 지금은 부모가
-                     flex **행**이라 stretch 축이 세로로 바뀌어 가로가 늘지
-                     않고, 오히려 self-start 를 두면 items-center 를 이겨
-                     배지가 마크와 세로 중앙이 안 맞는다.
-                     (줄을 다시 쪼개면 그때는 self-start 가 필요하다)
+                  ⚠️⚠️ **사진과의 줄 맞춤은 이 구조에서 포기했다.** 카드 패딩
+                        (48px)과 사양 행 박스가 함께 들어오면서 카드가 438.4px
+                        이 됐고, 큰 사진(384px)보다 **54.4px 길다.** 1280 이상은
+                        Container 가 최대 폭이라 더 넓어져도 그대로다.
 
-                  ⚠️ 세로가 거의 늘지 않는다. 이 줄이 배지 30px -> 마크 32px 로
-                     2px 자라지만, 1280.1440 에서는 사양 표의 lg:mt-auto 가 그
-                     2px 를 흡수해 **표 바닥도 버튼 바닥도 변화 0** 이다.
-                     1024 에서는 표와 사진이 **함께** 2.4px 밀려 둘의 관계
-                     (-84.1px)가 그대로다. 재서 확인했다. 아래 버튼의 mt-7 은
-                     "표 바닥 383.9 vs 사진 바닥 384" 를 0.1px 정밀도로 맞춘
-                     값이니, 마크를 더 키우려거든 이 셈을 먼저 다시 하라.
+                        사양이 판 하나(174px)이던 한 라운드 동안은 383.9 vs 384
+                        로 맞았다. "전체를 한 네모로" 가 되면서 그 자리에 더는
+                        들어가지 않는다. 억지로 맞추려면 패딩.행 높이.행 간격을
+                        모두 깎아야 30px 남짓인데, 그러면 카드가 빡빡해진다 —
+                        **그 대가가 더 크다고 봤다.** 재서 고른 것이지 놓친 것이
+                        아니다.
 
-                  ⚠️ 32px 가 물리적 상한이다. 이 파일은 손상된 PPT 래스터에서
-                     잘라낸 129x32 라 그보다 키우면 뭉갠다. 지금 28px 은 0.875배
-                     축소라 선명하다. README 자료 요청 5번: 벡터 원본을 받으면
-                     다시 뽑는다.
+                  ⚠️ 그래도 **lg:flex-1 은 남겨 둔다.** 지금은 내용이 칸보다
+                     커서 일을 하지 않지만, 사양이 줄거나 요약이 짧아지면
+                     카드를 칸 높이까지 늘려 준다. 1024 에서는 실제로 그렇게
+                     작동해 칸 바닥이 왼쪽과 맞는다. 카드 **안쪽**의
+                     lg:mt-auto 와 한 쌍이다.
 
-                  ⚠️ 제품명(h1) 안에 넣지 말 것. company/page.tsx 가 "사이트에서
-                     글 안에 이미지를 넣는 유일한 자리 … 다른 제목으로 번지지
-                     않게 한다 — 번지면 한글 표기 규칙이 무너진다" 고 적어 두었다.
-                     여기는 글이 아니라 배지 옆 별도 요소라 그 금지에 걸리지 않는다.
+                  ⚠️ 패딩이 값 칸을 좁힌다. 1024(두 칸이 가장 좁은 곳)에서 사양
+                     값이 한 줄로 남는지가 이 패딩의 상한이다. 키우려거든 먼저
+                     1024 에서 일곱 제품을 다 재라. */}
+              <div className="rounded-2xl border border-line bg-white p-5 sm:p-6 lg:flex lg:flex-1 lg:flex-col">
+                {/* 분류 배지(왼쪽)와 YUSIN 워드마크(오른쪽)가 한 줄이다.
 
-                  워드마크만 쓴다. 전체 로고는 같은 화면 헤더에 이미 서 있어,
-                  바로 아래 또 놓으면 같은 것을 두 번 읽는다.
+                    ⚠️ 마크를 네 번 매만졌다 — 배지 줄 24px -> 제목 줄 32px ->
+                       다시 배지 줄 32px -> 28px. 문제는 **자리가 아니라 크기**
+                       였다. 24px 짜리가 70% 농도로 흐릿해, 배지와 양 끝에 설
+                       무게가 없으니 그 사이 251~499px 가 "뭔가 더 있어야 할 빈
+                       곳" 으로 보였다. 28px · 75% 면 93x30px 배지와 덩어리가
+                       맞는다.
 
-                  alt 를 비운다. 헤더 로고가 이미 회사명을 읽어 주므로 여기서
-                  또 읽으면 중복이고, 이 자리에서 뜻을 나르는 것은 옆의 분류
-                  배지와 아래 제품명이다. */}
-              <div className="flex items-center justify-between gap-4">
-                <p className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-bold tracking-[0.1em] text-ink-soft">
-                  <span
-                    aria-hidden="true"
-                    className="h-1.5 w-1.5 rounded-full bg-brand"
+                       **24px 로 되돌리지 말 것**(무게가 없어진다). 32px 도 쓰지
+                       않는다 — 배지(30px)보다 커서 줄 높이를 마크가 정하게 되고,
+                       "조금 크다" 는 말을 들었다. 28px 이 그 사이다.
+
+                    ⚠️ self-start 를 주지 않는다. 그 값은 이 줄이 flex 행이
+                       아니던 시절, 배지가 lg:flex-col 의 교차축 stretch 로 칸
+                       폭(512px)까지 늘어나는 것을 막던 것이다. 지금은 부모가
+                       flex **행**이라 stretch 축이 세로로 바뀌어 가로가 늘지
+                       않고, 오히려 self-start 를 두면 items-center 를 이겨
+                       배지가 마크와 세로 중앙이 안 맞는다.
+                       (줄을 다시 쪼개면 그때는 self-start 가 필요하다)
+
+                    ⚠️ 세로가 거의 늘지 않는다. 이 줄이 배지 30px -> 마크 32px 로
+                       2px 자라지만, 1280.1440 에서는 사양 표의 lg:mt-auto 가 그
+                       2px 를 흡수해 **표 바닥도 버튼 바닥도 변화 0** 이다.
+                       1024 에서는 표와 사진이 **함께** 2.4px 밀려 둘의 관계
+                       (-84.1px)가 그대로다. 재서 확인했다. 아래 버튼의 mt-7 은
+                       "표 바닥 383.9 vs 사진 바닥 384" 를 0.1px 정밀도로 맞춘
+                       값이니, 마크를 더 키우려거든 이 셈을 먼저 다시 하라.
+
+                    ⚠️ 32px 가 물리적 상한이다. 이 파일은 손상된 PPT 래스터에서
+                       잘라낸 129x32 라 그보다 키우면 뭉갠다. 지금 28px 은 0.875배
+                       축소라 선명하다. README 자료 요청 5번: 벡터 원본을 받으면
+                       다시 뽑는다.
+
+                    ⚠️ 제품명(h1) 안에 넣지 말 것. company/page.tsx 가 "사이트에서
+                       글 안에 이미지를 넣는 유일한 자리 … 다른 제목으로 번지지
+                       않게 한다 — 번지면 한글 표기 규칙이 무너진다" 고 적어 두었다.
+                       여기는 글이 아니라 배지 옆 별도 요소라 그 금지에 걸리지 않는다.
+
+                    워드마크만 쓴다. 전체 로고는 같은 화면 헤더에 이미 서 있어,
+                    바로 아래 또 놓으면 같은 것을 두 번 읽는다.
+
+                    alt 를 비운다. 헤더 로고가 이미 회사명을 읽어 주므로 여기서
+                    또 읽으면 중복이고, 이 자리에서 뜻을 나르는 것은 옆의 분류
+                    배지와 아래 제품명이다. */}
+                <div className="flex items-center justify-between gap-4">
+                  <p className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-bold tracking-[0.1em] text-ink-soft">
+                    <span
+                      aria-hidden="true"
+                      className="h-1.5 w-1.5 rounded-full bg-brand"
+                    />
+                    {product.category}
+                  </p>
+                  <Image
+                    src="/images/logo-mark.webp"
+                    alt=""
+                    width={129}
+                    height={32}
+                    className="h-7 w-auto shrink-0 opacity-75"
                   />
-                  {product.category}
+                </div>
+
+                {/* 배너가 없으므로 제품명이 h1 이다. 검색에도 이쪽이 맞다. */}
+                <h1 className="mt-4 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+                  {product.name}
+                </h1>
+                <p className="mt-2 text-sm font-medium uppercase tracking-[0.08em] text-muted">
+                  {product.nameEn}
                 </p>
-                <Image
-                  src="/images/logo-mark.webp"
-                  alt=""
-                  width={129}
-                  height={32}
-                  className="h-7 w-auto shrink-0 opacity-75"
-                />
-              </div>
 
-              {/* 배너가 없으므로 제품명이 h1 이다. 검색에도 이쪽이 맞다. */}
-              <h1 className="mt-4 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-                {product.name}
-              </h1>
-              <p className="mt-2 text-sm font-medium uppercase tracking-[0.08em] text-muted">
-                {product.nameEn}
-              </p>
+                {/* ⚠️⚠️ **mb-6 가 아래 사양과의 최소 간격을 맡는다.** 사양
+                        블록은 lg:mt-auto 로 카드 바닥에 붙는데, 카드에 남는
+                        공간이 없으면 그 auto 가 **0 이 되어 요약과 사양이
+                        딱 붙는다** — 실제로 그렇게 붙여 놓고 발견했다.
+                        여기서 mb 로 받치면 auto 가 0 이어도 24px 은 남는다.
+                        **사양 쪽에 mt-6 를 같이 주지 말 것** — flex-col 에서는
+                        마진이 합쳐지지 않아 48px 이 된다. */}
+                <p className="mb-6 mt-6 text-lg font-medium leading-relaxed text-ink">
+                  {product.summary}
+                </p>
 
-              <p className="mt-6 text-lg font-medium leading-relaxed text-ink">
-                {product.summary}
-              </p>
+                {/* 히어로 사양 표 — specs 앞 **네** 줄이다. 아래 "제작 사양" 표는
+                    slice(4) 로 뒤 두 줄을 쓴다. 일곱 제품 모두 specs 가 여섯 줄이라
+                    4 + 2 로 갈린다.
 
-              {/* 히어로 사양 표 — specs 앞 **네** 줄이다. 아래 "제작 사양" 표는
-                  slice(4) 로 뒤 두 줄을 쓴다. 일곱 제품 모두 specs 가 여섯 줄이라
-                  4 + 2 로 갈린다.
+                    ⚠️ 한동안 아래 표가 slice(3) 이어서 **specs[3] 하나가 두 번
+                       나왔다**(볼피더 "회전 방향", 직진피더.컨트롤러 "설치",
+                       진동기 "제어", 호퍼피더 "배출", 방음커버 "제작", 우레탄
+                       "효과"). 히어로를 세 줄에서 네 줄로 늘리면서 아래쪽을 같이
+                       옮기지 않은 탓이다. 한쪽 줄 수를 바꾸면 반드시 다른 쪽도 본다.
 
-                  ⚠️ 한동안 아래 표가 slice(3) 이어서 **specs[3] 하나가 두 번
-                     나왔다**(볼피더 "회전 방향", 직진피더.컨트롤러 "설치",
-                     진동기 "제어", 호퍼피더 "배출", 방음커버 "제작", 우레탄
-                     "효과"). 히어로를 세 줄에서 네 줄로 늘리면서 아래쪽을 같이
-                     옮기지 않은 탓이다. 한쪽 줄 수를 바꾸면 반드시 다른 쪽도 본다.
+                    "주요 사양" 라벨은 두지 않는다. 표가 아래 "제작 사양" 과 같은
+                    짜임(격자선 + 회색 라벨 칸)이 되면서 그 자체로 사양표로 읽혀,
+                    라벨은 같은 말을 한 번 더 하는 16px + 간격 12px 였다.
 
-                  "주요 사양" 라벨은 두지 않는다. 표가 아래 "제작 사양" 과 같은
-                  짜임(격자선 + 회색 라벨 칸)이 되면서 그 자체로 사양표로 읽혀,
-                  라벨은 같은 말을 한 번 더 하는 16px + 간격 12px 였다.
+                    전에는 이 자리에 features.title 을 넣었는데, 아래 FEATURES
+                    섹션의 제목 네 개와 글자까지 100% 같았다. 히어로는 "이 제품이
+                    무엇인가"(주요 내용)를, 아래는 "왜 좋은가"(특징)를 맡아야
+                    하므로 축을 사양으로 바꿨다.
 
-                  전에는 이 자리에 features.title 을 넣었는데, 아래 FEATURES
-                  섹션의 제목 네 개와 글자까지 100% 같았다. 히어로는 "이 제품이
-                  무엇인가"(주요 내용)를, 아래는 "왜 좋은가"(특징)를 맡아야
-                  하므로 축을 사양으로 바꿨다.
+                    그 전에는 lead 문단(3줄)이었다. lead 는 데이터에 남아
+                    generateMetadata 의 검색 설명으로 쓰인다 — 화면에서만 빠졌다.
 
-                  그 전에는 lead 문단(3줄)이었다. lead 는 데이터에 남아
-                  generateMetadata 의 검색 설명으로 쓰인다 — 화면에서만 빠졌다.
+                    참고로 받은 신창에프에이 LSP 호퍼피더의 히어로 박스를 쟀다 —
+                    568x208 에 라벨 + 특징 네 줄이었다. 우리는 그 자리를 사양으로
+                    채우고 라벨 없이 표만 둔다.
 
-                  참고로 받은 신창에프에이 LSP 호퍼피더의 히어로 박스를 쟀다 —
-                  568x208 에 라벨 + 특징 네 줄이었다. 우리는 그 자리를 사양으로
-                  채우고 라벨 없이 표만 둔다.
+                    값은 어느 폭에서나 한 줄이다. 13px 로 재면 앞 세 줄 21개의
+                    가장 긴 것이 246px("스테인리스, 알루미늄 (부품 특성에 따라
+                    선정)")이고, 값 칸이 가장 좁아지는 1024(308px)에도 들어간다.
+                    라벨은 가장 긴 것이 63px("거칠기 등급")라 5rem(80px)에 든다.
 
-                  값은 어느 폭에서나 한 줄이다. 13px 로 재면 앞 세 줄 21개의
-                  가장 긴 것이 246px("스테인리스, 알루미늄 (부품 특성에 따라
-                  선정)")이고, 값 칸이 가장 좁아지는 1024(308px)에도 들어간다.
-                  라벨은 가장 긴 것이 63px("거칠기 등급")라 5rem(80px)에 든다.
+                    dt/dd 는 dl 직계여야 한다(접근성 검사 dlitem). 묶는 div 대신
+                    Fragment 를 쓴다 — 아래 사양 표와 같은 이유다. */}
+                <div className="lg:mt-auto">
+                  {/* ⚠️⚠️⚠️ **행마다 회색 박스다. 판 하나로 합치지 말 것.**
+                           한 라운드 동안 네 행을 bg-surface 판 하나로 합쳤다가
+                           되돌렸다. "큰 네모 박스 하나로 감싸 달라" 는 요청을
+                           **내가 스펙 네 줄에만 적용한 것이 오해**였고, 원래
+                           뜻은 바깥 카드(배지 줄.제목.요약까지)였다. 그 카드가
+                           생긴 지금은 **판까지 합치면 상자가 셋**이 되어 겹쳐
+                           보인다.
 
-                  dt/dd 는 dl 직계여야 한다(접근성 검사 dlitem). 묶는 div 대신
-                  Fragment 를 쓴다 — 아래 사양 표와 같은 이유다. */}
-              <div className="mt-6 lg:mt-auto">
-                {/* ⚠️⚠️ **회색 판 하나다. 행마다 박스로 되돌리지 말 것.**
-                       한때 네 행이 각각 bg-surface 박스였고(dt 가 왼쪽 모서리,
-                       dd 가 오른쪽 모서리를 나눠 가졌다) gap-y-2(8px)로 떨어져
-                       있었다. "큰 네모 박스 하나로 감싸서 통일감을 주고 싶다,
-                       토스 스타일로 미니멀하게" 라는 말에 판 하나로 바꿨다 —
-                       박스 넷은 **넷으로 끊겨** 보인다. 홈 POSITIONING 에서
-                       "행 칩 다섯 -> 열 띠 하나" 로 간 것과 같은 판단이다.
+                      ⚠️ 바깥 카드가 흰색이라 이 행들이 bg-surface 회색으로 선다.
+                         **카드를 회색으로 바꾸면 이 박스들이 사라져 보인다**
+                         (InquiryForm 성공 화면에서 같은 일을 겪었다).
 
-                    ⚠️ **행 간격이 16px(gap-y-4)인 것이 핵심이다.** 배경 박스가
-                       없어지면 행을 가르는 것이 여백뿐이다. 전의 8px 을 그대로
-                       두면 네 줄이 한 덩어리로 뭉쳐 읽힌다.
+                      ⚠️ 반경이 xl(12px)이고 바깥 카드가 2xl(16px)이다. 중첩된
+                         상자는 안쪽을 한 단계 작게 둔다 — 같게 두면 바깥.안쪽
+                         모서리가 평행해 어색하다.
 
-                    ⚠️ **테두리를 더하지 말 것.** /location 연락처 표는 흰 카드 +
-                       border-line 으로 서는데, 여기는 판 자체가 회색이라
-                       테두리 없이도 히어로의 흰 바탕에서 또렷하다. 두 안을
-                       그려서 회색 판을 골랐다.
+                      ⚠️ 한 행이 하나의 박스로 보이게 dt 가 왼쪽 모서리를, dd 가
+                         오른쪽 모서리를 나눠 가진다(rounded-l-xl / rounded-r-xl).
 
-                    ⚠️ **이 판 안에 회색을 또 넣지 말 것.** InquiryForm 성공
-                       화면의 선례다 — 회색 박스 안의 회색 띠는 보이지 않는다.
-                       강조가 필요하면 글자 굵기나 레드 점으로 한다.
+                      ⚠️ dt 의 pr-4(16px)다. pr-2(8px)이던 때 **가장 긴 라벨만**
+                         값에 달라붙어 보였다 — 열이 auto 라 그 라벨이 열 폭을
+                         정하고, 짧은 라벨은 남는 만큼 더 벌어지기 때문이다
+                         (방음커버에서 "소음 저감" 8px vs "구성" 36px). 20px 은
+                         짧은 라벨이 48px 까지 벌어져 편차가 커진다.
 
-                    ⚠️ 레드 점은 **유지한다.** 판으로 합치면서 행 구분이 약해진
-                       만큼 점이 각 행의 시작을 짚어 준다. 사이트 규칙 "레드는
-                       면적을 좁게 — CTA.라벨.강조선에만" 에 어긋나지 않는다.
+                      dl/dt/dd 와 Fragment 는 그대로다 — 사양은 "용어-정의" 이고,
+                      dt.dd 는 dl 직계여야 접근성 검사(dlitem)를 통과한다. 또
+                      grid-cols-[auto_minmax(0,1fr)] 의 셀로 직접 놓여야 라벨 열이
+                      자동 폭을 갖는다. **div 로 묶으면 그 격자가 무너진다.**
 
-                    ⚠️ gap-x-4(16px)는 전에 dt 가 pr-4 로 갖고 있던 값이다.
-                       pr-2(8px)이던 때 **가장 긴 라벨만** 값에 달라붙어
-                       보였다 — 열이 auto 라 그 라벨이 열 폭을 정하고, 짧은
-                       라벨은 남는 만큼 더 벌어지기 때문이다(방음커버에서
-                       "소음 저감" 8px vs "구성" 36px). 20px 은 짧은 라벨이
-                       48px 까지 벌어져 한 판 안의 편차가 커진다.
-
-                    dl/dt/dd 와 Fragment 는 그대로다 — 사양은 "용어-정의" 이고,
-                    dt.dd 는 dl 직계여야 접근성 검사(dlitem)를 통과한다. 또
-                    grid-cols-[auto_minmax(0,1fr)] 의 셀로 직접 놓여야 라벨 열이
-                    자동 폭을 갖는다. **div 로 묶으면 그 격자가 무너진다.**
-
-                    ⚠️ dd 의 flex items-center 를 빼지 말 것 — dt 가 점 때문에
-                       flex 라, 값 쪽에서 빼면 두 셀의 세로 중앙이 어긋난다.
-
-                    ⚠️ 값은 1024 에서 한 줄이어야 한다. 13px 로 가장 긴 것이
-                       246px("스테인리스, 알루미늄 (부품 특성에 따라 선정)")이고
-                       값 칸이 가장 좁아지는 곳이 1024 다. 판의 p-5(sm 이상
-                       p-6)와 gap-x-4 가 그 칸을 전보다 좁히므로, 사양 글을
-                       늘릴 때 1024 에서 다시 재야 한다.
-
-                    높이는 174px 다(안쪽 여백 24 x 2 + 행 19.5 x 4 + 간격
-                    16 x 3). 640 미만은 p-5 라 166px 다. 박스 넷이던 때는
-                    198px 였다.
-
-                    ⚠️ 이 칸이 lg:mt-auto 로 아래 정렬이고 표 바닥이 **버튼에서
-                       역산**되므로(아래 mt-7 주석 참고), 판 높이가 바뀌어도
-                       줄 맞춤은 그대로다. 24px 이 줄었는데도 1280.1440 에서
-                       판 바닥 383.9 vs 사진 바닥 384 로 **0.1px 그대로**이고,
-                       버튼 바닥과 썸네일 줄 바닥은 468 로 **딱 맞는다.**
-                       재서 확인했다 — mt-7 을 건드리지 말 것. */}
-                <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-4 rounded-2xl bg-surface p-5 sm:p-6">
-                  {product.specs.slice(0, 4).map((spec) => (
-                    <Fragment key={spec.label}>
-                      <dt className="flex items-center gap-2.5 whitespace-nowrap text-13 font-bold text-ink">
-                        <span
-                          aria-hidden="true"
-                          className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
-                        />
-                        {spec.label}
-                      </dt>
-                      <dd className="flex items-center text-13 leading-snug text-ink-soft">
-                        {spec.value}
-                      </dd>
-                    </Fragment>
-                  ))}
-                </dl>
+                      ⚠️⚠️ **값은 1024 에서 한 줄이어야 한다.** 13px 로 가장 긴
+                            것이 246px("스테인리스, 알루미늄 (부품 특성에 따라
+                            선정)")이고, 값 칸이 가장 좁아지는 곳이 1024 다.
+                            **바깥 카드의 패딩이 그 칸을 더 좁혔다** — 사양 글을
+                            늘릴 때 반드시 1024 에서 다시 잰다. */}
+                  <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-y-2">
+                    {product.specs.slice(0, 4).map((spec) => (
+                      <Fragment key={spec.label}>
+                        <dt className="flex items-center gap-2.5 whitespace-nowrap rounded-l-xl bg-surface py-3 pl-4 pr-4 text-13 font-bold text-ink">
+                          <span
+                            aria-hidden="true"
+                            className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+                          />
+                          {spec.label}
+                        </dt>
+                        <dd className="flex items-center rounded-r-xl bg-surface py-3 pr-4 text-13 leading-snug text-ink-soft">
+                          {spec.value}
+                        </dd>
+                      </Fragment>
+                    ))}
+                  </dl>
+                </div>
               </div>
 
               {/* 버튼 둘. 보던 제품이 아니면 목록으로 돌아갈 길을 같이 둔다.
