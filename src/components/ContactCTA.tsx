@@ -35,8 +35,21 @@ export default function ContactCTA() {
        전에는 위쪽 brand 선 + 기술 그리드 + 방사형 그라디언트가 얹혀 있었다.
        배너가 밝아지면서 이 블록이 사이트에서 유일한 색 면이 됐으므로, 장식을
        걷어도 면이 죽지 않는다 — 오히려 페이지 끝의 포인트로 또렷해진다.
-       (위쪽 선은 PageHero 아래쪽 선과 호응하던 것인데, 그쪽이 없어졌다.) */
-    <section className="bg-navy">
+       (위쪽 선은 PageHero 아래쪽 선과 호응하던 것인데, 그쪽이 없어졌다.)
+
+       ⚠️ relative 는 아래 그레인 겹의 기준이다. 빼면 그레인이 페이지
+          전체로 퍼진다.
+
+       ⚠️ 이 주석을 JSX 주석({ /* ... *\/ })으로 바꾸지 말 것. return (
+          바로 뒤에 두면 주석과 <section> 이 **자식 둘**이 되어
+          "Expected ',', got 'ident'" 로 빌드가 깨진다. */
+    <section className="relative bg-navy">
+      {/* ⚠️ 그레인이 Container **앞**에 있다. DOM 순서상 글자가 위로 온다.
+             단색 면이라 히어로(0.08)보다 진하게 0.12 를 준다. */}
+      <div
+        aria-hidden="true"
+        className="grain pointer-events-none absolute inset-0 opacity-[0.12] mix-blend-overlay"
+      />
       {/* 푸터와 같은 wide 폭이다 — 헤더·CTA·푸터가 한 줄로 서고, 그 사이
           본문만 읽기 좋은 폭으로 안쪽에 들어간다.
 

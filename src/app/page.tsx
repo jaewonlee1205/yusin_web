@@ -123,6 +123,20 @@ export default function Home() {
             poster="/images/hero-poster.webp"
           />
         </ParallaxLayer>
+        {/* 배경 3.5 — 미세한 필름 그레인.
+
+            ⚠️ 자리가 **내용(Container) 앞**이다. 그래야 DOM 순서상 글자가
+               그레인 위로 온다. ::after 로 만들면 반대가 된다.
+
+            ⚠️ mix-blend-overlay 다. 어두운 면에서 어두운 점은 묻히고 밝은
+               점만 살아 "인쇄된 면" 질감이 된다. opacity 0.08 은 히어로가
+               영상·오버레이까지 네 겹이라 그 위에 얹히는 값으로 잡았다
+               (문의 띠는 단색이라 더 진하게 줄 수 있다). */}
+        <div
+          aria-hidden="true"
+          className="grain pointer-events-none absolute inset-0 opacity-[0.08] mix-blend-overlay"
+        />
+
         {/* 배경 3 — 글자가 읽히도록 덮는 네이비 오버레이.
 
             ⚠️ 이 한 겹이 글자 가독성을 혼자 맡는다. 지우면 영상 위에서 흰
