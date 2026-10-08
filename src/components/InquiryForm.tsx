@@ -183,7 +183,18 @@ export default function InquiryForm() {
       setError(
         err instanceof InquiryError
           ? err.message
-          : "전송 중 문제가 발생했습니다. 전화나 이메일로 연락 부탁드립니다."
+          : /* ⚠️⚠️ 이 문구는 **fetch 가 throw 한 경우**에만 뜬다 — 서버가
+                      응답을 줬다면 InquiryError 쪽 문구로 간다.
+
+                      실제로 여기 떨어지는 가장 흔한 경우가 **429 Too Many
+                      Requests** 다. web3forms 가 429 응답에 CORS 헤더를 붙이지
+                      않아 **JS 가 상태 코드를 읽지 못하고** 그냥 throw 로
+                      떨어진다. 429 는 기다리면 풀리는 상황이라 "잠시 후 다시"
+                      가 맞는 안내다 — 한때 곧장 전화로 보냈다.
+
+                   ⚠️ 전화번호는 아래 tel: 링크로 그대로 붙어 있다. 여러 번
+                      실패하는 사람에게는 여전히 출구가 필요하다. */
+            "전송 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요."
       );
       /* ⚠️ 포커스를 에러로 옮긴다. 옮기지 않으면 body 로 떨어져, 키보드와
          스크린리더 사용자가 "무언가 막혔다" 는 것만 알고 어디인지 모른다.
@@ -194,37 +205,71 @@ export default function InquiryForm() {
   }
 
   if (status === "success") {
+    /* ⚠️⚠️ **바깥에 배경이 없다.** 한때 rounded-2xl bg-surface 회색 박스였는데,
+             설명을 회색 띠에 담으면서 박스까지 회색이면 띠가 보이지 않는다.
+             /contact 페이지가 흰 바탕이라 이대로 선다 — 세로 여백만 남겼다
+             (폼이 있던 자리를 대신하므로 숨 쉴 공간은 필요하다).
+
+             참고한 레퍼런스가 **외곽선 체크 + 큰 제목 + 회색 띠 한 줄** 구조다.
+
+       ⚠️⚠️ 이 설명을 **return ( 바로 뒤에 JSX 주석으로 두지 말 것.** 자식이
+             둘이 되어 "Expected ',', got 'ident'" 로 빌드가 깨진다 — 거기 뒀다가
+             겪었고, 이 레포에서 네 번째다. 바깥 순수 JS 주석으로 둔다. */
     return (
-      <div className="rounded-2xl bg-surface p-8 text-center sm:p-12">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-navy">
+      <div className="py-10 text-center sm:py-14">
+        {/* ⚠️ **외곽선 원이다**(채운 원이 아니다). 한때 bg-navy 에 흰 체크였는데
+               레퍼런스를 따라 링으로 바꿨다. 외곽선은 채움보다 가벼워 보여
+               크기를 56 -> 64px 로 올렸다.
+
+            ⚠️ svg 에 stroke="white" 를 다시 주지 말 것 — currentColor 라야
+               아래 text-navy 가 색을 정한다. */}
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-navy">
           <svg
-            width="24"
-            height="24"
+            width="32"
+            height="32"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="white"
-            strokeWidth="2.5"
+            stroke="currentColor"
+            strokeWidth="3"
             strokeLinecap="round"
             strokeLinejoin="round"
             aria-hidden="true"
+            className="text-navy"
           >
             <path d="M20 6 9 17l-5-5" />
           </svg>
         </div>
-        <h2 className="mt-5 text-xl font-bold text-ink">
+        <h2 className="mt-6 text-2xl font-bold text-ink">
           문의가 접수되었습니다
         </h2>
-        <p className="mt-3 text-sm leading-relaxed text-ink-soft">
+        {/* ⚠️ **회색 띠**다. 바깥 배경을 걷었으므로 bg-surface 가 흰 바탕
+               위에서 띠로 보인다(레퍼런스와 같은 구조).
+
+            ⚠️ 한때 이 문단 둘째 줄이 "급한 건이시라면 031-434-0065로 전화
+               주시면 더 빠릅니다." 였고, 그 뒤 한 라운드 동안 **전화 카드**
+               (흰 카드 + PhoneIcon + tel: 링크)로 꺼내 뒀다. **지워 달라는
+               요청에 통째로 걷었다** — 번호는 푸터와 제출 실패 문구에 있다.
+               다시 넣지 말 것. */}
+        <p className="mt-6 inline-block rounded-lg bg-surface px-5 py-3 text-sm leading-relaxed text-ink-soft">
           영업일 기준 1~2일 내에 담당자가 연락드리겠습니다.
-          <br />
-          급한 건이시라면 {site.tel}로 전화 주시면 더 빠릅니다.
         </p>
+
+        {/* ⚠️ 글자는 "확인" 이지만 **하는 일은 폼으로 돌아가는 것**이다
+               (setStatus("idle")). 한때 "문의 하나 더 남기기" 라고 적혀 있었다 —
+               글자가 짧아진 것이지 동작이 바뀐 것이 아니다.
+
+            ⚠️ 색이 **navy** 다. 위 체크 링과 같아 이 화면의 색이 하나로 모인다.
+               폼 제출 버튼은 bg-brand 레드지만 **여기를 레드로 바꾸지 말 것** —
+               성공 화면에 레드가 없는 것이 지금 상태다.
+
+            ⚠️ 폭을 320px 로 묶는다. 바깥이 max-w-3xl(768px)이라 전폭으로 두면
+               버튼 하나가 과하게 길어진다. */}
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="mt-6 text-sm font-semibold text-navy underline underline-offset-4"
+          className="mx-auto mt-8 block w-full max-w-[20rem] rounded-xl bg-navy py-3.5 text-15 font-bold text-white transition hover:bg-navy-deep active:scale-[0.99]"
         >
-          문의 하나 더 남기기
+          확인
         </button>
       </div>
     );

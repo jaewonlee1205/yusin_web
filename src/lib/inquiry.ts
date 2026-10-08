@@ -12,6 +12,10 @@
  *
  * access key는 공개돼도 안전하다. 등록된 수신 이메일로만 전달되며,
  * 키만으로는 수신 주소를 바꾸거나 기존 문의를 읽을 수 없다.
+ *
+ * ⚠️⚠️ **전송은 FormData 로 한다(JSON 아님).** 까닭은 아래 submitInquiry 안에
+ *       적어 뒀다 — 요약하면 JSON 은 CORS preflight 를 부르고 그 preflight 가
+ *       간헐적으로 막혀 "될 때 있고 안 될 때 있는" 증상이 났다.
  */
 
 export type InquiryPayload = {
@@ -72,24 +76,47 @@ export async function submitInquiry(payload: InquiryPayload): Promise<void> {
         ? topics[0]
         : `${topics[0]} 외 ${topics.length - 1}건`;
 
-  const res = await fetch(ENDPOINT, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      access_key: ACCESS_KEY,
-      subject: `[홈페이지 문의] ${payload.company || payload.name} - ${subjectTopic}`,
-      from_name: "유신 F.A 시스템 홈페이지",
-      회사명: payload.company,
-      담당자: payload.name,
-      연락처: payload.phone,
-      이메일: payload.email,
-      문의분야: payload.category || "선택 안 함",
-      문의내용: payload.message,
-    }),
-  });
+  /* ⚠️⚠️⚠️ **FormData 로 보낸다. JSON 으로 되돌리지 말 것.**
+             web3forms 공식 예제는 Content-Type: application/json 을 쓰는데,
+             그러면 CORS **preflight(OPTIONS)** 가 발생하고 **그 preflight 가
+             간헐적으로 차단된다.** 브라우저가 preflight 결과를 캐시하므로 한 번
+             통과하면 한동안 성공하고 만료되면 다시 실패해서, "될 때 있고 안 될
+             때 있다" 는 증상이 됐다.
+
+             실측으로 가렸다 — 같은 페이지(https://yusin.co.kr)에서 두 방식을
+             나란히 호출하고 콘솔 오류를 비교했다 —
+
+               JSON      "Response to preflight request doesn't pass access
+                          control check"        -> preflight 단계에서 막힘
+               FormData  "No 'Access-Control-Allow-Origin' header is present"
+                                                -> preflight 가 없고 POST 가
+                                                   서버에 **도달**했다
+
+             FormData 는 Content-Type 이 multipart/form-data 로 자동 설정돼
+             **CORS simple request** 가 되고, 그래서 preflight 가 아예 발생하지
+             않는다.
+
+      ⚠️ **headers 를 주지 말 것.** 하나라도 직접 넣으면(특히 Content-Type)
+         simple request 조건이 깨져 preflight 가 되살아난다. Accept 도 넣지
+         않는다 — 없어도 web3forms 는 JSON 을 돌려준다.
+
+      ⚠️ 필드 이름은 JSON 때와 같다. web3forms 는 FormData 의 모든 칸을 메일
+         본문에 그대로 넣는다(access_key · subject · from_name 만 예약 필드). */
+  const form = new FormData();
+  form.append("access_key", ACCESS_KEY);
+  form.append(
+    "subject",
+    `[홈페이지 문의] ${payload.company || payload.name} - ${subjectTopic}`
+  );
+  form.append("from_name", "유신 F.A 시스템 홈페이지");
+  form.append("회사명", payload.company);
+  form.append("담당자", payload.name);
+  form.append("연락처", payload.phone);
+  form.append("이메일", payload.email);
+  form.append("문의분야", payload.category || "선택 안 함");
+  form.append("문의내용", payload.message);
+
+  const res = await fetch(ENDPOINT, { method: "POST", body: form });
 
   if (!res.ok) {
     throw new InquiryError(
