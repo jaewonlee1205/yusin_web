@@ -4,6 +4,8 @@ import Container from "@/components/Container";
 import ContactCTA from "@/components/ContactCTA";
 import ProductCard from "@/components/ProductCard";
 import HeroBackgroundVideo from "@/components/HeroBackgroundVideo";
+import MagneticLink from "@/components/MagneticLink";
+import ParallaxLayer from "@/components/ParallaxLayer";
 import ProductVideo from "@/components/ProductVideo";
 import Section from "@/components/Section";
 import { process } from "@/data/company";
@@ -90,10 +92,14 @@ export default function Home() {
             밝은 구간이 있어 그 프레임에서 도면과 글자가 흐려졌다. 스크림을
             다시 얹는 대신 영상 자체를 한 단계 낮춘다 — 겹은 둘로 남고 배경이
             조용해진다. 영상은 여전히 보인다. */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-[0.3]"
-        >
+        {/* ⚠️ 배경이 본문보다 느리게 흐른다(ParallaxLayer). 히어로를
+               지나는 동안 겹이 12% 아래로 밀려 깊이가 생긴다.
+
+            ⚠️ aria-hidden 은 ParallaxLayer 가 자체적으로 건다 — 여기서 또
+               주지 않는다.
+
+            ⚠️ 잘라 주는 overflow-hidden 은 바깥 section 에 이미 있다. */}
+        <ParallaxLayer className="pointer-events-none absolute inset-0 opacity-[0.3]">
           <Image
             src="/images/hero-poster.webp"
             alt=""
@@ -116,7 +122,7 @@ export default function Home() {
             src="/videos/hero.mp4"
             poster="/images/hero-poster.webp"
           />
-        </div>
+        </ParallaxLayer>
         {/* 배경 3 — 글자가 읽히도록 덮는 네이비 오버레이.
 
             ⚠️ 이 한 겹이 글자 가독성을 혼자 맡는다. 지우면 영상 위에서 흰
@@ -186,13 +192,16 @@ export default function Home() {
                 className="rise mt-[clamp(1.25rem,3vh,2.25rem)] flex flex-row gap-3"
                 style={{ animationDelay: "300ms" }}
               >
-                <Link
+                {/* ⚠️ 사이트에서 마그네틱을 쓰는 자리는 둘뿐이다 — 여기와
+                       문의 CTA 띠의 "온라인 문의하기". 효과를 아끼지 않으면
+                       아무것도 중요해 보이지 않는다. */}
+                <MagneticLink
                   href="/products"
                   className="group inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-6 py-4 text-15 font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:px-8"
                 >
                   제품 살펴보기
                   <ArrowRight />
-                </Link>
+                </MagneticLink>
                 <Link
                   href="/contact"
                   className="inline-flex items-center justify-center rounded-xl border border-white/45 px-6 py-4 text-15 font-semibold text-white transition hover:border-white/70 hover:bg-white/10 active:scale-[0.98] sm:px-8"

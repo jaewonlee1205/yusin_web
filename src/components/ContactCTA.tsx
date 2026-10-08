@@ -1,4 +1,5 @@
 import Link from "next/link";
+import MagneticLink from "./MagneticLink";
 import Container from "./Container";
 import Reveal from "./Reveal";
 import { PhoneIcon } from "./icons";
@@ -96,9 +97,12 @@ export default function ContactCTA() {
             className="flex w-full flex-col items-start gap-3.5 sm:w-auto"
           >
             <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-              <Link
+              {/* ⚠️ transition(전체)이다. transition-colors 로 두면 색만
+                     전환되어 active:scale 이 딱딱 끊긴다 — 이 파일이 한동안
+                     그랬다. */}
+              <MagneticLink
                 href="/contact"
-                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-6 py-4 active:scale-[0.98] text-15 font-semibold text-white transition-colors hover:bg-brand-dark sm:px-8"
+                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-6 py-4 text-15 font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:px-8"
               >
                 온라인 문의하기
                 <svg
@@ -116,11 +120,11 @@ export default function ContactCTA() {
                   <path d="M5 12h14" />
                   <path d="m12 5 7 7-7 7" />
                 </svg>
-              </Link>
+              </MagneticLink>
               {/* 아이콘과 자릿수 정렬은 헤더 전화 링크와 같은 모양으로 맞춘다 */}
               <a
                 href={telHref(site.tel)}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/45 px-6 py-4 active:scale-[0.98] text-15 font-semibold tabular-nums text-white transition-colors hover:border-white/70 hover:bg-white/10 sm:px-8"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/45 px-6 py-4 text-15 font-semibold tabular-nums text-white transition hover:border-white/70 hover:bg-white/10 active:scale-[0.98] sm:px-8"
               >
                 <PhoneIcon />
                 전화 {site.tel}
