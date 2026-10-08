@@ -215,7 +215,20 @@ export default function LocationPage() {
 
                 ⚠️ delay 가 없다(0). 이 블록이 위에 있으므로 아래 연락처(90)보다
                    먼저 떠야 한다 — 순서를 다시 바꾸면 이 숫자도 함께 뒤집는다. */}
-            <Reveal className="overflow-hidden rounded-2xl border border-line">
+            {/* ⚠️ relative + bg-surface 가 아래 플레이스홀더의 바탕이다.
+                   iframe 은 loading="lazy" 라 화면에 가까워져야 받기
+                   시작하는데, 그동안 **빈 칸**이 떴다 — 320~400px 짜리
+                   흰 구멍이다.
+
+                ⚠️ iframe 에 bg-white 를 준다. 안 주면 iframe 이 투명해서
+                   지도가 떠도 뒤의 글자가 비쳐 보인다. */}
+            <Reveal className="relative overflow-hidden rounded-2xl border border-line bg-surface">
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 flex items-center justify-center text-13 text-muted"
+              >
+                지도를 불러오는 중…
+              </div>
               <iframe
                 src={MAP_SRC}
                 title={`${site.name} 위치 지도`}
@@ -226,7 +239,7 @@ export default function LocationPage() {
                    위치 핀의 빨강은 알아볼 만큼 남는다.
                    ⚠️ contrast.brightness 를 더하지 말 것 — 도로명과 상호 글자가
                       흐려져 길을 못 읽는다. */
-                className="block h-[320px] w-full border-0 saturate-50 sm:h-[400px] lg:aspect-[3/1] lg:h-auto"
+                className="relative block h-[320px] w-full border-0 bg-white saturate-50 sm:h-[400px] lg:aspect-[3/1] lg:h-auto"
               />
             </Reveal>
 

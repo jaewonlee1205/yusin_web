@@ -69,6 +69,17 @@ export const metadata: Metadata = {
     description: site.description,
     images: [{ url: "/images/og-image.png", width: 1200, height: 630 }],
   },
+  /* ⚠️ openGraph 와 **따로** 적어야 한다. 트위터/X 는 og: 태그를 상당
+     부분 읽지만, card 종류(여기서는 큰 이미지)는 twitter:card 로만 정할 수
+     있다. 빠뜨리면 링크가 작은 썸네일로 접힌다.
+
+     카카오톡·슬랙 같은 데는 og: 를 읽으므로 이 블록과 무관하다. */
+  twitter: {
+    card: "summary_large_image",
+    title: `${site.name} | 파츠피더 · 볼피더 · 직진피더 제작`,
+    description: site.description,
+    images: ["/images/og-image.png"],
+  },
   robots: { index: true, follow: true },
 };
 
