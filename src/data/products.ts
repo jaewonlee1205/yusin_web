@@ -219,7 +219,16 @@ export type Product = {
   features: {
     title: string;
     points: [string, string];
-    /** 글 오른쪽 64px 칸에 작게 서는 사진(public/images/features/). */
+    /** 글 오른쪽 48px 칸에 작게 서는 사진(public/images/features/).
+     *
+     * ⚠️⚠️ **-thumb 접미사가 붙은 96x96 판**이다. 원본(640x360)을 그대로
+     *    걸면 48px 자리에 **13.3배** 짜리가 내려간다 — next.config 가
+     *    static export 때문에 images.unoptimized 라, sizes="48px" 를 줘도
+     *    srcset 이 생성되지 않고 원본이 그대로 간다. 28장 합계
+     *    355KB -> 53KB(-85%).
+     *
+     *    원본(접미사 없는 파일)은 같은 폴더에 그대로 둔다 — 더 큰 자리에
+     *    쓸 때를 위해서다. 썸네일을 다시 뽑으려면 96x96 cover 로 자른다. */
     photo: string;
     /** 사진 설명. 무엇을 찍은 것인지만 적는다 — 특징 제목을 되풀이하지 않는다. */
     photoAlt: string;
@@ -555,7 +564,7 @@ export const products: Product[] = [
           "받은 샘플의 형상 · 재질 · 무게를 하나씩 분석",
           "그 부품만을 위한 트랙과 정렬 지그를 새로 설계",
         ],
-        photo: "/images/features/bowl-feeder-1.webp",
+        photo: "/images/features/bowl-feeder-1-thumb.webp",
         photoAlt: "부품이 도는 볼과 트랙 전체",
       },
       {
@@ -564,7 +573,7 @@ export const products: Product[] = [
           "부품 특성과 요구 공급 속도에 맞는 형상 선택",
           "형상이 정렬 자세와 시간당 처리량을 함께 결정",
         ],
-        photo: "/images/features/bowl-feeder-2.webp",
+        photo: "/images/features/bowl-feeder-2-thumb.webp",
         photoAlt: "볼 안쪽 곡면과 트랙",
       },
       {
@@ -573,7 +582,7 @@ export const products: Product[] = [
           "미세 전자부품용 소형기부터 볼트용 대형기까지",
           "부품 크기와 라인 소모량을 보고 볼 지름 결정",
         ],
-        photo: "/images/features/bowl-feeder-3.webp",
+        photo: "/images/features/bowl-feeder-3-thumb.webp",
         photoAlt: "트랙을 오르는 부품 줄",
       },
       {
@@ -582,7 +591,7 @@ export const products: Product[] = [
           "역방향 부품을 되돌려 보내는 선별 기구를 볼 안에",
           "불량 형상은 트랙에서 떨어뜨려 뒷공정 부담 감소",
         ],
-        photo: "/images/features/bowl-feeder-4.webp",
+        photo: "/images/features/bowl-feeder-4-thumb.webp",
         photoAlt: "볼 안쪽에 세운 선별 지그",
       },
     ],
@@ -700,7 +709,7 @@ export const products: Product[] = [
           "이송할 부품의 형상과 폭에 맞춘 전용 슈트 제작",
           "조립기가 받는 자세까지 보고 슈트 모양을 결정",
         ],
-        photo: "/images/features/linear-feeder-1.webp",
+        photo: "/images/features/linear-feeder-1-thumb.webp",
         photoAlt: "직선 트랙 전체",
       },
       {
@@ -709,7 +718,7 @@ export const products: Product[] = [
           "볼피더와 별도 컨트롤러로 이송 속도를 따로 조절",
           "라인이 멈추면 이쪽만 세웠다 다시 돌릴 수 있음",
         ],
-        photo: "/images/features/linear-feeder-2.webp",
+        photo: "/images/features/linear-feeder-2-thumb.webp",
         photoAlt: "트랙 앞쪽과 은색 부품",
       },
       {
@@ -718,7 +727,7 @@ export const products: Product[] = [
           "볼피더에서 조립기까지 거리를 재서 트랙 길이 산정",
           "짧으면 부품이 밀리고 길면 이송 중 자세가 흐트러짐",
         ],
-        photo: "/images/features/linear-feeder-3.webp",
+        photo: "/images/features/linear-feeder-3-thumb.webp",
         photoAlt: "트랙 끝과 부품 적재부",
       },
       {
@@ -727,7 +736,7 @@ export const products: Product[] = [
           "슈트는 사내 밀링으로 깎고 그라인더로 면을 마감",
           "부품이 스치는 면이 거칠면 자세가 흐트러지기 때문",
         ],
-        photo: "/images/features/linear-feeder-4.webp",
+        photo: "/images/features/linear-feeder-4-thumb.webp",
         photoAlt: "트랙 면 클로즈업",
       },
     ],
@@ -836,7 +845,7 @@ export const products: Product[] = [
           "경사진 판스프링과 전자석이 나선 운동을 만들어 냄",
           "모터가 없어 회전하며 마모되는 부분이 적음",
         ],
-        photo: "/images/features/vibrator-1.webp",
+        photo: "/images/features/vibrator-1-thumb.webp",
         photoAlt: "볼 안쪽 나선 트랙 전체",
       },
       {
@@ -845,7 +854,7 @@ export const products: Product[] = [
           "스프링 매수와 각도를 조정해 공급 속도를 맞춤",
           "납품 뒤 속도가 바뀌어도 전담 부서가 다시 잡아 드림",
         ],
-        photo: "/images/features/vibrator-2.webp",
+        photo: "/images/features/vibrator-2-thumb.webp",
         photoAlt: "나선 트랙 이음매",
       },
       {
@@ -854,7 +863,7 @@ export const products: Product[] = [
           "스프링만이 아니라 전압까지 함께 잡아 세팅",
           "같은 피더라도 다루는 부품이 바뀌면 다시 맞춰야 함",
         ],
-        photo: "/images/features/vibrator-3.webp",
+        photo: "/images/features/vibrator-3-thumb.webp",
         photoAlt: "볼 안쪽 벽면",
       },
       {
@@ -863,7 +872,7 @@ export const products: Product[] = [
           "본체는 그대로 두고 진동부만 바꿔 달 수 있음",
           "설비를 새로 들이지 않아도 공급 속도가 돌아옴",
         ],
-        photo: "/images/features/vibrator-4.webp",
+        photo: "/images/features/vibrator-4-thumb.webp",
         photoAlt: "트랙이 붙은 자리",
       },
     ],
@@ -962,7 +971,7 @@ export const products: Product[] = [
           "레벨 센서가 볼피더 잔량을 보고 필요한 만큼만 공급",
           "한꺼번에 쏟지 않아 부품이 눌려 상하는 일이 없음",
         ],
-        photo: "/images/features/hopper-feeder-1.webp",
+        photo: "/images/features/hopper-feeder-1-thumb.webp",
         photoAlt: "부품이 담긴 볼 전체",
       },
       {
@@ -971,7 +980,7 @@ export const products: Product[] = [
           "한 번 적재해 두면 작업자 없이 라인이 이어짐",
           "야간과 주말처럼 사람이 없는 시간대 가동에 씀",
         ],
-        photo: "/images/features/hopper-feeder-2.webp",
+        photo: "/images/features/hopper-feeder-2-thumb.webp",
         photoAlt: "볼 바닥에 쌓인 부품",
       },
       {
@@ -980,7 +989,7 @@ export const products: Product[] = [
           "하루 소모량을 보고 호퍼 적재 용량을 정함",
           "크면 부품이 오래 머물고 작으면 자주 채워야 함",
         ],
-        photo: "/images/features/hopper-feeder-3.webp",
+        photo: "/images/features/hopper-feeder-3-thumb.webp",
         photoAlt: "볼 왼쪽 벽면과 트랙",
       },
       {
@@ -989,7 +998,7 @@ export const products: Product[] = [
           "볼피더 신호를 그대로 받아 함께 서고 함께 돎",
           "볼 안에 넘치거나 눌려 상하는 일이 생기지 않음",
         ],
-        photo: "/images/features/hopper-feeder-4.webp",
+        photo: "/images/features/hopper-feeder-4-thumb.webp",
         photoAlt: "트랙 출구 쪽",
       },
     ],
@@ -1092,7 +1101,7 @@ export const products: Product[] = [
           "원통 커버 내벽의 흡음재가 볼 안 충돌음을 흡수",
           "귀마개 없이 설비 앞에서 작업할 수 있는 수준",
         ],
-        photo: "/images/features/soundproof-cover-1.webp",
+        photo: "/images/features/soundproof-cover-1-thumb.webp",
         photoAlt: "트랙과 금속 부품 전체",
       },
       {
@@ -1101,7 +1110,7 @@ export const products: Product[] = [
           "한 손으로 열어 젖히는 개폐 구조라 점검이 빠름",
           "커버를 떼어 따로 보관해 둘 자리가 필요 없음",
         ],
-        photo: "/images/features/soundproof-cover-2.webp",
+        photo: "/images/features/soundproof-cover-2-thumb.webp",
         photoAlt: "트랙 가까이 본 부품",
       },
       {
@@ -1110,7 +1119,7 @@ export const products: Product[] = [
           "표준 치수가 아니라 씌울 피더를 직접 재서 제작",
           "틈이 생기면 소리가 그대로 빠져나가기 때문",
         ],
-        photo: "/images/features/soundproof-cover-3.webp",
+        photo: "/images/features/soundproof-cover-3-thumb.webp",
         photoAlt: "볼 바깥 둘레",
       },
       {
@@ -1119,7 +1128,7 @@ export const products: Product[] = [
           "볼트나 금속 가공품처럼 서로 부딪히는 부품에 효과",
           "수지 부품 라인은 원래 소리가 작은 편",
         ],
-        photo: "/images/features/soundproof-cover-4.webp",
+        photo: "/images/features/soundproof-cover-4-thumb.webp",
         photoAlt: "줄지어 선 검은 금속 부품",
       },
     ],
@@ -1224,7 +1233,7 @@ export const products: Product[] = [
           "단계가 아니라 무단으로 조절해 꼭 맞는 지점을 찾음",
           "운전을 멈추지 않고도 세기를 바꿀 수 있음",
         ],
-        photo: "/images/features/controller-1.webp",
+        photo: "/images/features/controller-1-thumb.webp",
         photoAlt: "스테인리스 볼 전체",
       },
       {
@@ -1233,7 +1242,7 @@ export const products: Product[] = [
           "볼피더와 직진피더를 각각의 컨트롤러로 따로 제어",
           "한쪽만 빨라 부품이 밀리거나 끊기는 일을 막음",
         ],
-        photo: "/images/features/controller-2.webp",
+        photo: "/images/features/controller-2-thumb.webp",
         photoAlt: "트랙 왼쪽과 부품",
       },
       {
@@ -1242,7 +1251,7 @@ export const products: Product[] = [
           "피더 일체형과 조작반 별치형 가운데 선택",
           "설비 배치와 작업자 동선을 보고 자리를 정함",
         ],
-        photo: "/images/features/controller-3.webp",
+        photo: "/images/features/controller-3-thumb.webp",
         photoAlt: "볼 아래쪽 트랙",
       },
       {
@@ -1251,7 +1260,7 @@ export const products: Product[] = [
           "운전 · 정지 스위치와 세기 다이얼만 있는 조작부",
           "교대 인원이 바뀌어도 따로 설명할 것이 없음",
         ],
-        photo: "/images/features/controller-4.webp",
+        photo: "/images/features/controller-4-thumb.webp",
         photoAlt: "볼 안쪽 바닥",
       },
     ],
@@ -1367,7 +1376,7 @@ export const products: Product[] = [
           "우레탄 층이 금속에 닿는 충돌음과 진동을 흡수",
           "방음커버와 함께 쓰면 소음 저감 효과가 겹침",
         ],
-        photo: "/images/features/urethane-coating-1.webp",
+        photo: "/images/features/urethane-coating-1-thumb.webp",
         photoAlt: "우레탄을 입힌 볼 전체",
       },
       {
@@ -1376,7 +1385,7 @@ export const products: Product[] = [
           "도금 · 수지처럼 흠집에 민감한 부품 표면을 보호",
           "완성품 외관이 그대로 고객에게 가는 공정에 적합",
         ],
-        photo: "/images/features/urethane-coating-2.webp",
+        photo: "/images/features/urethane-coating-2-thumb.webp",
         photoAlt: "코팅면 가까이",
       },
       {
@@ -1385,7 +1394,7 @@ export const products: Product[] = [
           "부품을 받아 몇 가지 등급으로 시험해 보고 결정",
           "너무 매끄러우면 미끄러지고 거칠면 걸리기 때문",
         ],
-        photo: "/images/features/urethane-coating-3.webp",
+        photo: "/images/features/urethane-coating-3-thumb.webp",
         photoAlt: "볼 왼쪽 코팅면",
       },
       {
@@ -1394,7 +1403,7 @@ export const products: Product[] = [
           "볼 내면뿐 아니라 트랙과 직진피더 슈트에도 적용",
           "한 곳만 입히면 그쪽만 조용해지기 때문",
         ],
-        photo: "/images/features/urethane-coating-4.webp",
+        photo: "/images/features/urethane-coating-4-thumb.webp",
         photoAlt: "우레탄을 입힌 볼과 트랙",
       },
     ],

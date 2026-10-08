@@ -67,7 +67,19 @@ const boxBase =
   "border-[1.5px] border-line bg-white transition-colors " +
   "peer-checked:border-navy peer-checked:bg-navy " +
   "peer-checked:[&>svg]:block " +
-  "peer-focus-visible:ring-2 peer-focus-visible:ring-brand peer-focus-visible:ring-offset-2";
+  /* ⚠️⚠️ focus-visible 과 focus **둘 다** 건다. 네이티브 폼 검증이
+     막으면서 브라우저가 이 input 으로 포커스를 **강제로** 옮기는데, 그
+     경우는 :focus-visible 을 트리거하지 않는다. input 이 sr-only(1x1) 라
+     focus-visible 만 걸어 두면 **화면에 아무 표시도 안 남는다** — 동의를
+     빼먹고 보내기를 누른 사람 눈에는 버튼이 먹통으로 보인다.
+
+     재서 확인했다: 동의만 비우고 제출하면 포커스가 1x1 input 으로 가는데
+     형제 상자의 box-shadow 가 none 이었다.
+
+     focus 를 함께 걸면 라벨을 마우스로 눌렀을 때도 링이 잠깐 보인다.
+     체크박스에서는 통상 허용되는 거동이고, 안 보이는 것보다 낫다. */
+  "peer-focus-visible:ring-2 peer-focus-visible:ring-brand peer-focus-visible:ring-offset-2 " +
+  "peer-focus:ring-2 peer-focus:ring-brand peer-focus:ring-offset-2";
 const boxLabel =
   "text-sm leading-snug text-ink-soft transition-colors peer-checked:font-semibold peer-checked:text-ink";
 /**
@@ -124,6 +136,8 @@ export default function InquiryForm() {
    *    상태가 진실이다. setPicked([]) 를 함께 부른다.
    */
   const [picked, setPicked] = useState<string[]>([]);
+  /* 제출이 막혔을 때 포커스를 옮길 자리. 없으면 body 로 떨어진다. */
+  const errorRef = useRef<HTMLParagraphElement>(null);
   const allOn = picked.length === TOPICS.length;
   const someOn = picked.length > 0 && !allOn;
 
@@ -169,8 +183,13 @@ export default function InquiryForm() {
       setError(
         err instanceof InquiryError
           ? err.message
-          : "전송 중 문제가 발생했습니다. 전화로 연락 부탁드립니다."
+          : "전송 중 문제가 발생했습니다. 전화나 이메일로 연락 부탁드립니다."
       );
+      /* ⚠️ 포커스를 에러로 옮긴다. 옮기지 않으면 body 로 떨어져, 키보드와
+         스크린리더 사용자가 "무언가 막혔다" 는 것만 알고 어디인지 모른다.
+         requestAnimationFrame 은 위 setState 가 그려진 뒤에 잡기 위한 것 —
+         아직 없는 요소에는 포커스가 안 간다. */
+      requestAnimationFrame(() => errorRef.current?.focus());
     }
   }
 
@@ -456,24 +475,60 @@ export default function InquiryForm() {
         </label>
       </div>
 
+      {/* ⚠️ tabIndex={-1} + ref 가 있는 이유 — 제출이 막히면 포커스가
+             document.body 로 떨어져 키보드 사용자가 위치를 잃었다. 아래
+             handleSubmit 의 catch 가 이 요소로 포커스를 옮긴다.
+
+          ⚠️ role="alert" 가 live region 을 겸하므로 aria-live 를 따로
+             주지 않는다. 둘을 함께 주면 읽기가 두 번 난다.
+
+          ⚠️ 전화번호가 **문구 안에** 있다. 한동안 기본 문구가 "전화로
+             연락 부탁드립니다" 라고만 하고 번호를 주지 않았는데, 이
+             페이지에는 번호가 푸터 말고 없어서 최악의 순간에 막다른
+             길이었다. */}
       {status === "error" && (
         <p
+          ref={errorRef}
+          tabIndex={-1}
           role="alert"
-          className="rounded-xl bg-brand/5 px-4 py-3.5 text-sm text-brand-dark"
+          className="rounded-xl bg-brand/5 px-4 py-3.5 text-sm text-brand-dark outline-none"
         >
-          {error}
+          {error}{" "}
+          <a
+            href={`tel:${site.tel.replace(/-/g, "")}`}
+            className="font-semibold tabular-nums underline underline-offset-4"
+          >
+            {site.tel}
+          </a>
         </p>
       )}
 
       <button
         type="submit"
         disabled={status === "submitting"}
+        aria-busy={status === "submitting"}
         /* ⚠️ disabled: 가 active: 를 이기도록 둔다 — Tailwind 는 소스 순서를
              따르므로 disabled 계열이 뒤에 와야 보내는 중에 눌려도 안 줄어든다. */
         className="h-14 w-full rounded-xl bg-brand text-17 font-bold text-white transition hover:bg-brand-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100"
       >
         {status === "submitting" ? "전송 중…" : "문의 보내기"}
       </button>
+
+      {/* ⚠️ 버튼 **아래**다. 한동안 위에 있었고 "급하시면 031-434-0065" 가
+             함께 붙어 있었는데, 전화를 걷어 달라는 요청에 빼면서 자리도
+             옮겼다 — 전화가 빠지면 이 줄은 망설이는 사람을 붙드는 **안심
+             장치**가 아니라 보낸 뒤의 **기대치**가 된다. 버튼 앞에 둘
+             이유가 사라진다.
+
+          ⚠️ 버튼은 이 페이지의 시각적 종착점이다. 그 바로 위에 회색 작은
+             글이 끼면 버튼으로 가던 시선이 한 번 끊긴다.
+
+          ⚠️ 전화번호는 **제출 실패 문구에는 그대로 있다.** 그쪽은 "전화로
+             연락 부탁드립니다" 라고 해 놓고 번호가 없던 것을 고친 자리라
+             성격이 다르다 — 거기서는 번호가 유일한 출구다. */}
+      <p className="mt-3 text-center text-13 leading-relaxed text-muted">
+        영업일 기준 1~2일 내에 회신드립니다.
+      </p>
     </form>
   );
 }

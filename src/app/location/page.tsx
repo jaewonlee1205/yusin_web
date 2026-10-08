@@ -201,6 +201,34 @@ export default function LocationPage() {
 
               lg 미만에서는 지도가 고정 높이로 서고 표가 1열로 떨어진다. */}
           <div className="flex flex-col gap-10">
+            {/* Section 컴포넌트를 쓰지 않는다. 생김새만 Section 의 제목
+                블록과 맞춘다.
+
+                ⚠️ 한때 **지도가 제목보다 먼저** 왔고, 그것이 Section 을 쓰지
+                   못하는 첫째 근거였다(Section 은 제목을 늘 children 위에
+                   놓는다). 지금은 제목 → 지도 → 표 순이라 그 근거는 사라졌다.
+                   그래도 Section 으로 갈아타지 않는 **둘째 근거는 그대로**다 —
+                   Section 이 py-16 sm:py-24 를 제 몫으로 갖는데 여기는 바깥
+                   div 가 이미 py-14 sm:py-20 을 쓰고 gap-10 으로 셋을 띄운다.
+                   갈아타면 세로가 한 번 더 붙는다. 간격을 이 페이지가 직접
+                   쥐고 있다.
+
+                제목이 "위치 및 연락처" 다. 한때 "연락처" 였는데, 그때는 이
+                블록이 지도 **아래**에 있어 표만 덮으면 됐다. 지금은 제목이
+                지도까지 덮으므로 "연락처" 로는 반쪽만 말한다. "오시는 길" 은
+                쓸 수 없다 — 바로 위 h1 이 그 말이다.
+
+                ⚠️ delay 가 없다(0). 셋 중 맨 위라 가장 먼저 떠야 한다.
+                   순서를 바꾸면 지도(90) · 표(150)와 함께 다시 매긴다. */}
+            <Reveal>
+              <p className="text-xs font-bold tracking-[0.08em] text-brand">
+                FIND US
+              </p>
+              <h2 className="mt-3 text-2xl font-bold tracking-tight text-ink sm:text-4xl">
+                위치 및 연락처
+              </h2>
+            </Reveal>
+
             {/* lg 부터 3:1 이다(1088x363) — 홈 PERFORMANCE 영상과 같은
                 비율로 가로로 시원하게 눕는다. 한때 칸 높이를 받는 lg:flex +
                 lg:min-h-[25rem] 였는데, 그건 오른쪽에 연락처가 있어 행 높이를
@@ -213,8 +241,8 @@ export default function LocationPage() {
                 입체로 읽혀 자료를 읽는 자리에 맞지 않고, 한쪽만 바꾸면
                 위아래로 선 둘의 결이 갈린다.
 
-                ⚠️ delay 가 없다(0). 이 블록이 위에 있으므로 아래 연락처(90)보다
-                   먼저 떠야 한다 — 순서를 다시 바꾸면 이 숫자도 함께 뒤집는다. */}
+                ⚠️ delay={90} 이다. 제목(0) 다음, 표(150) 앞이다 — 셋이 위에서
+                   아래로 차례로 올라온다. 순서를 바꾸면 세 숫자를 함께 뒤집는다. */}
             {/* ⚠️ relative + bg-surface 가 아래 플레이스홀더의 바탕이다.
                    iframe 은 loading="lazy" 라 화면에 가까워져야 받기
                    시작하는데, 그동안 **빈 칸**이 떴다 — 320~400px 짜리
@@ -222,13 +250,54 @@ export default function LocationPage() {
 
                 ⚠️ iframe 에 bg-white 를 준다. 안 주면 iframe 이 투명해서
                    지도가 떠도 뒤의 글자가 비쳐 보인다. */}
-            <Reveal className="relative overflow-hidden rounded-2xl border border-line bg-surface">
+            <Reveal
+              delay={90}
+              className="relative overflow-hidden rounded-2xl border border-line bg-surface"
+            >
               <div
                 aria-hidden="true"
-                className="absolute inset-0 flex items-center justify-center text-13 text-muted"
+                /* ⚠️ text-ink-soft 다. text-muted(#6b7280)를 이 바탕
+                   (bg-surface #f6f7f9)에 올리면 실측 **4.03:1** 로 WCAG
+                   AA(4.5:1)에 못 미친다 — 픽셀 히스토그램으로 쟀다.
+                   ink-soft(#414751)는 약 8.9:1 이다. */
+                className="absolute inset-0 flex items-center justify-center text-13 text-ink-soft"
               >
                 지도를 불러오는 중…
               </div>
+              {/* ⚠️⚠️ 길찾기가 **지도 밖에** 있어야 한다. 이 페이지는
+                     "샘플을 들고 오시면 현장에서 함께 검토합니다" 라고
+                     해 놓고 가는 법을 주지 않았다. 게다가 키보드로는
+                     390px 에서 **Tab 네 번째**에 지도 iframe 이 걸리고,
+                     그 안에서 여섯 번을 더 눌러야 아래 연락처로 내려간다
+                     — 재서 확인했다. 이 링크가 그 우회로다.
+
+                  ⚠️ z-10 이 필요하다. 위 플레이스홀더와 아래 iframe 사이에
+                     끼어 있어 그냥 두면 iframe 이 덮는다. */}
+              <a
+                href={site.naverPlace}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute right-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-lg bg-white/95 px-3 py-2 text-13 font-semibold text-ink shadow-card backdrop-blur transition hover:text-brand active:scale-95"
+              >
+                길찾기
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                  className="shrink-0"
+                >
+                  <path d="M7 17 17 7" />
+                  <path d="M8 7h9v9" />
+                </svg>
+                <span className="sr-only">네이버 지도에서 열기 (새 창)</span>
+              </a>
+
               <iframe
                 src={MAP_SRC}
                 title={`${site.name} 위치 지도`}
@@ -243,28 +312,9 @@ export default function LocationPage() {
               />
             </Reveal>
 
-            {/* Section 컴포넌트를 쓰지 않는다. 생김새만 Section 의 제목
-                블록과 맞춘다.
-
-                근거가 둘이다. 하나는 Section 이 제목을 항상 children 위에
-                놓는데 여기는 **지도가 제목보다 먼저** 와야 한다는 것이고
-                (그래서 지도를 Section 밖에 둘 수가 없다), 다른 하나는
-                Section 이 py-16 sm:py-24 를 제 몫으로 갖는다는 것이다 —
-                여기는 바깥 div 가 이미 py-14 sm:py-20 을 쓰고 gap-10 으로
-                둘을 띄운다. 갈아타면 세로가 한 번 더 붙는다. 간격을 이
-                페이지가 직접 쥐고 있다.
-
-                제목은 "연락처" 다. "오시는 길" 로 하면 바로 위 h1 과 같은
-                말을 두 번 하게 된다.
-
-                ⚠️ delay={90} 이다 — 위 지도(0)보다 늦게 떠야 한다. */}
-            <Reveal delay={90}>
-              <p className="text-xs font-bold tracking-[0.08em] text-brand">
-                CONTACT
-              </p>
-              <h2 className="mt-3 text-2xl font-bold tracking-tight text-ink sm:text-4xl">
-                연락처
-              </h2>
+            {/* ⚠️ 표만 든 Reveal 이다. 제목은 **지도 위**로 올라갔다
+                   (위쪽 블록 참고). delay 150 — 제목(0) · 지도(90) 다음이다. */}
+            <Reveal delay={150}>
               {/* ⚠️ 제목 아래 안내 한 줄을 두지 않는다. 참고한
                      webprosoft.kr "찾아오시는길" 짜임을 따라 "방문에 필요한
                      연락처와 찾아오시는 길을 안내해 드립니다" 를 넣었던
@@ -301,7 +351,11 @@ export default function LocationPage() {
 
                   dl/dt/dd 는 그대로다. 라벨-값은 용어-정의가 맞고, 접근성
                   검사(dlitem)가 dt.dd 를 dl 직계로 요구한다. 생김새만 바뀐다. */}
-              <dl className="mt-8 grid border-t border-line lg:grid-cols-2 lg:gap-x-12">
+              {/* ⚠️ mt-8 을 걷었다. 제목이 바로 위에 있던 때의 간격인데,
+                     지금은 제목이 지도 위로 가고 이 Reveal 에 표만 남아
+                     바깥 div 의 gap-10(40px)이 지도와의 사이를 띄운다.
+                     두면 72px 이 된다. */}
+              <dl className="grid border-t border-line lg:grid-cols-2 lg:gap-x-12">
                 {cells.map((cell) => (
                   <div
                     key={cell.label}

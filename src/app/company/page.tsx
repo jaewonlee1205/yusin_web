@@ -101,7 +101,7 @@ export default function CompanyPage() {
             <h2 className="text-2xl font-bold leading-snug tracking-tight text-ink sm:text-4xl">
               {intro.title.lead}{" "}
               <Image
-                src="/images/logo-mark.png"
+                src="/images/logo-mark.webp"
                 alt={intro.title.brand}
                 width={129}
                 height={32}

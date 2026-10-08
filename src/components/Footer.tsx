@@ -61,7 +61,14 @@ const FOOTER_GROUPS: {
 /* 열 제목을 흐리게 내리고 링크를 ink 로 올렸다. 눈이 분류명보다 갈 곳을
    먼저 짚는다. */
 const LINK =
-  "inline-block py-1 text-sm text-ink transition-colors hover:text-brand";
+  /* ⚠️ py-2.5 다. py-1 일 때 링크 높이가 **25.8 x 28px** 로, WCAG 2.5.5
+     (AAA, 44x44)에 한참 못 미쳤다 — 페이지당 15개 x 10페이지 = 150개가
+     전부 그랬다. 2.5.8(AA, 24x24)은 통과하던 값이지만 휴대폰에서 옆 링크를
+     잘못 누르기 쉬웠다.
+
+     py-3(44px)까지 올리면 푸터가 한 화면 가까이 길어져 2.5 에서 멈췄다 —
+     40px 이면 엄지로 눌러 빗나가지 않는다. 글자 크기와 위치는 그대로다. */
+  "inline-block py-2.5 text-sm text-ink transition-colors hover:text-brand";
 
 /* 브랜드 열의 외부 채널 버튼(유튜브·네이버).
 
@@ -127,7 +134,7 @@ export default function Footer() {
               label={`${site.name} 홈으로`}
             >
               <Image
-                src="/images/logo.png"
+                src="/images/logo.webp"
                 alt={site.name}
                 width={403}
                 height={52}

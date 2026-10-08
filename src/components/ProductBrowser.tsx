@@ -181,7 +181,13 @@ export default function ProductBrowser() {
             줄 높이 65px 중 15px 이 막대였다. 대신 오른쪽 끝을 흐리게 지워
             "더 있다" 를 알린다. sm 부터는 칩이 줄바꿈되어 넘치지 않으므로
             마스크를 끈다. */}
-        <nav
+        {/* ⚠️ nav 가 아니라 div role="group" 이다. 바로 위 데스크톱
+               사이드바에도 같은 이름의 nav 가 있어, **스크린리더 랜드마크
+               목록에 "제품 분류" 가 두 번** 떴다(둘 다 DOM 에 있고 CSS 로만
+               하나씩 숨는다). 랜드마크는 하나면 충분하고, 이쪽은 필터
+               버튼 묶음이라 group 이 뜻에도 맞다. */}
+        <div
+          role="group"
           aria-label="제품 분류"
           className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-0.5 [mask-image:linear-gradient(to_right,#000_calc(100%-40px),transparent)] [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0 sm:[mask-image:none] lg:hidden [&::-webkit-scrollbar]:hidden"
         >
@@ -210,7 +216,7 @@ export default function ProductBrowser() {
               </button>
             );
           })}
-        </nav>
+        </div>
 
         {/* 도구 줄. 높이를 45px 로 못 박아 아랫선이 사이드바 헤더("제품 분류")
             아랫선과 같은 y 에 오게 한다 — 사이드바 카드 테두리 1px +

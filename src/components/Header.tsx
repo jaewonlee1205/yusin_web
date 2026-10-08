@@ -159,7 +159,7 @@ export default function Header() {
                 메뉴에 밀려 폭만 266px로 줄어든다 — 높이는 고정이라 로고가
                 찌그러진다. xl 부터 키운다. (lg:h-9 로 되돌리지 말 것) */}
             <Image
-              src="/images/logo.png"
+              src="/images/logo.webp"
               alt={site.name}
               width={403}
               height={52}
@@ -286,26 +286,47 @@ export default function Header() {
             </Link>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setMobileOpen((v) => !v)}
-            aria-expanded={mobileOpen}
-            aria-controls="mobile-nav"
-            className="-mr-2 flex h-10 w-10 items-center justify-center lg:hidden"
-          >
-            <span className="sr-only">
-              {mobileOpen ? "메뉴 닫기" : "메뉴 열기"}
-            </span>
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              aria-hidden="true"
+          {/* ⚠️⚠️ 모바일 바에 **전화가 있어야 한다.** 한동안 로고와
+                 햄버거뿐이어서, 공장에 서 있는 담당자가 가장 쉬운 전환인
+                 "탭해서 전화" 를 모든 페이지 상단에서 할 수 없었다 —
+                 메뉴를 연 뒤에야 번호가 나왔다. 데스크톱(lg 이상)은 바로
+                 위 블록이 이미 전화와 CTA 를 들고 있다.
+
+              ⚠️ 둘 다 h-11(44px)이다. 햄버거가 h-10(40px)이었는데 터치
+                 타깃 권장치에 못 미쳤다. */}
+          <div className="-mr-2 flex items-center lg:hidden">
+            <a
+              href={telHref(site.tel)}
+              aria-label={`전화 ${site.tel}`}
+              /* ⚠️ 360px 미만에서는 접는다. 320px 의 가용 폭은
+                   280px(360 - Container px-5 x2)인데 로고 217 + 전화 44 +
+                   햄버거 44 = 305px 라 **21px 넘쳤다** — 재서 확인했다.
+                   그 폭에서는 메뉴를 열면 전화가 나오므로 기능이 사라지는
+                   것은 아니다. 360 에서는 320 가용에 305 로 15px 남는다. */
+              className="hidden h-11 w-11 items-center justify-center rounded-lg text-brand transition active:scale-95 min-[360px]:flex"
             >
+              <PhoneIcon />
+            </a>
+            <button
+              type="button"
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-nav"
+              className="flex h-11 w-11 items-center justify-center"
+            >
+              <span className="sr-only">
+                {mobileOpen ? "메뉴 닫기" : "메뉴 열기"}
+              </span>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                aria-hidden="true"
+              >
               {mobileOpen ? (
                 <>
                   <path d="M5 5l14 14" />
@@ -318,8 +339,9 @@ export default function Header() {
                   <path d="M3 18h18" />
                 </>
               )}
-            </svg>
-          </button>
+              </svg>
+            </button>
+          </div>
         </div>
       </Container>
 

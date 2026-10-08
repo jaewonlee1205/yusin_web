@@ -164,7 +164,7 @@ export default async function ProductDetailPage({
                   {product.category}
                 </p>
                 <Image
-                  src="/images/logo-mark.png"
+                  src="/images/logo-mark.webp"
                   alt=""
                   width={129}
                   height={32}
@@ -404,16 +404,38 @@ export default async function ProductDetailPage({
               {/* 체크 · 글 · 사진 **세 칸**이 한 줄로 선다. 사진은 오른쪽
                   끝의 64x64 정사각 썸네일이다.
 
-                  ⚠️⚠️ 사진 칸이 **정사각 48px** 이어야 한다. 두 가지를 재서
-                       정한 값이다 —
+                  ⚠️⚠️ 사진 칸이 **정사각**이다. 세로 칸(64 x 136)은 16:9 원본의
+                       **74%가 잘려** 초록 면이나 금속 면만 남은 세로 띠가 됐다.
+                       정사각이면 44%로 준다. 이 근거는 크기와 무관하게 유효하다.
 
-                         세로 칸(64 x 136)은 16:9 원본의 **74%가 잘려** 초록 면이나
-                         금속 면만 남은 세로 띠가 됐다. 정사각이면 44%로 준다.
+                  ⚠️⚠️ 크기는 **모바일 48px · md(768) 이상 88px** 이다.
 
-                         1024(2열)에서 사진이 커질수록 글이 두 줄이 된다 —
-                           사진 없음 0/8   48px 0/8   56px 4/8   64px 5/8
-                         48px 까지는 카드 높이가 136px 로 단일이고, 56px 부터
-                         161·185 로 갈린다. **56px 이상으로 키우지 말 것.**
+                       한동안 전 폭 48px 였고 "56px 이상으로 키우지 말 것" 이라는
+                       측정이 여기 적혀 있었다. 그 값은 **1024 에서 2열이던 때**의
+                       것이다 — 지금은 xl:grid-cols-2 라 2열이 1280 부터이고,
+                       그만큼 카드가 넓어져 글이 밀리지 않는다. 사진이 작아 잘
+                       안 보인다는 말에 7제품 x 4카드를 폭마다 다시 쟀다 —
+
+                         폭              48px   64px   80px   88px   96px
+                         1440·1280(2열)  136    136    136    136    144
+                         1024·768 (1열)  136    136    136    136     —
+                         390      (1열)  185    2종    3종    4종     —
+
+                       글 영역이 88px 이고 카드 패딩이 p-6(24x2=48) 이라 88+48=136
+                       이다. 사진이 88px **이하**인 동안은 글이 카드 높이를 정하므로
+                       카드가 1px 도 안 변한다. 96px 부터 사진이 글을 넘어 144 가
+                       된다. **88px 을 넘기지 말 것.**
+
+                       390 은 48px 로 둔다. 거기서 키우면 글상자가 206 -> 166px 로
+                       좁아져 점 목록이 더 잘게 깨진다 — 1열이라 카드 높이가 갈리는
+                       것 자체는 괜찮지만 읽기가 나빠지는 쪽이 손해가 크다.
+                       640~767 은 재지 않아 보수적으로 md 부터 적용한다.
+
+                  ⚠️ 썸네일이 **192x192** 다(public/images/features/*-thumb.webp).
+                     88px 표시 x 레티나 2배 = 176px 가 필요하다. next.config 가
+                     static export 때문에 images.unoptimized 라 sizes 를 줘도
+                     srcset 이 안 생긴다 — 파일 자체가 그 크기여야 한다.
+                     28장 합계 129KB. 크기를 또 바꾸면 썸네일도 다시 뽑을 것.
 
                        그래서 카드 바깥 격자를 걷고 안쪽 한 줄로 평탄화했다 —
                        사진이 카드 높이와 무관해야 하기 때문이다.
@@ -474,12 +496,12 @@ export default async function ProductDetailPage({
                     ))}
                   </ul>
                 </div>
-                <div className="relative h-12 w-12 shrink-0 self-center overflow-hidden rounded-lg bg-surface">
+                <div className="relative h-12 w-12 shrink-0 self-center overflow-hidden rounded-lg bg-surface md:h-22 md:w-22">
                   <Image
                     src={f.photo}
                     alt={f.photoAlt}
                     fill
-                    sizes="48px"
+                    sizes="(min-width: 768px) 88px, 48px"
                     className="object-cover"
                   />
                 </div>
@@ -617,7 +639,15 @@ export default async function ProductDetailPage({
 
                 ⚠️ table 을 dl 로 바꾸지 말 것. 행과 열이 모두 뜻을 갖는
                    자료다(아래 dl 과 다르다). 바뀐 것은 생김새뿐이다. */}
-            <div className="mt-3 overflow-x-auto border-t border-line">
+            {/* ⚠️ 오른쪽 페이드 마스크가 있다. 열이 다섯이라 390px 에서는
+                   마지막 열(본체 중량)이 잘리는데, 아무 표시가 없으면
+                   "밀어 보세요" 가 아니라 **레이아웃 버그**로 읽힌다.
+                   하필 잘리는 값이 중량이라 작업대에 올라가는지를 판단할
+                   수 없었다.
+
+                ⚠️ sm 부터는 마스크를 끈다. 그 폭부터는 표가 다 들어간다.
+                   제품 목록의 분류 칩 스트립이 쓰는 것과 같은 장치다. */}
+            <div className="mt-3 overflow-x-auto border-t border-line [mask-image:linear-gradient(to_right,#000_calc(100%-36px),transparent)] sm:[mask-image:none]">
               <table className="w-full border-collapse text-left text-sm">
                 <thead>
                   <tr className="border-b border-line">

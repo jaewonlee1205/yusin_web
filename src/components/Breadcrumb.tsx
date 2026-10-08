@@ -36,9 +36,14 @@ export default function Breadcrumb({
           <ol className="flex flex-wrap items-center gap-2">
             {trail.map((item) => (
               <li key={item.href} className="flex items-center gap-2">
+                {/* ⚠️ px/py 로 누를 자리를 키우고 -mx/-my 로 되돌린다.
+                       "홈" 은 한 글자라 실측 **12 x 19.5px** 였고, 이건
+                       WCAG 2.5.8(AA)의 최소 24x24 에도 못 미친다. 음수
+                       마진 덕에 **글자 위치와 간격은 1px 도 안 변하고**
+                       누를 수 있는 면적만 24 x 27.5px 가 된다. */}
                 <Link
                   href={item.href}
-                  className="text-muted transition-colors hover:text-brand"
+                  className="-mx-1.5 -my-1 inline-block px-1.5 py-1 text-muted transition-colors hover:text-brand"
                 >
                   {item.label}
                 </Link>
