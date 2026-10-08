@@ -752,12 +752,27 @@ export default function Home() {
                         gap + 두 글자 + gap + 화살표. 그래야 두 축의 **길이가
                         저절로 같아진다.**
 
-                  ⚠️⚠️ **place-self-center 가 꼭 있어야 한다.** 격자 자식은
-                        기본이 stretch 라, 이게 없으면 알약이 **칸 전체로
-                        늘어난다** — 세로축은 맵 높이만큼, 가로축은 맵 폭만큼
-                        길어져 둘의 길이가 완전히 달라진다. 한 번 빠뜨렸다가
-                        화면에서 잡았다. justify-center 로는 안 된다(그건
-                        알약 **안쪽** 내용을 가운데 두는 것이다).
+                  ⚠️⚠️⚠️ **알약이 칸 전체로 늘어나는 것이 의도다.** 격자 자식의
+                           기본값 stretch 를 그대로 쓴다 —
+
+                             세로축  열 auto(내용 두께) · 행 1fr  -> **맵 높이**
+                             가로축  열 1fr             · 행 auto -> **맵 폭**
+
+                           그래서 알약 길이를 숫자로 적을 일이 없고, 맵이 폭마다
+                           달라져도 저절로 따라온다.
+
+                           ⚠️ **place-self-center 를 다시 넣지 말 것.** 한 라운드
+                              동안 그게 있었다. 그때는 화살표가 알약 **밖**에
+                              따로 서 있어서 알약이 글자만 감쌌고, 칸만큼 늘어나면
+                              안이 휑해 **버그**였다. 화살표를 알약 안으로 넣은
+                              지금은 길수록 좋다 — "그래프 가로.세로 길이와
+                              동일하게 맞춰 달라" 는 요청이 그것이다.
+
+                  ⚠️ 안쪽은 **justify-between** 이다. 알약이 길어졌으므로
+                     justify-center + gap 으로는 내용이 가운데 뭉친다. 양 끝으로
+                     벌리고, 패딩(20px)이 화살표를 알약 끝에서 띄운다 — 알약
+                     두께가 28px 라 반경이 14px 이므로 둥근 모서리 **바깥**에
+                     화살표가 선다.
 
                         한때 알약 둘의 **비율만** 1.86 : 1 로 맞췄는데, 길이가
                         66 vs 52 로 달라 "대응이 더 길어 보인다" 는 말을 들었다.
@@ -782,7 +797,7 @@ export default function Home() {
                         ⚠️ 바깥 div 는 writing-mode 가 없으므로 **거기 쓰는
                            px/py 는 평범하게 동작한다.** 뒤바뀌는 것은
                            writing-mode 가 걸린 span 뿐이다. */}
-              <div className="flex flex-col items-center gap-4 place-self-center rounded-full bg-surface px-1.5 py-4">
+              <div className="flex flex-col items-center justify-between rounded-full bg-surface px-1.5 py-5">
                 <AxisArrow className="rotate-[-90deg]" />
                 <span className="text-13 font-bold leading-none text-ink-soft [writing-mode:vertical-rl]">
                   대응
@@ -882,7 +897,7 @@ export default function Home() {
                   ⚠️ 여기는 writing-mode 가 없어 px/py 가 평범하게 동작한다 —
                      위 세로축과 값이 뒤집혀 보이는 것이 정상이다
                      (가로 px-4 py-1.5  <->  세로 px-1.5 py-4). */}
-              <div className="flex items-center gap-4 place-self-center rounded-full bg-surface px-4 py-1.5">
+              <div className="flex items-center justify-between rounded-full bg-surface px-5 py-1.5">
                 <AxisArrow className="rotate-180" />
                 <span className="text-13 font-bold leading-none text-ink-soft">
                   가격
