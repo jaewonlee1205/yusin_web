@@ -138,10 +138,20 @@ export default async function ProductDetailPage({
                         것이다. 여기는 제품 사진과 짝을 이루는 자리라 조건이
                         다르다.
 
+                  ⚠️⚠️ **shadow-card 가 아니라 shadow-hero-card 다.** card 는
+                        아래로만 드리워서 흰 섹션 위 흰 카드의 **위쪽 가장자리가
+                        배경에 묻혔다** — "위쪽이 잘 경계가 안 보인다" 는 말을
+                        들었다. hero-card 는 card 에 0 -2px 6px / 5% 를 앞에
+                        더한 것이고, 값을 고른 과정은 globals.css 주석에 있다.
+
+                        ⚠️ **왼쪽 갤러리 사진은 shadow-card 그대로다.** 사진은
+                           안에 내용이 있어 위쪽 윤곽이 저절로 선다. 둘의 아래
+                           그림자가 같은 값이라 나란히 선 모습은 여전히 짝이
+                           맞는다 — 사진까지 hero-card 로 바꾸지 말 것.
+
                   ⚠️ **shadow-raised 로 올리지 말 것.** 사이트의 호버 언어다
                      (ProductCard.VideoCard). 정적으로 쓰면 위계가 흔들리고,
-                     사진(shadow-card)보다 세면 오른쪽만 떠 보인다. 세기를
-                     올릴 일이 생기면 **사진과 카드를 함께** 올린다.
+                     사진보다 **아래** 그림자가 세지면 오른쪽만 떠 보인다.
 
                   ⚠️ 테두리와 그림자를 같이 두지 않는다 — ProductCard 주석의
                      "테두리를 걷었으므로 shadow-card 가 윤곽을 맡는다" 가
@@ -179,7 +189,7 @@ export default async function ProductDetailPage({
                   ⚠️ 패딩이 값 칸을 좁힌다. 1024(두 칸이 가장 좁은 곳)에서 사양
                      값이 한 줄로 남는지가 이 패딩의 상한이다. 키우려거든 먼저
                      1024 에서 일곱 제품을 다 재라. */}
-              <div className="rounded-2xl bg-white p-5 shadow-card lg:flex lg:flex-1 lg:flex-col">
+              <div className="rounded-2xl bg-white p-5 shadow-hero-card lg:flex lg:flex-1 lg:flex-col">
                 {/* 분류 배지(왼쪽)와 YUSIN 워드마크(오른쪽)가 한 줄이다.
 
                     ⚠️ 마크를 네 번 매만졌다 — 배지 줄 24px -> 제목 줄 32px ->
