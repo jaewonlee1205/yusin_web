@@ -810,24 +810,43 @@ export default async function ProductDetailPage({
               히어로 사양 카드가 specs 앞 세 줄을 가져가므로 여기는 slice(3) 으로
               **뒤 세 줄**만 쓴다.
 
-              ⚠️⚠️ **1열이다.** 한때 "두 쌍뿐이라 sm 부터 2열로 놓아 한 줄에
-                    담는다" 였는데, 히어로가 네 줄에서 세 줄로 줄면서 여기가
-                    **셋**이 되었고 2열에서는 **마지막 하나가 둘째 줄 왼쪽에
-                    혼자** 섰다. 1열로 두면 행마다의 border-b 가 gap-x-12 로
-                    끊기지 않고 한 줄로 이어지고, 값 칸도 전폭이라 긴 값
-                    (방음커버 282px)이 여유 있게 들어간다.
+              ⚠️⚠️ **3열이고, 라벨이 값 위에 있다.** 항목이 셋이라 sm 부터
+                    한 줄에 떨어진다.
 
-                    ⚠️ **오시는 길 연락처 표.회사 개요 표는 여전히 2열이다.**
-                       열 수만 다르고 글자 크기.색.라벨 폭.행 높이는 셋이
-                       그대로 같다 — 항목 수가 홀수라 생긴 차이이지 디자인이
-                       갈라진 것이 아니다.
+                    ⚠️ **라벨을 왼쪽으로 되돌리지 말 것.** 3열에서는 칸이
+                       331px 뿐이라, 라벨이 같은 줄에 서면 값 칸이 235px 로
+                       좁아져 **일곱 제품에서 값 여섯 개가 두 줄로 접힌다**
+                       (직진피더.진동기 "튜닝", 호퍼피더 "연동", 방음커버
+                       "개폐", 컨트롤러 "출력", 우레탄 "효과"). 세로로 쌓으면
+                       값이 칸 전폭을 써 **가장 긴 것도 302px 로 한 줄**이다.
+                       재서 고른 배치다.
 
-                    ⚠️ 항목이 다시 짝수가 되면 2열로 되돌릴 수 있다. 그때는
-                       sm:grid-cols-2 와 sm:gap-x-12 를 **함께** 넣는다.
+                    ⚠️⚠️ **아래 선이 dl 에 있다(sm:border-b).** 3열이면 행이
+                          하나뿐이라 행 사이 선이 필요 없다. 행에 border-b 를
+                          두면 세 칸의 선이 gap-x-12(48px)만큼 끊겨, 바로 위
+                          모델별 규격표의 전폭 선과 어긋나 보인다. 그래서
+                          행은 sm:border-b-0 으로 끄고 dl 이 아래 선을 맡는다 —
+                          **이 둘은 한 쌍이라 같이 본다.**
 
-              ⚠️ 라벨 폭이 w-16(64px), sm 부터 w-20(80px)이다. 42개 값을 전부
-                 쟀을 때 가장 긴 라벨이 68px("거칠기 등급")라 들어간다. 라벨을
-                 바꿀 때 이 80px 를 넘기지 말 것.
+                          모바일(sm 미만)은 1열이라 **행마다의 border-b 가
+                          그대로 필요하다**(마지막 행 선이 표의 꼬리를 맺는다).
+                          sm:border-b 는 거기서 적용되지 않는다.
+
+                    ⚠️ 한 라운드 안에서 **2열 -> 1열 -> 3열**로 두 번 바뀌었다.
+                       2열은 항목이 셋이 되며 마지막 하나가 둘째 줄에 혼자
+                       섰고, 1열은 표가 세로로 길었다. 되돌리려거든 그 두
+                       까닭을 먼저 볼 것.
+
+                    ⚠️ **오시는 길 연락처 표.회사 개요 표는 라벨이 왼쪽인 2열
+                       그대로다.** 이 표만 구조가 다른 것은 항목이 셋이라
+                       생긴 차이이고, 글자 크기와 색(라벨 13px 회색 · 값 15px
+                       먹색)은 셋이 여전히 같다.
+
+              ⚠️ **라벨에 폭을 주지 않는다.** 값 위에 제 줄로 서므로 고정 폭이
+                 필요 없다. 한때 w-16(64px) · sm:w-20(80px)이었고 "가장 긴
+                 라벨이 68px(거칠기 등급)라 들어간다" 는 기록이 있었는데,
+                 라벨을 왼쪽에 두던 때의 제약이다. 되돌릴 일이 생기면 그 80px
+                 상한도 같이 살려야 한다.
 
               ⚠️ dt/dd 를 div 로 묶는다(한때 Fragment 였다). 격자 직계여야
                  한다는 접근성 검사(dlitem)는 **div 그룹화를 허용한다** —
@@ -847,16 +866,14 @@ export default async function ProductDetailPage({
                 지금은 선이 전부 border 라 그 문제가 없다.
               · p-px 로 바깥 테두리를 만들면 반경 16px 모서리에서 1px 가 곡선을
                 따라 가늘어져 끊겨 보였다. **지금은 바깥 테두리 자체가 없다.** */}
-          <dl className="mt-8 grid border-t border-line">
+          <dl className="mt-8 grid border-t border-line sm:grid-cols-3 sm:gap-x-12 sm:border-b">
             {product.specs.slice(3).map((spec) => (
               <div
                 key={spec.label}
-                className="flex items-center gap-4 border-b border-line py-4"
+                className="border-b border-line py-4 sm:border-b-0"
               >
-                <dt className="w-16 shrink-0 text-13 font-bold text-muted sm:w-20">
-                  {spec.label}
-                </dt>
-                <dd className="text-15 leading-relaxed text-ink">
+                <dt className="text-13 font-bold text-muted">{spec.label}</dt>
+                <dd className="mt-1 text-15 leading-relaxed text-ink">
                   {spec.value}
                 </dd>
               </div>
