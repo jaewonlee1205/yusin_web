@@ -15,7 +15,7 @@ import {
   type NavChild,
   type NavItem,
 } from "@/data/site";
-import { PhoneIcon } from "./icons";
+import { MobileIcon, PhoneIcon } from "./icons";
 import { handleSameRouteClick } from "@/lib/scrollToTop";
 
 /** 마우스가 메뉴를 스쳐 지날 때 깜빡이지 않도록 닫기를 약간 늦춘다. */
@@ -299,17 +299,38 @@ export default function Header() {
                       줄마다 붙이면 **두 줄이 각각 전화번호 한 건**으로 읽힌다.
                       가로는 아이콘이 쓰던 자리를 그대로 쓰므로 늘지 않는다.
 
-                ⚠️ 아이콘을 다시 하나로 줄이지 말 것. 첫 줄에만 맞춰 올리는
-                   안도 찍어 봤는데, 둘째 줄이 표식 없이 들여쓰기만 된 것처럼
-                   보여 더 나빴다. */}
+                ⚠️⚠️ **두 아이콘이 서로 다르다(수화기 / 휴대폰).** 여기까지
+                      오는 데 지적을 두 번 받았다 —
+
+                        아이콘 하나를 두 줄 옆 가운데   "두 줄에 아이콘 한 개다
+                                                       보니 많이 이상하다"
+                        줄마다 **같은** 수화기          "서로 아이콘이 동일하다
+                                                       보니 부자연스럽다"
+                        줄마다 **다른** 아이콘          지금
+
+                      같은 글리프가 두 번 반복되면 전화 표시가 아니라 목록
+                      불릿처럼 읽히고, 두 번호가 **무엇이 다른지**는 여전히
+                      말하지 않는다. 031 은 유선, 010 은 휴대폰이다 — 아이콘이
+                      그 차이를 맡으면 반복이 사라지면서 정보가 는다.
+
+                      ⚠️ 둘을 같은 아이콘으로 되돌리지 말 것. 하나로 줄이는
+                         것도 마찬가지다(첫 줄에만 맞춰 올리는 안도 찍어
+                         봤는데, 둘째 줄이 표식 없이 들여쓰기만 된 것처럼
+                         보여 더 나빴다). 셋 다 지나온 자리다.
+
+                ⚠️ MobileIcon 의 strokeWidth 가 2.2 인 까닭은 icons.tsx 주석에
+                   있다 — 사각형이 수화기보다 무거워 보이는 것을 맞춘 값이다. */}
             <div className="flex flex-col">
-              {[site.tel, site.telMobile].map((tel) => (
+              {[
+                { tel: site.tel, Icon: PhoneIcon },
+                { tel: site.telMobile, Icon: MobileIcon },
+              ].map(({ tel, Icon }) => (
                 <a
                   key={tel}
                   href={telHref(tel)}
                   className="inline-flex items-center gap-1.5 text-sm font-semibold tabular-nums text-ink transition-colors hover:text-brand"
                 >
-                  <PhoneIcon className="shrink-0 text-brand" />
+                  <Icon className="shrink-0 text-brand" />
                   {tel}
                 </a>
               ))}

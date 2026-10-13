@@ -151,3 +151,40 @@ export function PhoneIcon({ className = "shrink-0" }: { className?: string }) {
     </svg>
   );
 }
+
+/**
+ * 휴대폰 번호 앞. 헤더가 대표번호(유선)와 나란히 둘 때 **둘을 가르는 것**이
+ * 이 아이콘의 일이다 — PhoneIcon 과 짝으로만 쓴다.
+ *
+ * ⚠️⚠️ **strokeWidth 가 2.2 다. 이 파일에서 유일하게 2.5 가 아니다.**
+ *       일부러 그렇다. 사각형은 수화기 곡선보다 둘레가 길어 같은 굵기에서
+ *       더 무겁게 보인다. 네 가지(넓게 2.5 · 좁게 2.5 · 좁게 2.2 · 더 좁게
+ *       2.2)를 4배로 키워 수화기와 나란히 찍어 고른 값이고, 좁게(w12) 2.2
+ *       가 둘의 무게가 맞는 유일한 조합이었다.
+ *
+ *       2.5 로 "통일" 하지 말 것 — 숫자는 맞아도 눈에는 안 맞는다. 바꾸려거든
+ *       4배로 키워 수화기 옆에 놓고 보라.
+ *
+ * ⚠️ 본체를 w11 이하로 더 좁히지 말 것. 가늘어져 휴대폰으로 안 읽힌다.
+ *
+ * 번호만 읽히도록 스크린리더에서는 숨긴다(PhoneIcon 과 같다).
+ */
+export function MobileIcon({ className = "shrink-0" }: { className?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <rect x="6" y="2" width="12" height="20" rx="2.5" ry="2.5" />
+      <line x1="12" y1="18" x2="12.01" y2="18" />
+    </svg>
+  );
+}
