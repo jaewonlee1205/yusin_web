@@ -106,6 +106,11 @@ const FRAMES = [
   ["applications/fastener", "preview-metal-parts", 3.5, "full", "볼트 · 너트 · 나사 등 체결부품 — 트랙에 선 판금 부품"],
   /* right 는 볼 바깥면뿐이다 */
   ["applications/cosmetic", "preview-metal-parts", 5.5, "tl", "화장품 용기 캡 · 펌프 부품 — 트랙을 도는 부품"],
+  /* ⚠️⚠️ **이 줄은 더 이상 돌리면 안 된다.** applications/appliance 는
+           2026-10 에 **실물 부품 사진**(USB 샘플사진의 금속 브래킷)으로
+           바뀌었다. 여기를 실행하면 그 사진이 hero 프레임으로 덮어써진다.
+           같은 이유로 connector · fastener · cosmetic · urethane-plated ·
+           urethane-resin · urethane-noise 여섯 줄도 돌리지 않는다. */
   ["applications/appliance", "hero", 4.5, "full", "가전 · 전기기기 조립 부품 — 볼 전체와 트랙"],
 
   /* ══ 직진피더 ═════════════════════════════════════════════════════ */

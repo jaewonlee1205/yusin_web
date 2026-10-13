@@ -75,8 +75,14 @@ export const videos: Video[] = [
 원본 촬영본에서 아래 명령으로 만듭니다. 원본은 저장소에 두지 않습니다.
 
 ```bash
-# 영상 (MAH07514.MP4 의 114초 지점부터 9초)
-ffmpeg -ss 114 -t 9 -i MAH07514.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 28 -preset slow -g 60 -movflags +faststart   -vf scale=1280:720 public/videos/hero.mp4
+# 영상 (신아FA 200504 의 MAH03914.MP4, 5초 지점부터 7초)
+#
+# ⚠️ 2026-10 에 갈아 끼웠습니다. 전에는 MAH07514 의 114초부터 9초였는데
+#    1592KB 로 유일하게 1MB 규칙을 어겼고, 트랙을 오르는 흐름이 약해
+#    "쏟아 넣으면 한 줄로 나옵니다" 라는 제목을 장면이 받쳐 주지 못했습니다.
+#    지금 영상은 볼 바닥이 금속 부싱으로 가득 차고 그것이 나선 트랙을 타고
+#    한 줄로 올라갑니다. crf 를 28 -> 35 로 올려 842KB 로 맞췄습니다.
+ffmpeg -ss 5 -t 7 -i MAH03914.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 35 -movflags +faststart   -vf scale=1280:720 public/videos/hero.mp4
 
 # 포스터 (영상 첫 프레임). 영상이 뜨기 전과 '움직임 줄이기'에서 이게 보입니다.
 ffmpeg -ss 0 -i public/videos/hero.mp4 -frames:v 1   -c:v libwebp -quality 72 public/images/hero-poster.webp
@@ -256,7 +262,7 @@ ffmpeg -ss <t> -t 7 -i 원본.MP4 -vf "fps=2,scale=300:-1,tile=7x2" -frames:v 1 
 | 컨트롤러 | `MAH05268` | 104초 | 822KB |
 | 우레탄 코팅 | `더블유비` | 80초 | 766KB |
 
-- ⚠️ `MAH07514` 의 **114초는 `hero.mp4` 가 씁니다.** 구간이 겹치면 홈과 제품
+- ⚠️ `MAH03914`(신아FA 200504) 의 **5초는 `hero.mp4` 가 씁니다.** 구간이 겹치면 홈과 제품
   상세에 같은 장면이 돕니다. `MAH05268` 53초(`preview-bowl-jig`)와
   `더블유비` 14초(`preview-metal-parts`)도 마찬가지입니다
 - ⚠️ 컨트롤러는 111초가 가장 조용하지만 **117초쯤 오른쪽 아래로 검은 물체가
