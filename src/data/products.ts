@@ -1129,10 +1129,18 @@ export const products: Product[] = [
     ],
     // specs 의 "배출 = 볼피더 직상부 투입 슈트", "연동 = 볼피더 레벨 센서 신호".
     related: ["bowl-feeder", "controller"],
+    /* ⚠️ 2026년 USB 자료에서 갈아 끼운 **실제 납품 장비 사진**이다(CLK 납품분,
+       01 = 2026-06, 02 = 2025-10). 앞서는 PPT 원본의 2000년대 초 촬영본이었다.
+       1920x1080 현장 사진에서 장비가 가운데 오도록 1200x900(4:3)으로 잘랐다 —
+       ProductCard 가 4:3 칸이라 다른 비율이면 흰 띠가 남는다. */
     images: [
       {
         src: "/images/products/hopper-feeder-01.webp",
-        alt: "투명 커버와 배출 슈트를 갖춘 호퍼피더 3기",
+        alt: "투명 상부 커버와 배출 슈트를 갖춘 호퍼피더 본체",
+      },
+      {
+        src: "/images/products/hopper-feeder-02.webp",
+        alt: "다리와 고정 브래킷까지 보이는 호퍼피더 전체 모습",
       },
     ],
   },
