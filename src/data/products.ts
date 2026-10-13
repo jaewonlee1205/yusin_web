@@ -458,31 +458,43 @@ export type Product = {
     note: string;
   };
   /**
-   * 제품 도면. **일곱 중 다섯만 있다.**
+   * 제품 도면. **일곱 중 다섯만 있고, 제품마다 한 장이 아니다.**
    *
-   * 2026-10-13 에 USB 의 CAD 자료(.dwg 36,812개)에서 뽑았다. 외부 프로그램
-   * 없이 WASM(@mlightcad/libredwg-web)으로 DWG 를 읽고, 구역을 지정해
-   * 그 안의 엔티티만 SVG 로 그린 것이다 — 도면 파일에는 배치(Layout)가
-   * 없고 모델 공간에 도면 수백 장이 늘어서 있어 구역을 직접 집어야 한다.
-   * 어느 파일의 어느 좌표를 썼는지는 README 2차 조사 절에 적어 뒀다.
+   * USB 의 CAD(.dwg 36,812개)에서 뽑는다. 외부 프로그램 없이 WASM
+   * (@mlightcad/libredwg-web)으로 DWG 를 읽고 구역을 지정해 그 안의 엔티티만
+   * SVG 로 그린 것이다 — 도면 파일에는 배치(Layout)가 없고 모델 공간에 도면
+   * 수백 장이 늘어서 있어 구역을 직접 집어야 한다. 어느 파일의 어느 좌표를
+   * 썼는지는 README 2차 조사 절에 있다.
+   *
+   * ⚠️⚠️ **도면 한 장(시트)을 통째로 넣지 말 것.** 처음에 그렇게 했다가
+   *       "제품도 잘 안 보이고 치수도 잘 안 보인다" 는 말을 들었다. 표제란
+   *       패널.범례.일곱 기종이 한 화면에 들어가니 제품 하나가 손톱만 해졌다.
+   *       **한 장에 한 제품, 뷰 한둘**만 담는다. 세로로 길면 뷰를 갈라
+   *       여러 장으로 — 가로세로비를 1:1~3:1 로 두는 것이 기준이다.
+   *
+   * ⚠️⚠️ **치수가 붙은 제품 도면은 직진피더뿐이다.** 전수로 셌다 — 진동기
+   *       폴더 dwg 339개 중 치수 8개 이상인 것 1개, 호퍼 108개 중 1개(부품
+   *       가공도), 리니어 260개 중 0개, 호퍼.방음커버 조립도는 0개.
+   *       나머지는 "제품을 크게" 까지만 할 수 있다. **없는 치수를 만들어
+   *       넣지 않는다.**
    *
    * ⚠️ **없는 제품 둘**
-   *   우레탄 코팅 — 공정이라 도면 자체가 없다(파일명에 "우레탄" 인 dwg 0개)
+   *   우레탄 코팅 — 공정이라 도면 자체가 없다. 파일명에 "우레탄" 인 것은
+   *               리니어 방진 고무 부품(.ipt)뿐이다. 전수로 확인했다
    *   컨트롤러   — 유신이 쓰는 제어기가 **외부 제품**이다(DS-100S · DS-210S ·
-   *               DSD-30F …). USB 에 있는 것은 그 제어기를 모델링한 3D 와
-   *               **거치대(브라케트) 도면**뿐이라, 자사 제품 도면이 없다.
-   *               남의 제어기 도면을 걸 수는 없다
+   *               DSD-30F …). USB 에 있는 것은 그 제어기의 3D 모델과
+   *               **거치대(브라케트) 도면**뿐이고, 설명서는 PDF 라 그림으로
+   *               바꿀 수단이 없다. 비워 두기로 했다
    *
-   * ⚠️ **SVG 다.** 선 그림이라 확대해도 안 깨지고 gzip 뒤 8~37KB 다. 래스터로
-   *    바꾸지 말 것 — 도면은 확대해 봐야 하는 그림인데 이 사이트에는 라이트
-   *    박스가 없어 "눌러서 새 탭" 으로 크게 본다.
+   * ⚠️ **SVG 다.** 선 그림이라 확대해도 안 깨지고 열 장 gzip 합계가 67KB 다.
+   *    래스터로 바꾸지 말 것.
    */
-  drawing?: {
+  drawings?: {
     src: string;
     alt: string;
-    /** 어느 기종의 무슨 도면인가. 치수가 읽히면 그것도 적는다. */
+    /** 어느 기종의 무슨 뷰인가. 치수가 읽히면 그 수치도 적는다. */
     caption: string;
-  };
+  }[];
   /**
    * 상세 페이지 아래 "다른 제품" 에 띄울 제품의 slug.
    *
@@ -764,8 +776,7 @@ export const products: Product[] = [
       { label: "옵션", value: "방음커버, 호퍼피더, 직진피더 연결" },
     ],
     specTable: {
-      caption:
-        "형식명과 \"함\" 치수는 유신 도면에 적힌 값입니다 — 1호 함50 · 2호 함70 · 3호 단높은볼 함90 · 4호 함110 · Ø500 함200.",
+      caption: "\"함\" 치수도 도면 값입니다.",
       columns: ["형식", "함", "입력 전원", "진동수", "본체 중량"],
       rows: [
         ["1호", "50", "110 / 220V", "7,200회/분", "약 8kg"],
@@ -788,11 +799,18 @@ export const products: Product[] = [
       poster: "/images/videos/product-bowl-feeder.webp",
       note: "볼에서 올라온 금속 부품이 트랙 위에서 한 자세로 줄지어 나갑니다.",
     },
-    drawing: {
-      src: "/images/drawings/bowl-feeder.svg",
-      alt: "볼피더 2호 제작 도면 — 볼과 호퍼, 받침대가 함께 그려진 A3 도면",
-      caption: "2호 볼피더 제작 도면(도면번호 YSN04-BWL01-M100 · 재질 SUS304). 볼 지름 250 치수가 함께 적혀 있습니다.",
-    },
+    drawings: [
+      {
+        src: "/images/drawings/bowl-feeder-1.svg",
+        alt: "볼피더 2호 평면도 — 볼과 직진피더, 호퍼 투입구",
+        caption: "2호 평면도. 직진피더 슈트 길이 250 이 적혀 있습니다.",
+      },
+      {
+        src: "/images/drawings/bowl-feeder-2.svg",
+        alt: "볼피더 2호 정면도 — 볼·직진피더·호퍼·받침대",
+        caption: "2호 정면도. 볼피더와 호퍼가 받침대 위에 함께 섭니다.",
+      },
+    ],
     applications: [
       {
         name: "커넥터 · 단자 등 전자부품",
@@ -921,7 +939,7 @@ export const products: Product[] = [
       { label: "튜닝", value: "실제 부품으로 이송 속도와 자세를 맞춘 뒤 납품" },
     ],
     specTable: {
-      caption: "형식명과 바닥 폭은 유신 도면에 적힌 값입니다.",
+      caption: "바닥 폭도 도면 값입니다.",
       columns: ["형식", "바닥 폭", "입력 전원", "진동수", "본체 중량"],
       rows: [
         ["1호", "80mm", "110 / 220V", "7,200회/분", "약 4kg"],
@@ -937,11 +955,23 @@ export const products: Product[] = [
       poster: "/images/videos/product-linear-feeder.webp",
       note: "볼에서 나온 부품이 직선 트랙을 타고 자세를 유지한 채 이송됩니다.",
     },
-    drawing: {
-      src: "/images/drawings/linear-feeder.svg",
-      alt: "직진피더 2호 도면 — 평면도·정면도·측면도와 설치 상태",
-      caption: "2호 직진피더 도면. 트랙 폭 140 · 90, 상판 길이 132 치수가 읽힙니다.",
-    },
+    drawings: [
+      {
+        src: "/images/drawings/linear-feeder-1.svg",
+        alt: "직진피더 1호 도면 — 평면도·정면도·측면도",
+        caption: "1호. 상판 104 · 단 17 · 15 · 68 이 읽힙니다.",
+      },
+      {
+        src: "/images/drawings/linear-feeder-2.svg",
+        alt: "직진피더 2호 도면 — 평면도·정면도·측면도·저면도",
+        caption: "2호. 140 · 132 · 113.5 · 26.5 · 체결 M8 이 읽힙니다.",
+      },
+      {
+        src: "/images/drawings/linear-feeder-3.svg",
+        alt: "직진피더 3호 도면 — 평면도·정면도·측면도와 슈트 단면",
+        caption: "3호. 184 · 164 · 130 · 160 과 슈트 120 · 35 · 29 가 읽힙니다.",
+      },
+    ],
     applications: [
       {
         name: "볼피더 – 조립기 사이 부품 이송",
@@ -1057,7 +1087,7 @@ export const products: Product[] = [
       { label: "튜닝", value: "실제 부품으로 이송 속도와 방향을 맞춘 뒤 납품" },
     ],
     specTable: {
-      caption: "위 도면에 그려진 일곱 기종 그대로입니다.",
+      caption: "도면의 일곱 기종입니다.",
       columns: ["형식", "입력 전원", "진동수", "중량"],
       rows: [
         ["1호", "110 / 220V", "7,200회/분", "약 3kg"],
@@ -1076,11 +1106,18 @@ export const products: Product[] = [
       poster: "/images/videos/product-vibrator.webp",
       note: "진동만으로 부품이 볼 벽을 타고 나선으로 올라갑니다.",
     },
-    drawing: {
-      src: "/images/drawings/vibrator.svg",
-      alt: "진동기 기종별 도면 — 1호부터 Ø500 까지 일곱 기종의 평면도·정면도·저면도",
-      caption: "진동기 일곱 기종(1호 · 2호신형 · 3호신형 · 4호구형 · 4호신형 · Ø440 · Ø500)의 평면도 · 정면도 · 저면도입니다.",
-    },
+    drawings: [
+      {
+        src: "/images/drawings/vibrator-1.svg",
+        alt: "진동기 4호신형 평면도 — 판스프링 네 조와 체결부",
+        caption: "4호신형 평면도. 판스프링이 네 방향으로 뻗습니다.",
+      },
+      {
+        src: "/images/drawings/vibrator-2.svg",
+        alt: "진동기 4호신형 정면도 — 상판·본체·받침",
+        caption: "4호신형 정면도. 위 상판에 볼이 얹히고 아래가 받침입니다.",
+      },
+    ],
     applications: [
       {
         name: "볼피더 구동부",
@@ -1209,8 +1246,7 @@ export const products: Product[] = [
       { label: "보충", value: "상부 커버를 열어 부품 투입" },
     ],
     specTable: {
-      caption:
-        "형식명은 호퍼통 한 변의 치수로 부릅니다. 한산타입은 거래처 사양으로 따로 만드는 형식입니다.",
+      caption: "형식명은 호퍼통 한 변의 치수입니다.",
       columns: ["형식", "입력 전원", "구동", "본체 중량"],
       rows: [
         ["400", "220V", "기어드 모터", "약 18kg"],
@@ -1229,11 +1265,13 @@ export const products: Product[] = [
       poster: "/images/videos/product-hopper-feeder.webp",
       note: "볼이 가득 찬 상태로 공급이 이어집니다. 호퍼피더가 이 양을 자동으로 채웁니다.",
     },
-    drawing: {
-      src: "/images/drawings/hopper-feeder.svg",
-      alt: "호퍼피더 500×500 조립 도면 — 평면도·정면도·측면도·저면도",
-      caption: "500×500 호퍼피더 조립 도면(호퍼통 높이 200). 평면 · 정면 · 측면 · 저면 네 면입니다.",
-    },
+    drawings: [
+      {
+        src: "/images/drawings/hopper-feeder-1.svg",
+        alt: "호퍼피더 500×500 측면도와 정면도",
+        caption: "500×500(호퍼통 높이 200). 왼쪽이 측면, 오른쪽이 정면입니다.",
+      },
+    ],
     applications: [
       {
         name: "장시간 무인 운전 라인",
@@ -1350,7 +1388,7 @@ export const products: Product[] = [
       { label: "효과", value: "금속 부품 취급 라인에서 특히 큼" },
     ],
     specTable: {
-      caption: "볼피더 호수에 맞춰 전용 제작합니다 — 커버 높이는 도면 기준 450 입니다.",
+      caption: "볼피더 호수에 맞춰 전용 제작합니다.",
       columns: ["형식", "적용 볼피더", "소음 저감", "중량"],
       rows: [
         ["1호볼용", "1호", "약 15dB", "약 20kg"],
@@ -1369,11 +1407,18 @@ export const products: Product[] = [
       poster: "/images/videos/product-soundproof-cover.webp",
       note: "커버를 씌우기 전의 금속 부품 라인입니다. 이 충돌음을 15~20dB 낮춥니다.",
     },
-    drawing: {
-      src: "/images/drawings/soundproof-cover.svg",
-      alt: "사각 방음커버 조립 도면 — 등각투상도와 정면도·측면도",
-      caption: "사각 방음커버 조립 도면. 등각투상 둘과 정면 · 측면도이고, 아래가 트인 쪽이 트랙이 빠져나가는 자리입니다.",
-    },
+    drawings: [
+      {
+        src: "/images/drawings/soundproof-cover-1.svg",
+        alt: "사각 방음커버 등각투상도",
+        caption: "등각투상. 아래가 트인 쪽이 트랙이 빠져나가는 자리입니다.",
+      },
+      {
+        src: "/images/drawings/soundproof-cover-2.svg",
+        alt: "사각 방음커버 정면도와 측면도",
+        caption: "정면도와 측면도. 앞뒤 두 짝으로 나뉩니다.",
+      },
+    ],
     applications: [
       {
         name: "금속 부품 취급 라인",
@@ -1726,12 +1771,17 @@ for (const p of products) {
   }
 
   // 도면은 **SVG 여야 한다.** 선 그림이라 확대해도 안 깨지는 것이 이 자리의
-  // 전제다(상세 페이지에서 눌러 새 탭으로 크게 본다). 래스터를 넣으면 그
-  // 전제가 조용히 깨진다.
-  if (p.drawing && !/^\/images\/drawings\/.+\.svg$/.test(p.drawing.src)) {
-    throw new Error(
-      `products.ts: ${p.slug} 의 drawing.src 가 /images/drawings/*.svg 가 아니다`
-    );
+  // 전제다. 래스터를 넣으면 그 전제가 조용히 깨진다.
+  for (const d of p.drawings ?? []) {
+    if (!/^\/images\/drawings\/.+\.svg$/.test(d.src)) {
+      throw new Error(
+        `products.ts: ${p.slug} 의 drawings.src 가 /images/drawings/*.svg 가 아니다 (${d.src})`
+      );
+    }
+  }
+  // 빈 배열을 두지 않는다 — 화면이 "도면 있음" 으로 읽고 빈 칸을 남긴다.
+  if (p.drawings && p.drawings.length === 0) {
+    throw new Error(`products.ts: ${p.slug} 의 drawings 가 빈 배열이다. 없으면 필드를 빼라`);
   }
 
   // 특징은 2열 격자라 넷이어야 두 행이 꽉 찬다. 홀수면 마지막 행에 칸이
