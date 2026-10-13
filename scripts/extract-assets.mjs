@@ -49,9 +49,18 @@ const PLAN = [
   { src: "image13.jpeg", out: "products/soundproof-cover-02.webp", max: 1200 },
   { src: "image16.jpeg", out: "products/urethane-coating-01.webp", max: 1400 },
   { src: "image17.jpeg", out: "products/urethane-coating-02.webp", max: 500 },
-  // 컨트롤러 단독 사진이 없어 우레탄 코팅 사진에서 OPC-50TH 부분을 잘라 쓴다.
-  // 원본은 장비 뒤쪽에서 찍어 패널 글씨가 뒤집혀 있어 180도 돌린다.
-  // TODO: 유신 측 컨트롤러 실사진 확보되면 교체할 것.
+  // ⚠️⚠️⚠️ **이 항목은 더 이상 쓰지 않는다. 돌리면 안 된다.**
+  //
+  // 아래는 컨트롤러 단독 사진이 없던 때의 임시 방편이었다 — 우레탄 코팅
+  // 사진에서 OPC-50TH 부분을 잘라, 장비 뒤쪽에서 찍혀 뒤집힌 패널 글씨를
+  // 180도 돌려 쓰던 것이다.
+  //
+  // 2026년에 유신 납품 기록(3제이 2026-09)에서 **실제 컨트롤러 사진**을
+  // 찾아 public/images/products/controller-01.webp 를 교체했다. 이 스크립트를
+  // 그대로 돌리면 **그 사진이 다시 우레탄 크롭 180도 회전본으로 덮어쓰인다.**
+  //
+  // 지우지 않고 두는 것은 crop 좌표가 PPT 원본에서 1px 씩 재서 구한 값이라,
+  // 되살릴 일이 생겼을 때 그 수고를 아끼기 위해서다(hero-bg 와 같은 처리다).
   {
     src: "image16.jpeg",
     out: "products/controller-01.webp",
