@@ -1116,7 +1116,9 @@ export default function Home() {
             sameAs: [site.youtube],
             foundingDate: site.founded,
             description: site.description,
-            telephone: [site.tel, ...site.telExtra],
+            // ⚠️ telMobile 은 2026-10-13 부터 **헤더 화면에 보이는** 번호다.
+            //    화면에 나가는 번호가 여기서 빠지면 안 된다.
+            telephone: [site.tel, site.telMobile, ...site.telExtra],
             faxNumber: site.fax,
             email: site.email,
             address: {

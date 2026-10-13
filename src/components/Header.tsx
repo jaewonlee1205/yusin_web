@@ -270,14 +270,42 @@ export default function Header() {
 
                 아이콘 레드는 15px 짜리라 면적이 거의 없다(globals.css 토큰
                 주석 — "레드는 면적을 좁게"). hover:text-brand 는 그대로 둔다.
-                올리면 번호가 레드가 되고 아이콘은 이미 레드다. */}
-            <a
-              href={telHref(site.tel)}
-              className="inline-flex items-center gap-1.5 text-sm font-semibold tabular-nums text-ink transition-colors hover:text-brand"
-            >
+                올리면 번호가 레드가 되고 아이콘은 이미 레드다.
+
+                ⚠️⚠️ **번호가 둘이고, 가로가 아니라 세로로 쌓인다.** 2026-10-13
+                      에 010-5276-6947 을 더해 달라는 요청이 있었다.
+
+                      가로로 이으면 **중앙 메뉴를 깎는다.** 이 헤더는
+                      lg:grid-cols-[1fr_auto_1fr] 라 양옆 칸이 같은 폭이 되는데,
+                      1024 에서 메뉴 끝과 이 묶음 시작 사이가 **49px 뿐**이다
+                      (실측). 한 줄로 이으면 +125px 라 메뉴가 찌그러진다 —
+                      바로 위 로고 주석이 "lg 구간은 메뉴 폭이 가장 빠듯하다"
+                      고 적어 둔 그 구간이다.
+
+                      세로로 쌓으면 **가로가 113px 그대로**고, 두 줄 높이 40px
+                      가 옆 "견적 문의" 버튼(40px)과 정확히 같아 줄이 맞는다.
+
+                ⚠️ **leading 을 건드리지 말 것.** 기본 줄 높이(text-sm = 20px)
+                   두 줄이라 40px 다. leading-tight 로 좁히면 35px 이 되어
+                   버튼과 어긋난다.
+
+                ⚠️ 아이콘은 **하나**다. 줄마다 달면 가로가 15px 더 먹고,
+                   레드 점이 둘이 되어 "면적을 좁게" 규칙에 걸린다.
+                   items-center 로 두 줄 옆 세로 가운데에 선다. */}
+            <div className="flex items-center gap-1.5">
               <PhoneIcon className="shrink-0 text-brand" />
-              {site.tel}
-            </a>
+              <div className="flex flex-col">
+                {[site.tel, site.telMobile].map((tel) => (
+                  <a
+                    key={tel}
+                    href={telHref(tel)}
+                    className="text-sm font-semibold tabular-nums text-ink transition-colors hover:text-brand"
+                  >
+                    {tel}
+                  </a>
+                ))}
+              </div>
+            </div>
             <Link
               href={headerCta.href}
               className="rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98]"
@@ -401,15 +429,24 @@ export default function Header() {
 
             <div className="my-5 flex flex-col gap-3">
               {/* 위 데스크톱 전화 링크와 같은 ink 다. 여기는 아이콘이
-                  없어 레드 포인트도 없다. */}
-              <a
-                href={telHref(site.tel)}
-                /* ⚠️ 휴대폰 메뉴다. hover: 를 주지 않는 것이 맞다(터치에는 호버가
-                    없다) — 대신 active: 로 누름을 보여 준다. */
-                className="rounded-xl border border-line py-3 text-center text-sm font-semibold text-ink transition active:scale-[0.98]"
-              >
-                전화 {site.tel}
-              </a>
+                  없어 레드 포인트도 없다.
+
+                  ⚠️ 번호가 둘이다. 여기는 flex-col 스택이라 버튼 하나가 더
+                     늘어도 자리가 넉넉하다 — 바깥 모바일 바와 달리 폭 다툼이
+                     없다(그쪽은 아래 320px 계산 주석 참고. **둘째 번호는
+                     햄버거 안에서만 보인다**).
+
+                  ⚠️ 휴대폰 메뉴다. hover: 를 주지 않는 것이 맞다(터치에는
+                     호버가 없다) — 대신 active: 로 누름을 보여 준다. */}
+              {[site.tel, site.telMobile].map((tel) => (
+                <a
+                  key={tel}
+                  href={telHref(tel)}
+                  className="rounded-xl border border-line py-3 text-center text-sm font-semibold text-ink transition active:scale-[0.98]"
+                >
+                  전화 {tel}
+                </a>
+              ))}
               <Link
                 href="/contact"
                 className="rounded-xl bg-brand py-3 text-center text-sm font-semibold text-white transition active:scale-[0.98]"
