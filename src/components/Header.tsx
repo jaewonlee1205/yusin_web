@@ -289,22 +289,30 @@ export default function Header() {
                    두 줄이라 40px 다. leading-tight 로 좁히면 35px 이 되어
                    버튼과 어긋난다.
 
-                ⚠️ 아이콘은 **하나**다. 줄마다 달면 가로가 15px 더 먹고,
-                   레드 점이 둘이 되어 "면적을 좁게" 규칙에 걸린다.
-                   items-center 로 두 줄 옆 세로 가운데에 선다. */}
-            <div className="flex items-center gap-1.5">
-              <PhoneIcon className="shrink-0 text-brand" />
-              <div className="flex flex-col">
-                {[site.tel, site.telMobile].map((tel) => (
-                  <a
-                    key={tel}
-                    href={telHref(tel)}
-                    className="text-sm font-semibold tabular-nums text-ink transition-colors hover:text-brand"
-                  >
-                    {tel}
-                  </a>
-                ))}
-              </div>
+                ⚠️⚠️ **아이콘이 줄마다 하나씩이다.** 한 라운드 동안 아이콘
+                      하나를 두 줄 옆 세로 가운데에 뒀는데(가로를 15px 아끼고
+                      레드 점을 하나로 두려던 것), "두 줄에 아이콘 한 개다
+                      보니 시각적으로 많이 이상하다" 는 말을 들었다. 40px 짜리
+                      두 줄 덩어리 옆에 16px 아이콘이 가운데 홀로 떠, 어느 줄에
+                      붙은 것인지 읽히지 않았다.
+
+                      줄마다 붙이면 **두 줄이 각각 전화번호 한 건**으로 읽힌다.
+                      가로는 아이콘이 쓰던 자리를 그대로 쓰므로 늘지 않는다.
+
+                ⚠️ 아이콘을 다시 하나로 줄이지 말 것. 첫 줄에만 맞춰 올리는
+                   안도 찍어 봤는데, 둘째 줄이 표식 없이 들여쓰기만 된 것처럼
+                   보여 더 나빴다. */}
+            <div className="flex flex-col">
+              {[site.tel, site.telMobile].map((tel) => (
+                <a
+                  key={tel}
+                  href={telHref(tel)}
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold tabular-nums text-ink transition-colors hover:text-brand"
+                >
+                  <PhoneIcon className="shrink-0 text-brand" />
+                  {tel}
+                </a>
+              ))}
             </div>
             <Link
               href={headerCta.href}
