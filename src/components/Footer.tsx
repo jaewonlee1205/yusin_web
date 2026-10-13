@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Container from "./Container";
 import HomeLogoLink from "./HomeLogoLink";
-import { NaverIcon, PhoneIcon, YoutubeIcon } from "./icons";
+import { MobileIcon, NaverIcon, PhoneIcon, YoutubeIcon } from "./icons";
 import { products } from "@/data/products";
 import { site, telHref } from "@/data/site";
 
@@ -195,7 +195,7 @@ export default function Footer() {
               </a>
             </div>
 
-            {/* 대표번호는 푸터에서 가장 중요한 한 줄이다. 팩스·이메일은 맨
+            {/* 전화번호 둘이 푸터에서 가장 중요한 덩어리다. 팩스·이메일은 맨
                 아래 사업자정보 줄로 내렸다 — 성격이 다른 정보다.
 
                 전에는 로고와 이 번호 사이에 "부품 자동정렬 공급기 설계 ·
@@ -204,18 +204,54 @@ export default function Footer() {
                 머리말·회사소개·검색 설명에 이미 있어 뺐다. 그때 이 열이 옆
                 열보다 37px 일찍 끝났는데, 유튜브 링크가 들어오면서 다시 찼다.
 
-                간격은 재서 골랐다. 32(로고) + 16 + 34(버튼) + 12 + 28 + 8 +
-                20 = 150px 로, [제품] 열 마지막 행(우레탄 코팅·전체 보기)과
-                오차 0px 다. 버튼이 글자 링크보다 6px 커진 만큼을 여기서 뺐다
-                (mt-5 -> mt-3). 버튼은 테두리가 스스로 경계를 만들어 주므로
-                간격이 좁아도 위에 붙어 보이지 않는다. */}
-            <a
-              href={telHref(site.tel)}
-              className="mt-3 inline-flex items-center gap-2 text-lg font-bold tabular-nums text-ink transition-colors hover:text-brand"
-            >
-              <PhoneIcon className="h-[18px] w-[18px] shrink-0" />
-              {site.tel}
-            </a>
+                ⚠️⚠️ **감싸는 div 가 flex-col 인 것이 핵심이다.** 링크가
+                      inline-flex 라, 둘째 번호를 그냥 뒤에 두면 줄바꿈 없이
+                      **같은 줄에 나란히** 선다. 헤더도 같은 이유로 감쌌다.
+                      items-start 는 두 링크가 칸 전폭으로 늘어나는 것을 막는다.
+
+                ⚠️⚠️ **이 열이 가장 긴 열보다 짧아야 푸터가 안 커진다.**
+                      1280 에서 재면 —
+
+                        1열    로고 32 + 16 + 버튼 34 + 12 + 번호 28 + gap 4
+                               + 번호 28 + 8 + 영업시간 20 = **181px**
+                        가장 긴 열([제품]·[회사])            **202px**
+                        남은 여유                            **21px**
+
+                      격자 행 높이를 가장 긴 열이 정하므로, 181 이 202 안에
+                      있는 한 푸터 전체 높이는 그대로다 — 1280.1024 에서 417px
+                      로 변화 0 을 확인했다. 2026-10-13 에 휴대폰 번호를 더하며
+                      150 -> 181 이 됐다. **여기에 또 한 줄(28 + 4 = 32px)을
+                      더하면 21px 여유를 넘어 푸터가 커진다.**
+
+                      ⚠️ 전에 이 자리에 "150px 로 [제품] 열 마지막 행과 오차
+                         0px" 이라 적혀 있었는데 **사실이 아니었다.** 재 보니
+                         [제품] 열 마지막 행은 162~202 라 150 과 맞지 않는다.
+                         유튜브·네이버 버튼이 들어오면서 어긋난 채 남은 글이다.
+
+                간격은 재서 골랐다. 버튼이 글자 링크보다 6px 커진 만큼을
+                여기서 뺐다(mt-5 -> mt-3). 버튼은 테두리가 스스로 경계를
+                만들어 주므로 간격이 좁아도 위에 붙어 보이지 않는다.
+
+                ⚠️ 아이콘에 **text-brand 를 주지 않는다.** 링크의 text-ink 를
+                   물려받는 것이 이 자리의 모습이다 — 헤더는 아이콘만 레드라
+                   다르다. 헤더를 보고 레드를 옮겨 붙이지 말 것.
+
+                ⚠️ 아이콘이 18px 다(헤더는 16px). 번호가 text-lg 라 크다. */}
+            <div className="mt-3 flex flex-col items-start gap-1">
+              {[
+                { tel: site.tel, Icon: PhoneIcon },
+                { tel: site.telMobile, Icon: MobileIcon },
+              ].map(({ tel, Icon }) => (
+                <a
+                  key={tel}
+                  href={telHref(tel)}
+                  className="inline-flex items-center gap-2 text-lg font-bold tabular-nums text-ink transition-colors hover:text-brand"
+                >
+                  <Icon className="h-[18px] w-[18px] shrink-0" />
+                  {tel}
+                </a>
+              ))}
+            </div>
             <p className="mt-2 text-xs leading-relaxed text-ink-soft">
               {site.hours.weekday} · {site.hours.holiday}
             </p>
