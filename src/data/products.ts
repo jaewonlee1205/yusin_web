@@ -999,10 +999,21 @@ export const products: Product[] = [
     ],
     // specs 의 "적용 = 볼피더 하부, 직진피더 하부", "제어 = 파츠피더 컨트롤러 연결".
     related: ["bowl-feeder", "linear-feeder", "controller"],
+    /* ⚠️⚠️ 2026년 USB 자료에서 갈아 끼운 **실물 사진**이다(한스테크 2024-04
+       납품분). 그 전에는 **3D 도면**이었고, 그 파일은 홈 히어로의
+       hero-unit.webp 와 바이트까지 같았다 — PPT 원본 image12.png 를 두 이름으로
+       뽑은 탓이다(extract-assets.mjs). 이제 둘이 갈렸고 **홈 히어로는 그대로**다.
+
+       ⚠️ 판스프링 넉 대와 파란 본체, 상부 플레이트가 보이는 것이 중요하다 —
+          이 제품의 specs 가 "전자석 + 판스프링 진동" 이라고 적고 있다. */
     images: [
       {
         src: "/images/products/vibrator-01.webp",
-        alt: "판스프링과 전자석으로 구성된 파츠피더용 진동기 3D 도면",
+        alt: "파란 본체 위에 판스프링 네 대로 상부 플레이트를 받친 진동기",
+      },
+      {
+        src: "/images/products/vibrator-02.webp",
+        alt: "판스프링과 중심 볼트가 드러난 진동기 구동부 근접",
       },
     ],
   },
