@@ -729,9 +729,11 @@ export const products: Product[] = [
     // 다섯이다. clients.ts 의 clientIndustries 여섯 산업을 부품 이름으로 풀어
     // 썼다 — 실제 거래처가 그 분야라 지어낸 말이 아니다.
     // 일곱 제품 가운데 분야가 부품군인 것은 볼피더뿐이라 여기만 사진을 둔다.
-    /* MAH07514 66초. 녹색 볼에서 커넥터가 트랙으로 올라서는 장면이다.
-       ⚠️ 같은 원본의 114초는 hero.mp4(홈 히어로 + PERFORMANCE)가 쓴다.
-          구간이 겹치면 홈과 제품 상세에 같은 장면이 돈다. */
+    /* 대성본사 230204. 톱니 모양 금속 부품이 트랙에 줄지어 오르는 장면이다.
+       ⚠️ 2026-10 에 MAH07514 66초에서 갈았는데 **시작 초를 안 남겼다.**
+          다시 만들어야 하면 구간부터 새로 찾아야 한다.
+       ⚠️ 홈 영상과 겹치지 말 것 — hero.mp4 는 테콘 230702 의 MAH02496 64초,
+          performance.mp4 는 아하테크 200402 의 MAH03965 8초다. */
     video: {
       src: "/videos/product-bowl-feeder.mp4",
       poster: "/images/videos/product-bowl-feeder.webp",
