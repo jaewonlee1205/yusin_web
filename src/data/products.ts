@@ -438,9 +438,24 @@ export type Product = {
 /**
  * 사진 있는 적용 분야 한 칸.
  *
- * ⚠️ src 의 사진은 유신이 찍은 것이 아니라 어떤 부품인지 보여 주는 일반 산업
- *    사진이다(scripts/fetch-application-photos.mjs 에 출처가 있다). 유신 실물
- *    사진을 받으면 같은 이름으로 파일만 갈아 끼우면 되고 여기는 고칠 것이 없다.
+ * ⚠️⚠️ **src 의 사진은 두 종류가 섞여 있다.**
+ *
+ *    **일곱 칸(connector · fastener · cosmetic · appliance · urethane-plated ·
+ *    urethane-resin · urethane-noise)은 유신이 실제로 공급한 부품 사진**이다.
+ *    2026-10 에 USB(D 드라이브)의 샘플사진 1,896장에서 골랐다 — 그 폴더는 전부
+ *    "고객이 보낸 부품 한 점씩" 이라 **"어떤 부품을 다루는가"** 를 보여 주는
+ *    이 자리에 꼭 맞는다.
+ *
+ *    **나머지 열두 칸은 유신 영상에서 뽑은 프레임**이다
+ *    (scripts/capture-video-frames.mjs). 그 칸들은 부품이 아니라 **공정 · 상황**
+ *    (무인 운전, 작업자 상주 구역, 속도 제어…)을 가리켜 장비가 도는 그림이 맞다.
+ *
+ *    ⚠️ 한때 이 주석이 "일반 산업 사진(Pexels)" 이라고 적고 있었다. 그 뒤
+ *       capture-video-frames.mjs 가 전부 유신 영상으로 덮어썼고, 이번에 일곱
+ *       칸이 실물 부품 사진이 됐다. **스톡은 한 장도 없다.**
+ *
+ *    ⚠️⚠️ npm run app-photos 를 돌리면 **열아홉 칸이 전부 Pexels 스톡으로
+ *          되돌아간다.** 그 스크립트는 이제 출처 기록으로만 남겨 둔 것이다.
  *
  *    ⚠️ 화면에는 그 사실을 적지 않는다. 한때 격자 아래에 "실제 납품 사례가
  *       아닙니다" 를 띄웠는데 빼 달라고 하셔서 지웠다 — 사실은 이 주석과
@@ -712,22 +727,22 @@ export const products: Product[] = [
       {
         name: "커넥터 · 단자 등 전자부품",
         src: "/images/applications/connector.webp",
-        alt: "볼피더 트랙을 한 줄로 올라오는 검은 커넥터",
+        alt: "전자부품용 검은 커넥터 하우징",
       },
       {
         name: "볼트 · 너트 · 나사 등 체결부품",
         src: "/images/applications/fastener.webp",
-        alt: "초록 볼 트랙에 줄지어 선 검은 판금 부품",
+        alt: "머리에 플랜지가 달린 검은 볼트",
       },
       {
         name: "화장품 용기 캡 · 펌프 부품",
         src: "/images/applications/cosmetic.webp",
-        alt: "볼 둘레를 따라 도는 부품들",
+        alt: "흰 수지 용기 캡",
       },
       {
         name: "가전 · 전기기기 조립 부품",
         src: "/images/applications/appliance.webp",
-        alt: "위에서 내려다본 볼피더 전체와 트랙",
+        alt: "구멍이 뚫린 금속 브래킷",
       },
     ],
     // specs 의 "옵션 = 방음커버, 호퍼피더, 직진피더 연결" 그대로다.
@@ -1543,17 +1558,17 @@ export const products: Product[] = [
       {
         name: "도금 · 도장 부품",
         src: "/images/applications/urethane-plated.webp",
-        alt: "우레탄을 입힌 볼 위쪽과 부품",
+        alt: "나사산이 있는 황동 니플",
       },
       {
         name: "수지 · 세라믹 등 깨지기 쉬운 부품",
         src: "/images/applications/urethane-resin.webp",
-        alt: "코팅된 볼 안쪽 면",
+        alt: "ㄱ자로 꺾인 흰 수지 부품",
       },
       {
         name: "소음 저감이 필요한 라인",
         src: "/images/applications/urethane-noise.webp",
-        alt: "위에서 내려다본 코팅 볼과 부품",
+        alt: "구리와 은색이 겹친 금속 단자",
       },
     ],
     // specs 의 "적용 부위 = 볼 내면, 트랙, 직진피더 슈트".
