@@ -901,6 +901,65 @@ export default async function ProductDetailPage({
                  예시다" 라는 뜻이라, 규격표가 없으면 가리킬 것이 없다.
                  (표를 그리는 위 블록도 같은 조건을 쓴다 — 조건이 둘로
                  나뉜 것은 그 사이에 구동 · 옵션 목록이 끼어서다.) */}
+          {/* 제품 도면.
+
+              ⚠️⚠️ **일곱 중 다섯만 있다.** 우레탄 코팅은 공정이라 도면 자체가
+                    없고, 컨트롤러는 유신이 쓰는 제어기가 외부 제품이라 자사
+                    도면이 없다(products.ts 의 drawing 주석에 까닭을 적었다).
+                    없는 제품에서는 이 블록이 **통째로 안 그려진다** — 빈 칸을
+                    남기지 말 것.
+
+              ⚠️⚠️ **next/image 가 아니라 <img> 다.** 도면은 SVG 이고 이 사이트는
+                    images.unoptimized 라 next/image 로 얻을 것이 없다. 오히려
+                    SVG 에 fill/sizes 를 씌우면 비율만 꼬인다.
+
+              ⚠️ **확대는 "눌러서 새 탭" 이다.** 사이트에 라이트박스가 하나도
+                 없고, 도면 한 장 때문에 만들지 않기로 했다(물어서 정했다).
+                 SVG 라 새 탭에서 얼마든지 키워도 선이 선명하다.
+
+              ⚠️ 테두리만 두고 그림자를 주지 않는다. 도면은 선 그림이라
+                 그림자를 얹으면 종이가 아니라 카드처럼 보인다.
+
+              bg-white 는 의도다. 이 섹션이 흰색이라 같은 색이지만, 도면이
+              **흰 종이**라는 것을 테두리와 함께 분명히 한다. */}
+          {product.drawing && (
+            <figure className="mt-10">
+              <a
+                href={product.drawing.src}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block overflow-hidden rounded-xl border border-line bg-white p-4 transition-colors hover:border-ink-soft sm:p-6"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                {/* ⚠️ **높이를 묶는다.** 도면마다 가로세로비가 제각각이라
+                       (진동기 2.9:1 가로, 호퍼 0.9:1 세로) w-full 만 두면
+                       호퍼가 1,209px 로 늘어나 한 화면에 안 들어왔다.
+                       object-contain 이라 가로로 긴 도면은 영향이 없다.
+
+                    ⚠️ SVG 에 width/height 가 들어 있어야 한다. viewBox 만 있는
+                       SVG 를 <img> 로 걸면 **높이가 0** 으로 잡혀 도면이 아예
+                       안 보인다 — 실제로 그렇게 한 번 나갔다. */}
+                <img
+                  src={product.drawing.src}
+                  alt={product.drawing.alt}
+                  loading="lazy"
+                  className="mx-auto block h-auto max-h-[560px] w-full object-contain"
+                />
+              </a>
+              <figcaption className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-13 leading-relaxed text-ink-soft">
+                <span>{product.drawing.caption}</span>
+                <a
+                  href={product.drawing.src}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-navy transition-colors hover:text-brand"
+                >
+                  도면 크게 보기 ↗
+                </a>
+              </figcaption>
+            </figure>
+          )}
+
           {product.specTable && (
           <div className="mt-8">
           <div className="flex items-start gap-2.5 rounded-xl bg-surface px-4 py-3">
@@ -924,8 +983,15 @@ export default async function ProductDetailPage({
                   보통 공백으로는 벌릴 수 없다(홈 ABOUT US 박스가 쓰는 것과
                   같은 방법이다). 1~5칸을 찍어 비교했다 — 1~2칸은 라벨이
                   설명에 붙어 읽히고, 5칸은 두 덩어리로 갈라진다. */}
-              <b className="font-bold text-ink">예시 규격</b>&nbsp;&nbsp;&nbsp;&nbsp;실제
-              값은 공급할 부품에 따라 산출합니다. {product.specTable.caption}
+              {/* ⚠️⚠️ **두 문장이다. 하나로 합치지 말 것.**
+                     2026-10-13 에 형식명을 유신 **실제 기종명**으로 갈아
+                     끼웠다(USB 도면에서 읽었다). 그래서 이 표는 이제
+                     **진짜 이름 + 예시 수치**가 섞여 있다 — 무엇이 실제이고
+                     무엇이 예시인지 한 줄로 갈라 주지 않으면, 지어낸 전원·
+                     진동수·중량까지 유신이 확인해 준 값처럼 읽힌다. */}
+              <b className="font-bold text-ink">형식명은 실제 기종명</b>
+              &nbsp;&nbsp;&nbsp;&nbsp;{product.specTable.caption} 나머지 수치는
+              예시이며, 실제 값은 공급할 부품에 따라 산출합니다.
             </p>
           </div>
           </div>
