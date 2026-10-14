@@ -949,11 +949,12 @@ export default function Home() {
 
             ⚠️ StatCounter 를 쓰지 않는다. 바로 위 히어로 지표 띠가 이미 세어
                올리고 있어, 한 화면에서 숫자가 두 번 구르면 산만하다. */}
-        {/* ⚠️ **lg:items-end 다.** 비교 칸 숫자가 56px, 나머지 둘이 34px 라
-               그냥 두면 비교 칸 라벨이 **21px 아래**로 내려가 밑줄이 어긋난다.
-               아래를 맞추면 숫자 윗선이 어긋나는데, 눈이 따라가는 것은
-               **라벨 줄**이라 그쪽을 맞췄다. */}
-        <ul className="mt-10 grid gap-8 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4 lg:items-end lg:gap-7 lg:text-center">
+        {/* ⚠️ 한때 **lg:items-end** 가 있었다. 비교 칸 숫자가 56px, 나머지
+               둘이 34px 이던 시절 비교 칸 라벨이 21px 아래로 내려가 밑줄이
+               어긋났기 때문이다. **셋이 같은 34px 가 되면서 저절로 맞아
+               걷었다**(밑줄차·윗선차 둘 다 0 을 확인했다).
+               ⚠️ 비교 칸 숫자를 다시 키우면 이 클래스가 또 필요해진다. */}
+        <ul className="mt-10 grid gap-8 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4 lg:gap-7 lg:text-center">
           {performanceKpis.map((kpi, i) => (
             <Reveal
               as="li"
@@ -989,18 +990,21 @@ export default function Home() {
                      ⚠️ AxisArrow 는 width/height 가 16 고정이라 큰 숫자 옆에서
                         작다. h-7 w-7 로 덮는다(CSS 가 속성을 이긴다).
 
-                 ⚠️⚠️ **비교 칸 숫자는 반응형이다. 고정 크기로 두지 말 것.**
-                    2칸 폭을 쓰는데 내용이 덜 차 "여백 많으니 좀 더 크게" 를
-                    **두 번** 들어 34 -> 44 -> 56px 로 올렸는데, 56 에서
-                    **"너무 큰 거 같아"** 가 돌아와 48 로 내렸다. 거쳐 온
-                    값이 34 · 44 · 56 · **48** 이다 — **56 이 상한**이라고
-                    보면 된다.
-                    ⚠️ **320 에서는 이 칸이 280px 뿐**이라 큰 값을 고정으로
-                       두면 넘친다. 그래서 —
+                 ⚠️⚠️⚠️ **비교 칸 숫자는 옆 칸(200~600mm · 7,200회/분)과
+                    **같은 text-34 다. 키우지 말 것.** 한 바퀴를 돌아 제자리로
+                    왔다 —
 
-                      320 · 390      36px
-                      640 ~ 1023     40px
-                      1024 이상      48px
+                      34px   처음
+                      44px   "여백 많으니 좀 더 크게"
+                      56px   "좀 더 크게" (두 번째)
+                      48px   "너무 큰 거 같아"
+                      **34px**  **"옆에 있는 숫자하고 동일하게 맞추는 게 낫다.
+                               이것만 옆 숫자보다 크니깐 이상하게 보인다"**
+
+                    올려 달라는 말을 두 번, 내려 달라는 말을 두 번 듣고 결국
+                    **"옆 칸과 같아야 한다" 가 최종 판단**이 됐다. 2칸 폭이라
+                    여백이 남는 것은 사실이지만, **한 띠 안에서 숫자 크기가
+                    다른 쪽이 더 거슬린다**는 것이 결론이다.
 
                     ⚠️ 화살표도 함께 올린다. 숫자만 키우면 가운데가 비어
                        보인다. mb-* 는 **라벨 줄만큼 화살표를 내려** 숫자
@@ -1011,7 +1015,7 @@ export default function Home() {
               {kpi.from ? (
                 <div className="flex items-end gap-4 sm:gap-6 lg:justify-center">
                   <div className="text-center">
-                    <p className="text-[2.25rem] font-extrabold leading-none tracking-tight tabular-nums text-muted sm:text-[2.5rem] lg:text-[3rem]">
+                    <p className="text-34 font-extrabold leading-none tracking-tight tabular-nums text-muted">
                       {kpi.from}
                       <span className="ml-0.5 text-lg font-bold">
                         {kpi.unit}
@@ -1021,9 +1025,9 @@ export default function Home() {
                       {kpi.fromLabel}
                     </p>
                   </div>
-                  <AxisArrow className="mb-8 h-6 w-6 sm:mb-9 sm:h-7 sm:w-7 lg:mb-10 lg:h-8 lg:w-8" />
+                  <AxisArrow className="mb-8 h-6 w-6" />
                   <div className="text-center">
-                    <p className="text-[2.25rem] font-extrabold leading-none tracking-tight tabular-nums text-ink sm:text-[2.5rem] lg:text-[3rem]">
+                    <p className="text-34 font-extrabold leading-none tracking-tight tabular-nums text-ink">
                       {kpi.value}
                       <span className="ml-0.5 text-lg font-bold text-brand">
                         {kpi.unit}
@@ -1264,14 +1268,19 @@ export default function Home() {
                          만지지 말고 폭을 재라.** 필요한 최소 폭은 약
                          333px(71 + 151 + 111)이다.
 
-                      ⚠️ max-w-[26rem](416px)이 그 답이다. **맵은 건드리지
-                         않는다** — 격자 비율이 그대로라 맵 칸도 355px 이고,
-                         맵이 aspect-auto 로 받는 표 높이도 안 변한다. 세로를
-                         줄이면 맵이 납작해진다는 지적을 받은 자리라 이쪽을
-                         피했다.
+                      ⚠️ 폭이 **597 -> 416 -> 480px** 로 갔다. 416(26rem)은
+                         **"너무 작아진 거 같은데 가로가 조금 더 길었으면"**
+                         이라는 말을 들었다. 지금 값은 **30rem(480px)** —
+                         처음보다 좁고 416 보다 넉넉하다. 또 만질 일이 있으면
+                         **그 두 값 사이**에서 고르면 된다.
+
+                      ⚠️ **맵은 건드리지 않는다** — 격자 비율이 그대로라 맵
+                         칸도 355px 이고, 맵이 aspect-auto 로 받는 표 높이도
+                         안 변한다. 세로를 줄이면 맵이 납작해진다는 지적을
+                         받은 자리라 이쪽을 피했다.
 
                       ⚠️ px-2 아래로 내리지 말 것 — 분홍 띠가 글자에 달라붙는다. */}
-            <table className="w-full min-w-[24rem] max-w-[26rem] border-separate border-spacing-0 text-center text-sm">
+            <table className="w-full min-w-[24rem] max-w-[30rem] border-separate border-spacing-0 text-center text-sm">
               <thead>
                 <tr>
                   <th
