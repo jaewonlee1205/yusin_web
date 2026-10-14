@@ -281,14 +281,38 @@ export default function Home() {
         {/* ⚠️ **세로 한 줄이다.** 글이 위, 진동기가 아래 전폭.
                2026-10-14 에 lg:grid-cols-2 로 좌우를 갈라 봤다가 걷었다 —
                진동기가 반쪽에 갇혀 작아졌다(위 ParallaxLayer 주석 참고).
-               ⚠️⚠️ **justify-start 다.** 글과 라인업이 한 덩어리로 위에
-                  붙는다. 거쳐 온 둘은 이랬다 —
+
+               ⚠️⚠️ **justify-center 에 아래 패딩을 더 준 꼴이다.** 거쳐 온
+                  넷은 이랬다 —
                     justify-end     전부 바닥 → **위가 165px 비었다**
                     justify-between 글만 위 → **글과 라인업 사이가
                                     70~189px 비었다**
-                  "진동기 이미지도 좀 더 올려야 한다" 는 말이 두 번째 것이다.
-                  사이 간격은 아래 gap 하나가 맡는다. */}
-        <Container className="relative flex flex-1 flex-col justify-center gap-[clamp(1rem,2.6vh,2rem)] py-[clamp(1.25rem,3.6vh,3.5rem)]">
+                    justify-start   천장에 붙음 → **아래가 199px 비었다**
+                    **justify-center + pb** ← 지금
+                  사이 간격은 아래 gap 하나가 맡는다.
+
+               ⚠️⚠️ **pt 와 pb 가 다르다.** 같았을 때(py) 위아래가 각 158px
+                  이었는데 "아주 조금만 더 위로" 라는 말을 들었다. pb 를
+                  키우면 가운데가 그만큼 위로 옮겨 간다 — justify-center 를
+                  버리지 않으므로 **화면 높이에 따라 따라오는 성질**은 그대로다.
+                  ⚠️⚠️ **pb 가 vh 비례가 아니라 calc(svh - 상수)다.**
+                     --h 와 같은 이유다 — 비례만 쓰면 큰 화면을 올리는 만큼
+                     짧은 화면도 올라가 넘친다. 상수가 짧은 화면을 보호한다.
+
+                       화면 높이   pb      히어로 위 여백
+                       1080       105px   143 -> **125px**
+                       900         76px    80 ->   70px
+                       720         46px    31 ->   31px   <- 그대로다
+                       667         37px    32 ->   35px   <- 오히려 는다
+                       568        36(하한)  24 ->   24px   <- 그대로다
+
+                     계수 16.4 와 상수 72 는 **(720, 46) 과 (1080, 105) 두
+                     점을 지나는 직선**이다. 720 을 건드리지 않으면서 1080 만
+                     36px 더 올린다.
+
+                  ⚠️ 1280x720 과 320x568 이 한계선이다(여유 0). pb 를 더
+                     키우기 전에 그 둘에서 재 볼 것. */}
+        <Container className="relative flex flex-1 flex-col justify-center gap-[clamp(1rem,2.6vh,2rem)] pt-[clamp(1.25rem,3.6vh,3.5rem)] pb-[clamp(2.25rem,calc(16.4svh-72px),8rem)]">
             {/* ⚠️⚠️ **글은 조연이다.** 이 화면의 용건은 아래 진동기 넷이고,
                    글이 커지면 그만큼 진동기가 작아진다 — 세로 예산이 하나뿐
                    이기 때문이다. 2026-10-14 에 "어필이 텍스트보다 진동기가
