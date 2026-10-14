@@ -866,9 +866,22 @@ export default function Home() {
               delay={i * 80}
               className={i > 0 ? "lg:border-l lg:border-line" : ""}
             >
-              <p className="text-34 font-extrabold leading-none tracking-tight tabular-nums text-ink">
+              {/* ⚠️ tone 이 "muted" 면 숫자와 단위가 **함께** 회색이 된다.
+                     비포–애프터 쌍의 「비포」 칸 하나뿐이고, 회색 95% 옆에
+                     검은 99.9% 가 서면서 "이쪽에서 저쪽으로" 가 읽힌다.
+                     ⚠️ 화살표를 넣지 말 것 — 색 대비만으로 충분하고, 이
+                        사이트는 화살표를 두 번 걷어낸 자리다. */}
+              <p
+                className={`text-34 font-extrabold leading-none tracking-tight tabular-nums ${
+                  kpi.tone === "muted" ? "text-muted" : "text-ink"
+                }`}
+              >
                 {kpi.value}
-                <span className="ml-0.5 text-lg font-bold text-brand">
+                <span
+                  className={`ml-0.5 text-lg font-bold ${
+                    kpi.tone === "muted" ? "text-muted" : "text-brand"
+                  }`}
+                >
                   {kpi.unit}
                 </span>
               </p>
