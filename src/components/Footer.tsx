@@ -68,7 +68,7 @@ const LINK =
 
      py-3(44px)까지 올리면 푸터가 한 화면 가까이 길어져 2.5 에서 멈췄다 —
      40px 이면 엄지로 눌러 빗나가지 않는다. 글자 크기와 위치는 그대로다. */
-  "inline-block py-2.5 text-sm text-ink-soft transition-colors hover:text-brand";
+  "inline-block py-2.5 text-sm text-white/75 transition-colors hover:text-white";
 
 /* 브랜드 열의 외부 채널 버튼(유튜브·네이버).
 
@@ -101,7 +101,7 @@ const LINK =
       검게 읽힌다 — 2026-10-14 에 "너무 검다" 는 말을 듣고 한 단계 내렸다.
       ⚠️ ink-soft 로 되돌리지 말 것. 눈에 같은 무게로 맞춘 값이다. */
 const CHANNEL_BUTTON =
-  "flex items-center justify-center rounded-full border border-line p-2 text-muted transition hover:border-dark-soft/40 hover:text-ink active:scale-95";
+  "flex items-center justify-center rounded-full border border-white/25 p-2 text-white/70 transition hover:border-white/50 hover:text-white active:scale-95";
 
 /* 자간을 벌리지 않는다. 0.2em 으로 늘렸던 적이 있는데(Section 의 eyebrow 와
    맞춘 값이었다), eyebrow 는 한두 단어짜리 영문 꼬리표라 벌려도 읽히지만
@@ -110,7 +110,7 @@ const CHANNEL_BUTTON =
    연했다** — 위계가 뒤집혀 있었다. 제목을 ink·bold 로 올리고 링크를
    ink-soft 로 한 단계 내려 제목이 가장 진하게 만들었다.
    ⚠️ 둘을 같은 색으로 되돌리지 말 것. 굵기만으로는 차이가 약하다. */
-const HEADING = "text-13 font-bold text-ink";
+const HEADING = "text-13 font-bold text-white";
 
 /* 상단 선을 뺐다. 바로 위가 네이비 CTA 라 경계가 이미 뚜렷하고, 바탕색이
    다른 데 선까지 두면 구분이 두 겹이 된다.
@@ -119,7 +119,13 @@ const HEADING = "text-13 font-bold text-ink";
       return ( 바로 뒤에 두면 객체 리터럴로 파싱돼 빌드가 깨진다. */
 export default function Footer() {
   return (
-    <footer className="mt-auto bg-surface">
+    /* ⚠️⚠️ **네이비 면이다**(#0d1b33). 2026-10-14 에 bg-surface(연한 회색)
+       에서 갈았다 — 헤더와 같은 요청이다.
+
+       ⚠️⚠️ **border-t 가 border-white/10 이어야 한다.** 바로 위 ContactCTA 가
+          **같은 bg-dark** 라, 선이 없으면 "문의하세요" 블록과 사이트맵이
+          **한 덩어리**로 붙어 버린다. */
+    <footer className="mt-auto border-t border-white/10 bg-dark text-white">
       {/* 헤더와 같은 wide 폭이다. 푸터도 사이트 크롬인데 content(1152) 를
           쓰고 있어 헤더 로고와 64px 어긋나 있었다. 하단 CTA 도 같이 넓혔다.
 
@@ -149,7 +155,8 @@ export default function Footer() {
                 alt={site.name}
                 width={403}
                 height={52}
-                className="h-7 w-auto sm:h-8"
+                /* ⚠️ 흰 로고다 — 까닭은 Header.tsx 의 같은 자리에 적혀 있다. */
+                className="h-7 w-auto [filter:brightness(0)_invert(1)] sm:h-8"
               />
             </HomeLogoLink>
             {/* 바깥 채널 두 개. 목록 링크가 아니라 테두리 버튼이다 — 옆 세
@@ -277,14 +284,14 @@ export default function Footer() {
                 <a
                   key={tel}
                   href={telHref(tel)}
-                  className="inline-flex items-center gap-2 text-base font-bold tabular-nums text-ink-soft transition-colors hover:text-brand"
+                  className="inline-flex items-center gap-2 text-base font-bold tabular-nums text-white transition-colors hover:text-white/75"
                 >
                   <Icon className="h-[15px] w-[15px] shrink-0" />
                   {tel}
                 </a>
               ))}
             </div>
-            <p className="mt-2 text-xs leading-relaxed text-ink-soft">
+            <p className="mt-2 text-xs leading-relaxed text-white/60">
               {site.hours.weekday} · {site.hours.holiday}
             </p>
           </div>
@@ -344,11 +351,11 @@ export default function Footer() {
 
         {/* 사업자정보. 상호·대표·주소·연락처·사업자등록번호가 관례상 한자리에
             모인다. 팩스는 걸 수 없어 링크가 아니다(헤더·CTA·문의하기와 같은 규칙). */}
-        <div className="mt-12 space-y-2 border-t border-line pt-6 text-xs leading-relaxed text-ink-soft">
+        <div className="mt-12 space-y-2 border-t border-white/15 pt-6 text-xs leading-relaxed text-white/60">
           <p>
             <Link
               href="/location"
-              className="transition-colors hover:text-brand"
+              className="transition-colors hover:text-white"
             >
               {site.address.road}
             </Link>
@@ -357,7 +364,7 @@ export default function Footer() {
             {" · "}
             <a
               href={`mailto:${site.email}`}
-              className="transition-colors hover:text-brand"
+              className="transition-colors hover:text-white"
             >
               {site.email}
             </a>

@@ -136,7 +136,20 @@ export default function Header() {
   return (
     <header
       ref={headerRef}
-      className={`sticky top-0 z-50 border-b border-line bg-white/95 backdrop-blur transition-shadow duration-300 ${
+      /* ⚠️⚠️ **네이비 바다**(#0d1b33 95%). 2026-10-14 에 흰 바에서 갈았다 —
+         "여기도 네이비 색상으로 하자. 진한 네이비로, 공급할 부품을 보내
+         주시면… 여기 컬러하고 동일하게".
+
+         ⚠️⚠️ **border-b 가 border-white/10 이어야 한다.** 홈 첫 화면이 이미
+            네이비 면이라, 선이 없으면 **헤더와 히어로의 경계가 사라져 헤더가
+            안 보인다.** 히어로 지표 띠가 쓰는 것과 같은 값이다.
+
+         ⚠️ 드롭다운 패널과 모바일 메뉴는 **흰색 그대로 둔다** — 떠 있는 판은
+            밝은 쪽이 자연스럽고, 어두운 바 + 흰 패널은 흔한 조합이다. */
+      /* ⚠️ text-white 가 **루트에** 있다. body 기본색이 ink 라, 명시하지 않은
+         자식이 하나라도 있으면 네이비 위에서 글자가 사라진다. 흰 패널
+         (드롭다운 · 모바일 메뉴) 안쪽은 text-ink 가 **명시**돼 있어 안전하다. */
+      className={`sticky top-0 z-50 border-b border-white/10 bg-dark/95 text-white backdrop-blur transition-shadow duration-300 ${
         scrolled ? "shadow-lg shadow-ink/[0.07]" : ""
       }`}
     >
@@ -164,7 +177,13 @@ export default function Header() {
               width={403}
               height={52}
               priority
-              className="h-7 w-auto sm:h-8 xl:h-9"
+              /* ⚠️ 필터로 흰 로고를 만든다. logo.webp 는 빨강+차콜 이미지라
+                 색을 CSS 로 못 바꾸고, 픽셀의 75% 가 차콜이라 네이비 위에서
+                 묻힌다(밝기만 올려서는 회색이 될 뿐이다).
+                 ⚠️ **SVG 원본을 받으면 이 필터가 필요 없다**(README 5번).
+                    지금 같은 필터를 네 곳이 쓴다 — 헤더 · 푸터 · 비교표 머리 ·
+                    포지셔닝 맵 점. */
+              className="h-7 w-auto [filter:brightness(0)_invert(1)] sm:h-8 xl:h-9"
             />
           </Link>
 
@@ -188,7 +207,9 @@ export default function Header() {
                     onClick={(e) => onSameRouteClick(e, item.href)}
                     aria-current={active ? "page" : undefined}
                     className={`rounded-lg px-2 py-2 text-15 font-medium transition-colors xl:px-4 ${
-                      active ? "text-brand" : "text-ink-soft hover:text-ink"
+                      active
+                        ? "text-brand-light"
+                        : "text-white/80 hover:text-white"
                     }`}
                   >
                     {item.label}
@@ -234,7 +255,9 @@ export default function Header() {
                       onSameRouteClick(e, item.href);
                     }}
                     className={`flex items-center gap-1.5 rounded-lg px-2 py-2 text-15 font-medium transition-colors xl:px-4 ${
-                      active ? "text-brand" : "text-ink-soft hover:text-ink"
+                      active
+                        ? "text-brand-light"
+                        : "text-white/80 hover:text-white"
                     }`}
                   >
                     {item.label}
@@ -336,13 +359,15 @@ export default function Header() {
                 <a
                   key={tel}
                   href={telHref(tel)}
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold tabular-nums text-ink-soft transition-colors hover:text-brand"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold tabular-nums text-white/80 transition-colors hover:text-white"
                 >
                   {/* ⚠️ 13px 다. 번호가 14px 인데 아이콘을 16px(기본)로
                          두었더니 "텍스트보다 아이콘이 더 커 보인다" 는 말을
                          들었다 — 아이콘은 **꽉 찬 도형**이라 같은 크기여도
                          글자보다 커 보인다. 한 단계 아래가 맞다. */}
-                  <Icon className="h-[13px] w-[13px] shrink-0 text-brand" />
+                  {/* ⚠️ brand-light 다. 네이비 위에서 brand(#d5261e)는
+                         3.38:1 로 어둡다. */}
+                  <Icon className="h-[13px] w-[13px] shrink-0 text-brand-light" />
                   {tel}
                 </a>
               ))}
@@ -372,7 +397,7 @@ export default function Header() {
                    햄버거 44 = 305px 라 **21px 넘쳤다** — 재서 확인했다.
                    그 폭에서는 메뉴를 열면 전화가 나오므로 기능이 사라지는
                    것은 아니다. 360 에서는 320 가용에 305 로 15px 남는다. */
-              className="hidden h-11 w-11 items-center justify-center rounded-lg text-brand transition active:scale-95 min-[360px]:flex"
+              className="hidden h-11 w-11 items-center justify-center rounded-lg text-brand-light transition active:scale-95 min-[360px]:flex"
             >
               <PhoneIcon />
             </a>
