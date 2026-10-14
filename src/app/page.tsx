@@ -1179,13 +1179,23 @@ export default function Home() {
                   xl:items-start 라 표 297px 옆에 맵 칸이 395px 로 서서
                   "그래프가 표보다 훨씬 커 보인다" 는 말을 들었다.
                   맵 안쪽에서 flex-1 이 그 높이를 나눠 쓴다. */}
-        {/* ⚠️⚠️ **비율을 1.35 -> 1.5 로 올렸다.** 2026-10-14 에 "너무 납작해서
-               디자인이 이상해 보인다" 는 말을 들었다 — 맵이 355x157(2.26:1)
-               이었다. 맵은 xl 에서 aspect-auto 라 **표 높이를 그대로 받으므로**,
-               표 행 패딩을 올려 키우고(50 -> 62px) 동시에 맵 칸을 좁혔다.
-               ⚠️ 표가 세 열(한때 네 열)이라 1.5fr 에서도 1280 에서 줄바꿈이
-                  없다 — 바꿀 때 거기서 다시 잴 것. */}
-        <div className="grid gap-10 xl:grid-cols-[1.5fr_1fr] xl:gap-12">
+        {/* ⚠️⚠️ **맵은 xl 에서 aspect-auto 라 표 높이를 그대로 받는다.**
+               그래서 **표를 키워야 맵이 커지고, 표를 좁히면 맵이 넓어진다** —
+               둘을 따로 못 움직인다. 2026-10-14 에 이 자리를 두 번 만졌다 —
+
+                 "너무 납작해서 디자인이 이상해 보인다"
+                   -> 행 패딩을 올리고(50 -> 62px) 1.35 -> 1.5fr 로 맵을 좁혔다
+                      맵 355x157(2.26:1) -> 328x213(1.54:1)
+                 "표가 너무 여백이 많은 것처럼 느껴진다, **가로 여백만** 줄이고"
+                   -> 셀 가로 패딩을 px-3 -> px-2 로, 비율을 **1.35fr 로 되돌렸다**.
+                      대신 「부품 범위」 행이 하나 늘어 표가 세로로 길어져
+                      맵도 함께 높아진다
+
+               ⚠️ **세로(행 패딩)를 줄이지 말 것.** 맵이 바로 납작해진다 —
+                  사용자가 그 점을 짚어 "가로 여백만" 이라고 했다.
+               ⚠️ 1.35fr 주석에 "1280 에서 표가 620px 라 겨우 선다" 고 적혀
+                  있었는데 그때는 **네 열**이었다. 지금은 세 열이라 여유가 있다. */}
+        <div className="grid gap-10 xl:grid-cols-[1.35fr_1fr] xl:gap-12">
           {/* ── 비교표 ──
 
               ⚠️⚠️ **회사 개요 표(/company OVERVIEW) · 오시는 길 연락처 표와
@@ -1241,7 +1251,7 @@ export default function Home() {
                 <tr>
                   <th
                     scope="col"
-                    className="whitespace-nowrap border-b border-line px-3 py-4 text-13 font-bold text-muted"
+                    className="whitespace-nowrap border-b border-line px-2 py-4 text-13 font-bold text-muted"
                   >
                     항목
                   </th>
@@ -1252,7 +1262,7 @@ export default function Home() {
                       /* ⚠️ 유신 열(i === 0)에서 **세로 띠가 시작된다** —
                            bg-brand/[0.06] 과 위쪽 모서리만 둥근 rounded-t-lg.
                            띠는 아래 tbody 의 같은 열로 끊김 없이 이어진다. */
-                      className={`whitespace-nowrap border-b border-line px-3 py-4 text-13 font-bold text-muted ${
+                      className={`whitespace-nowrap border-b border-line px-2 py-4 text-13 font-bold text-muted ${
                         i === 0 ? "rounded-t-lg bg-brand/[0.06]" : ""
                       }`}
                     >
@@ -1301,7 +1311,7 @@ export default function Home() {
                   <tr key={row.item}>
                     <th
                       scope="row"
-                      className="whitespace-nowrap border-b border-line px-3 py-5 text-13 font-bold text-muted"
+                      className="whitespace-nowrap border-b border-line px-2 py-5 text-13 font-bold text-muted"
                     >
                       {row.item}
                     </th>
@@ -1364,7 +1374,7 @@ export default function Home() {
 
                            ⚠️ border-b 가 **셀에** 있다. border-separate 라 tr
                               에 주면 렌더되지 않는다(위 table 주석 참고). */
-                        className={`whitespace-nowrap border-b border-line px-3 py-5 ${
+                        className={`whitespace-nowrap border-b border-line px-2 py-5 ${
                           i === 0
                             ? "bg-brand/[0.06] text-15 font-bold text-ink-soft"
                             : "text-muted"
