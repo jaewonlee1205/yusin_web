@@ -1268,11 +1268,16 @@ export default function Home() {
                          만지지 말고 폭을 재라.** 필요한 최소 폭은 약
                          333px(71 + 151 + 111)이다.
 
-                      ⚠️ 폭이 **597 -> 416 -> 480px** 로 갔다. 416(26rem)은
-                         **"너무 작아진 거 같은데 가로가 조금 더 길었으면"**
-                         이라는 말을 들었다. 지금 값은 **30rem(480px)** —
-                         처음보다 좁고 416 보다 넉넉하다. 또 만질 일이 있으면
-                         **그 두 값 사이**에서 고르면 된다.
+                      ⚠️ 폭을 **네 번** 옮겼다 —
+
+                           597px  처음(max-w 없이 w-full 이 격자 칸을 꽉 채우던 때)
+                                  -> **"표가 너무 여백이 많다"**
+                           416px  26rem -> **"너무 작아진 거 같은데 조금 더"**
+                           480px  30rem -> **"조금 더 길었으면"**
+                           **544px**  **34rem · 지금**
+
+                         ⚠️ **597 은 "여백이 많다" 던 폭**이다. 또 넓혀 달라는
+                            말이 나오면 **544 와 597 사이**가 남은 구간이다.
 
                       ⚠️ **맵은 건드리지 않는다** — 격자 비율이 그대로라 맵
                          칸도 355px 이고, 맵이 aspect-auto 로 받는 표 높이도
@@ -1280,7 +1285,7 @@ export default function Home() {
                          받은 자리라 이쪽을 피했다.
 
                       ⚠️ px-2 아래로 내리지 말 것 — 분홍 띠가 글자에 달라붙는다. */}
-            <table className="w-full min-w-[24rem] max-w-[30rem] border-separate border-spacing-0 text-center text-sm">
+            <table className="w-full min-w-[24rem] max-w-[34rem] border-separate border-spacing-0 text-center text-sm">
               <thead>
                 <tr>
                   <th
