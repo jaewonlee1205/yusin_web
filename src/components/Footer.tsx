@@ -100,8 +100,11 @@ const LINK =
       글자는 가는 획이고 마크는 꽉 찬 덩어리라, 같은 색을 줘도 마크가 더
       검게 읽힌다 — 2026-10-14 에 "너무 검다" 는 말을 듣고 한 단계 내렸다.
       ⚠️ ink-soft 로 되돌리지 말 것. 눈에 같은 무게로 맞춘 값이다. */
+/* ⚠️ 패딩이 p-2(8px) 가 아니라 7px 다. 안쪽 마크를 16 → 18px 로 키우면서
+   버튼 34x34 를 지키려고 1px 를 내줬다(테두리 1 + 7 + 18 + 7 + 1 = 34).
+   34 는 푸터 브랜드 열 정렬의 전제다 — 마크 크기의 근거는 icons.tsx 에 있다. */
 const CHANNEL_BUTTON =
-  "flex items-center justify-center rounded-full border border-white/25 p-2 text-white transition hover:border-white/50 active:scale-95";
+  "flex items-center justify-center rounded-full border border-white/25 p-[7px] text-white transition hover:border-white/50 active:scale-95";
 
 /* 자간을 벌리지 않는다. 0.2em 으로 늘렸던 적이 있는데(Section 의 eyebrow 와
    맞춘 값이었다), eyebrow 는 한두 단어짜리 영문 꼬리표라 벌려도 읽히지만
