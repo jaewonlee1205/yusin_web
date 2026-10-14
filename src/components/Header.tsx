@@ -136,7 +136,9 @@ export default function Header() {
   return (
     <header
       ref={headerRef}
-      /* ⚠️⚠️ **네이비 바다**(#0d1b33 95%). 2026-10-14 에 흰 바에서 갈았다 —
+      /* ⚠️⚠️ **dark-deep 바다**(#0a1426 95%). 2026-10-14 에 흰 바 -> dark ->
+         **dark-deep** 으로 두 번 갔다. 가운데 단계에서 "네이비인데 더
+         진하잖아? 검정 느낌으로" 라는 말을 들었다 — 기준은 첫 화면 지표 띠다.
          "여기도 네이비 색상으로 하자. 진한 네이비로, 공급할 부품을 보내
          주시면… 여기 컬러하고 동일하게".
 
@@ -149,7 +151,7 @@ export default function Header() {
       /* ⚠️ text-white 가 **루트에** 있다. body 기본색이 ink 라, 명시하지 않은
          자식이 하나라도 있으면 네이비 위에서 글자가 사라진다. 흰 패널
          (드롭다운 · 모바일 메뉴) 안쪽은 text-ink 가 **명시**돼 있어 안전하다. */
-      className={`sticky top-0 z-50 border-b border-white/10 bg-dark/95 text-white backdrop-blur transition-shadow duration-300 ${
+      className={`sticky top-0 z-50 border-b border-white/10 bg-dark-deep/95 text-white backdrop-blur transition-shadow duration-300 ${
         scrolled ? "shadow-lg shadow-ink/[0.07]" : ""
       }`}
     >
@@ -269,7 +271,11 @@ export default function Header() {
                       id={panelId}
                       className="absolute left-1/2 top-full z-50 w-56 -translate-x-1/2 pt-2"
                     >
-                      <div className="overflow-hidden rounded-xl border border-line bg-white shadow-overlay">
+                      {/* ⚠️ **어두운 패널이다.** 2026-10-14 에 "회사소개 마우스
+                             올리면 나오는 드롭박스도" 같은 색으로 달라는 요청에
+                             흰 판에서 갈았다. 테두리가 border-white/15 라
+                             shadow-overlay 가 안 보여도 판의 경계가 선다. */}
+                      <div className="overflow-hidden rounded-xl border border-white/15 bg-dark-deep shadow-overlay">
                         <ListPanel
                           items={childrenFor(item)}
                           onNavigate={() => setOpenMenu(null)}
@@ -443,7 +449,9 @@ export default function Header() {
       {mobileOpen && (
         <div
           id="mobile-nav"
-          className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line bg-white lg:hidden"
+          /* ⚠️ 데스크톱 드롭다운과 **같은 색**이다. 모바일만 흰 판으로 두면
+                 같은 메뉴가 기기마다 달라 보인다. */
+          className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-white/15 bg-dark-deep lg:hidden"
         >
           <Container width="wide" className="py-2">
             <nav aria-label="모바일 메뉴" className="flex flex-col">
@@ -456,7 +464,7 @@ export default function Header() {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="border-b border-line py-4 text-base font-medium text-ink"
+                      className="border-b border-white/15 py-4 text-base font-medium text-white"
                     >
                       {item.label}
                     </Link>
@@ -464,12 +472,12 @@ export default function Header() {
                 }
 
                 return (
-                  <div key={item.href} className="border-b border-line">
+                  <div key={item.href} className="border-b border-white/15">
                     <button
                       type="button"
                       aria-expanded={isOpen}
                       onClick={() => setExpanded(isOpen ? null : item.href)}
-                      className="flex w-full items-center justify-between py-4 text-left text-base font-medium text-ink"
+                      className="flex w-full items-center justify-between py-4 text-left text-base font-medium text-white"
                     >
                       {item.label}
                       <Chevron open={isOpen} />
@@ -480,7 +488,7 @@ export default function Header() {
                           <li key={child.href}>
                             <Link
                               href={child.href}
-                              className="block border-l-2 border-line py-2.5 pl-4 text-sm text-ink-soft"
+                              className="block border-l-2 border-white/15 py-2.5 pl-4 text-sm text-white/75"
                             >
                               {child.label}
                             </Link>
@@ -508,7 +516,7 @@ export default function Header() {
                 <a
                   key={tel}
                   href={telHref(tel)}
-                  className="rounded-xl border border-line py-3 text-center text-sm font-semibold text-ink transition active:scale-[0.98]"
+                  className="rounded-xl border border-white/25 py-3 text-center text-sm font-semibold text-white transition active:scale-[0.98]"
                 >
                   전화 {tel}
                 </a>

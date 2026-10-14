@@ -125,7 +125,10 @@ export default function Footer() {
        ⚠️⚠️ **border-t 가 border-white/10 이어야 한다.** 바로 위 ContactCTA 가
           **같은 bg-dark** 라, 선이 없으면 "문의하세요" 블록과 사이트맵이
           **한 덩어리**로 붙어 버린다. */
-    <footer className="mt-auto border-t border-white/10 bg-dark text-white">
+    /* ⚠️ **dark-deep 이다**(#0a1426) — 헤더·드롭다운과 같은 면.
+       바로 위 ContactCTA 가 dark(#0d1b33)로 **한 단계 밝아** 선이 없어도
+       갈리지만, border-t 는 보강으로 남긴다. */
+    <footer className="mt-auto border-t border-white/10 bg-dark-deep text-white">
       {/* 헤더와 같은 wide 폭이다. 푸터도 사이트 크롬인데 content(1152) 를
           쓰고 있어 헤더 로고와 64px 어긋나 있었다. 하단 CTA 도 같이 넓혔다.
 
