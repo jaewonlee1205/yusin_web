@@ -200,7 +200,10 @@ const STATS = [
     value: equipmentTotals.units,
     count: true,
     unit: "대 가공 설비",
-    note: `사내 ${equipmentTotals.kinds}종 — 외주 없이`,
+    /* ⚠️ 한때 `사내 N종 — 외주 없이` 였다. 13자로 옆 셋(8·9·7자)보다 길고
+       긴 줄표가 끼어 있어 "— 이거 없애 주고 다른 문구로" 라는 말을 들었다.
+       「외주 없이」는 「사내에서」 한 마디에 담긴다. */
+    note: `${equipmentTotals.kinds}종을 사내에서`,
   },
   { value: "30+", count: false, unit: "년", note: "1992년부터" },
 ];

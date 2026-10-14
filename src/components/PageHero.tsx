@@ -90,6 +90,35 @@ export default function PageHero({
         </defs>
         <rect width="100%" height="100%" fill="url(#hero-lines)" />
       </svg>
+      {/* 사선 면 둘과 큰 원. 문의 띠(ContactCTA)의 어휘를 빌리되 **배치를
+          뒤집었다** — "문의 띠 배경 장식은 이쁘잖아, 이거랑 똑같이는 하지 말고
+          그 배경장식처럼 배너도 이쁘게" 라는 말을 듣고 짠 자리다.
+
+            문의 띠   밝은 면 **왼쪽** · 점 격자 오른쪽 위 · 원 왼쪽 아래
+            배너     밝은 면 **오른쪽** · 가로 선 격자 전폭 · 원 오른쪽 아래
+
+          좌우가 반대인 것은 우연이 아니다. 문의 띠는 **버튼이 오른쪽**이라
+          레드가 밝은 면에 닿지 않게 왼쪽으로 몰았고, 배너는 **글이 왼쪽**이라
+          오른쪽이 통째로 빈다. 격자도 점이 아니라 선이다.
+
+          ⚠️ 38도는 로고 획에서 받은 값이다(Header.tsx 주석 참고). 바꾸지 말 것.
+
+          ⚠️ **모든 폭에서 보인다.** 문의 띠의 사선은 lg 전용인데, 거기는 좁은
+             폭에서 버튼이 전체 폭을 써서 레드가 밝은 면을 밟기 때문이다. 배너에는
+             버튼이 없고 흰 글자(17:1)뿐이라 그 제약이 없다. eyebrow 만 13px
+             brand-light 인데, 사선이 오른쪽이고 eyebrow 는 왼쪽이라 닿지 않는다
+             (닿으면 4.64:1 로 AA 를 간신히 넘는다 — 사선을 왼쪽으로 옮기지 말 것).
+
+          ⚠️ 다섯 안(선만 · 선+사선 · 사선만 · 선+사선+원 · 세로선+사선)을 한 장에
+             놓고 고른 값이다. 사선만 두면 왼쪽이 허전하고, 세로 선은 번잡했다. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        <div className="absolute right-[11.4%] top-1/2 h-[300%] w-[22%] -translate-y-1/2 rotate-[38deg] bg-white/[0.04]" />
+        <div className="absolute -right-[7.2%] top-1/2 h-[300%] w-[11%] -translate-y-1/2 rotate-[38deg] bg-white/[0.10]" />
+        <div className="absolute -bottom-[40%] -right-[8%] aspect-square h-[160%] rounded-full bg-white/[0.03]" />
+      </div>
       {/* 문의 띠와 같은 그레인 겹이다. 단색 면이라 히어로(0.08)보다 진하게 0.12. */}
       <div
         aria-hidden="true"
