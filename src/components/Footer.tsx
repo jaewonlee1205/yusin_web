@@ -68,7 +68,7 @@ const LINK =
 
      py-3(44px)까지 올리면 푸터가 한 화면 가까이 길어져 2.5 에서 멈췄다 —
      40px 이면 엄지로 눌러 빗나가지 않는다. 글자 크기와 위치는 그대로다. */
-  "inline-block py-2.5 text-sm text-ink transition-colors hover:text-brand";
+  "inline-block py-2.5 text-sm text-ink-soft transition-colors hover:text-brand";
 
 /* 브랜드 열의 외부 채널 버튼(유튜브·네이버).
 
@@ -102,7 +102,11 @@ const CHANNEL_BUTTON =
 /* 자간을 벌리지 않는다. 0.2em 으로 늘렸던 적이 있는데(Section 의 eyebrow 와
    맞춘 값이었다), eyebrow 는 한두 단어짜리 영문 꼬리표라 벌려도 읽히지만
    "고객지원" 같은 한글 열 제목은 자간이 벌어지면 글자가 흩어져 보인다. */
-const HEADING = "text-13 font-semibold text-muted";
+/* ⚠️ 한때 text-muted(#6b7280) 였다. 링크가 text-ink 라 **제목이 링크보다
+   연했다** — 위계가 뒤집혀 있었다. 제목을 ink·bold 로 올리고 링크를
+   ink-soft 로 한 단계 내려 제목이 가장 진하게 만들었다.
+   ⚠️ 둘을 같은 색으로 되돌리지 말 것. 굵기만으로는 차이가 약하다. */
+const HEADING = "text-13 font-bold text-ink";
 
 /* 상단 선을 뺐다. 바로 위가 네이비 CTA 라 경계가 이미 뚜렷하고, 바탕색이
    다른 데 선까지 두면 구분이 두 겹이 된다.
@@ -158,14 +162,21 @@ export default function Footer() {
                   길이 된다. 접근성 이름은 aria-label 이 이기므로 두 번
                   읽히지 않는다.
 
-                ■ 마크 색 — 알아볼 수 있는 색으로 둔다.
-                  유튜브는 사이트 브랜드 레드(#d5261e)가 원색과 같은 계열이라
-                  그대로 쓴다. 팔레트도 지키고 알아보기도 한다.
-                  네이버 초록(#03C75A)은 사이트에 가까운 색이 없어 제 색을
-                  쓴다. 브랜드 레드로도 그려 봤는데 빨간 N 은 아무것도 뜻하지
-                  않았다. 초록은 흰 바탕 대비 2.4:1 로 비문자 기준(3:1)에
-                  못 미치지만, 아이콘은 aria-hidden 장식이고 링크 이름은
-                  aria-label 이 따로 들고 있어 WCAG 1.4.11 대상이 아니다.
+                ■ 마크 색 — **색 지정이 없다.** 두 아이콘 모두
+                  fill="currentColor" 라 위 CHANNEL_BUTTON 의 text-ink-soft 를
+                  그대로 따르고, 마우스를 올리면 hover:text-ink 로 진해진다.
+                  곧 **푸터 글자색과 같다.**
+
+                  ⚠️ 한때 유튜브는 브랜드 레드(#d5261e), 네이버는 제 초록
+                     (#03C75A)이었다. 2026-10-14 에 "빨강 초록이 너무 이상해서
+                     텍스트 색상과 맞추는 게 낫겠다" 는 말에 둘 다 걷었다.
+                     **제 색으로 되돌리지 말 것** — 로고 둘만 유채색이면
+                     푸터에서 그 둘만 뜬다.
+
+                     덤으로 대비도 나아졌다. 네이버 초록은 흰 바탕에서
+                     2.4:1 이라 원래도 흐렸다(아이콘이 aria-hidden 장식이고
+                     링크 이름은 aria-label 이 따로 들고 있어 WCAG 1.4.11
+                     대상이 아니라 통과였을 뿐이다).
 
                 ■ 폭 — 34px 버튼 둘에 간격 8px, 줄 폭 75px 다. 가장 좁은
                   열(640 에서 256px)에도 넉넉해 어느 폭에서도 한 줄이다.
@@ -181,7 +192,7 @@ export default function Footer() {
                 title="유튜브 채널"
                 className={CHANNEL_BUTTON}
               >
-                <YoutubeIcon className="shrink-0 text-brand" />
+                <YoutubeIcon className="shrink-0" />
               </a>
               <a
                 href={site.naverPlace}
@@ -191,7 +202,7 @@ export default function Footer() {
                 title="네이버 플레이스"
                 className={CHANNEL_BUTTON}
               >
-                <NaverIcon className="shrink-0 text-[#03C75A]" />
+                <NaverIcon className="shrink-0" />
               </a>
             </div>
 

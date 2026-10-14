@@ -16,11 +16,10 @@ import {
 } from "@/data/company";
 import ClientGrid from "@/components/ClientGrid";
 import Reveal from "@/components/Reveal";
-import ScrollCue from "@/components/ScrollCue";
 import StatCounter from "@/components/StatCounter";
 import { featuredClients } from "@/data/clients";
 import { performanceKpis, products } from "@/data/products";
-import { site } from "@/data/site";
+import { site, yearsInBusiness } from "@/data/site";
 import VideoCard from "@/components/VideoCard";
 import { featuredVideos } from "@/data/videos";
 
@@ -62,13 +61,48 @@ const VIBRATOR_SPAN = VIBRATORS.reduce((s, v) => s + v.w, 0);
    ⚠️ 값은 전부 제품 상세(products.ts 진동기 kpis)에 있는 것과 같다.
       한쪽만 고치지 말 것.
 
-   ⚠️ count 는 숫자를 세어 올리는 효과다. 4 는 셀 것이 없어 false,
-      7,200 은 올라가는 맛이 있어 true 다. */
+   ⚠️⚠️ **스펙이 아니라 이득을 적는다.** 한때 "4종 진동기 / 200~600mm /
+      7,200회/분 / 24시간" 에 설명이 "1·2·3·4호 신형 / 적용 볼 외경 /
+      최대 진동수 / 연속 가동" 이었다 — **진동기 제원표를 옮겨 적은 것**이라
+      "그래서 뭐가 좋아지나" 가 없었다.
+
+      지금은 **설명 줄이 뜻을 진다.** 첫 칸의 "한 기종으로 안 되는 부품까지"
+      가 이 회사가 네 기종을 갖춘 이유 그 자체다.
+
+   ⚠️ 값의 출처 — 넷 다 products.ts 진동기에 있다.
+        4            VIBRATORS 길이(1·2·3·4호 신형)
+        200~600mm    kpis "적용 볼 외경"
+        7,200회/분   specTable — 1·2·3호가 7,200, 4호가 3,600 이다.
+                     **기종마다 진동수가 다른 것**이 "골라 쓴다" 의 근거라
+                     설명 줄이 그 말을 한다
+        34년 튜닝    features "현장 튜닝 대응 · 납품 뒤 다시 잡아 드림"
+                     ⚠️ 회사 연차가 아니라 **진동기 튜닝 경력**으로 읽히게
+                        단위를 "년 튜닝" 으로 묶었다.
+
+   ⚠️ 지어낸 수치를 넣지 말 것. 넷 다 제품 상세와 같은 값이어야 한다.
+
+   ⚠️ count 는 숫자를 세어 올리는 효과다. 글자가 섞인 값(200~600)은 셀 수
+      없어 false 다. */
 const STATS = [
-  { value: VIBRATORS.length, count: false, unit: "종 진동기", note: "1·2·3·4호 신형" },
-  { value: "200~600", count: false, unit: "mm", note: "적용 볼 외경" },
-  { value: 7200, count: true, unit: "회/분", note: "최대 진동수" },
-  { value: 24, count: true, unit: "시간", note: "연속 가동" },
+  {
+    value: VIBRATORS.length,
+    count: false,
+    unit: "종 진동기",
+    note: "한 기종으로 안 되는 부품까지",
+  },
+  { value: "200~600", count: false, unit: "mm", note: "작은 볼부터 큰 볼까지" },
+  /* ⚠️ 값이 "3,600~7,200" 이던 적이 있다. 360px 에서 두 줄로 깨져 지표
+        띠가 24px 자라고 히어로가 한 화면을 넘겼다. 값은 짧게 두고 **뜻은
+        설명 줄이 진다** — 기종마다 진동수가 다르다는 것이 요점이다.
+        (1·2·3호 7,200 · 4호 3,600 — 제품 상세 규격표에 있다.) */
+  { value: 7200, count: true, unit: "회/분", note: "기종마다 다른 진동수" },
+  /* ⚠️ 숫자를 박지 말 것 — yearsInBusiness 는 site.ts 가 해마다 다시 센다. */
+  {
+    value: yearsInBusiness,
+    count: true,
+    unit: "년 튜닝",
+    note: "안 맞으면 다시 잡습니다",
+  },
 ];
 
 /* "자세히 보기 / 전체 보기" 버튼. 영상자료의 "영상 더 보기" 와 같은
@@ -205,8 +239,18 @@ export default function Home() {
           className="pointer-events-none absolute inset-0 bg-gradient-to-r from-dark via-dark/75 to-transparent"
         />
 
-        <Container className="relative flex flex-1 items-center py-[clamp(1.5rem,4vh,3.5rem)]">
-          <div className="grid w-full items-center gap-[clamp(1.5rem,3.5vh,3.5rem)] lg:grid-cols-[1.1fr_1fr]">
+        {/* ⚠️ 세로 패딩이 4vh 였다. 진동기 줄을 전폭으로 내리면서 360x740
+               에서 6px 넘쳤다 — 3.6vh 로 낮춰 위아래 6px 를 돌려받았다.
+               ⚠️ 다시 올리기 전에 360x740 에서 재 볼 것. */}
+        <Container className="relative flex flex-1 items-center py-[clamp(1.25rem,3.6vh,3.5rem)]">
+          {/* ⚠️⚠️ **세로 한 줄이다.** 한때 lg:grid-cols-[1.1fr_1fr] 로
+                 글과 그림을 좌우로 갈랐는데, 그러면 진동기 넷이 오른쪽
+                 절반(504px)에 갇혀 4호가 172px 밖에 안 되고 **글·그림 아래
+                 KPI 띠까지 200px 이 통째로 비었다**(1280x820 실측).
+                 진동기 넷이 첫 화면의 용건이라 전폭으로 내렸다 —
+                 4호가 268px 로 커지고 빈 자리가 사라진다.
+                 ⚠️ 좌우 2단으로 되돌리지 말 것. */}
+          <div className="flex w-full flex-col gap-[clamp(1.25rem,3vh,2.5rem)]">
             <div>
               {/* 로고의 F.A 가 무엇의 약자인지 풀어 주는 자리다.
                   로고에는 "유신 F.A SYSTEM" 만 크게 보이고 그 아래 작은
@@ -228,11 +272,11 @@ export default function Home() {
                 className="rise mt-[clamp(0.75rem,2vh,1.25rem)] text-[clamp(1.6rem,4.4vh,3.4rem)] font-bold leading-[1.25] tracking-tight text-white"
                 style={{ animationDelay: "140ms" }}
               >
-                부품마다 다른 진동기,
+                한 기종으로는 안 되는 부품이 있습니다
                 <br />
-                <span className="text-brand-light">네 기종을 갖춰</span>{" "}
-                {/* 좁은 칼럼에서 "골라 / 씁니다"로 끊기지 않게 묶어 둔다 */}
-                <span className="whitespace-nowrap">골라 씁니다</span>
+                <span className="text-brand-light">그래서 네 기종을</span>{" "}
+                {/* 좁은 칼럼에서 "갖췄 / 습니다"로 끊기지 않게 묶어 둔다 */}
+                <span className="whitespace-nowrap">갖췄습니다</span>
               </h1>
               {/* ⚠️⚠️ **2026-10-14 — 첫 화면을 진동기 네 기종으로 돌렸다.**
                   전에는 "부품 자동정렬 공급기, 설계부터 튜닝까지 직접
@@ -262,8 +306,8 @@ export default function Home() {
                 className="rise mt-[clamp(0.75rem,2vh,1.5rem)] max-w-xl text-[clamp(0.875rem,1.9vh,1.125rem)] leading-relaxed text-white/75"
                 style={{ animationDelay: "220ms" }}
               >
-                한 기종으로 다 덮지 않습니다. 부품과 볼 크기에 맞는 진동기를
-                골라 피더를 짭니다.
+                부품과 볼 크기에 맞는 진동기를 골라 답니다. 작은 부품도 큰
+                부품도 한 자리에서.
               </p>
 
               <div
@@ -328,9 +372,22 @@ export default function Home() {
                      절대량으로 줄어 비가 깨진다.
 
                   calc 의 3 은 **칸 사이 간격 셋**이다. 항목이 넷이라 셋이다. */}
+              {/* ⚠️⚠️ **높이 상한을 묶음 바깥에 건다.** 개별 <img> 에
+                     max-height 를 걸면 넷이 저마다 다르게 잘려 **크기 비가
+                     깨진다** — 이 블록의 전부가 그 비율이다.
+
+                     그래서 ul 의 **폭**을 제한한다. 가장 큰 4호가 묶음 폭의
+                     38.69% 를 쓰고 그 그림의 세로/가로가 503/549 이므로,
+                     묶음 폭 W 일 때 가장 높은 그림은 W x 0.3869 x 0.916 이다.
+                     곧 높이 H 를 얻으려면 W = H / 0.3544 다.
+                     H 를 clamp(150px, 30svh, 280px) 로 두면 W 는 아래 값이
+                     된다 — 그 계산을 CSS 가 그대로 한다. */}
               <ul
-                className="flex items-end justify-center gap-[var(--g)]"
-                style={{ ["--g" as string]: "clamp(0.5rem,1.6vw,1.25rem)" }}
+                className="mx-auto flex items-end justify-center gap-[var(--g)]"
+                style={{
+                  ["--g" as string]: "clamp(0.5rem,1.6vw,1.25rem)",
+                  maxWidth: "calc(clamp(150px, 30svh, 280px) / 0.3544)",
+                }}
               >
                 {VIBRATORS.map((v) => (
                   <li
@@ -347,10 +404,17 @@ export default function Home() {
                       height={v.h}
                       className="h-auto w-full"
                     />
-                    <p className="mt-2 text-center text-[clamp(0.625rem,1.2vh,0.8125rem)] font-bold text-white">
+                    {/* ⚠️ 낮은 화면에서 mt 를 한 단계 더 줄인다 — 375x667
+                           에서 마지막 3px 가 여기서 나왔다. */}
+                    <p className="mt-2 text-center text-[clamp(0.625rem,1.2vh,0.8125rem)] font-bold text-white [@media(max-height:720px)]:mt-1">
                       {v.no}
                     </p>
-                    <p className="text-center text-[clamp(0.5625rem,1vh,0.6875rem)] tabular-nums text-white/55">
+                    {/* ⚠️ 낮은 화면(≤720px)에서는 중량 줄을 접는다. 375x667
+                           (아이폰 SE)에서 이 한 줄이 히어로를 16px 넘기게
+                           했다 — 그림을 통째로 감추는 것보다 이쪽이 낫다.
+                           호수(1·2·3·4호)는 남으므로 네 기종이라는 말은
+                           그대로 선다. 중량은 제품 상세 규격표에 있다. */}
+                    <p className="text-center text-[clamp(0.5625rem,1vh,0.6875rem)] tabular-nums text-white/55 [@media(max-height:720px)]:hidden">
                       {v.weight}
                     </p>
                   </li>
@@ -359,7 +423,13 @@ export default function Home() {
             </div>
           </div>
 
-          <ScrollCue />
+          {/* ⚠️ 여기 <ScrollCue /> 가 있었다. 2026-10-14 에 걷었다 —
+                 진동기 넷을 전폭으로 내리면서 그림 이름표와 **겹쳤다**
+                 (그림 아래부터 지표 띠까지 45px 인데 표시가 52px 를 쓴다).
+                 애초에 히어로가 비어 보여 넣은 것이고, 지금은 첫 화면이
+                 꽉 차 있어 할 일이 없다. 바닥의 지표 띠가 아래에 더 있다는
+                 신호를 이미 준다.
+                 ⚠️ 되살리려면 그림 묶음 아래 자리부터 만들 것. */}
         </Container>
 
         {/* 2. 지표 스트립 — 섹션 맨 아래에 붙어 항상 첫 화면 안에 보인다 */}
