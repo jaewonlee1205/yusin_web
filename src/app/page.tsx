@@ -102,26 +102,19 @@ const performanceKpis: Kpi[] = [
     label: "진동기 4종 정확도",
     note: "둘 다 회사가 제시한 값 — 한 기종만 쓰는 방식과 네 기종을 골라 쓰는 방식",
   },
-  /* ⚠️ **숫자를 손으로 박지 말 것.** 보유 설비 페이지의 equipment 배열에서
-     세어 온다 — 설비가 늘면 여기도 따라온다. company.ts 의 strengths 주석에
-     같은 교훈이 적혀 있다("여기만 21종 55대 로 박아 두는 바람에 설비가 늘면
-     이 한 줄만 조용히 틀어지는 상태였다").
+  /* ⚠️⚠️ **뒤 두 칸은 2026-10-14 에 첫 화면 지표 띠(STATS)와 맞바꿨다.**
+     거기 있던 "55대 사내 가공 설비 · 30+년 1992년부터" 가 위로 올라가고,
+     띠에 있던 이 둘이 내려왔다. **두 자리를 함께 보고 옮길 것** — 한쪽만
+     고치면 같은 값이 한 페이지에 두 번 나온다.
 
-     ⚠️ 한때 "1:1 부품마다 지그 설계" 였다. 2026-10-14 에 "유신 FA 시스템에
-        뭔가 잘 할 수 있거나 어필할 수 있는 걸" 로 바꿔 달라는 요청에 갈았다 —
-        회사소개 strengths 의 "설계부터 튜닝까지 사내 일관 제작 · 20종 이상의
-        가공 설비" 가 근거다. */
+     ⚠️ 이 둘은 products.ts 에 있는 값이다(진동기 kpis 의 "적용 볼 외경",
+        specTable 의 진동수 1·2·3호 7,200 · 4호 3,600). 지어낸 값이 아니다. */
+  { value: "200~600", unit: "mm", label: "적용 볼 외경", note: "제작 가능 범위" },
   {
-    value: String(equipmentTotals.units),
-    unit: "대",
-    label: "사내 가공 설비",
-    note: `밀링 · 선반 · 연마기 · 알곤 용접기 등 ${equipmentTotals.kinds}종 — 외주 없이 사내에서 가공`,
-  },
-  {
-    value: "30+",
-    unit: "년",
-    label: "1992년부터",
-    note: "1992년 6월 6일 설립",
+    value: "7,200",
+    unit: "회/분",
+    label: "최대 진동수",
+    note: "전파 60Hz 기준 — 기종마다 다르다",
   },
 ];
 
@@ -193,8 +186,23 @@ const STATS = [
     unit: "종 진동기",
     note: "1호부터 4호까지",
   },
-  { value: "200~600", count: false, unit: "mm", note: "적용 볼 외경" },
-  { value: 7200, count: true, unit: "회/분", note: "기종마다 다름" },
+  /* ⚠️⚠️ **뒤 두 칸은 2026-10-14 에 PERFORMANCE 띠와 맞바꿨다.** 거기 있던
+     이 둘이 올라오고, 여기 있던 "200~600mm · 7,200회/분" 이 내려갔다.
+     **두 자리를 함께 보고 옮길 것.**
+
+     ⚠️ **55 를 손으로 박지 말 것.** 보유 설비 페이지의 equipment 배열에서
+        세어 온다 — 설비가 늘면 따라온다. company.ts 의 strengths 주석에 같은
+        교훈이 있다("여기만 21종 55대 로 박아 두는 바람에 설비가 늘면 이 한
+        줄만 조용히 틀어지는 상태였다").
+
+     ⚠️ **30+ 는 count 를 false 로 둔다.** "+" 가 붙어 셀 수 없는 값이다. */
+  {
+    value: equipmentTotals.units,
+    count: true,
+    unit: "대 가공 설비",
+    note: `사내 ${equipmentTotals.kinds}종 — 외주 없이`,
+  },
+  { value: "30+", count: false, unit: "년", note: "1992년부터" },
 ];
 
 /* "자세히 보기 / 전체 보기" 버튼. 영상자료의 "영상 더 보기" 와 같은
@@ -1171,7 +1179,13 @@ export default function Home() {
                   xl:items-start 라 표 297px 옆에 맵 칸이 395px 로 서서
                   "그래프가 표보다 훨씬 커 보인다" 는 말을 들었다.
                   맵 안쪽에서 flex-1 이 그 높이를 나눠 쓴다. */}
-        <div className="grid gap-10 xl:grid-cols-[1.35fr_1fr] xl:gap-12">
+        {/* ⚠️⚠️ **비율을 1.35 -> 1.5 로 올렸다.** 2026-10-14 에 "너무 납작해서
+               디자인이 이상해 보인다" 는 말을 들었다 — 맵이 355x157(2.26:1)
+               이었다. 맵은 xl 에서 aspect-auto 라 **표 높이를 그대로 받으므로**,
+               표 행 패딩을 올려 키우고(50 -> 62px) 동시에 맵 칸을 좁혔다.
+               ⚠️ 표가 세 열(한때 네 열)이라 1.5fr 에서도 1280 에서 줄바꿈이
+                  없다 — 바꿀 때 거기서 다시 잴 것. */}
+        <div className="grid gap-10 xl:grid-cols-[1.5fr_1fr] xl:gap-12">
           {/* ── 비교표 ──
 
               ⚠️⚠️ **회사 개요 표(/company OVERVIEW) · 오시는 길 연락처 표와
@@ -1227,7 +1241,7 @@ export default function Home() {
                 <tr>
                   <th
                     scope="col"
-                    className="whitespace-nowrap border-b border-line px-3 py-3 text-13 font-bold text-muted"
+                    className="whitespace-nowrap border-b border-line px-3 py-4 text-13 font-bold text-muted"
                   >
                     항목
                   </th>
@@ -1238,7 +1252,7 @@ export default function Home() {
                       /* ⚠️ 유신 열(i === 0)에서 **세로 띠가 시작된다** —
                            bg-brand/[0.06] 과 위쪽 모서리만 둥근 rounded-t-lg.
                            띠는 아래 tbody 의 같은 열로 끊김 없이 이어진다. */
-                      className={`whitespace-nowrap border-b border-line px-3 py-3 text-13 font-bold text-muted ${
+                      className={`whitespace-nowrap border-b border-line px-3 py-4 text-13 font-bold text-muted ${
                         i === 0 ? "rounded-t-lg bg-brand/[0.06]" : ""
                       }`}
                     >
@@ -1287,7 +1301,7 @@ export default function Home() {
                   <tr key={row.item}>
                     <th
                       scope="row"
-                      className="whitespace-nowrap border-b border-line px-3 py-3.5 text-13 font-bold text-muted"
+                      className="whitespace-nowrap border-b border-line px-3 py-5 text-13 font-bold text-muted"
                     >
                       {row.item}
                     </th>
@@ -1350,7 +1364,7 @@ export default function Home() {
 
                            ⚠️ border-b 가 **셀에** 있다. border-separate 라 tr
                               에 주면 렌더되지 않는다(위 table 주석 참고). */
-                        className={`whitespace-nowrap border-b border-line px-3 py-3.5 ${
+                        className={`whitespace-nowrap border-b border-line px-3 py-5 ${
                           i === 0
                             ? "bg-brand/[0.06] text-15 font-bold text-ink-soft"
                             : "text-muted"
@@ -1507,7 +1521,7 @@ export default function Home() {
               <div className="flex flex-col items-center justify-between rounded-full bg-surface px-1.5 py-5">
                 <AxisArrow className="rotate-[-90deg]" />
                 <span className="text-13 font-bold leading-none text-ink-soft [writing-mode:vertical-rl]">
-                  부품 범위
+                  정확도
                 </span>
                 <AxisArrow className="rotate-90" />
               </div>
