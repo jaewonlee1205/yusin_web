@@ -1299,10 +1299,36 @@ export default function Home() {
                       key={group}
                       scope="col"
                       /* ⚠️ 유신 열(i === 0)에서 **세로 띠가 시작된다** —
-                           bg-brand/[0.06] 과 위쪽 모서리만 둥근 rounded-t-lg.
-                           띠는 아래 tbody 의 같은 열로 끊김 없이 이어진다. */
-                      className={`whitespace-nowrap border-b border-line px-2 py-4 text-13 font-bold text-muted ${
-                        i === 0 ? "rounded-t-lg bg-brand/[0.06]" : ""
+                           bg-dark/[0.06] 과 위쪽 모서리만 둥근 rounded-t-lg.
+                           띠는 아래 tbody 의 같은 열로 끊김 없이 이어진다.
+
+                           ⚠️⚠️ **꽉 찬 네이비(#0d1b33) + 흰 글자다.** 문의 띠·
+                              히어로가 쓰는 그 면과 같은 색이다. 2026-10-14 에
+                              "빨간색 말고 여기서 사용하는 네이비 컬러 형태로"
+                              라는 요청에 갈았다.
+
+                              ⚠️⚠️ **연한 농도로 가지 말 것.** dark 는 채도가
+                                 낮아 **6% 도 14% 도 화면에서는 그냥 회색**으로
+                                 보인다 — 셋을 찍어 비교하고 꽉 찬 면을 골랐다.
+                                 레드이던 시절의 brand/[0.06] 은 연해도 분홍기가
+                                 남았지만 네이비는 그렇지 않다.
+
+                              ⚠️ 이 파일 위쪽에 "유신 열을 바탕색으로 강조하지
+                                 않는다 · 회색 배경은 가장 약한 강조" 라는 옛
+                                 경고가 있다. **꽉 찬 네이비는 그 경고가 말하는
+                                 '약한 회색' 이 아니다** — 오히려 그때 들었던
+                                 "크게 강조된다는 느낌이 안 든다" 를 푸는 쪽이다.
+
+                              ⚠️ 행 구분선이 border-white/15 다. 네이비 위에
+                                 밝은 border-line 을 그으면 띠가 끊겨 보인다.
+                              ⚠️ 마지막 행만 rounded-b-lg 이고 border-b 가 없다 —
+                                 둥근 모서리가 선에 가려지기 때문이다.
+                              ⚠️ 위 YUSIN 로고는 빨강 이미지라 그대로 남는다 —
+                                 네이비 면 위의 레드 한 점이 포인트가 된다. */
+                      className={`whitespace-nowrap px-2 py-4 text-13 font-bold ${
+                        i === 0
+                          ? "rounded-t-lg border-b border-white/15 bg-dark text-white"
+                          : "border-b border-line text-muted"
                       }`}
                     >
                       {/* ⚠️⚠️ 첫 열(유신)은 **글자가 아니라 YUSIN 로고**다.
@@ -1346,7 +1372,7 @@ export default function Home() {
                         'ident'" 로 빌드가 깨진다 — 이 주석을 거기 뒀다가
                         겪었다. 설명은 이렇게 바깥으로 모은다. */}
               <tbody className="[&>tr:last-child>td:nth-child(2)]:rounded-b-lg">
-                {positioning.map((row) => (
+                {positioning.map((row, rowIndex) => (
                   <tr key={row.item}>
                     <th
                       scope="row"
@@ -1413,10 +1439,14 @@ export default function Home() {
 
                            ⚠️ border-b 가 **셀에** 있다. border-separate 라 tr
                               에 주면 렌더되지 않는다(위 table 주석 참고). */
-                        className={`whitespace-nowrap border-b border-line px-2 py-5 ${
+                        className={`whitespace-nowrap px-2 py-5 ${
                           i === 0
-                            ? "bg-brand/[0.06] text-15 font-bold text-ink-soft"
-                            : "text-muted"
+                            ? `bg-dark text-15 font-bold text-white ${
+                                rowIndex === positioning.length - 1
+                                  ? "rounded-b-lg"
+                                  : "border-b border-white/15"
+                              }`
+                            : "border-b border-line text-muted"
                         }`}
                       >
                         {value}
@@ -1596,23 +1626,26 @@ export default function Home() {
               <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-surface sm:aspect-[5/2] xl:aspect-auto">
                 <div
                   aria-hidden="true"
-                  className="absolute right-0 top-0 bg-brand/[0.06]"
+                  className="absolute right-0 top-0 bg-dark/[0.06]"
                   style={{
                     width: `${POSITIONING_IDEAL.width}%`,
                     height: `${POSITIONING_IDEAL.height}%`,
                   }}
                 />
-                {/* ⚠️⚠️ **brand-dark 다. brand 도, 불투명도를 준 것도 안 된다.**
-                        이 글자는 영역 음영(brand 6% on surface = #f4eaec) 위에
-                        올라가므로 흰 바탕일 때보다 대비가 낮다. 실측 —
+                {/* ⚠️ **text-dark 다.** 2026-10-14 에 영역 음영이 레드에서
+                        네이비로 바뀌면서 글자도 따라갔다("빨간색 말고 네이비
+                        컬러 형태로"). 음영이 dark 6% on surface = #e8eaed 라
+                        실측 **약 13.4:1** — 레드이던 시절(brand-dark 5.70:1)
+                        보다 높다.
 
-                          text-brand/70   #de615c   2.98:1   X  (Lighthouse 가 잡음)
-                          text-brand      #d5261e   4.37:1   X  아슬하게 미달
-                          text-brand-dark #b41f18   5.70:1   O
-
+                        ⚠️ 레드로 돌아갈 일이 있으면 **brand-dark 만** 쓸 것.
+                           그때 재 둔 값이다 —
+                             text-brand/70   #de615c   2.98:1   X
+                             text-brand      #d5261e   4.37:1   X  아슬하게 미달
+                             text-brand-dark #b41f18   5.70:1   O
                         12px bold 라 WCAG 의 "큰 글자" 예외(3:1)도 못 받는다.
                         영역 음영을 진하게 바꾸면 이 값을 다시 잴 것. */}
-                <span className="absolute right-4 top-3.5 text-xs font-bold text-brand-dark">
+                <span className="absolute right-4 top-3.5 text-xs font-bold text-dark">
                   이상적
                 </span>
 
@@ -1628,7 +1661,7 @@ export default function Home() {
                       aria-hidden="true"
                       className={`mx-auto block rounded-full ${
                         point.self
-                          ? "h-3.5 w-3.5 bg-brand ring-4 ring-brand/15"
+                          ? "h-3.5 w-3.5 bg-dark ring-4 ring-dark/15"
                           : "h-2.5 w-2.5 bg-muted"
                       }`}
                     />
