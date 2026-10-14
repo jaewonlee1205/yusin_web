@@ -80,7 +80,7 @@ export default function FacilityPage() {
               >
                 {/* 아래 품목 행과 같은 틀(이름 왼쪽 / 수 오른쪽)이라 그룹 합계가
                     품목 대수와 한 열로 선다. 합계를 품목보다 약하게 둔다 —
-                    text-xs muted 대 text-sm bold navy. 합계가 개별 항목보다
+                    text-xs muted 대 text-sm bold ink. 합계가 개별 항목보다
                     세 보이면 위계가 뒤집힌다.
                     단위는 종 → 대 순서다. 배너 lead("21종 55대")와 맞춘다. */}
                 <div className="flex items-baseline justify-between gap-3">
@@ -116,7 +116,7 @@ export default function FacilityPage() {
                       className="inline-flex items-baseline gap-2 rounded-lg bg-surface px-3 py-1.5"
                     >
                       <span className="text-sm text-ink-soft">{item.name}</span>
-                      <span className="shrink-0 text-sm tabular-nums text-navy">
+                      <span className="shrink-0 text-sm font-semibold tabular-nums text-ink">
                         {item.count}대
                       </span>
                     </li>

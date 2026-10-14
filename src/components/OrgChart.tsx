@@ -74,7 +74,7 @@ export default function OrgChart() {
               className={`${ITEM} lg:flex lg:flex-col lg:items-center`}
               style={delay(STEP.plantDrop)}
             >
-              <Node label={plant.title} tone="navy" style={delay(STEP.plant)} />
+              <Node label={plant.title} tone="dark" style={delay(STEP.plant)} />
 
               {/* 공장장 -> 다섯 부서 */}
               <ul className={BRANCH} style={delay(STEP.teamDrop)}>
@@ -188,12 +188,12 @@ function Node({
   style,
 }: {
   label: string;
-  tone: "brand" | "navy";
+  tone: "brand" | "dark";
   style?: CSSProperties;
 }) {
   const styles = {
     brand: "bg-brand text-white",
-    navy: "bg-navy text-white",
+    dark: "bg-carbon text-white",
   } as const;
 
   return (

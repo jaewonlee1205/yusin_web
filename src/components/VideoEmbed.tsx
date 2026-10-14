@@ -161,7 +161,7 @@ export default function VideoEmbed({
           />
           <span
             aria-hidden="true"
-            className="absolute inset-0 bg-navy-deep/25 transition-colors group-hover:bg-navy-deep/10"
+            className="absolute inset-0 bg-carbon-deep/25 transition-colors group-hover:bg-carbon-deep/10"
           />
           {/* 맨 위로 버튼(BackToTop)과 같은 언어다 — rounded-full + bg-white
               + text-ink + shadow-card. 전에는 64px 브랜드 레드 원이었는데,
@@ -169,7 +169,7 @@ export default function VideoEmbed({
               레드는 강조 한 점에만 쓰는 색이다.
 
               흰 원이 밝은 썸네일 위에서도 보이는 것은 바로 위의 어두운
-              겹(navy-deep/25) 덕이다. 그 겹을 지우면 원이 묻힌다.
+              겹(carbon-deep/25) 덕이다. 그 겹을 지우면 원이 묻힌다.
 
               호버 확대는 1.1 에서 1.06 으로 줄였다. */}
           <span
@@ -195,7 +195,7 @@ export default function VideoEmbed({
           href={watchUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="absolute inset-0 flex items-end bg-navy-deep/40 p-4 text-sm font-semibold text-white"
+          className="absolute inset-0 flex items-end bg-carbon-deep/40 p-4 text-sm font-semibold text-white"
         >
           {video.title} — 유튜브에서 보기
         </a>

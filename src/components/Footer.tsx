@@ -88,7 +88,7 @@ const LINK =
    모서리 반경만 바꾸므로 이 치수가 그대로고, 그래서 아래 정렬도 유지된다
    (전화번호 mt-3, 브랜드 열 150px).
 
-   hover 는 테두리가 navy/40 으로 진해지는 것으로 읽힌다. 바탕이 없어도
+   hover 는 테두리가 carbon/40 으로 진해지는 것으로 읽힌다. 바탕이 없어도
    반응이 보인다.
 
    ⚠ 글자가 없다. 그래서 두 링크의 접근성 이름은 전적으로 aria-label 이
@@ -97,7 +97,7 @@ const LINK =
      link-name 도 깨진다. 글자를 되살리든 라벨을 두든, 둘 중 하나는 반드시
      있어야 한다. */
 const CHANNEL_BUTTON =
-  "flex items-center justify-center rounded-full border border-line p-2 text-ink-soft transition hover:border-navy/40 hover:text-ink active:scale-95";
+  "flex items-center justify-center rounded-full border border-line p-2 text-ink-soft transition hover:border-carbon/40 hover:text-ink active:scale-95";
 
 /* 자간을 벌리지 않는다. 0.2em 으로 늘렸던 적이 있는데(Section 의 eyebrow 와
    맞춘 값이었다), eyebrow 는 한두 단어짜리 영문 꼬리표라 벌려도 읽히지만

@@ -19,7 +19,7 @@ import VideoEmbed from "./VideoEmbed";
  * 수단이다(videos.ts 머리 주석).
  *
  * 그리고 이쪽은 유튜브 파사드라 썸네일 위에 재생 버튼과 어두운
- * 겹(navy-deep/25)이 이미 있다 — 거기에 자막 그라데이션을 더하면 두 겹이
+ * 겹(carbon-deep/25)이 이미 있다 — 거기에 자막 그라데이션을 더하면 두 겹이
  * 된다.
  *
  * 카드에 호버를 두지 않는다. ProductCard 는 카드 전체가 링크라 떠오르는 것이
@@ -57,10 +57,14 @@ export default function VideoCard({
 
             ⚠️ 흰 글씨가 읽히는 것은 그라데이션 덕이다. 두 편의 하단 22% 띠
                밝기를 420프레임씩 재니 평균 Y 60~62, 가장 밝은 순간이 138.8
-               이었다(금속 부품 쪽). 거기에 navy-deep/85(Y 34.6)를 덮으면
-               Y 50 으로 떨어져 흰 글씨 대비가 약 12.8:1 이 된다(AAA 7:1 의
-               1.8배). 제품 영상 일곱 편(최대 116.4 -> 16:1)보다 밝지만
-               충분하다. 영상을 갈아 끼울 때 하단이 더 밝으면 다시 잰다.
+               이었다(금속 부품 쪽).
+
+               2026-10-14 에 막을 navy-deep 에서 carbon-deep 으로 갈았다 —
+               막 자체 luma 가 35.1 -> 28.4 로 내려가 **대비가 올라갔다**.
+               /85 를 덮은 뒤 흰 글씨 대비는 평균에서 16.0:1, 가장 밝은
+               순간(138.8)에도 13.8:1 이다(navy 때 각각 14.2 · 12.1).
+               AAA(7:1)의 두 배다.
+               영상을 갈아 끼울 때 하단이 더 밝으면 다시 잰다.
 
             패딩이 ProductVideo 보다 좁은 폭에서 작다. 그쪽은 본문 전체 폭을
             쓰는 띠라 영상이 크지만, 여기는 1024 부터 2열로 쪼개져 영상 높이가
@@ -68,7 +72,7 @@ export default function VideoCard({
 
             pointer-events-none — 누를 것이 없는 장식 영상이라 마우스를
             가로채지 않는다. */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/40 to-transparent px-4 pb-4 pt-9 sm:px-5 sm:pb-5 sm:pt-10 lg:px-6 lg:pb-6 lg:pt-12">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-carbon-deep/85 via-carbon-deep/40 to-transparent px-4 pb-4 pt-9 sm:px-5 sm:pb-5 sm:pt-10 lg:px-6 lg:pb-6 lg:pt-12">
           <p className="text-13 font-medium leading-relaxed text-white sm:text-sm">
             {video.note}
           </p>

@@ -190,7 +190,7 @@ export default function CompanyPage() {
           <Reveal
             as="aside"
             delay={80}
-            className="rounded-2xl bg-navy-deep p-7 sm:p-8 lg:col-start-2 lg:row-start-1"
+            className="rounded-2xl bg-carbon-deep p-7 sm:p-8 lg:col-start-2 lg:row-start-1"
           >
             <p className="text-xs font-bold tracking-[0.08em] text-brand-light">
               경영이념
@@ -222,8 +222,9 @@ export default function CompanyPage() {
                   <p className="text-center text-sm font-bold text-brand-light">
                     {item.title}
                   </p>
-                  {/* bg-navy 는 사진이 뜨기 전 자리를 지킨다. 패널이
-                      navy-deep 이라 한 단계 밝은 navy 가 칸으로 보인다.
+                  {/* bg-carbon 은 사진이 뜨기 전 자리를 지킨다. 패널이
+                      carbon-deep 이라 **한 단계 밝은** carbon 이 칸으로 보인다.
+                      ⚠️ 둘을 같은 색으로 두지 말 것 — 칸이 사라진다.
                       rounded-lg 는 패널(rounded-2xl)보다 두 단계 작다 — 작은
                       칸에 같은 반경을 주면 모서리만 눈에 띈다. */}
                   {/* ⚠️⚠️ **3:2 다.** 이 비율이 패널 높이를 정하고, 패널
@@ -247,7 +248,7 @@ export default function CompanyPage() {
                           짧아 격자 stretch 로 늘어나는 쪽이라 사진을 키워도
                           남는 자리가 생긴다. 거기까지 없애려면 1:1(153x153)이
                           되는데, 그러면 16:9 원본이 크게 잘린다. */}
-                  <div className="relative mt-2.5 aspect-[3/2] w-full overflow-hidden rounded-lg bg-navy">
+                  <div className="relative mt-2.5 aspect-[3/2] w-full overflow-hidden rounded-lg bg-carbon">
                     <Image
                       src={item.photo}
                       alt={item.photoAlt}
@@ -266,7 +267,7 @@ export default function CompanyPage() {
                         99~119px)보다도 줄였다.
 
                         pointer-events-none — 누를 것이 없다. */}
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/40 to-transparent px-3 pb-2 pt-6">
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-carbon-deep/85 via-carbon-deep/40 to-transparent px-3 pb-2 pt-6">
                       <p className="text-center text-xs font-medium leading-snug text-white">
                         {item.caption}
                       </p>

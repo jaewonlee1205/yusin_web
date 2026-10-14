@@ -65,7 +65,7 @@ const label = "mb-2.5 block text-sm font-medium text-muted";
 const boxBase =
   "flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-[6px] " +
   "border-[1.5px] border-line bg-white transition-colors " +
-  "peer-checked:border-navy peer-checked:bg-navy " +
+  "peer-checked:border-carbon peer-checked:bg-carbon " +
   "peer-checked:[&>svg]:block " +
   /* ⚠️⚠️ focus-visible 과 focus **둘 다** 건다. 네이티브 폼 검증이
      막으면서 브라우저가 이 input 으로 포커스를 **강제로** 옮기는데, 그
@@ -114,7 +114,7 @@ const boxAgree = `mt-0.5 ${boxBase}`;
  * 컴포넌트에서 ref + useEffect 로 세운다.
  */
 const boxAll =
-  `${boxBase} peer-indeterminate:border-navy peer-indeterminate:bg-navy ` +
+  `${boxBase} peer-indeterminate:border-carbon peer-indeterminate:bg-carbon ` +
   "peer-indeterminate:[&>span]:block";
 
 export default function InquiryForm() {
@@ -217,13 +217,13 @@ export default function InquiryForm() {
              겪었고, 이 레포에서 네 번째다. 바깥 순수 JS 주석으로 둔다. */
     return (
       <div className="py-10 text-center sm:py-14">
-        {/* ⚠️ **외곽선 원이다**(채운 원이 아니다). 한때 bg-navy 에 흰 체크였는데
+        {/* ⚠️ **외곽선 원이다**(채운 원이 아니다). 한때 채운 원에 흰 체크였는데
                레퍼런스를 따라 링으로 바꿨다. 외곽선은 채움보다 가벼워 보여
                크기를 56 -> 64px 로 올렸다.
 
             ⚠️ svg 에 stroke="white" 를 다시 주지 말 것 — currentColor 라야
-               아래 text-navy 가 색을 정한다. */}
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-navy">
+               아래 text-carbon 이 색을 정한다. */}
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-carbon">
           <svg
             width="32"
             height="32"
@@ -234,7 +234,7 @@ export default function InquiryForm() {
             strokeLinecap="round"
             strokeLinejoin="round"
             aria-hidden="true"
-            className="text-navy"
+            className="text-carbon"
           >
             <path d="M20 6 9 17l-5-5" />
           </svg>
@@ -258,16 +258,19 @@ export default function InquiryForm() {
                (setStatus("idle")). 한때 "문의 하나 더 남기기" 라고 적혀 있었다 —
                글자가 짧아진 것이지 동작이 바뀐 것이 아니다.
 
-            ⚠️ 색이 **navy** 다. 위 체크 링과 같아 이 화면의 색이 하나로 모인다.
+            ⚠️ 색이 **차콜(carbon)** 이다. 위 체크 링과 같아 이 화면의 색이
+               하나로 모인다. 2026-10-14 에 navy 에서 갈아 끼웠다 — 색만 바뀌고
+               역할은 그대로다.
                폼 제출 버튼은 bg-brand 레드지만 **여기를 레드로 바꾸지 말 것** —
-               성공 화면에 레드가 없는 것이 지금 상태다.
+               성공 화면에 레드가 없는 것이 지금 상태다. 이 버튼은 행동이 아니라
+               **화면을 닫는 것**이다.
 
             ⚠️ 폭을 320px 로 묶는다. 바깥이 max-w-3xl(768px)이라 전폭으로 두면
                버튼 하나가 과하게 길어진다. */}
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="mx-auto mt-8 block w-full max-w-[20rem] rounded-xl bg-navy py-3.5 text-15 font-bold text-white transition hover:bg-navy-deep active:scale-[0.99]"
+          className="mx-auto mt-8 block w-full max-w-[20rem] rounded-xl bg-carbon py-3.5 text-15 font-bold text-white transition hover:bg-carbon-deep active:scale-[0.99]"
         >
           확인
         </button>

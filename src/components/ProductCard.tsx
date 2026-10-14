@@ -73,7 +73,7 @@ export default function ProductCard({ product }: { product: Product }) {
             로 커져 같은 줄 카드 셋과 그 아래가 전부 밀린다. 자리를 사진 위로
             옮겨 그 흔들림을 없앴다.
 
-            막은 navy-deep 65% 다. 눈대중이 아니라, 가장 밝은 사진(진동기 -
+            막은 carbon-deep 65% 다. 눈대중이 아니라, 가장 밝은 사진(진동기 -
             흰 배경 3D 도면) 위에서도 흰 글자가 읽히는 값을 대비로 구했다.
             흰 바탕 기준 45%:2.73  55%:3.61  60%:4.18  65%:4.88  70%:5.71 이라,
             AA(4.5:1)를 넘기는 첫 값이 65% 다. 어두운 사진 위에서는 더 높다.
@@ -92,7 +92,7 @@ export default function ProductCard({ product }: { product: Product }) {
             그대로 보이고, 카드 전체가 누르는 자리다. */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 flex items-center justify-center bg-navy-deep/65 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          className="pointer-events-none absolute inset-0 flex items-center justify-center bg-carbon-deep/65 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         >
           <span className="flex translate-y-1 items-center gap-1.5 text-sm font-bold text-white transition-transform duration-300 group-hover:translate-y-0">
             상세보기

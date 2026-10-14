@@ -8,7 +8,7 @@ type Props = {
   title?: string;
   lead?: string;
   /** 회색 배경 */
-  tone?: "white" | "surface" | "navy";
+  tone?: "white" | "surface" | "dark";
   /**
    * 세로 여백.
    *  - "default" : 홈·하위 페이지처럼 섹션이 한두 개인 곳
@@ -32,7 +32,7 @@ type Props = {
    *    249) 위에 레드 5%% 가 섞여 배경이 (244,237,238)이 되고, 레드 글자 대비가
    *    4.40:1 로 떨어져 Lighthouse color-contrast 가 미통과했다(접근성 96).
    *    흰 바탕이면 5.09:1 이고, 회색 섹션 위에서 배지가 더 또렷하게 뜬다.
-   *    어두운 쪽은 바탕을 깔지 않는다 — navy 위 brand-light 대비를 그대로 쓴다.
+   *    어두운 쪽은 바탕을 깔지 않는다 — 차콜 위 brand-light 대비를 그대로 쓴다.
    */
   align?: "left" | "center";
   /**
@@ -53,7 +53,7 @@ type Props = {
 const TONE = {
   white: "bg-white",
   surface: "bg-surface",
-  navy: "bg-navy-deep text-white",
+  dark: "bg-carbon-deep text-white",
 } as const;
 
 /*
@@ -102,7 +102,7 @@ export default function Section({
   id,
   className = "",
 }: Props) {
-  const dark = tone === "navy";
+  const dark = tone === "dark";
   const centered = align === "center";
 
   return (

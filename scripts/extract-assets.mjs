@@ -359,7 +359,9 @@ async function makeBrandMarks() {
     await sharp(icon).resize(180, 180).png().toBuffer()
   );
 
-  // OG 이미지: 흰 바탕 + 로고, 하단에 네이비 바.
+  // OG 이미지: 흰 바탕 + 로고, 하단에 차콜 바.
+  // ⚠️ 2026-10-14 에 네이비(11,60,141)에서 carbon-deep(33,27,29)으로 갈았다.
+  //    globals.css 의 --color-carbon-deep 과 같은 값이어야 한다.
   const logo = await sharp(path.join(OUT, "logo.png")).toBuffer();
   const ogLogo = await sharp(logo).resize({ width: 760, fit: "inside" }).toBuffer();
   const ogLogoMeta = await sharp(ogLogo).metadata();
@@ -383,7 +385,7 @@ async function makeBrandMarks() {
             width: 1200,
             height: 96,
             channels: 4,
-            background: { r: 11, g: 60, b: 141, alpha: 1 },
+            background: { r: 33, g: 27, b: 29, alpha: 1 },
           },
         },
         left: 0,

@@ -262,7 +262,8 @@ export default function Header() {
           <div className="hidden items-center gap-6 lg:flex lg:justify-self-end">
             {/* 번호는 ink, 아이콘만 brand 다.
 
-                한때 둘 다 navy 였는데, 흰 헤더 위에서 그 파랑이 로고 레드.
+                한때 둘 다 navy 였는데(2026-10-14 에 사이트에서 걷은 그 파랑),
+                흰 헤더 위에서 그 파랑이 로고 레드.
                 회색 메뉴 어느 쪽과도 짝이 안 맞아 혼자 뜨고 링크처럼 읽혔다.
                 시안 다섯을 한 화면에 찍어 비교했다 — 메뉴와 같은 ink-soft 는
                 번호가 메뉴에 묻히고, 번호까지 brand 로 하면 바로 옆 "견적
