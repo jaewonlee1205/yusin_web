@@ -325,9 +325,24 @@ export default function Home() {
                      ⚠️ 그래서 **gap 도 calc(svh - 상수)** 다. 글과 라인업
                         사이가 화면 높이를 따라 벌어져야 이 관계가 유지된다.
 
+                  ⚠️⚠️ **반대도 같은 손잡이다 — 라인업만 _내리려면_
+                     gap +X · pb -X.** 위 두 관계를 그대로 뒤집으면 나온다.
+                     2026-10-14 에 "진동기 이미지만 아주 조금만 더 내리면
+                     이쁠 거 같아서" 라는 말에 X = 14px(1080 기준) 로 한 번
+                     썼다 —
+
+                       1080  gap 61 -> 75 · pb 72 -> 58
+                             글 125 그대로 · 라인업 아래 158 -> 144
+                        720  둘 다 그대로
+
+                     ⚠️ **720 에서 0 이 되게** 두 식을 다시 잡았다. 짧은
+                        화면은 라인업 아래가 38px 뿐이라 더 줄이면 띠에
+                        붙는다. 계수를 키우고 상수도 함께 키우면 긴 화면만
+                        움직인다.
+
                   ⚠️ 1280x720 · 375x667 · 320x568 이 한계선이다(여유 0).
                      pb 나 gap 을 더 키우기 전에 그 셋에서 재 볼 것. */}
-        <Container className="relative flex flex-1 flex-col justify-center gap-[clamp(1rem,calc(9svh-36px),4rem)] pt-[clamp(1.25rem,3.6vh,3.5rem)] pb-[clamp(1.25rem,calc(10svh-36px),5rem)]">
+        <Container className="relative flex flex-1 flex-col justify-center gap-[clamp(1rem,calc(12.9svh-64px),4.5rem)] pt-[clamp(1.25rem,3.6vh,3.5rem)] pb-[clamp(1.25rem,calc(6.1svh-8px),4rem)]">
             {/* ⚠️⚠️ **글은 조연이다.** 이 화면의 용건은 아래 진동기 넷이고,
                    글이 커지면 그만큼 진동기가 작아진다 — 세로 예산이 하나뿐
                    이기 때문이다. 2026-10-14 에 "어필이 텍스트보다 진동기가

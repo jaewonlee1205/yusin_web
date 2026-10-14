@@ -82,8 +82,19 @@ export default function ContactCTA() {
              그대로 둔다. 지금까지 지켜 온 "오른쪽은 버튼 자리라 비운다" 는
              **그림**에 대한 규칙이었다 — 격자는 글자를 가리지 않는다.
 
-          ⚠️ 불투명도가 0.1 이다. 0.16(괄호·네모와 함께 쓰던 값)으로 두면
-             전폭이 되면서 칸 수가 늘어 **버튼 글자가 지저분해 보인다.**
+          ⚠️⚠️ **진하기는 버튼 글자가 기준이다.** 세 값을 거쳐 왔다 —
+
+               0.16 · 칸 40   괄호·네모와 함께 쓰던 값. 전폭으로 펴자
+                              칸 수가 늘어 "온라인 문의하기" 뒤가
+                              지저분해졌다
+               0.10 · 칸 40   그래서 내렸더니 "흰색 테두리가 현재 잘
+                              안 보이는데 조금만 더 잘 보이게" 를 들었다
+               **0.2 · 칸 48** 칸을 키워 선 수를 줄이고 진하기를 올렸다.
+                              선 하나하나는 또렷한데 **총량은 비슷**해
+                              버튼 글자가 깨끗하다
+
+             ⚠️ 진하기만 올리고 칸을 그대로 두면(0.15~0.2 · 칸 40) 다시
+                지저분해진다. **둘은 같이 움직여야 한다.**
 
           ⚠️ 자리가 **그레인보다 앞**이다. 그레인이 이 위에도 얹혀야 한 면으로
              읽힌다.
@@ -92,17 +103,17 @@ export default function ContactCTA() {
              글 위로 올라왔기 때문인데 격자는 그런 일이 없다. */}
       <svg
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 h-full w-full text-white opacity-[0.1]"
+        className="pointer-events-none absolute inset-0 h-full w-full text-white opacity-[0.2]"
       >
         <defs>
           <pattern
             id="cta-grid"
-            width="40"
-            height="40"
+            width="48"
+            height="48"
             patternUnits="userSpaceOnUse"
           >
             <path
-              d="M40 0H0V40"
+              d="M48 0H0V48"
               fill="none"
               stroke="currentColor"
               strokeWidth="1"
