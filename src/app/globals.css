@@ -332,6 +332,25 @@ body {
   animation: cue 2s ease-in-out infinite;
 }
 
+/* 가로로 흐르는 스크롤 신호. 지표 띠 **위 경계선**을 따라 좌에서 우로
+   지나간다.
+
+   ⚠️ 한때 히어로 가운데 아래에 **세로선**(@keyframes cue)이 서 있었는데,
+      바로 위가 진동기 라인업이라 "진동기에 방해된다" 는 말을 들었다.
+      띠의 경계선 자리로 옮기면 진동기 영역을 전혀 쓰지 않는다. */
+@keyframes cue-x {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+.cue-line-x {
+  animation: cue-x 2.6s ease-in-out infinite;
+}
+
 /*
   스크롤 리빌 — Reveal 컴포넌트가 화면에 들어올 때 is-visible을 붙인다.
   JS가 막히면 영영 안 보이므로 layout.tsx의 <noscript>에서 되돌린다.

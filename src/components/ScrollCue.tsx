@@ -5,7 +5,15 @@ import { useEffect, useState } from "react";
 /**
  * 히어로 하단의 "아래로 스크롤하세요" 표시.
  *
- * ⚠️⚠️ **홈 히어로가 쓴다. 자리는 Container 의 아래 여백이 비워 둔다.**
+ * ⚠️⚠️ **지표 띠의 위 경계선 자리에 얹힌다.** -top-px h-px 로 띠의
+ *    border-t 를 덮고 좌에서 우로 가는 빛줄이 지나간다.
+ *
+ *    한때 히어로 가운데 아래에 **세로선**으로 서 있었다. 바로 위가 진동기
+ *    라인업이라 "진동기에 방해된다" 는 말을 들었고, 자리를 비우려고 Container
+ *    에 아래 여백(pb-*)까지 잡아먹고 있었다. 지금은 **그 여백이 필요 없다** —
+ *    띠의 경계선을 쓰므로 진동기 영역을 전혀 건드리지 않는다.
+ *
+ * ⚠️ 옛 메모(세로선 시절):
  *    이 표시는 absolute 라 높이를 더하지 않으므로, 쓰는 쪽에서 자리를 만들어
  *    주지 않으면 아래 내용과 겹친다 — 2026-10-14 에 진동기 이름표와 겹쳐
  *    통째로 걷었다가 되살린 적이 있다.
@@ -35,18 +43,14 @@ export default function ScrollCue() {
   return (
     <div
       aria-hidden="true"
-      className={`pointer-events-none absolute inset-x-0 bottom-3 hidden justify-center transition-opacity duration-500 lg:flex [@media(max-height:700px)]:!hidden ${
+      className={`pointer-events-none absolute inset-x-0 -top-px h-px overflow-hidden transition-opacity duration-500 ${
         hidden ? "opacity-0" : "opacity-100"
       }`}
     >
-      {/* ⚠️ **글자가 없다. 움직이는 선뿐이다.** 2026-10-14 에 "SCROLL 문구는
-             지우고 애니메이션만" 이라는 요청에 걷었다. 되살리지 말 것 —
-             글자를 되살리면 쓰는 높이가 44 -> 64px 로 늘어 page.tsx 의 예약
-             여백(pb-*)도 같이 키워야 한다.
-             aria-hidden 장식이라 글자가 없어도 접근성에 영향이 없다. */}
-      <span className="relative block h-11 w-px overflow-hidden bg-white/15">
-        <span className="cue-line absolute inset-0 block bg-white/70" />
-      </span>
+      {/* ⚠️ **글자가 없다. 움직이는 선뿐이다.** "SCROLL 문구는 지우고
+             애니메이션만" 이라는 요청에 걷었다. 되살리지 말 것.
+             aria-hidden 장식이라 접근성에 영향이 없다. */}
+      <span className="cue-line-x block h-px w-1/5 bg-gradient-to-r from-transparent via-white/70 to-transparent" />
     </div>
   );
 }

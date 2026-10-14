@@ -27,7 +27,11 @@ import { featuredVideos } from "@/data/videos";
 /** count=false 인 값은 세어 올리지 않는다 — 연도가 굴러가면 어색하다. */
 /* 첫 화면에 서는 진동기 네 기종.
 
-   ⚠️⚠️ **w·h 는 도면의 모델 단위 그대로다.** 넷을 같은 도면
+   ⚠️ w·h 는 **사방 6% 여백을 넣은 뒤의 값**이다(232 : 323 : 420 : 615).
+      여백 전은 207 : 288 : 375 : 549 였고 **비는 똑같다** — 네 장을 모두
+      1.12배 했기 때문이다. 여백을 넣은 까닭은 SVG 파일 머리에 적어 두었다.
+
+   ⚠️⚠️ **w·h 는 도면의 모델 단위에서 왔다.** 넷을 같은 도면
       (유신자료/진동기,리니어도면.dwg)의 같은 줄에서 **같은 축척으로**
       잘라 왔기 때문에, 이 숫자의 비(207 : 288 : 375 : 549)가 곧 실제
       크기 비다. 화면에서 그 비율대로 서는 것이 이 블록의 전부다 —
@@ -39,10 +43,10 @@ import { featuredVideos } from "@/data/videos";
    ⚠️ 규격표에는 **일곱 기종**이 있다(4호구형 · Ø440 · Ø500 포함).
       첫 화면에 세우는 것은 **표준 넷**이다. */
 const VIBRATORS = [
-  { no: "1호", w: 207, h: 213, src: "/images/hero/vibrator-1.svg", alt: "진동기 1호 평면도" },
-  { no: "2호", w: 288, h: 302, src: "/images/hero/vibrator-2.svg", alt: "진동기 2호 신형 평면도" },
-  { no: "3호", w: 375, h: 380, src: "/images/hero/vibrator-3.svg", alt: "진동기 3호 신형 평면도" },
-  { no: "4호", w: 549, h: 503, src: "/images/hero/vibrator-4.svg", alt: "진동기 4호 신형 평면도" },
+  { no: "1호", w: 232, h: 238, src: "/images/hero/vibrator-1.svg", alt: "진동기 1호 평면도" },
+  { no: "2호", w: 323, h: 338, src: "/images/hero/vibrator-2.svg", alt: "진동기 2호 신형 평면도" },
+  { no: "3호", w: 420, h: 425, src: "/images/hero/vibrator-3.svg", alt: "진동기 3호 신형 평면도" },
+  { no: "4호", w: 615, h: 563, src: "/images/hero/vibrator-4.svg", alt: "진동기 4호 신형 평면도" },
 ];
 
 /** 네 기종 도면 폭의 합. 화면 폭을 비율로 나눌 때 분모가 된다. */
@@ -271,7 +275,7 @@ export default function Home() {
                2026-10-14 에 lg:grid-cols-2 로 좌우를 갈라 봤다가 걷었다 —
                진동기가 반쪽에 갇혀 작아졌다(위 ParallaxLayer 주석 참고).
                justify-end 로 바닥에 앉혀 위가 비게 둔다. */}
-        <Container className="relative flex flex-1 flex-col justify-end gap-[clamp(1rem,2.6vh,2rem)] py-[clamp(1.25rem,3.6vh,3.5rem)] lg:[@media(min-height:701px)]:pb-24">
+        <Container className="relative flex flex-1 flex-col justify-end gap-[clamp(1rem,2.6vh,2rem)] py-[clamp(1.25rem,3.6vh,3.5rem)]">
             {/* ⚠️⚠️ **글은 조연이다.** 이 화면의 용건은 아래 진동기 넷이고,
                    글이 커지면 그만큼 진동기가 작아진다 — 세로 예산이 하나뿐
                    이기 때문이다. 2026-10-14 에 "어필이 텍스트보다 진동기가
@@ -310,7 +314,7 @@ export default function Home() {
                 className="rise mt-[clamp(0.625rem,1.6vh,1rem)] text-[clamp(1.25rem,5vw,1.75rem)] font-bold leading-[1.3] tracking-tight text-white lg:text-[clamp(1.4rem,3.4vh,2.5rem)]"
                 style={{ animationDelay: "140ms" }}
               >
-                한 기종으로는 안 되는 부품이 있습니다
+                진동기가 맞아야 부품이 안 걸립니다
                 <br />
                 <span className="text-brand-light">그래서 네 기종을</span>{" "}
                 {/* 좁은 칼럼에서 "갖췄 / 습니다"로 끊기지 않게 묶어 둔다 */}
@@ -322,6 +326,12 @@ export default function Home() {
                   설계합니다" 로 **제품을 나열**했다. 이 회사의 경쟁력은
                   **진동기를 네 가지로 갖춰 부품마다 골라 쓰는 것**이라,
                   첫 화면이 그 말을 하게 했다.
+
+                  ⚠️⚠️ **"오류율" 을 숫자 없이 현장 언어로 옮긴 문구다.**
+                     "오류율 n% 감소" 는 유신이 확인해 준 값이 아니라 쓸 수
+                     없다. 대신 그 말이 현장에서 뜻하는 것 — **걸림 · 자세
+                     흐트러짐 · 공급 끊김** — 을 적는다. 수치를 받으면 그때
+                     바꾼다.
 
                   ⚠️ **경쟁사를 깎는 문장을 쓰지 않는다.** "다른 회사는
                      정확도가 떨어진다" 는 확인할 수 없는 말이고 비방으로
@@ -344,8 +354,8 @@ export default function Home() {
                 className="rise mt-[clamp(0.5rem,1.4vh,0.875rem)] max-w-xl text-[clamp(0.8125rem,1.6vh,1rem)] leading-relaxed text-white/75"
                 style={{ animationDelay: "220ms" }}
               >
-                부품과 볼 크기에 맞는 진동기를 골라 답니다. 작은 부품도 큰
-                부품도 한 자리에서.
+                부품과 볼 크기에 맞는 진동기를 고르면 걸림과 자세 흐트러짐이
+                줄어 공급이 끊기지 않습니다.
               </p>
 
               </div>
@@ -366,15 +376,18 @@ export default function Home() {
                   제품 살펴보기
                   <ArrowRight />
                 </MagneticLink>
-                {/* ⚠️ **상자가 아니라 글자 링크다.** 테두리 상자가 둘이면
-                       서로 겨뤄 1차(레드)가 묻힌다. 밑줄과 화살표가 누를
-                       곳임을 말한다. 상자로 되돌리지 말 것. */}
+                {/* ⚠️ **상자다.** 한때 밑줄 글자 링크였는데 "디자인 너무
+                       이상해, 박스로 감싸든 개선 필요" 라는 말을 들었다.
+                       1차(레드 채움)와 겹쳐 보이지 않게 **옅은 바탕**을 깔아
+                       두 버튼의 무게를 가른다.
+                   ⚠️ **화살표를 넣지 말 것.** 1차 버튼에만 둔다 — 둘 다
+                      있으면 같은 말을 두 번 하고, 글자 뒤에 떨어진 화살표가
+                      따로 노는 것으로 읽힌다. */}
                 <Link
                   href="/contact"
-                  className="group inline-flex items-center gap-1.5 px-1 py-4 text-15 font-semibold text-white/85 underline decoration-white/30 underline-offset-[6px] transition hover:text-white hover:decoration-white/70"
+                  className="inline-flex items-center justify-center rounded-xl border border-white/35 bg-white/[0.06] px-6 py-4 text-15 font-semibold text-white transition hover:border-white/60 hover:bg-white/[0.12] active:scale-[0.98] sm:px-8"
                 >
                   견적 문의하기
-                  <span className="transition-transform group-hover:translate-x-0.5">→</span>
                 </Link>
               </div>
             </div>
@@ -481,25 +494,16 @@ export default function Home() {
               </ul>
             </div>
 
-          {/* ⚠️⚠️ 이 표시는 **절대배치**라 높이를 더하지 않는다. 그래서
-                 자리는 위 Container 의 **아래 여백**이 비워 둔다. 표시가
-                 쓰는 높이는 글자 12 + 간격 8 + 선 32 + bottom-3 12 = 64px 라
-                 **pb-24(96px)** 를 줘서 32px 를 띄운다. pb-16(64px)으로는
-                 틈이 정확히 0 이 되어 1280x720 · 1024x768 에서 이름표에
-                 **닿았다** — 실측으로 올린 값이다.
-
-                 한때 그 여백 없이 걸었다가 진동기 이름표와 겹쳐 통째로
-                 걷은 적이 있다(그림 아래부터 지표 띠까지 45px 인데 표시가
-                 64px 를 쓴다). **여백과 짝으로만 쓴다.**
-
-                 ⚠️ 여백은 표시가 보이는 조건과 **똑같은 조건**에 건다 —
-                    sm(640px) 이상이고 높이 701px 이상. 그 밖에서는 표시가
-                    !hidden 이라 여백만 남는다. */}
-          <ScrollCue />
         </Container>
 
         {/* 2. 지표 스트립 — 섹션 맨 아래에 붙어 항상 첫 화면 안에 보인다 */}
+        {/* ⚠️ **스크롤 신호가 이 띠의 위 경계선에 얹힌다**(ScrollCue).
+               relative 가 그 기준이다 — 빼면 표시가 페이지 전체로 퍼진다.
+               한때 표시가 히어로 가운데 아래에 세로선으로 서 있었고, 그
+               자리를 비우려고 Container 가 아래 여백을 128px 까지 잡아먹었다.
+               여기로 옮기면서 그 여백을 **전부 진동기에 돌려줬다.** */}
         <div className="relative border-t border-white/10 bg-black/25 backdrop-blur-[2px]">
+          <ScrollCue />
           <Container>
             <dl className="grid grid-cols-2 divide-white/10 sm:grid-cols-4 sm:divide-x">
               {STATS.map((s, i) => (
