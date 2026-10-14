@@ -1150,22 +1150,10 @@ export default function Home() {
               끼우면 같은 말을 두 번 하면서 표까지 시선이 닿는 거리도 멀어진다. */
         eyebrow="WHY YUSIN"
         title="유신을 선택하는 이유"
-        action={
-          /* PROCESS 때부터 있던 버튼이다. 그때 근거는 "제작 과정을 읽은 다음이
-             문의로 가기 자연스러운 자리" 였는데, 지금은 **비교표로 믿음을 준
-             다음**이라 더 맞는다.
-
-             글자가 "견적 문의하기" 가 아닌 것은 히어로 버튼이 이미 그 말을
-             쓰고 있어서다. 한 페이지에 같은 글자 버튼이 둘이면 눌러 본 것을
-             또 누르게 된다.
-
-             ⚠️ /company 로 바꾸지 말 것. 홈 본문에 회사소개 링크를 **일부러
-                두지 않았다** — 위 PERFORMANCE 주석에 "그 동선은 헤더.푸터
-                메뉴에 있다" 고 적혀 있다. */
-          <Link href="/contact" className={BTN}>
-            제작 문의하기
-          </Link>
-        }
+        /* ⚠️ **action(버튼)을 다시 넣지 말 것.** 2026-10-14 에 걷었다 —
+           "제작 문의하기" 라는 버튼이 여기 있었는데, 바로 아래 문의 띠가
+           같은 자리에서 같은 말을 더 크게 한다. 히어로에도 "견적 문의하기"
+           가 있어 한 페이지에 문의 버튼이 셋이었다. */
       >
         {/* 표 + 맵이 **한 줄**로 선다.
 
@@ -1208,8 +1196,14 @@ export default function Home() {
                  "가격대"~"부품 변경" 으로 짧아 가운데가 어색하지 않다.
 
               ⚠️ 가로 스크롤 + 오른쪽 페이드 마스크는 **제품 상세 사양표가
-                 쓰는 것과 같은 장치**다. min-w-[34rem]은 네 열이 줄바꿈
-                 없이 서는 최소 폭이다(가운데 정렬이라 패딩이 줄어 36 -> 34rem).
+                 쓰는 것과 같은 장치**다. min-w 는 **열이 줄바꿈 없이 서는
+                 최소 폭**이고, 열 수가 바뀌면 함께 바꾼다 —
+
+                   네 열(수입 브랜드가 있던 때)   34rem
+                   **세 열(지금)**                **24rem**
+
+                 24rem(384px)이면 가장 긴 값("전담 부서 · 현장 방문")이 들어가고
+                 **390 에서 가로 스크롤이 거의 사라진다**(Container 안쪽 350px).
 
               ⚠️ th scope 가 둘이다 — 머리행은 col, 각 행의 항목 이름은 row. */}
           {/* ⚠️ div 가 아니라 **Reveal** 이다. 래퍼를 덧대지 않고 격자 자식
@@ -1228,7 +1222,7 @@ export default function Home() {
 
                       border-spacing-0 이라 보기에는 collapse 와 거의 같다.
                       세로선이 없고 가로선은 행마다 하나뿐이라 겹칠 일도 없다. */}
-            <table className="w-full min-w-[34rem] border-separate border-spacing-0 text-center text-sm">
+            <table className="w-full min-w-[24rem] border-separate border-spacing-0 text-center text-sm">
               <thead>
                 <tr>
                   <th
@@ -1513,7 +1507,7 @@ export default function Home() {
               <div className="flex flex-col items-center justify-between rounded-full bg-surface px-1.5 py-5">
                 <AxisArrow className="rotate-[-90deg]" />
                 <span className="text-13 font-bold leading-none text-ink-soft [writing-mode:vertical-rl]">
-                  대응
+                  부품 범위
                 </span>
                 <AxisArrow className="rotate-90" />
               </div>
@@ -1539,7 +1533,7 @@ export default function Home() {
               <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-surface sm:aspect-[5/2] xl:aspect-auto">
                 <div
                   aria-hidden="true"
-                  className="absolute left-0 top-0 bg-brand/[0.06]"
+                  className="absolute right-0 top-0 bg-brand/[0.06]"
                   style={{
                     width: `${POSITIONING_IDEAL.width}%`,
                     height: `${POSITIONING_IDEAL.height}%`,
@@ -1555,7 +1549,7 @@ export default function Home() {
 
                         12px bold 라 WCAG 의 "큰 글자" 예외(3:1)도 못 받는다.
                         영역 음영을 진하게 바꾸면 이 값을 다시 잴 것. */}
-                <span className="absolute left-4 top-3.5 text-xs font-bold text-brand-dark">
+                <span className="absolute right-4 top-3.5 text-xs font-bold text-brand-dark">
                   이상적
                 </span>
 
@@ -1613,7 +1607,7 @@ export default function Home() {
               <div className="flex items-center justify-between rounded-full bg-surface px-5 py-1.5">
                 <AxisArrow className="rotate-180" />
                 <span className="text-13 font-bold leading-none text-ink-soft">
-                  가격
+                  진동기 기종
                 </span>
                 <AxisArrow />
               </div>
