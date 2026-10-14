@@ -95,11 +95,11 @@ const performanceKpis: Kpi[] = [
         라벨의 1종 → 4종 이 같은 방향으로 읽힌다. */
   {
     from: "95",
-    fromLabel: "진동기 1종",
+    fromLabel: "진동기 1종 정확도",
     value: "99.9",
     unit: "%",
     wide: true,
-    label: "4종",
+    label: "4종 정확도",
     note: "둘 다 회사가 제시한 값 — 한 기종만 쓰는 방식과 네 기종을 골라 쓰는 방식",
   },
   /* ⚠️ **숫자를 손으로 박지 말 것.** 보유 설비 페이지의 equipment 배열에서
@@ -941,7 +941,11 @@ export default function Home() {
 
             ⚠️ StatCounter 를 쓰지 않는다. 바로 위 히어로 지표 띠가 이미 세어
                올리고 있어, 한 화면에서 숫자가 두 번 구르면 산만하다. */}
-        <ul className="mt-10 grid gap-8 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4 lg:gap-7 lg:text-center">
+        {/* ⚠️ **lg:items-end 다.** 비교 칸 숫자가 56px, 나머지 둘이 34px 라
+               그냥 두면 비교 칸 라벨이 **21px 아래**로 내려가 밑줄이 어긋난다.
+               아래를 맞추면 숫자 윗선이 어긋나는데, 눈이 따라가는 것은
+               **라벨 줄**이라 그쪽을 맞췄다. */}
+        <ul className="mt-10 grid gap-8 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4 lg:items-end lg:gap-7 lg:text-center">
           {performanceKpis.map((kpi, i) => (
             <Reveal
               as="li"
@@ -973,14 +977,25 @@ export default function Home() {
                      ⚠️ AxisArrow 는 width/height 가 16 고정이라 큰 숫자 옆에서
                         작다. h-7 w-7 로 덮는다(CSS 가 속성을 이긴다).
 
-                 ⚠️ 비교 칸만 숫자가 크다(44px vs 34px). 2칸 폭을 쓰는데
-                    내용이 230px 밖에 안 차 "여백 많으니 좀 더 크게" 라는 말을
-                    들었다. **items-end 로 밑줄을 맞춘다** — 글자 크기가 달라
-                    baseline 이 어긋나기 때문이다. */}
+                 ⚠️⚠️ **비교 칸 숫자는 반응형이다. 고정 크기로 두지 말 것.**
+                    2칸 폭을 쓰는데 내용이 덜 차 "여백 많으니 좀 더 크게" 를
+                    **두 번** 들어 34 -> 44 -> 56px 로 올렸는데, **320 에서는
+                    이 칸이 280px 뿐**이라 56px 이면 넘친다. 그래서 —
+
+                      320 · 390      36px
+                      640 ~ 1023     44px
+                      1024 이상      56px
+
+                    ⚠️ 화살표도 함께 올린다. 숫자만 키우면 가운데가 비어
+                       보인다. mb-* 는 **라벨 줄만큼 화살표를 내려** 숫자
+                       가운데에 맞추는 값이라 크기를 따라 바꿔야 한다.
+
+                 ⚠️ **items-end 로 밑줄을 맞춘다** — 비교 칸만 글자가 커서
+                    baseline 이 다른 칸과 어긋나기 때문이다. */}
               {kpi.from ? (
                 <div className="flex items-end gap-4 sm:gap-6 lg:justify-center">
                   <div className="text-center">
-                    <p className="text-[2.75rem] font-extrabold leading-none tracking-tight tabular-nums text-muted">
+                    <p className="text-[2.25rem] font-extrabold leading-none tracking-tight tabular-nums text-muted sm:text-[2.75rem] lg:text-[3.5rem]">
                       {kpi.from}
                       <span className="ml-0.5 text-lg font-bold">
                         {kpi.unit}
@@ -990,9 +1005,9 @@ export default function Home() {
                       {kpi.fromLabel}
                     </p>
                   </div>
-                  <AxisArrow className="mb-9 h-7 w-7" />
+                  <AxisArrow className="mb-8 h-6 w-6 sm:mb-9 sm:h-7 sm:w-7 lg:mb-11 lg:h-9 lg:w-9" />
                   <div className="text-center">
-                    <p className="text-[2.75rem] font-extrabold leading-none tracking-tight tabular-nums text-ink">
+                    <p className="text-[2.25rem] font-extrabold leading-none tracking-tight tabular-nums text-ink sm:text-[2.75rem] lg:text-[3.5rem]">
                       {kpi.value}
                       <span className="ml-0.5 text-lg font-bold text-brand">
                         {kpi.unit}
