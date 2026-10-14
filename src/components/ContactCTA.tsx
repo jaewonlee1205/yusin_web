@@ -48,7 +48,28 @@ export default function ContactCTA() {
        ⚠️ 이 주석을 JSX 주석({ /* ... *\/ })으로 바꾸지 말 것. return (
           바로 뒤에 두면 주석과 <section> 이 **자식 둘**이 되어
           "Expected ',', got 'ident'" 로 빌드가 깨진다. */
-    <section className="relative bg-dark">
+    <section className="relative overflow-hidden bg-dark">
+      {/* 진동기 4호 평면도. 첫 화면과 짝이 맞는다 — 같은 도면이 맨 위와
+             맨 아래에서 두 번 보인다.
+
+          ⚠️ **오른쪽 가장자리를 넘어간다.** section 의 overflow-hidden 이
+             잘라 준다 — 그 클래스를 빼면 띠 밖으로 삐져나온다.
+
+          ⚠️ 자리가 **그레인보다 앞**이다. 그레인이 이 그림 위에도 얹혀야
+             한 면으로 읽힌다.
+
+          ⚠️ 글과 버튼은 왼쪽·가운데에 있고 이 그림은 오른쪽 끝이라 대비에
+             영향이 없다. 불투명도를 올리면 그때는 영향이 생긴다.
+
+          ⚠️ 1024 아래에서는 감춘다 — 폭이 좁아지면 그림이 글 위로 올라온다. */}
+      <img
+        src="/images/hero/vibrator-4.svg"
+        alt=""
+        aria-hidden="true"
+        width={549}
+        height={503}
+        className="pointer-events-none absolute -right-16 top-1/2 hidden h-[150%] w-auto -translate-y-1/2 opacity-[0.08] lg:block"
+      />
       {/* ⚠️ 그레인이 Container **앞**에 있다. DOM 순서상 글자가 위로 온다.
              단색 면이라 히어로(0.08)보다 진하게 0.12 를 준다. */}
       <div

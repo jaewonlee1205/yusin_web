@@ -139,7 +139,14 @@ export default function Home() {
       />
 
       {/* 1. Hero — 헤더를 뺀 한 화면에 지표 줄까지 전부 들어가야 한다.
-          화면이 낮아지면 패딩·글자·이미지가 clamp()로 같이 줄어든다. */}
+          화면이 낮아지면 패딩·글자·이미지가 clamp()로 같이 줄어든다.
+
+          ⚠️⚠️ **들어가는지 재는 법** —
+             hero.getBoundingClientRect().bottom <= window.innerHeight
+          **높이끼리 비교하지 말 것.** 히어로 위에 헤더(81px)가 있어서
+          hero.height 와 innerHeight 를 견주면 늘 들어가는 것처럼 나온다.
+          2026-10-14 에 그렇게 재서 열한 크기 중 아홉이 11~65px 넘치는 것을
+          놓쳤다. */}
       <section className="hero-screen relative flex flex-col overflow-hidden bg-dark">
         {/* 배경 2 — 실제 피더가 도는 영상.
 
@@ -240,7 +247,7 @@ export default function Home() {
         {/* ⚠️ 세로 패딩이 4vh 였다. 진동기 줄을 전폭으로 내리면서 360x740
                에서 6px 넘쳤다 — 3.6vh 로 낮춰 위아래 6px 를 돌려받았다.
                ⚠️ 다시 올리기 전에 360x740 에서 재 볼 것. */}
-        <Container className="relative flex flex-1 items-center py-[clamp(1.25rem,3.6vh,3.5rem)] sm:[@media(min-height:701px)]:pb-24">
+        <Container className="relative flex flex-1 items-center py-[clamp(1.25rem,3.6vh,3.5rem)] lg:[@media(min-height:701px)]:pb-32">
           {/* ⚠️⚠️ **세로 한 줄이다.** 한때 lg:grid-cols-[1.1fr_1fr] 로
                  글과 그림을 좌우로 갈랐는데, 그러면 진동기 넷이 오른쪽
                  절반(504px)에 갇혀 4호가 172px 밖에 안 되고 **글·그림 아래
@@ -248,14 +255,24 @@ export default function Home() {
                  진동기 넷이 첫 화면의 용건이라 전폭으로 내렸다 —
                  4호가 268px 로 커지고 빈 자리가 사라진다.
                  ⚠️ 좌우 2단으로 되돌리지 말 것. */}
-          <div className="flex w-full flex-col gap-[clamp(1.25rem,3vh,2.5rem)]">
-            {/* ⚠️ **가운데 정렬이다.** 진동기 넷을 전폭으로 내리면서
-                   글은 왼쪽 끝, 그림은 가운데가 되어 **축이 둘로 갈렸다**.
-                   눈썹 · 제목 · 본문 · 버튼 · 진동기 넷 · SCROLL 이 한 축에
-                   서도록 글도 가운데로 모았다.
-                   ⚠️ 왼쪽 정렬로 되돌리려면 그림 줄도 같이 왼쪽으로 옮길 것.
-                      한쪽만 바꾸면 다시 축이 갈린다. */}
-            <div className="text-center">
+          {/* ⚠️ 칸이 셋이다 — 글 · 구분선 · 라인업. 간격이 두 번 들어가므로
+                 값을 낮게 잡았다. 구분선 자체가 이미 갈라 주는 몫을 한다. */}
+          <div className="flex w-full flex-col gap-[clamp(0.875rem,2.2vh,1.75rem)]">
+            {/* ⚠️⚠️ **제목·본문은 왼쪽, 버튼은 오른쪽 끝이다.**
+                   한때 전부 가운데로 모았는데 "가운데 정렬만 한 수준" 이라는
+                   말을 들었다. 버튼을 제목 옆으로 보내면 두 가지가 풀린다 —
+                   가로로는 전폭을 쓰고, **세로로 약 80px 이 남는다**(버튼이
+                   제목 아래 한 줄을 통째로 차지하지 않는다).
+                   그 80px 이 아래 라인업과 SCROLL 의 숨 쉴 자리가 된다.
+
+                   관용구는 문의 CTA 띠(ContactCTA.tsx)에서 가져왔다 —
+                   minmax(0,1fr)_auto 는 왼쪽이 남는 폭을 다 먹고 오른쪽은
+                   버튼 실제 폭만 갖는다. 좁은 폭에서는 세로로 쌓인다.
+
+                   ⚠️ 가운데 정렬로 되돌리지 말 것. 한글은 왼쪽 정렬이 읽기
+                      편하고, 가운데로 모으면 다시 "무난" 해진다. */}
+            <div className="flex flex-col items-start gap-[clamp(1.25rem,3vh,2.25rem)] lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-12">
+              <div>
               {/* 로고의 F.A 가 무엇의 약자인지 풀어 주는 자리다.
                   로고에는 "유신 F.A SYSTEM" 만 크게 보이고 그 아래 작은
                   영문은 눈에 잘 안 들어온다.
@@ -272,8 +289,14 @@ export default function Home() {
               >
                 {site.tagline}
               </p>
+              {/* ⚠️ 글자 크기가 **폰과 데스크톱이 다른 기준**이다.
+                     폰은 **폭**(5.6vw), lg 부터는 **높이**(4.4vh)로 잡는다.
+                     이 제목은 폰에서 4줄이라 vh 로 잡으면 844 에서 37px x 4 =
+                     185px 를 먹고 히어로가 23px 넘쳤다. 폰은 세로가 아니라
+                     **가로가 좁아서** 줄이 늘어나는 것이라 폭으로 재는 쪽이
+                     맞는다. ⚠️ 하나로 합치지 말 것. */}
               <h1
-                className="rise mt-[clamp(0.75rem,2vh,1.25rem)] text-[clamp(1.6rem,4.4vh,3.4rem)] font-bold leading-[1.25] tracking-tight text-white"
+                className="rise mt-[clamp(0.75rem,2vh,1.25rem)] text-[clamp(1.35rem,5.6vw,2rem)] font-bold leading-[1.25] tracking-tight text-white lg:text-[clamp(1.6rem,4.4vh,3.4rem)]"
                 style={{ animationDelay: "140ms" }}
               >
                 한 기종으로는 안 되는 부품이 있습니다
@@ -307,15 +330,21 @@ export default function Home() {
                   실측 — 640~1440 에서 1줄, 320~430 에서 2줄. 폰에서 1줄은
                   어떤 후보로도 안 된다(후보 일곱을 폭마다 재 봤다). */}
               <p
-                className="rise mx-auto mt-[clamp(0.75rem,2vh,1.5rem)] max-w-xl text-[clamp(0.875rem,1.9vh,1.125rem)] leading-relaxed text-white/75"
+                className="rise mt-[clamp(0.75rem,2vh,1.5rem)] max-w-xl text-[clamp(0.875rem,1.9vh,1.125rem)] leading-relaxed text-white/75"
                 style={{ animationDelay: "220ms" }}
               >
                 부품과 볼 크기에 맞는 진동기를 골라 답니다. 작은 부품도 큰
                 부품도 한 자리에서.
               </p>
 
+              </div>
+
+              {/* ⚠️ 둘째 칸이다. lg 부터 제목 오른쪽에 서고, 그 아래에서는
+                     본문 밑으로 내려온다.
+                     ⚠️ **mt 를 주지 말 것.** 바깥 묶음의 gap 이 이미 간격을
+                        맡는다 — 둘 다 주면 쌓였을 때 간격이 두 번 들어간다. */}
               <div
-                className="rise mt-[clamp(1.25rem,3vh,2.25rem)] flex flex-row justify-center gap-3"
+                className="rise flex flex-row gap-3"
                 style={{ animationDelay: "300ms" }}
               >
                 {/* ⚠️ 사이트에서 마그네틱을 쓰는 자리는 둘뿐이다 — 여기와
@@ -336,6 +365,14 @@ export default function Home() {
                 </Link>
               </div>
             </div>
+
+            {/* 글과 라인업을 가르는 전폭 선. 선이 가로를 끝까지 쓰면서
+                구조가 생긴다 — 넷이 멀리 떨어져도 한 줄로 읽히는 근거다.
+                ⚠️ 라인업이 감춰지는 낮은 화면에서는 선도 같이 감춘다. */}
+            <div
+              aria-hidden="true"
+              className="h-px w-full bg-white/15 [@media(max-height:640px)]:hidden"
+            />
 
             {/* 진동기 네 기종. 이 회사의 강점이 "부품에 맞는 진동기를 골라
                 쓴다" 는 것이라, 첫 화면이 그 넷을 바로 보여 준다.
@@ -370,27 +407,35 @@ export default function Home() {
               className="rise-zoom w-full [@media(max-height:640px)]:hidden"
               style={{ animationDelay: "380ms" }}
             >
-              {/* ⚠️ 폭을 **퍼센트**로 준다. px 로 주면 도면 크기 그대로(합
-                     1,419px) 서서 칸을 넘친다. 칸이 좁아져도 넷이 **같이**
-                     줄어야 크기 비가 유지된다 — flex-shrink 에 맡기면
-                     절대량으로 줄어 비가 깨진다.
+              {/* ⚠️⚠️ **ul 은 전폭이다. 남는 폭을 간격이 먹는다.**
 
-                  calc 의 3 은 **칸 사이 간격 셋**이다. 항목이 넷이라 셋이다. */}
-              {/* ⚠️⚠️ **높이 상한을 묶음 바깥에 건다.** 개별 <img> 에
-                     max-height 를 걸면 넷이 저마다 다르게 잘려 **크기 비가
-                     깨진다** — 이 블록의 전부가 그 비율이다.
+                     한때 ul 에 max-width 를 걸어 694px 로 묶었다. 그러면
+                     1280 에서 **좌우로 394px 이 비고** 넷이 간격 20px 로
+                     따닥 붙었다 — "공간을 더 활용하라" 는 말을 들은 자리다.
 
-                     그래서 ul 의 **폭**을 제한한다. 가장 큰 4호가 묶음 폭의
-                     38.69% 를 쓰고 그 그림의 세로/가로가 503/549 이므로,
-                     묶음 폭 W 일 때 가장 높은 그림은 W x 0.3869 x 0.916 이다.
-                     곧 높이 H 를 얻으려면 W = H / 0.3544 다.
-                     H 를 clamp(150px, 30svh, 280px) 로 두면 W 는 아래 값이
-                     된다 — 그 계산을 CSS 가 그대로 한다. */}
+                     뒤집었다. 그림 폭 합계(--span)는 **높이 상한에서** 뽑고,
+                     ul 은 100% 를 쓰며, **남는 폭 전부를 간격 셋이 나눈다.**
+
+                     --h    가장 큰 4호의 **높이** 상한
+                     --span 네 그림 **폭의 합** = --h / 0.3544
+                            0.3544 = (549/1419) x (503/549)
+                            1419 는 네 폭의 합(207+288+375+549)
+                     li     calc(var(--span) * 그 기종 폭 / 1419)
+                     gap    (100% - --span) / 3   ← 남는 폭을 셋이 나눈다
+
+                     ⚠️ --span 에 min() 이 걸려 있다. 화면이 높고 좁으면
+                        --h/0.3544 가 100% 를 넘어 **간격이 음수**가 된다.
+
+                     ⚠️⚠️ **아래 비율 숫자를 손대면 거짓이 된다.** 넷은 같은
+                        도면에서 같은 축척으로 잘라 온 것이고 그 비가 곧
+                        실제 크기 비다. */}
               <ul
-                className="mx-auto flex items-end justify-center gap-[var(--g)]"
+                className="flex w-full items-end"
                 style={{
-                  ["--g" as string]: "clamp(0.5rem,1.6vw,1.25rem)",
-                  maxWidth: "calc(clamp(150px, 30svh, 280px) / 0.3544)",
+                  ["--h" as string]: "clamp(130px, 26svh, 300px)",
+                  ["--span" as string]:
+                    "min(calc(var(--h) / 0.3544), calc(100% - 3rem))",
+                  gap: "max(0.5rem, calc((100% - var(--span)) / 3))",
                 }}
               >
                 {VIBRATORS.map((v) => (
@@ -398,7 +443,7 @@ export default function Home() {
                     key={v.no}
                     className="shrink-0"
                     style={{
-                      width: `calc((100% - 3 * var(--g)) * ${(v.w / VIBRATOR_SPAN).toFixed(4)})`,
+                      width: `calc(var(--span) * ${(v.w / VIBRATOR_SPAN).toFixed(4)})`,
                     }}
                   >
                     <img

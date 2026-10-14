@@ -9,9 +9,11 @@ import { useEffect, useState } from "react";
  *    이 표시는 absolute 라 높이를 더하지 않으므로, 쓰는 쪽에서 자리를 만들어
  *    주지 않으면 아래 내용과 겹친다 — 2026-10-14 에 진동기 이름표와 겹쳐
  *    통째로 걷었다가 되살린 적이 있다.
- *    page.tsx 의 Container 가 sm:[@media(min-height:701px)]:pb-24 로
- *    96px 를 비운다(표시가 64px 를 쓰고 32px 가 틈이다).
+ *    page.tsx 의 Container 가 lg:[@media(min-height:701px)]:pb-32 로
+ *    128px 를 비운다(표시가 64px 를 쓰고 64px 가 틈이다).
  *    **표시가 보이는 조건과 똑같은 조건**이어야 한다.
+ *    ⚠️ sm(640)이 아니라 **lg(1024)부터**다 — 768x1024 에서 128px 를
+ *       비우느라 히어로가 83px 넘쳤다. 태블릿에는 표시가 없어도 된다.
  *
  * absolute로 띄워 레이아웃 높이에 전혀 영향을 주지 않는다.
  * 히어로가 화면에 딱 맞게 짜여 있어서 높이를 한 픽셀이라도 더하면 안 된다.
@@ -32,7 +34,7 @@ export default function ScrollCue() {
   return (
     <div
       aria-hidden="true"
-      className={`pointer-events-none absolute inset-x-0 bottom-3 hidden justify-center transition-opacity duration-500 sm:flex [@media(max-height:700px)]:!hidden ${
+      className={`pointer-events-none absolute inset-x-0 bottom-3 hidden justify-center transition-opacity duration-500 lg:flex [@media(max-height:700px)]:!hidden ${
         hidden ? "opacity-0" : "opacity-100"
       }`}
     >
