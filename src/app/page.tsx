@@ -18,28 +18,57 @@ import ClientGrid from "@/components/ClientGrid";
 import Reveal from "@/components/Reveal";
 import ScrollCue from "@/components/ScrollCue";
 import StatCounter from "@/components/StatCounter";
-import { featuredClients, totalClients } from "@/data/clients";
+import { featuredClients } from "@/data/clients";
 import { performanceKpis, products } from "@/data/products";
-import { site, yearsInBusiness } from "@/data/site";
+import { site } from "@/data/site";
 import VideoCard from "@/components/VideoCard";
 import { featuredVideos } from "@/data/videos";
 
 /** count=false 인 값은 세어 올리지 않는다 — 연도가 굴러가면 어색하다. */
+/* 첫 화면에 서는 진동기 네 기종.
+
+   ⚠️⚠️ **w·h 는 도면의 모델 단위 그대로다.** 넷을 같은 도면
+      (유신자료/진동기,리니어도면.dwg)의 같은 줄에서 **같은 축척으로**
+      잘라 왔기 때문에, 이 숫자의 비(207 : 288 : 375 : 549)가 곧 실제
+      크기 비다. 화면에서 그 비율대로 서는 것이 이 블록의 전부다 —
+      **보기 좋으라고 고치면 거짓이 된다.**
+
+   ⚠️ 중량은 제품 상세 규격표(products.ts 진동기 specTable)와 같은 값이다.
+      한쪽만 고치지 말 것.
+
+   ⚠️ 규격표에는 **일곱 기종**이 있다(4호구형 · Ø440 · Ø500 포함).
+      첫 화면에 세우는 것은 **표준 넷**이다. */
+const VIBRATORS = [
+  { no: "1호", weight: "약 3kg", w: 207, h: 213, src: "/images/hero/vibrator-1.svg", alt: "진동기 1호 평면도" },
+  { no: "2호", weight: "약 5kg", w: 288, h: 302, src: "/images/hero/vibrator-2.svg", alt: "진동기 2호 신형 평면도" },
+  { no: "3호", weight: "약 8kg", w: 375, h: 380, src: "/images/hero/vibrator-3.svg", alt: "진동기 3호 신형 평면도" },
+  { no: "4호", weight: "약 11kg", w: 549, h: 503, src: "/images/hero/vibrator-4.svg", alt: "진동기 4호 신형 평면도" },
+];
+
+/** 네 기종 도면 폭의 합. 화면 폭을 비율로 나눌 때 분모가 된다. */
+const VIBRATOR_SPAN = VIBRATORS.reduce((s, v) => s + v.w, 0);
+
+/* 지표 띠 — **넷 다 진동기 이야기다.**
+
+   한때 1992년 설립 · 34년 제작 경력 · 34개사 · 7종 제품이었다. 회사의
+   규모와 연사를 말하던 자리인데, 이 회사의 경쟁력이 **진동기를 네 가지로
+   갖춰 부품마다 골라 쓰는 것**이라 첫 화면을 그쪽으로 모았다.
+
+   ⚠️ **「34년」과 「34개사」가 첫 화면에서 빠진 것은 알고 한 선택이다.**
+      처음 오는 사람에게 〈오래된 회사〉〈거래처가 많다〉는 강한 신호다 —
+      회사소개와 납품실적에는 그대로 있다. 되돌릴 거면 그 두 줄을 알고
+      되돌릴 것.
+
+   ⚠️ 값은 전부 제품 상세(products.ts 진동기 kpis)에 있는 것과 같다.
+      한쪽만 고치지 말 것.
+
+   ⚠️ count 는 숫자를 세어 올리는 효과다. 4 는 셀 것이 없어 false,
+      7,200 은 올라가는 맛이 있어 true 다. */
 const STATS = [
-  {
-    value: 1992,
-    count: false,
-    unit: "년 설립",
-    note: `${yearsInBusiness}년째 한 분야`,
-  },
-  {
-    value: yearsInBusiness,
-    count: true,
-    unit: "년 제작 경력",
-    note: "설계부터 튜닝까지",
-  },
-  { value: totalClients, count: true, unit: "개사", note: "주요 거래처" },
-  { value: products.length, count: true, unit: "종 제품", note: "피더 전 라인업" },
+  { value: VIBRATORS.length, count: false, unit: "종 진동기", note: "1·2·3·4호 신형" },
+  { value: "200~600", count: false, unit: "mm", note: "적용 볼 외경" },
+  { value: 7200, count: true, unit: "회/분", note: "최대 진동수" },
+  { value: 24, count: true, unit: "시간", note: "연속 가동" },
 ];
 
 /* "자세히 보기 / 전체 보기" 버튼. 영상자료의 "영상 더 보기" 와 같은
@@ -199,13 +228,25 @@ export default function Home() {
                 className="rise mt-[clamp(0.75rem,2vh,1.25rem)] text-[clamp(1.6rem,4.4vh,3.4rem)] font-bold leading-[1.25] tracking-tight text-white"
                 style={{ animationDelay: "140ms" }}
               >
-                부품 자동정렬 공급기,
+                부품마다 다른 진동기,
                 <br />
-                <span className="text-brand-light">설계부터 튜닝까지</span>{" "}
-                {/* 좁은 칼럼에서 "직접 / 만듭니다"로 끊기지 않게 묶어 둔다 */}
-                <span className="whitespace-nowrap">직접 만듭니다</span>
+                <span className="text-brand-light">네 기종을 갖춰</span>{" "}
+                {/* 좁은 칼럼에서 "골라 / 씁니다"로 끊기지 않게 묶어 둔다 */}
+                <span className="whitespace-nowrap">골라 씁니다</span>
               </h1>
-              {/* 한 문장이다. 전에는 두 문장(63자)이라 데스크톱에서도 두
+              {/* ⚠️⚠️ **2026-10-14 — 첫 화면을 진동기 네 기종으로 돌렸다.**
+                  전에는 "부품 자동정렬 공급기, 설계부터 튜닝까지 직접
+                  만듭니다" + "볼피더·직진피더·호퍼피더를 부품 샘플에 맞춰
+                  설계합니다" 로 **제품을 나열**했다. 이 회사의 경쟁력은
+                  **진동기를 네 가지로 갖춰 부품마다 골라 쓰는 것**이라,
+                  첫 화면이 그 말을 하게 했다.
+
+                  ⚠️ **경쟁사를 깎는 문장을 쓰지 않는다.** "다른 회사는
+                     정확도가 떨어진다" 는 확인할 수 없는 말이고 비방으로
+                     읽힌다. **유신이 하는 것만** 적고 비교는 읽는 사람이
+                     하게 둔다 — "한 기종으로 다 덮지 않습니다" 까지다.
+
+                  한 문장이다. 전에는 두 문장(63자)이라 데스크톱에서도 두
                   줄, 320~430 에서는 서너 줄이었다.
 
                   "34년째" 가 빠진 자리를 눈여겨볼 것. 바로 아래 지표 띠가
@@ -221,7 +262,8 @@ export default function Home() {
                 className="rise mt-[clamp(0.75rem,2vh,1.5rem)] max-w-xl text-[clamp(0.875rem,1.9vh,1.125rem)] leading-relaxed text-white/75"
                 style={{ animationDelay: "220ms" }}
               >
-                볼피더·직진피더·호퍼피더를 부품 샘플에 맞춰 설계합니다.
+                한 기종으로 다 덮지 않습니다. 부품과 볼 크기에 맞는 진동기를
+                골라 피더를 짭니다.
               </p>
 
               <div
@@ -247,20 +289,73 @@ export default function Home() {
               </div>
             </div>
 
-            {/* 폰에서는 문구·버튼·지표를 한 화면에 넣을 자리가 없어 도면을 감춘다.
-                배경 질감은 그대로 남는다. */}
+            {/* 진동기 네 기종. 이 회사의 강점이 "부품에 맞는 진동기를 골라
+                쓴다" 는 것이라, 첫 화면이 그 넷을 바로 보여 준다.
+
+                ⚠️⚠️ **네 장의 크기 비율이 실제 값이다.** 같은 도면
+                   (유신자료/진동기,리니어도면.dwg)의 같은 줄에서 **같은
+                   축척으로** 잘라 왔고, SVG 의 width 가 곧 도면의 모델
+                   단위다 — 207 : 288 : 375 : 549. 아래 flex-basis 가 그
+                   숫자다. **임의로 고치면 거짓이 된다.**
+
+                ⚠️ 바닥을 맞춘다(items-end). 가운데를 맞추면 크기 차이가
+                   눈에 덜 띈다 — 넷을 나란히 세우는 이유가 그 차이다.
+
+                ⚠️ <img> 다. 네 장을 JSX 로 펴면 DOM 이 1,200 노드 늘고
+                   첫 화면이 그만큼 늦어진다(4호 하나가 522 요소다).
+                   흰 선은 파일 안에 박아 두었다.
+
+                ⚠️ **폰에서도 보인다.** 도면 한 장이던 시절에는 hidden
+                   sm:flex 로 감췄다 — 문구·버튼·지표를 한 화면에 넣을 자리가
+                   없어서였다. 지금은 이 넷이 첫 화면의 **용건**이라 감추면
+                   폰에서 할 말이 사라진다. 선화라 가볍고(넷 합쳐 61KB ·
+                   벡터) 390 에서도 한 화면에 들어간다.
+                ⚠️⚠️ 가리는 기준이 **폭이 아니라 높이**다. 390x844 · 360x740 ·
+                   768x1024 는 한 화면에 들어가는데 320x568 은 넘친다 —
+                   이 줄이 125px 를 더하고 나머지가 503px 이라 568 을 넘는다.
+                   그래서 **max-height:640px** 에서만 감춘다. sm:block 으로
+                   되돌리지 말 것 — 그러면 폰에서 이 넷이 통째로 사라진다. */}
+            {/* ⚠️ 칸을 꽉 쓴다. 한때 자연 폭으로 두었더니 1280 에서 넷이
+                   합쳐 65+90+117+172px 로 서고 오른쪽 아래가 통째로 비었다.
+                   폭을 100% 로 잡고 아래 calc 가 넷으로 나눈다. */}
             <div
-              className="rise-zoom hidden justify-center sm:flex"
+              className="rise-zoom w-full [@media(max-height:640px)]:hidden"
               style={{ animationDelay: "380ms" }}
             >
-              <Image
-                src="/images/hero-unit.webp"
-                alt="파츠피더 구동부(진동기) 3D 도면"
-                width={659}
-                height={672}
-                priority
-                className="h-auto max-h-[min(30svh,340px)] w-auto object-contain drop-shadow-2xl lg:max-h-[min(42svh,460px)]"
-              />
+              {/* ⚠️ 폭을 **퍼센트**로 준다. px 로 주면 도면 크기 그대로(합
+                     1,419px) 서서 칸을 넘친다. 칸이 좁아져도 넷이 **같이**
+                     줄어야 크기 비가 유지된다 — flex-shrink 에 맡기면
+                     절대량으로 줄어 비가 깨진다.
+
+                  calc 의 3 은 **칸 사이 간격 셋**이다. 항목이 넷이라 셋이다. */}
+              <ul
+                className="flex items-end justify-center gap-[var(--g)]"
+                style={{ ["--g" as string]: "clamp(0.5rem,1.6vw,1.25rem)" }}
+              >
+                {VIBRATORS.map((v) => (
+                  <li
+                    key={v.no}
+                    className="shrink-0"
+                    style={{
+                      width: `calc((100% - 3 * var(--g)) * ${(v.w / VIBRATOR_SPAN).toFixed(4)})`,
+                    }}
+                  >
+                    <img
+                      src={v.src}
+                      alt={v.alt}
+                      width={v.w}
+                      height={v.h}
+                      className="h-auto w-full"
+                    />
+                    <p className="mt-2 text-center text-[clamp(0.625rem,1.2vh,0.8125rem)] font-bold text-white">
+                      {v.no}
+                    </p>
+                    <p className="text-center text-[clamp(0.5625rem,1vh,0.6875rem)] tabular-nums text-white/55">
+                      {v.weight}
+                    </p>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 

@@ -40,15 +40,18 @@ export default function StatCounter({
   duration = 1200,
   className = "",
 }: {
-  value: number;
+  /* 숫자가 아니어도 된다 — "200~600" 처럼 범위를 적는 칸이 있다.
+     ⚠️ 글자를 넘기면 세어 올리지 않는다(count 를 줘도 무시한다). */
+  value: number | string;
   count?: boolean;
   duration?: number;
   className?: string;
 }) {
-  const [shown, setShown] = useState(value);
+  const countable = count && typeof value === "number";
+  const [shown, setShown] = useState<number | string>(value);
 
   useIsomorphicLayoutEffect(() => {
-    if (!count || prefersReducedMotion()) return;
+    if (!countable || prefersReducedMotion()) return;
 
     // 지표 줄은 .rise 의 지연(최대 670ms) 동안 화면에 보이지 않는다.
     // 그 창 안에 하이드레이션이 끝났다면 아무도 못 보는 사이에 0으로 되돌릴 수 있다.
@@ -57,10 +60,11 @@ export default function StatCounter({
     if (performance.now() > FADE_IN_WINDOW_MS) return;
 
     setShown(0);
-  }, [count]);
+  }, [countable]);
 
   useEffect(() => {
-    if (!count || prefersReducedMotion()) return;
+    if (!countable || typeof value !== "number") return;
+    if (prefersReducedMotion()) return;
 
     let raf = 0;
     const start = performance.now();
@@ -80,7 +84,14 @@ export default function StatCounter({
       cancelAnimationFrame(raf);
       clearTimeout(settle);
     };
-  }, [count, value, duration]);
+  }, [countable, value, duration]);
 
-  return <span className={className}>{shown}</span>;
+  /* ⚠️ 천 단위 쉼표를 **직접** 넣는다. toLocaleString 은 서버와 브라우저의
+        로캘이 다르면 다른 글자를 내놓아 하이드레이션이 어긋난다. */
+  const text =
+    typeof shown === "number"
+      ? String(shown).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      : shown;
+
+  return <span className={className}>{text}</span>;
 }
