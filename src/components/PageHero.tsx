@@ -57,60 +57,38 @@ export default function PageHero({
 
        ⚠️ relative 는 아래 장식 겹의 기준이다. 빼면 장식이 페이지 전체로 퍼진다. */
     <div className="relative overflow-hidden bg-dark">
-      {/* 가로 선 격자. 설계 도면의 결이라 제조업 톤과 맞고, 문의 띠가 쓰는
-          **사선 면 · 점 격자와 어휘가 겹치지 않는다**.
+      {/* 배경 — **문의 띠(ContactCTA)의 거울상**이다.
 
-          ⚠️⚠️ **한 라운드 동안 동심원 파문이었다가 걷었다.** 진동이 퍼지는
-             모양이라 진동기 회사와 맞는다고 골랐는데, "별로 안 예쁘고 잘
-             보이지도 않네 너무 연해서" 라는 말을 들었다. 진하기만 올려
-             (0.07 → 0.14, 원별 0.08~0.20) 다시 찍어 봤지만 **오른쪽에 큰 원
-             하나가 덩그러니 놓인 모양**이 여전히 어색했다. 지금 그대로 ·
-             진한 동심원 · 가로 선 격자 · 대각 그라디언트 · 장식 없음
-             다섯을 한 장에 놓고 고른 값이다. ⚠️ 동심원을 되살리지 말 것.
+          "문의 띠하고 배경장식 동일하게 하자. 근데 문의 띠는 동그라미가 왼쪽에
+          있다면 배너는 오른쪽에 있고, 옆에 ··· 많은 거 이거를 왼쪽에 두게.
+          180도 회전한 것 같은 느낌이지, 역방향이니까 위치가 양옆이 바뀌어서"
+          라는 말을 듣고 맞춘 자리다.
 
-          ⚠️ 48px 칸에 1px 선 하나다. 문의 띠의 점 격자와 같은 pattern 구조이고
-             <circle> 대신 가로 <path> 를 쓴다. currentColor 라 text-white 를
-             그대로 받는다.
+            문의 띠   사선 면 왼쪽  · 원 왼쪽 아래  · 점 격자 오른쪽 위
+            배너     사선 면 오른쪽 · 원 오른쪽 아래 · 점 격자 **왼쪽 위**
 
-          ⚠️ **9개 페이지에 반복되는 면이다.** 눈에 먼저 들어오면 과한 것이다.
-             0.07 은 선이 보이되 제목(17:1)보다 뒤에 서는 값으로 고른 것이다. */}
-      <svg
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 h-full w-full text-white opacity-[0.07]"
-      >
-        <defs>
-          <pattern
-            id="hero-lines"
-            width="48"
-            height="48"
-            patternUnits="userSpaceOnUse"
-          >
-            <path d="M0 0H48" fill="none" stroke="currentColor" strokeWidth="1" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#hero-lines)" />
-      </svg>
-      {/* 사선 면 둘과 큰 원. 문의 띠(ContactCTA)의 어휘를 빌리되 **배치를
-          뒤집었다** — "문의 띠 배경 장식은 이쁘잖아, 이거랑 똑같이는 하지 말고
-          그 배경장식처럼 배너도 이쁘게" 라는 말을 듣고 짠 자리다.
-
-            문의 띠   밝은 면 **왼쪽** · 점 격자 오른쪽 위 · 원 왼쪽 아래
-            배너     밝은 면 **오른쪽** · 가로 선 격자 전폭 · 원 오른쪽 아래
-
-          좌우가 반대인 것은 우연이 아니다. 문의 띠는 **버튼이 오른쪽**이라
+          좌우가 반대인 데에는 까닭이 있다. 문의 띠는 **버튼이 오른쪽**이라
           레드가 밝은 면에 닿지 않게 왼쪽으로 몰았고, 배너는 **글이 왼쪽**이라
-          오른쪽이 통째로 빈다. 격자도 점이 아니라 선이다.
+          오른쪽이 통째로 빈다.
+
+          ⚠️⚠️ **값이 문의 띠에서 그대로 온 것이다.** 사선 폭·각도, 원 크기,
+             점 간격·진하기가 모두 같다. **한쪽을 고치면 다른 쪽도 볼 것.**
+
+          ⚠️ 여기까지 네 번 바뀌었다 — 동심원 파문 → 가로 선 격자 → 가로 선 +
+             사선 + 원 → 지금(문의 띠 거울상). 가로 선(---)은 "이거 하고 맞출
+             거니까 없애도 될 것 같네" 라는 말에 걷었다.
+             ⚠️ **동심원을 되살리지 말 것** — "별로 안 예쁘고 잘 보이지도 않네
+                너무 연해서" 라는 말을 들었고, 진하기를 올려도 마찬가지였다.
 
           ⚠️ 38도는 로고 획에서 받은 값이다(Header.tsx 주석 참고). 바꾸지 말 것.
 
-          ⚠️ **모든 폭에서 보인다.** 문의 띠의 사선은 lg 전용인데, 거기는 좁은
+          ⚠️ **모든 폭에서 보인다.** 문의 띠의 사선·원은 lg 전용인데, 거기는 좁은
              폭에서 버튼이 전체 폭을 써서 레드가 밝은 면을 밟기 때문이다. 배너에는
-             버튼이 없고 흰 글자(17:1)뿐이라 그 제약이 없다. eyebrow 만 13px
-             brand-light 인데, 사선이 오른쪽이고 eyebrow 는 왼쪽이라 닿지 않는다
-             (닿으면 4.64:1 로 AA 를 간신히 넘는다 — 사선을 왼쪽으로 옮기지 말 것).
+             버튼이 없고 흰 글자(17:1)뿐이라 그 제약이 없다.
 
-          ⚠️ 다섯 안(선만 · 선+사선 · 사선만 · 선+사선+원 · 세로선+사선)을 한 장에
-             놓고 고른 값이다. 사선만 두면 왼쪽이 허전하고, 세로 선은 번잡했다. */}
+          ⚠️ eyebrow 만 13px brand-light 다. 사선 위에서 6.08 → 5.62 로 내려가고
+             점 격자가 그 뒤를 지나지만 AA(4.5)는 넘는다. **사선을 왼쪽으로 옮기지
+             말 것** — 닿으면 4.64 까지 떨어진다. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 overflow-hidden"
@@ -118,6 +96,23 @@ export default function PageHero({
         <div className="absolute right-[11.4%] top-1/2 h-[300%] w-[22%] -translate-y-1/2 rotate-[38deg] bg-white/[0.04]" />
         <div className="absolute -right-[7.2%] top-1/2 h-[300%] w-[11%] -translate-y-1/2 rotate-[38deg] bg-white/[0.10]" />
         <div className="absolute -bottom-[40%] -right-[8%] aspect-square h-[160%] rounded-full bg-white/[0.03]" />
+        {/* 점 격자. 문의 띠의 cta-dots 와 같은 값이고 right-0 이 left-0 으로만
+            바뀌었다. ⚠️ pattern id 는 달라야 한다 — 9개 페이지가 이 배너와 문의
+            띠를 **한 화면에 함께** 쓴다. 같은 id 를 두면 뒤에 오는 쪽이 앞의
+            정의를 가져다 쓴다. */}
+        <svg className="absolute left-0 top-0 h-[110px] w-[220px] text-white opacity-[0.16] sm:h-[88px] sm:w-[264px]">
+          <defs>
+            <pattern
+              id="hero-dots"
+              width="22"
+              height="22"
+              patternUnits="userSpaceOnUse"
+            >
+              <circle cx="2" cy="2" r="1.6" fill="currentColor" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#hero-dots)" />
+        </svg>
       </div>
       {/* 문의 띠와 같은 그레인 겹이다. 단색 면이라 히어로(0.08)보다 진하게 0.12. */}
       <div
