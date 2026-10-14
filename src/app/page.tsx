@@ -11,6 +11,7 @@ import Section from "@/components/Section";
 import {
   POSITIONING_GROUPS,
   POSITIONING_IDEAL,
+  equipmentTotals,
   positioning,
   positioningMap,
 } from "@/data/company";
@@ -19,7 +20,7 @@ import Reveal from "@/components/Reveal";
 import ScrollCue from "@/components/ScrollCue";
 import StatCounter from "@/components/StatCounter";
 import { featuredClients } from "@/data/clients";
-import { performanceKpis, products } from "@/data/products";
+import { type Kpi, products } from "@/data/products";
 import { site } from "@/data/site";
 import VideoCard from "@/components/VideoCard";
 import { featuredVideos } from "@/data/videos";
@@ -42,6 +43,88 @@ import { featuredVideos } from "@/data/videos";
 
    ⚠️ 규격표에는 **일곱 기종**이 있다(4호구형 · Ø440 · Ø500 포함).
       첫 화면에 세우는 것은 **표준 넷**이다. */
+/* ⚠️⚠️ **네 칸이 전부 유신 이야기다.** 2026-10-14 에 통째로 갈았다 —
+      그 전에는 99% · 7,200회/분 · 24시간 · 2~4주 였는데 이런 말을 들었다:
+
+        "7,200 위에 내용에 있고(= 첫 화면 지표 띠와 중복), 24시간 이거 다
+         다른 경쟁 업체도 피더 다 똑같은 레벨이야. **여기에 우리 유신에
+         KPI 가 녹아져야지**"
+
+      그래서 **경쟁사와 갈리는 것만** 남겼다 — 진동기를 네 기종 갖춰 부품마다
+      골라 쓰고, 볼 안쪽 지그를 부품 형상대로 1:1 로 깎는다는 것.
+
+      ⚠️ **업계 일반값(진동수 · 연속 가동 · 납기)을 여기 다시 넣지 말 것.**
+         어느 피더 업체나 같은 숫자를 쓴다.
+
+   ⚠️⚠️ **99.9% 와 첫 화면 지표 띠의 「0.1% 오류율」은 같은 값이다**
+      (100 − 99.9 = 0.1). 둘 다 유신이 준 수치다. **한쪽만 고치면 사이트
+      안에서 어긋난다** — 고칠 때 page.tsx 의 STATS 첫 칸도 함께 본다.
+      측정 조건을 받으면 두 자리에 함께 붙인다(README 22번).
+
+   ⚠️ **「30+ 년」은 손이 안 가는 표기다.** 한때 "34년" 이었는데 해가 바뀔
+      때마다 고쳐야 했다(1992-06-06 설립이라 2027년 6월에 35년). "30년 이상"
+      으로 적어 달라는 요청이기도 했다. **다시 정확한 햇수로 되돌리지 말 것.**
+
+   ⚠️ 「4 종」 칸은 2026-10-14 에 걷혔다 — 비포–애프터 쌍이 두 칸을 쓰면서
+      자리를 내줬다. 첫 화면 지표 띠에 그대로 있으니 사이트에서 사라진 말은
+      아니고, **중복이 풀린 것**이다. 되살리지 말 것. */
+const performanceKpis: Kpi[] = [
+  /* ⚠️⚠️⚠️ **앞 두 칸은 비포–애프터 한 쌍이다. 따로 떼어 고치지 말 것.**
+
+     ⚠️⚠️ **95% 는 「다른 업체」가 아니라 「한 기종만 쓰는 방식」의 값이다.**
+        경쟁사를 지목하는 순간 부당 비교광고가 된다(표시광고법). label 을
+        "다른 업체는" · "경쟁사" 같은 말로 바꾸지 말 것 — **방식의 조건**
+        으로만 적는다.
+
+     ⚠️⚠️ **두 값은 같은 기준이어야 한다.** 같은 부품 · 같은 셈법에서 나온
+        값이 아니면 비교 자체가 성립하지 않는다. 한쪽 조건만 받아 적용하지
+        말 것 — README 22번에 **둘을 함께** 올려 두었다.
+
+     2026-10-14 에 유신에서 "진동기 여러 개 사용 안 하면 정확도 한 95%
+     정도고 우리는 진동기 여러 개 사용해서 99.9% 정확도다, 비포 애프터
+     형태로" 라고 알려 주신 내용이다. **둘 다 회사가 제시한 값**이고 내가
+     잰 값이 아니다.
+
+     ⚠️⚠️ **한 칸이다. 두 칸으로 가르지 말 것.** 처음에 95% 와 99.9% 를
+        나란한 두 칸으로 놨더니 "따로따로 같아 보여서 비포 애프터 형태의
+        느낌이 아니다" 라는 말을 들었다. from 이 그래서 있다.
+
+     ⚠️ **라벨이 「진동기 1종 → 4종」이다.** "한 기종만 쓸 때 / 네 기종을
+        골라 쓰면" 으로 적었더니 **무슨 기종인지 모른다**는 지적을 받았다.
+        "진동기" 를 앞에 붙이면 길어지므로 숫자로 줄였다 — 값의 95 → 99.9 와
+        라벨의 1종 → 4종 이 같은 방향으로 읽힌다. */
+  {
+    from: "95",
+    fromLabel: "진동기 1종",
+    value: "99.9",
+    unit: "%",
+    wide: true,
+    label: "4종",
+    note: "둘 다 회사가 제시한 값 — 한 기종만 쓰는 방식과 네 기종을 골라 쓰는 방식",
+  },
+  /* ⚠️ **숫자를 손으로 박지 말 것.** 보유 설비 페이지의 equipment 배열에서
+     세어 온다 — 설비가 늘면 여기도 따라온다. company.ts 의 strengths 주석에
+     같은 교훈이 적혀 있다("여기만 21종 55대 로 박아 두는 바람에 설비가 늘면
+     이 한 줄만 조용히 틀어지는 상태였다").
+
+     ⚠️ 한때 "1:1 부품마다 지그 설계" 였다. 2026-10-14 에 "유신 FA 시스템에
+        뭔가 잘 할 수 있거나 어필할 수 있는 걸" 로 바꿔 달라는 요청에 갈았다 —
+        회사소개 strengths 의 "설계부터 튜닝까지 사내 일관 제작 · 20종 이상의
+        가공 설비" 가 근거다. */
+  {
+    value: String(equipmentTotals.units),
+    unit: "대",
+    label: "사내 가공 설비",
+    note: `밀링 · 선반 · 연마기 · 알곤 용접기 등 ${equipmentTotals.kinds}종 — 외주 없이 사내에서 가공`,
+  },
+  {
+    value: "30+",
+    unit: "년",
+    label: "1992년부터",
+    note: "1992년 6월 6일 설립",
+  },
+];
+
 const VIBRATORS = [
   { no: "1호", w: 248, h: 255, src: "/images/hero/vibrator-1.svg", alt: "진동기 1호 평면도" },
   { no: "2호", w: 346, h: 363, src: "/images/hero/vibrator-2.svg", alt: "진동기 2호 신형 평면도" },
@@ -868,36 +951,71 @@ export default function Home() {
                 kpi.wide ? " sm:col-span-2" : ""
               }`}
             >
-              {/* ⚠️⚠️ **from 이 있으면 한 칸 안에서 화살표로 잇는다** —
-                     회색 95%  →  검정 99.9%. 두 칸으로 나란히 놨더니
-                     "따로따로 같아 보여서 비포 애프터 형태의 느낌이 아니다"
-                     라는 말을 들은 자리다.
+              {/* ⚠️⚠️ **from 이 있는 칸은 구조가 다르다.** 숫자+라벨 덩어리
+                     둘을 화살표가 잇고, **라벨은 각자 자기 숫자 바로 아래**
+                     가운데로 선다.
+
+                       95%      ->      99.9%
+                       진동기 1종         4종
+
+                     거쳐 온 둘이 이랬다 —
+                       두 칸으로 나란히   "따로따로 같아 보여서 비포 애프터
+                                       형태의 느낌이 아니다"
+                       한 칸 + 라벨 한 줄 "진동기 1종 → 4종" 로 붙여 놨더니
+                                       어느 숫자의 라벨인지 안 붙었다
+                     ⚠️ 라벨에 화살표를 다시 넣지 말 것 — 값 쪽 하나로 족하다.
 
                  ⚠️⚠️ **이 화살표는 걷어낸 버튼 화살표와 쓰임이 다르다.**
                      버튼에서는 테두리 상자가 이미 "누를 곳" 이라고 말하는데
                      화살표가 같은 말을 두 번 해서 걷었다. 여기서는 **방향이
-                     뜻의 전부**다 — 95 에서 99.9 로 간다는 것. AxisArrow 를
-                     쓰는 제품 상세의 축 표시와 같은 성격이다.
-                     ⚠️ AxisArrow 는 width/height 가 16 고정이라 34px 숫자
-                        옆에서 작다. h-6 w-6 로 덮는다(CSS 가 속성을 이긴다). */}
-              <p className="flex items-center text-34 font-extrabold leading-none tracking-tight tabular-nums text-ink lg:justify-center">
-                {kpi.from && (
-                  <>
-                    <span className="text-muted">
+                     뜻의 전부**다. AxisArrow 를 쓰는 제품 상세 축 표시와 같은
+                     성격이다.
+                     ⚠️ AxisArrow 는 width/height 가 16 고정이라 큰 숫자 옆에서
+                        작다. h-7 w-7 로 덮는다(CSS 가 속성을 이긴다).
+
+                 ⚠️ 비교 칸만 숫자가 크다(44px vs 34px). 2칸 폭을 쓰는데
+                    내용이 230px 밖에 안 차 "여백 많으니 좀 더 크게" 라는 말을
+                    들었다. **items-end 로 밑줄을 맞춘다** — 글자 크기가 달라
+                    baseline 이 어긋나기 때문이다. */}
+              {kpi.from ? (
+                <div className="flex items-end gap-4 sm:gap-6 lg:justify-center">
+                  <div className="text-center">
+                    <p className="text-[2.75rem] font-extrabold leading-none tracking-tight tabular-nums text-muted">
                       {kpi.from}
                       <span className="ml-0.5 text-lg font-bold">
                         {kpi.unit}
                       </span>
+                    </p>
+                    <p className="mt-2.5 text-sm font-bold text-ink">
+                      {kpi.fromLabel}
+                    </p>
+                  </div>
+                  <AxisArrow className="mb-9 h-7 w-7" />
+                  <div className="text-center">
+                    <p className="text-[2.75rem] font-extrabold leading-none tracking-tight tabular-nums text-ink">
+                      {kpi.value}
+                      <span className="ml-0.5 text-lg font-bold text-brand">
+                        {kpi.unit}
+                      </span>
+                    </p>
+                    <p className="mt-2.5 text-sm font-bold text-ink">
+                      {kpi.label}
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <p className="text-34 font-extrabold leading-none tracking-tight tabular-nums text-ink">
+                    {kpi.value}
+                    <span className="ml-0.5 text-lg font-bold text-brand">
+                      {kpi.unit}
                     </span>
-                    <AxisArrow className="mx-2.5 h-6 w-6" />
-                  </>
-                )}
-                {kpi.value}
-                <span className="ml-0.5 text-lg font-bold text-brand">
-                  {kpi.unit}
-                </span>
-              </p>
-              <p className="mt-2.5 text-sm font-bold text-ink">{kpi.label}</p>
+                  </p>
+                  <p className="mt-2.5 text-sm font-bold text-ink">
+                    {kpi.label}
+                  </p>
+                </>
+              )}
 
             </Reveal>
           ))}

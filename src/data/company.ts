@@ -398,7 +398,7 @@ export function equipmentByGroup(group: EquipmentGroup) {
  * ⚠️⚠️ **합이 "2~4주" 와 어긋나면 안 된다.** 그 값은 products.ts 의
  *       **LEAD_TIME 상수** 하나에서 나오고, 지금 화면 **세 곳**이 쓴다 —
  *
- *         홈 PERFORMANCE 띠      performanceKpis 의 "설계 → 납품"
+ *         홈 PERFORMANCE 띠      (2026-10-14 에 납기 칸이 빠졌다)
  *         홈 POSITIONING 비교표   company.ts 의 positioning "납기" 행
  *         여기 process 넷의 합    (아래 계산)
  *
@@ -430,7 +430,7 @@ export function equipmentByGroup(group: EquipmentGroup) {
  * 같은 원칙을 적어 두었다.
  *
  * ⚠️ duration 넷과 output 넷은 **유신이 확인해 준 값이 아니다.** 업계 일반
- *    공정으로 잡았고 합계만 위 2~4주에 맞췄다. performanceKpis 가 같은 처지를
+ *    공정으로 잡았고 합계만 위 2~4주에 맞췄다. 홈 PERFORMANCE 띠가 같은 처지를
  *    적어 둔 방식을 따른다 — README 자료 요청 표 16번에 받을 것을 적어 뒀다.
  *
  * summary 는 같은 단계를 한 줄로 줄인 것이다. points 를 쓸 자리가 없는 좁은
@@ -654,7 +654,7 @@ export const positioning: {
  *
  * ⚠️⚠️ **"정확도" 로 바꾸지 말 것.** 축을 바꾸면 경쟁군 두 점의 좌표도
  *       정해야 하는데, 정확도는 **일본 수입 피더가 유신보다 높다고 볼 근거가
- *       있다.** 임의로 낮게 그리면 허위비교가 된다. 홈 performanceKpis 의
+ *       있다.** 임의로 낮게 그리면 허위비교가 된다. 홈 PERFORMANCE 띠(page.tsx)의
  *       "99% 정렬 · 선별 정확도" 는 유신 **자체** 값이라 비교군 좌표의 근거가
  *       되지 못한다. 유신 측에서 경쟁군 대비 자료를 받으면 그때 갈아끼운다.
  *
