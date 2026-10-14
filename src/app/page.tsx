@@ -39,10 +39,10 @@ import { featuredVideos } from "@/data/videos";
    ⚠️ 규격표에는 **일곱 기종**이 있다(4호구형 · Ø440 · Ø500 포함).
       첫 화면에 세우는 것은 **표준 넷**이다. */
 const VIBRATORS = [
-  { no: "1호", weight: "약 3kg", w: 207, h: 213, src: "/images/hero/vibrator-1.svg", alt: "진동기 1호 평면도" },
-  { no: "2호", weight: "약 5kg", w: 288, h: 302, src: "/images/hero/vibrator-2.svg", alt: "진동기 2호 신형 평면도" },
-  { no: "3호", weight: "약 8kg", w: 375, h: 380, src: "/images/hero/vibrator-3.svg", alt: "진동기 3호 신형 평면도" },
-  { no: "4호", weight: "약 11kg", w: 549, h: 503, src: "/images/hero/vibrator-4.svg", alt: "진동기 4호 신형 평면도" },
+  { no: "1호", w: 207, h: 213, src: "/images/hero/vibrator-1.svg", alt: "진동기 1호 평면도" },
+  { no: "2호", w: 288, h: 302, src: "/images/hero/vibrator-2.svg", alt: "진동기 2호 신형 평면도" },
+  { no: "3호", w: 375, h: 380, src: "/images/hero/vibrator-3.svg", alt: "진동기 3호 신형 평면도" },
+  { no: "4호", w: 549, h: 503, src: "/images/hero/vibrator-4.svg", alt: "진동기 4호 신형 평면도" },
 ];
 
 /** 네 기종 도면 폭의 합. 화면 폭을 비율로 나눌 때 분모가 된다. */
@@ -172,23 +172,16 @@ export default function Home() {
                주지 않는다.
 
             ⚠️ 잘라 주는 overflow-hidden 은 바깥 section 에 이미 있다. */}
-        {/* ⚠️⚠️ **lg 부터 영상이 오른쪽 절반을 차지하는 패널이 된다**
-               (left-1/2). 그 전에는 히어로 전체에 깔린 배경이었다 —
-               2026-10-14 에 "완전히 새롭게" 라는 요청에 **뼈대를 바꾼
-               것**이 이 한 줄이다. 영상이 배경에서 **물건을 보여 주는 면**
-               으로 올라선다.
+        {/* ⚠️⚠️ **영상은 히어로 전체에 깔린다. 반쪽으로 자르지 말 것.**
+               2026-10-14 에 lg:left-1/2 로 잘라 "오른쪽 영상 패널" 을 만들어
+               본 적이 있다. **잘린 화면으로 읽혔다** — 세로 경계가 생기고
+               영상이 중간에 끊긴 것처럼 보인다. 더 큰 문제는 그 구조가
+               **진동기를 오른쪽 절반(544px)에 가둬** 4호가 184px 로
+               작아진 것이다. 전폭이던 때보다 작았다.
 
-            ⚠️ 왜 50% 인가 — Container 는 가운데 정렬이라 그 **내용 가운데가
-               곧 섹션 가운데**다. 그래서 패널을 left-1/2 에 두고 글을
-               lg:grid-cols-2 로 가르면 **경계가 정확히 맞는다.** 42% 같은
-               값으로 바꾸면 글 칸 끝과 패널 경계가 어긋난다.
-
-            ⚠️ 패널이 되면서 불투명도를 0.3 -> 0.5 로 올렸다. 배경일 때는
-               글이 그 위에 얹혀 눌러야 했지만, 패널은 글이 없는 면이다.
-
-            ⚠️ **영상 요소는 하나뿐이다.** 폭만 바뀐다 — 두 벌을 두면
-               1.59MB 를 두 번 받는다. */}
-        <ParallaxLayer className="pointer-events-none absolute inset-0 opacity-[0.3] lg:left-1/2 lg:opacity-[0.5]">
+            ⚠️ 그래서 지금 구조는 **진동기가 세로에 막히고 폭에는 안 막힌다.**
+               반쪽으로 돌리면 폭이 상한이 되어 다시 작아진다. */}
+        <ParallaxLayer className="pointer-events-none absolute inset-0 opacity-[0.3]">
           <Image
             src="/images/hero-poster.webp"
             alt=""
@@ -240,7 +233,7 @@ export default function Home() {
                (문의 띠는 단색이라 더 진하게 줄 수 있다). */}
         <div
           aria-hidden="true"
-          className="grain pointer-events-none absolute inset-0 opacity-[0.08] mix-blend-overlay lg:left-1/2"
+          className="grain pointer-events-none absolute inset-0 opacity-[0.08] mix-blend-overlay"
         />
 
         {/* 배경 3 — 글자가 읽히도록 덮는 네이비 오버레이.
@@ -257,33 +250,36 @@ export default function Home() {
             자체로 구분돼 없어도 읽힌다. */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-r from-dark via-dark/75 to-transparent lg:left-1/2 lg:via-dark/25"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-r from-dark via-dark/75 to-transparent"
         />
 
-        {/* 배경 3.6 — 패널 **아래쪽**을 눌러 주는 막.
+        {/* 배경 3.6 — 화면 **아래쪽**을 눌러 주는 막.
 
-            ⚠️ 진동기 선화가 이 위에 선다. 영상에는 밝은 구간(흰 부품이 몰린
-               곳)이 있어 막이 없으면 **흰 선이 흰 바탕에 묻힌다** — 실제로
-               3호·4호가 안 읽혔다. 제품 영상 자막과 같은 수법이다.
-
-            ⚠️ lg 부터만이다. 그 아래에서는 진동기가 영상 위가 아니라
-               단색 면 위에 선다(패널이 없다). */}
+            ⚠️⚠️ **진동기 선화가 이 위에 선다. 지우지 말 것.** 영상에는 밝은
+               구간(흰 부품이 몰린 곳)이 있어 막이 없으면 **흰 선이 흰 바탕에
+               묻힌다** — 실제로 3호·4호가 안 읽혔다. 막을 깔면 실측 16:1 이다.
+               제품 영상 자막과 같은 수법이다. */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-[62%] bg-gradient-to-t from-dark via-dark/80 to-transparent lg:left-1/2 lg:block"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-dark via-dark/80 to-transparent"
         />
 
         {/* ⚠️ 세로 패딩이 4vh 였다. 진동기 줄을 전폭으로 내리면서 360x740
                에서 6px 넘쳤다 — 3.6vh 로 낮춰 위아래 6px 를 돌려받았다.
                ⚠️ 다시 올리기 전에 360x740 에서 재 볼 것. */}
-        {/* ⚠️ lg 부터 **반반**이다. 왼쪽은 말, 오른쪽은 영상 패널 위의 물건.
-               items-end 라 둘 다 **바닥에 앉는다** — 위가 비는 것이 이
-               구성의 숨이다. */}
-        <Container className="relative flex flex-1 flex-col justify-end py-[clamp(1.25rem,3.6vh,3.5rem)] lg:grid lg:grid-cols-2 lg:items-end lg:gap-10 lg:[@media(min-height:701px)]:pb-28">
-            {/* 왼쪽 칸 — 말. lg 부터 **단색 면 위**에 선다(오른쪽 패널의
-                   영상이 여기까지 오지 않는다). 그래서 글 뒤가 조용하다.
-                   ⚠️ 가운데 정렬로 되돌리지 말 것. */}
-            <div className="flex flex-col items-start gap-[clamp(1.25rem,3vh,2.25rem)]">
+        {/* ⚠️ **세로 한 줄이다.** 글이 위, 진동기가 아래 전폭.
+               2026-10-14 에 lg:grid-cols-2 로 좌우를 갈라 봤다가 걷었다 —
+               진동기가 반쪽에 갇혀 작아졌다(위 ParallaxLayer 주석 참고).
+               justify-end 로 바닥에 앉혀 위가 비게 둔다. */}
+        <Container className="relative flex flex-1 flex-col justify-end gap-[clamp(1rem,2.6vh,2rem)] py-[clamp(1.25rem,3.6vh,3.5rem)] lg:[@media(min-height:701px)]:pb-24">
+            {/* ⚠️⚠️ **글은 조연이다.** 이 화면의 용건은 아래 진동기 넷이고,
+                   글이 커지면 그만큼 진동기가 작아진다 — 세로 예산이 하나뿐
+                   이기 때문이다. 2026-10-14 에 "어필이 텍스트보다 진동기가
+                   훨씬 몇 배로 중요하다" 는 말을 듣고 줄였다.
+
+                   버튼을 제목 오른쪽으로 보낸 것도 같은 이유다. 아래 한 줄을
+                   통째로 차지하지 않아 **약 55px** 이 진동기로 넘어간다. */}
+            <div className="flex flex-col items-start gap-[clamp(0.875rem,2.2vh,1.5rem)] lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-10">
               <div>
               {/* 로고의 F.A 가 무엇의 약자인지 풀어 주는 자리다.
                   로고에는 "유신 F.A SYSTEM" 만 크게 보이고 그 아래 작은
@@ -311,7 +307,7 @@ export default function Home() {
                      **가로가 좁아서** 줄이 늘어나는 것이라 폭으로 재는 쪽이
                      맞는다. ⚠️ 하나로 합치지 말 것. */}
               <h1
-                className="rise mt-[clamp(0.75rem,2vh,1.25rem)] text-[clamp(1.35rem,5.6vw,2rem)] font-bold leading-[1.25] tracking-tight text-white lg:text-[clamp(1.6rem,4.4vh,3.4rem)]"
+                className="rise mt-[clamp(0.625rem,1.6vh,1rem)] text-[clamp(1.25rem,5vw,1.75rem)] font-bold leading-[1.3] tracking-tight text-white lg:text-[clamp(1.4rem,3.4vh,2.5rem)]"
                 style={{ animationDelay: "140ms" }}
               >
                 한 기종으로는 안 되는 부품이 있습니다
@@ -345,7 +341,7 @@ export default function Home() {
                   실측 — 640~1440 에서 1줄, 320~430 에서 2줄. 폰에서 1줄은
                   어떤 후보로도 안 된다(후보 일곱을 폭마다 재 봤다). */}
               <p
-                className="rise mt-[clamp(0.75rem,2vh,1.5rem)] max-w-xl text-[clamp(0.875rem,1.9vh,1.125rem)] leading-relaxed text-white/75"
+                className="rise mt-[clamp(0.5rem,1.4vh,0.875rem)] max-w-xl text-[clamp(0.8125rem,1.6vh,1rem)] leading-relaxed text-white/75"
                 style={{ animationDelay: "220ms" }}
               >
                 부품과 볼 크기에 맞는 진동기를 골라 답니다. 작은 부품도 큰
@@ -444,7 +440,13 @@ export default function Home() {
               <ul
                 className="flex w-full items-end"
                 style={{
-                  ["--h" as string]: "clamp(130px, 26svh, 300px)",
+                  /* ⚠️⚠️ 이 값이 **진동기 크기를 혼자 정한다.** 전폭 구조라
+                        폭에는 안 막히고 **세로가 상한**이다. 2026-10-14 에
+                        26svh -> 40svh 로 올렸다 — 그 전에는 세로 200px 이
+                        놀고 있는데 진동기는 184px 였다.
+                        ⚠️ 올리면 히어로가 넘친다. 열한 크기에서 재서 정한
+                           값이다. */
+                  ["--h" as string]: "clamp(150px, 35svh, 420px)",
                   ["--span" as string]:
                     "min(calc(var(--h) / 0.3544), calc(100% - 3rem))",
                   gap: "max(0.5rem, calc((100% - var(--span)) / 3))",
@@ -470,14 +472,10 @@ export default function Home() {
                     <p className="mt-2 text-center text-[clamp(0.625rem,1.2vh,0.8125rem)] font-bold text-white [@media(max-height:720px)]:mt-1">
                       {v.no}
                     </p>
-                    {/* ⚠️ 낮은 화면(≤720px)에서는 중량 줄을 접는다. 375x667
-                           (아이폰 SE)에서 이 한 줄이 히어로를 16px 넘기게
-                           했다 — 그림을 통째로 감추는 것보다 이쪽이 낫다.
-                           호수(1·2·3·4호)는 남으므로 네 기종이라는 말은
-                           그대로 선다. 중량은 제품 상세 규격표에 있다. */}
-                    <p className="text-center text-[clamp(0.5625rem,1vh,0.6875rem)] tabular-nums text-white/55 [@media(max-height:720px)]:hidden">
-                      {v.weight}
-                    </p>
+                    {/* ⚠️ 한때 여기에 중량(약 3kg …)이 있었다. 2026-10-14 에
+                           "약 3kg 이거는 필요 없어" 라는 말에 걷었다 —
+                           세로 14px 을 진동기에 돌려주고 줄이 간결해진다.
+                           **중량은 제품 상세 규격표에 그대로 있다.** */}
                   </li>
                 ))}
               </ul>

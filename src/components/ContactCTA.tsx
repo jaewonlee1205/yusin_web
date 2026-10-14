@@ -55,7 +55,9 @@ export default function ContactCTA() {
           ⚠️ **왼쪽** 가장자리를 넘어간다. 2026-10-14 에 오른쪽에서 옮겼다 —
              오른쪽은 버튼 자리라 "사람들이 많이 누르는 곳인데 시각적으로
              방해된다" 는 말을 들었다. 왼쪽은 제목·본문이 지나지만 제목이
-             큰 흰 굵은 글자(17.2:1)라 8% 짜리 가는 선에 묻히지 않는다.
+             큰 흰 굵은 글자(17.2:1)라 가는 선에 묻히지 않는다.
+             ⚠️ 불투명도가 0.16 이다. 0.07 로 두었더니 "너무 흐려서 잘 보이지도
+                않는다" 는 말을 들었다 — 내리지 말 것.
              ⚠️ 오른쪽으로 되돌리지 말 것.
 
           ⚠️ section 의 overflow-hidden 이
@@ -74,7 +76,7 @@ export default function ContactCTA() {
         aria-hidden="true"
         width={549}
         height={503}
-        className="pointer-events-none absolute -left-20 top-1/2 hidden h-[150%] w-auto -translate-y-1/2 opacity-[0.07] lg:block"
+        className="pointer-events-none absolute -left-24 top-1/2 hidden h-[170%] w-auto -translate-y-1/2 opacity-[0.16] lg:block"
       />
       {/* ⚠️ 그레인이 Container **앞**에 있다. DOM 순서상 글자가 위로 온다.
              단색 면이라 히어로(0.08)보다 진하게 0.12 를 준다. */}
