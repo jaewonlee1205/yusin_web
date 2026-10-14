@@ -1246,7 +1246,32 @@ export default function Home() {
 
                       border-spacing-0 이라 보기에는 collapse 와 거의 같다.
                       세로선이 없고 가로선은 행마다 하나뿐이라 겹칠 일도 없다. */}
-            <table className="w-full min-w-[24rem] border-separate border-spacing-0 text-center text-sm">
+            {/* ⚠️⚠️⚠️ **여백의 원인은 패딩이 아니라 w-full 이다.** 같은
+                      지적("표가 너무 여백이 많다")을 **두 번** 받고서야 재서
+                      찾았다 — 1440 에서 —
+
+                        표 597px
+                        열1 항목      칸 121px · 글자 36px · 남는 폭  85px
+                        열2 유신      칸 272px · 글자 27px · 남는 폭 245px
+                        열3 업계 일반  칸 205px · 글자 40px · 남는 폭 165px
+                        가장 긴 값 "전담 부서 · 현장 방문" 135px
+
+                      패딩은 이미 8px(px-2)로 작았다. w-full 이 격자 칸을 꽉
+                      채우고 **남는 폭을 열이 나눠 가지므로**, 패딩을 줄이면
+                      그만큼 열이 더 벌어질 뿐이다.
+
+                      ⚠️ **다음에 또 "여백이 많다" 는 말을 들으면 패딩부터
+                         만지지 말고 폭을 재라.** 필요한 최소 폭은 약
+                         333px(71 + 151 + 111)이다.
+
+                      ⚠️ max-w-[26rem](416px)이 그 답이다. **맵은 건드리지
+                         않는다** — 격자 비율이 그대로라 맵 칸도 355px 이고,
+                         맵이 aspect-auto 로 받는 표 높이도 안 변한다. 세로를
+                         줄이면 맵이 납작해진다는 지적을 받은 자리라 이쪽을
+                         피했다.
+
+                      ⚠️ px-2 아래로 내리지 말 것 — 분홍 띠가 글자에 달라붙는다. */}
+            <table className="w-full min-w-[24rem] max-w-[26rem] border-separate border-spacing-0 text-center text-sm">
               <thead>
                 <tr>
                   <th
