@@ -338,7 +338,11 @@ export default function Header() {
                   href={telHref(tel)}
                   className="inline-flex items-center gap-1.5 text-sm font-semibold tabular-nums text-ink-soft transition-colors hover:text-brand"
                 >
-                  <Icon className="shrink-0 text-brand" />
+                  {/* ⚠️ 13px 다. 번호가 14px 인데 아이콘을 16px(기본)로
+                         두었더니 "텍스트보다 아이콘이 더 커 보인다" 는 말을
+                         들었다 — 아이콘은 **꽉 찬 도형**이라 같은 크기여도
+                         글자보다 커 보인다. 한 단계 아래가 맞다. */}
+                  <Icon className="h-[13px] w-[13px] shrink-0 text-brand" />
                   {tel}
                 </a>
               ))}

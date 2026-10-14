@@ -27,9 +27,9 @@ import { featuredVideos } from "@/data/videos";
 /** count=false 인 값은 세어 올리지 않는다 — 연도가 굴러가면 어색하다. */
 /* 첫 화면에 서는 진동기 네 기종.
 
-   ⚠️ w·h 는 **사방 6% 여백을 넣은 뒤의 값**이다(232 : 323 : 420 : 615).
+   ⚠️ w·h 는 **사방 10% 여백을 넣은 뒤의 값**이다(248 : 346 : 450 : 659).
       여백 전은 207 : 288 : 375 : 549 였고 **비는 똑같다** — 네 장을 모두
-      1.12배 했기 때문이다. 여백을 넣은 까닭은 SVG 파일 머리에 적어 두었다.
+      1.20배 했기 때문이다. 여백을 넣은 까닭은 SVG 파일 머리에 적어 두었다.
 
    ⚠️⚠️ **w·h 는 도면의 모델 단위에서 왔다.** 넷을 같은 도면
       (유신자료/진동기,리니어도면.dwg)의 같은 줄에서 **같은 축척으로**
@@ -43,10 +43,10 @@ import { featuredVideos } from "@/data/videos";
    ⚠️ 규격표에는 **일곱 기종**이 있다(4호구형 · Ø440 · Ø500 포함).
       첫 화면에 세우는 것은 **표준 넷**이다. */
 const VIBRATORS = [
-  { no: "1호", w: 232, h: 238, src: "/images/hero/vibrator-1.svg", alt: "진동기 1호 평면도" },
-  { no: "2호", w: 323, h: 338, src: "/images/hero/vibrator-2.svg", alt: "진동기 2호 신형 평면도" },
-  { no: "3호", w: 420, h: 425, src: "/images/hero/vibrator-3.svg", alt: "진동기 3호 신형 평면도" },
-  { no: "4호", w: 615, h: 563, src: "/images/hero/vibrator-4.svg", alt: "진동기 4호 신형 평면도" },
+  { no: "1호", w: 248, h: 255, src: "/images/hero/vibrator-1.svg", alt: "진동기 1호 평면도" },
+  { no: "2호", w: 346, h: 363, src: "/images/hero/vibrator-2.svg", alt: "진동기 2호 신형 평면도" },
+  { no: "3호", w: 450, h: 456, src: "/images/hero/vibrator-3.svg", alt: "진동기 3호 신형 평면도" },
+  { no: "4호", w: 659, h: 604, src: "/images/hero/vibrator-4.svg", alt: "진동기 4호 신형 평면도" },
 ];
 
 /** 네 기종 도면 폭의 합. 화면 폭을 비율로 나눌 때 분모가 된다. */
@@ -274,8 +274,10 @@ export default function Home() {
         {/* ⚠️ **세로 한 줄이다.** 글이 위, 진동기가 아래 전폭.
                2026-10-14 에 lg:grid-cols-2 로 좌우를 갈라 봤다가 걷었다 —
                진동기가 반쪽에 갇혀 작아졌다(위 ParallaxLayer 주석 참고).
-               justify-end 로 바닥에 앉혀 위가 비게 둔다. */}
-        <Container className="relative flex flex-1 flex-col justify-end gap-[clamp(1rem,2.6vh,2rem)] py-[clamp(1.25rem,3.6vh,3.5rem)]">
+               ⚠️ **justify-between 이다.** 한때 justify-end 로 전부 바닥에
+                  몰아 놨더니 1440x900 에서 **위가 165px 비었다.** 글은 위에
+                  붙고 라인업은 바닥에 붙는다. */}
+        <Container className="relative flex flex-1 flex-col justify-between gap-[clamp(1rem,2.6vh,2rem)] py-[clamp(1.25rem,3.6vh,3.5rem)]">
             {/* ⚠️⚠️ **글은 조연이다.** 이 화면의 용건은 아래 진동기 넷이고,
                    글이 커지면 그만큼 진동기가 작아진다 — 세로 예산이 하나뿐
                    이기 때문이다. 2026-10-14 에 "어필이 텍스트보다 진동기가
@@ -455,11 +457,18 @@ export default function Home() {
                 style={{
                   /* ⚠️⚠️ 이 값이 **진동기 크기를 혼자 정한다.** 전폭 구조라
                         폭에는 안 막히고 **세로가 상한**이다. 2026-10-14 에
-                        26svh -> 40svh 로 올렸다 — 그 전에는 세로 200px 이
-                        놀고 있는데 진동기는 184px 였다.
+                        계속 키워 왔다 — 세로가 놀고 있는데 진동기가 작았다.
+
+                        ⚠️⚠️ **svh 비례가 아니라 calc(svh - 상수)다.** 짧은
+                           화면과 긴 화면의 여유가 다르기 때문이다 —
+                           1440x900 은 165px 이 남는데 1280x720 은 10px 도
+                           안 남는다(폭이 좁으면 글이 줄을 더 먹는다).
+                           비례만 쓰면 큰 화면의 빈 자리를 못 메우거나 짧은
+                           화면이 넘친다. 상수가 짧은 화면을 보호한다.
+
                         ⚠️ 올리면 히어로가 넘친다. 열한 크기에서 재서 정한
                            값이다. */
-                  ["--h" as string]: "clamp(150px, 35svh, 420px)",
+                  ["--h" as string]: "clamp(150px, calc(46svh - 55px), 470px)",
                   ["--span" as string]:
                     "min(calc(var(--h) / 0.3544), calc(100% - 3rem))",
                   gap: "max(0.5rem, calc((100% - var(--span)) / 3))",
@@ -480,9 +489,12 @@ export default function Home() {
                       height={v.h}
                       className="h-auto w-full"
                     />
-                    {/* ⚠️ 낮은 화면에서 mt 를 한 단계 더 줄인다 — 375x667
-                           에서 마지막 3px 가 여기서 나왔다. */}
-                    <p className="mt-2 text-center text-[clamp(0.625rem,1.2vh,0.8125rem)] font-bold text-white [@media(max-height:720px)]:mt-1">
+                    {/* ⚠️ 그림과 **넉넉히** 떼어 놓는다. 8px 이던 때 "4호
+                           텍스트 때문에 진동기가 잘린 것 같다" 는 말을 두 번
+                           들었다 — 도면의 받침대가 닫히지 않고 끝나는 모양
+                           이라, 글자가 바짝 붙으면 글자가 자른 것처럼 읽힌다.
+                           ⚠️ 낮은 화면에서만 한 단계 줄인다(375x667). */}
+                    <p className="mt-[clamp(0.75rem,1.6vh,1.25rem)] text-center text-[clamp(0.625rem,1.2vh,0.8125rem)] font-bold text-white [@media(max-height:720px)]:mt-2">
                       {v.no}
                     </p>
                     {/* ⚠️ 한때 여기에 중량(약 3kg …)이 있었다. 2026-10-14 에

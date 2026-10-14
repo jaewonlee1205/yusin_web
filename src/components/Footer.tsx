@@ -256,8 +256,10 @@ export default function Footer() {
 
                 ⚠️ 번호가 **text-base(16px)** 다. 한때 text-lg(18px)였는데
                    "글자가 너무 크게 느껴진다" 는 말을 듣고 내렸다.
-                   아이콘은 18px 그대로다(헤더는 16px) — 번호보다 살짝 커도
-                   아이콘은 글자가 아니라 표식이라 커 보이지 않는다. */}
+                   아이콘도 18px -> **15px** 로 내렸다(헤더는 13px).
+                   아이콘은 **꽉 찬 도형**이라 글자와 같은 크기여도 더 커
+                   보인다 — 번호 16px 에 아이콘 15px 이 눈에 같아 보인다.
+                   ⚠️ 다시 키우지 말 것. */}
             {/* ⚠️ **mt-auto 다.** 이 열(181px)이 가장 긴 열(202px)보다
                    21px 짧아서, 그 여유를 자동 여백이 먹고 전화 묶음이
                    **[우레탄 코팅]·[납품실적] 줄에 맞춰 내려앉는다.**
@@ -277,7 +279,7 @@ export default function Footer() {
                   href={telHref(tel)}
                   className="inline-flex items-center gap-2 text-base font-bold tabular-nums text-ink-soft transition-colors hover:text-brand"
                 >
-                  <Icon className="h-[18px] w-[18px] shrink-0" />
+                  <Icon className="h-[15px] w-[15px] shrink-0" />
                   {tel}
                 </a>
               ))}
