@@ -864,24 +864,36 @@ export default function Home() {
               as="li"
               key={kpi.label}
               delay={i * 80}
-              className={i > 0 ? "lg:border-l lg:border-line" : ""}
+              className={`${i > 0 ? "lg:border-l lg:border-line" : ""}${
+                kpi.wide ? " sm:col-span-2" : ""
+              }`}
             >
-              {/* ⚠️ tone 이 "muted" 면 숫자와 단위가 **함께** 회색이 된다.
-                     비포–애프터 쌍의 「비포」 칸 하나뿐이고, 회색 95% 옆에
-                     검은 99.9% 가 서면서 "이쪽에서 저쪽으로" 가 읽힌다.
-                     ⚠️ 화살표를 넣지 말 것 — 색 대비만으로 충분하고, 이
-                        사이트는 화살표를 두 번 걷어낸 자리다. */}
-              <p
-                className={`text-34 font-extrabold leading-none tracking-tight tabular-nums ${
-                  kpi.tone === "muted" ? "text-muted" : "text-ink"
-                }`}
-              >
+              {/* ⚠️⚠️ **from 이 있으면 한 칸 안에서 화살표로 잇는다** —
+                     회색 95%  →  검정 99.9%. 두 칸으로 나란히 놨더니
+                     "따로따로 같아 보여서 비포 애프터 형태의 느낌이 아니다"
+                     라는 말을 들은 자리다.
+
+                 ⚠️⚠️ **이 화살표는 걷어낸 버튼 화살표와 쓰임이 다르다.**
+                     버튼에서는 테두리 상자가 이미 "누를 곳" 이라고 말하는데
+                     화살표가 같은 말을 두 번 해서 걷었다. 여기서는 **방향이
+                     뜻의 전부**다 — 95 에서 99.9 로 간다는 것. AxisArrow 를
+                     쓰는 제품 상세의 축 표시와 같은 성격이다.
+                     ⚠️ AxisArrow 는 width/height 가 16 고정이라 34px 숫자
+                        옆에서 작다. h-6 w-6 로 덮는다(CSS 가 속성을 이긴다). */}
+              <p className="flex items-center text-34 font-extrabold leading-none tracking-tight tabular-nums text-ink lg:justify-center">
+                {kpi.from && (
+                  <>
+                    <span className="text-muted">
+                      {kpi.from}
+                      <span className="ml-0.5 text-lg font-bold">
+                        {kpi.unit}
+                      </span>
+                    </span>
+                    <AxisArrow className="mx-2.5 h-6 w-6" />
+                  </>
+                )}
                 {kpi.value}
-                <span
-                  className={`ml-0.5 text-lg font-bold ${
-                    kpi.tone === "muted" ? "text-muted" : "text-brand"
-                  }`}
-                >
+                <span className="ml-0.5 text-lg font-bold text-brand">
                   {kpi.unit}
                 </span>
               </p>
