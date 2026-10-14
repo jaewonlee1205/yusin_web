@@ -96,8 +96,12 @@ const LINK =
      aria-label 을 지우면 스크린리더가 "링크" 라고만 읽고 Lighthouse
      link-name 도 깨진다. 글자를 되살리든 라벨을 두든, 둘 중 하나는 반드시
      있어야 한다. */
+/* ⚠️ 글자색은 ink-soft 인데 **마크는 한 단계 더 연한 muted** 다.
+      글자는 가는 획이고 마크는 꽉 찬 덩어리라, 같은 색을 줘도 마크가 더
+      검게 읽힌다 — 2026-10-14 에 "너무 검다" 는 말을 듣고 한 단계 내렸다.
+      ⚠️ ink-soft 로 되돌리지 말 것. 눈에 같은 무게로 맞춘 값이다. */
 const CHANNEL_BUTTON =
-  "flex items-center justify-center rounded-full border border-line p-2 text-ink-soft transition hover:border-dark-soft/40 hover:text-ink active:scale-95";
+  "flex items-center justify-center rounded-full border border-line p-2 text-muted transition hover:border-dark-soft/40 hover:text-ink active:scale-95";
 
 /* 자간을 벌리지 않는다. 0.2em 으로 늘렸던 적이 있는데(Section 의 eyebrow 와
    맞춘 값이었다), eyebrow 는 한두 단어짜리 영문 꼬리표라 벌려도 읽히지만
@@ -256,7 +260,7 @@ export default function Footer() {
                 <a
                   key={tel}
                   href={telHref(tel)}
-                  className="inline-flex items-center gap-2 text-lg font-bold tabular-nums text-ink transition-colors hover:text-brand"
+                  className="inline-flex items-center gap-2 text-lg font-bold tabular-nums text-ink-soft transition-colors hover:text-brand"
                 >
                   <Icon className="h-[18px] w-[18px] shrink-0" />
                   {tel}

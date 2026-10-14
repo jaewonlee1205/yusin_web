@@ -16,10 +16,11 @@ import {
 } from "@/data/company";
 import ClientGrid from "@/components/ClientGrid";
 import Reveal from "@/components/Reveal";
+import ScrollCue from "@/components/ScrollCue";
 import StatCounter from "@/components/StatCounter";
 import { featuredClients } from "@/data/clients";
 import { performanceKpis, products } from "@/data/products";
-import { site, yearsInBusiness } from "@/data/site";
+import { site } from "@/data/site";
 import VideoCard from "@/components/VideoCard";
 import { featuredVideos } from "@/data/videos";
 
@@ -75,9 +76,7 @@ const VIBRATOR_SPAN = VIBRATORS.reduce((s, v) => s + v.w, 0);
         7,200회/분   specTable — 1·2·3호가 7,200, 4호가 3,600 이다.
                      **기종마다 진동수가 다른 것**이 "골라 쓴다" 의 근거라
                      설명 줄이 그 말을 한다
-        34년 튜닝    features "현장 튜닝 대응 · 납품 뒤 다시 잡아 드림"
-                     ⚠️ 회사 연차가 아니라 **진동기 튜닝 경력**으로 읽히게
-                        단위를 "년 튜닝" 으로 묶었다.
+        3가지 조정   specs "조정 요소 = 스프링 매수 · 각도 · 전압"
 
    ⚠️ 지어낸 수치를 넣지 말 것. 넷 다 제품 상세와 같은 값이어야 한다.
 
@@ -96,13 +95,12 @@ const STATS = [
         설명 줄이 진다** — 기종마다 진동수가 다르다는 것이 요점이다.
         (1·2·3호 7,200 · 4호 3,600 — 제품 상세 규격표에 있다.) */
   { value: 7200, count: true, unit: "회/분", note: "기종마다 다른 진동수" },
-  /* ⚠️ 숫자를 박지 말 것 — yearsInBusiness 는 site.ts 가 해마다 다시 센다. */
-  {
-    value: yearsInBusiness,
-    count: true,
-    unit: "년 튜닝",
-    note: "안 맞으면 다시 잡습니다",
-  },
+  /* ⚠️ 한때 "34년 튜닝 / 안 맞으면 다시 잡습니다" 였다. **회사 연차**라
+        네 칸을 진동기로 모으기로 한 뜻과 어긋났다. 조정 요소 셋으로 바꿔
+        네 칸이 한 줄기로 이어진다 —
+          부품마다 고르고 → 크기 폭이 넓고 → 기종마다 다르고 → 고른 뒤에도 맞춘다
+        출처는 products.ts 진동기 specs 의 "조정 요소". */
+  { value: 3, count: false, unit: "가지 조정", note: "스프링 매수 · 각도 · 전압" },
 ];
 
 /* "자세히 보기 / 전체 보기" 버튼. 영상자료의 "영상 더 보기" 와 같은
@@ -242,7 +240,7 @@ export default function Home() {
         {/* ⚠️ 세로 패딩이 4vh 였다. 진동기 줄을 전폭으로 내리면서 360x740
                에서 6px 넘쳤다 — 3.6vh 로 낮춰 위아래 6px 를 돌려받았다.
                ⚠️ 다시 올리기 전에 360x740 에서 재 볼 것. */}
-        <Container className="relative flex flex-1 items-center py-[clamp(1.25rem,3.6vh,3.5rem)]">
+        <Container className="relative flex flex-1 items-center py-[clamp(1.25rem,3.6vh,3.5rem)] sm:[@media(min-height:701px)]:pb-24">
           {/* ⚠️⚠️ **세로 한 줄이다.** 한때 lg:grid-cols-[1.1fr_1fr] 로
                  글과 그림을 좌우로 갈랐는데, 그러면 진동기 넷이 오른쪽
                  절반(504px)에 갇혀 4호가 172px 밖에 안 되고 **글·그림 아래
@@ -251,7 +249,13 @@ export default function Home() {
                  4호가 268px 로 커지고 빈 자리가 사라진다.
                  ⚠️ 좌우 2단으로 되돌리지 말 것. */}
           <div className="flex w-full flex-col gap-[clamp(1.25rem,3vh,2.5rem)]">
-            <div>
+            {/* ⚠️ **가운데 정렬이다.** 진동기 넷을 전폭으로 내리면서
+                   글은 왼쪽 끝, 그림은 가운데가 되어 **축이 둘로 갈렸다**.
+                   눈썹 · 제목 · 본문 · 버튼 · 진동기 넷 · SCROLL 이 한 축에
+                   서도록 글도 가운데로 모았다.
+                   ⚠️ 왼쪽 정렬로 되돌리려면 그림 줄도 같이 왼쪽으로 옮길 것.
+                      한쪽만 바꾸면 다시 축이 갈린다. */}
+            <div className="text-center">
               {/* 로고의 F.A 가 무엇의 약자인지 풀어 주는 자리다.
                   로고에는 "유신 F.A SYSTEM" 만 크게 보이고 그 아래 작은
                   영문은 눈에 잘 안 들어온다.
@@ -303,7 +307,7 @@ export default function Home() {
                   실측 — 640~1440 에서 1줄, 320~430 에서 2줄. 폰에서 1줄은
                   어떤 후보로도 안 된다(후보 일곱을 폭마다 재 봤다). */}
               <p
-                className="rise mt-[clamp(0.75rem,2vh,1.5rem)] max-w-xl text-[clamp(0.875rem,1.9vh,1.125rem)] leading-relaxed text-white/75"
+                className="rise mx-auto mt-[clamp(0.75rem,2vh,1.5rem)] max-w-xl text-[clamp(0.875rem,1.9vh,1.125rem)] leading-relaxed text-white/75"
                 style={{ animationDelay: "220ms" }}
               >
                 부품과 볼 크기에 맞는 진동기를 골라 답니다. 작은 부품도 큰
@@ -311,7 +315,7 @@ export default function Home() {
               </p>
 
               <div
-                className="rise mt-[clamp(1.25rem,3vh,2.25rem)] flex flex-row gap-3"
+                className="rise mt-[clamp(1.25rem,3vh,2.25rem)] flex flex-row justify-center gap-3"
                 style={{ animationDelay: "300ms" }}
               >
                 {/* ⚠️ 사이트에서 마그네틱을 쓰는 자리는 둘뿐이다 — 여기와
@@ -423,13 +427,21 @@ export default function Home() {
             </div>
           </div>
 
-          {/* ⚠️ 여기 <ScrollCue /> 가 있었다. 2026-10-14 에 걷었다 —
-                 진동기 넷을 전폭으로 내리면서 그림 이름표와 **겹쳤다**
-                 (그림 아래부터 지표 띠까지 45px 인데 표시가 52px 를 쓴다).
-                 애초에 히어로가 비어 보여 넣은 것이고, 지금은 첫 화면이
-                 꽉 차 있어 할 일이 없다. 바닥의 지표 띠가 아래에 더 있다는
-                 신호를 이미 준다.
-                 ⚠️ 되살리려면 그림 묶음 아래 자리부터 만들 것. */}
+          {/* ⚠️⚠️ 이 표시는 **절대배치**라 높이를 더하지 않는다. 그래서
+                 자리는 위 Container 의 **아래 여백**이 비워 둔다. 표시가
+                 쓰는 높이는 글자 12 + 간격 8 + 선 32 + bottom-3 12 = 64px 라
+                 **pb-24(96px)** 를 줘서 32px 를 띄운다. pb-16(64px)으로는
+                 틈이 정확히 0 이 되어 1280x720 · 1024x768 에서 이름표에
+                 **닿았다** — 실측으로 올린 값이다.
+
+                 한때 그 여백 없이 걸었다가 진동기 이름표와 겹쳐 통째로
+                 걷은 적이 있다(그림 아래부터 지표 띠까지 45px 인데 표시가
+                 64px 를 쓴다). **여백과 짝으로만 쓴다.**
+
+                 ⚠️ 여백은 표시가 보이는 조건과 **똑같은 조건**에 건다 —
+                    sm(640px) 이상이고 높이 701px 이상. 그 밖에서는 표시가
+                    !hidden 이라 여백만 남는다. */}
+          <ScrollCue />
         </Container>
 
         {/* 2. 지표 스트립 — 섹션 맨 아래에 붙어 항상 첫 화면 안에 보인다 */}

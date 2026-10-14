@@ -260,14 +260,21 @@ export default function Header() {
           </nav>
 
           <div className="hidden items-center gap-6 lg:flex lg:justify-self-end">
-            {/* 번호는 ink, 아이콘만 brand 다.
+            {/* 번호는 ink-soft, 아이콘만 brand 다.
 
                 한때 둘 다 navy 였는데(2026-10-14 에 사이트에서 걷은 그 파랑),
                 흰 헤더 위에서 그 파랑이 로고 레드.
                 회색 메뉴 어느 쪽과도 짝이 안 맞아 혼자 뜨고 링크처럼 읽혔다.
-                시안 다섯을 한 화면에 찍어 비교했다 — 메뉴와 같은 ink-soft 는
-                번호가 메뉴에 묻히고, 번호까지 brand 로 하면 바로 옆 "견적
-                문의" 버튼과 레드가 둘이 되어 겨룬다.
+                시안 다섯을 한 화면에 찍어 비교했다 — 번호까지 brand 로 하면
+                바로 옆 "견적 문의" 버튼과 레드가 둘이 되어 겨룬다.
+
+                ⚠️ **그때 ink-soft 를 뺀 까닭은 "메뉴에 묻힌다" 였는데,
+                   2026-10-14 에 ink-soft 로 옮겼다.** 그 시안 때와 달리 지금은
+                   **번호 옆 아이콘이 brand 레드**라 아이콘이 이미 번호를
+                   메뉴와 갈라 준다. 글자가 ink 면 너무 검게 읽힌다는 말을
+                   듣고 한 단계 눅였다 — 메뉴(15px/500)보다 작고(14px) 굵어
+                   (600) 묻히지 않는 것을 1280 에서 찍어 확인했다.
+                   ⚠️ 아이콘의 brand 를 빼면 이 전제가 무너진다.
 
                 아이콘 레드는 15px 짜리라 면적이 거의 없다(globals.css 토큰
                 주석 — "레드는 면적을 좁게"). hover:text-brand 는 그대로 둔다.
@@ -329,7 +336,7 @@ export default function Header() {
                 <a
                   key={tel}
                   href={telHref(tel)}
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold tabular-nums text-ink transition-colors hover:text-brand"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold tabular-nums text-ink-soft transition-colors hover:text-brand"
                 >
                   <Icon className="shrink-0 text-brand" />
                   {tel}
