@@ -140,9 +140,16 @@ export default function Footer() {
           pb-8 이면 마지막 글자 밑동에서 34px — 참고한 ablelabsinc.com 의
           35px 과 같다. 묶어 뒀을 때는 66px 로 그 두 배였다. */}
       <Container width="wide" className="pb-8 pt-12 sm:pt-16">
-        {/* lg 첫 열 폭은 로고가 정한다 — sm:h-8 에서 248px 라 좁으면 preflight 의
-            img{max-width:100%} 에 눌린다. 기준은 lg 가 시작하는 1024px 다.
-            거기서 여유가 1.7fr 37px / 1.6fr 26px / 1.5fr 14px 라 1.7fr 로 둔다. */}
+        {/* ⚠️⚠️ **첫 열 폭을 더는 로고가 정하지 않는다.** 2026-10-14 에 로고가
+            logo-mark 로 바뀌며 1024 기준 248 → **145px** 가 되어, 이제 통화 시간
+            줄과 전화번호 묶음이 그 폭을 쓴다. 같은 날 1024 에서 첫 열 286px ·
+            [제품] 218 · [회사] 168 · [고객지원] 168 이고 **네 열 바닥이 모두 같은
+            선**에서 끝나는 것을 확인했다.
+
+            옛 근거 — "lg 첫 열 폭은 로고가 정한다. sm:h-8 에서 248px 라 좁으면
+            preflight 의 img{max-width:100%} 에 눌린다. 1024 에서 여유가 1.7fr
+            37px / 1.6fr 26px / 1.5fr 14px 라 1.7fr 로 둔다."
+            ⚠️ 비율을 줄이려면 로고가 아니라 **통화 시간 줄**의 자연 폭부터 잴 것. */}
         <div className="grid grid-cols-2 gap-10 sm:gap-x-12 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)] lg:gap-10">
           {/* ⚠️ **flex h-full flex-col 이다.** 아래 전화 묶음의 mt-auto 가
                  남는 높이를 먹어 **바닥에 내려앉게** 하려는 것이다 —
@@ -157,12 +164,14 @@ export default function Footer() {
               label={`${site.name} 홈으로`}
             >
               <Image
-                src="/images/logo.webp"
+                src="/images/logo-mark.webp"
                 alt={site.name}
-                width={403}
-                height={52}
-                /* ⚠️ 흰 로고다 — 까닭은 Header.tsx 의 같은 자리에 적혀 있다. */
-                className="h-7 w-auto [filter:brightness(0)_invert(1)] sm:h-8"
+                width={129}
+                height={32}
+                /* ⚠️ 흰 로고다 — 까닭은 Header.tsx 의 같은 자리에 적혀 있다.
+                   ⚠️ 2026-10-14 에 헤더와 **같이** logo-mark 로 바꿨다. 한쪽만
+                      바꾸면 같은 페이지 위아래에서 로고가 달라진다. */
+                className="h-8 w-auto [filter:brightness(0)_invert(1)] sm:h-9"
               />
             </HomeLogoLink>
             {/* 바깥 채널 두 개. 목록 링크가 아니라 테두리 버튼이다 — 옆 세

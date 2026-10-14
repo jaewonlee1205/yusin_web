@@ -157,10 +157,16 @@ export default function Header() {
     >
       <Container width="wide">
         {/*
-          lg 이상에서는 3칸 그리드를 쓴다. justify-between 으로 두면 로고(279px)와
+          lg 이상에서는 3칸 그리드를 쓴다. justify-between 으로 두면 로고(161px)와
           우측 그룹(225px)의 폭 차이만큼 메뉴가 한쪽으로 밀린다.
           minmax(0,1fr) 이라야 양옆 칸이 정확히 같은 폭이 되어 메뉴가 화면 정중앙에 온다.
           (그냥 1fr 은 칸의 최소 폭이 내용 크기라 다시 치우친다)
+
+          ⚠️ 로고가 logo-mark 로 바뀌며 279 → 161px 가 됐다. 폭 차가 오히려
+             **커져서** 이 그리드가 더 필요해졌다. 2026-10-14 에 1024 · 1280 ·
+             1440 · 1920 에서 메뉴 중심이 화면 중심과 **1px 도 어긋나지 않는 것**을
+             확인했다. 같은 날 lg 구간의 폭 압박도 풀렸다 — 로고 오른끝과 메뉴
+             왼끝 사이가 1024 에서 49 → **145px** 다.
         */}
         <div className="flex h-16 items-center justify-between gap-4 sm:h-20 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
           <Link
@@ -169,23 +175,35 @@ export default function Header() {
             className="shrink-0 transition-opacity hover:opacity-70 active:opacity-55 lg:justify-self-start"
             aria-label={`${site.name} 홈으로`}
           >
-            {/* lg(1024~1280px)에서 h-8 을 유지하는 것은 의도다. 이 구간은 메뉴가
-                쓸 수 있는 폭이 가장 빠듯한데, 로고가 h-9(자연 폭 279px)이면
-                메뉴에 밀려 폭만 266px로 줄어든다 — 높이는 고정이라 로고가
-                찌그러진다. xl 부터 키운다. (lg:h-9 로 되돌리지 말 것) */}
+            {/* ⚠️⚠️ **2026-10-14 에 logo.webp 에서 logo-mark.webp 로 바꿨다.**
+                   "유신 F.A 시스템 이거 문구 지우고 YUSIN만 나오게 하고 싶어" 라는
+                   말을 들었다. logo.webp 는 YUSIN 워드마크 옆에 「유신 F.A SYSTEM /
+                   FEEDING AUTOMATION SYSTEM」 이 붙은 403x52 짜리고, logo-mark.webp
+                   는 워드마크만 있는 129x32 다. 홈 비교표 머리 · 포지셔닝 맵 점 ·
+                   회사소개 · 제품상세가 이미 쓰던 파일이다.
+
+                ⚠️ **높이를 한 단계 키웠다**(h-7/8/9 → h-8/9/10 = 32/36/40px).
+                   같은 높이로 두면 폭이 248 → 129px 로 절반이 되어 헤더에서
+                   빈약해 보인다. 28 · 32 · 36 · 40 · 44px 를 헤더째로 찍어
+                   비교하고 골랐다 — 44 는 메뉴를 압도했고, 32 이하는 작았다.
+
+                ⚠️ **lg 분기가 없어졌다.** 전에는 "lg(1024~1280)는 메뉴 폭이 가장
+                   빠듯해 h-8 을 유지한다(h-9 면 로고가 279px 라 메뉴에 밀려
+                   찌그러진다)" 는 단서가 붙어 있었다. 로고가 145px 로 줄면서
+                   그 압박 자체가 사라졌다. */}
             <Image
-              src="/images/logo.webp"
+              src="/images/logo-mark.webp"
               alt={site.name}
-              width={403}
-              height={52}
+              width={129}
+              height={32}
               priority
-              /* ⚠️ 필터로 흰 로고를 만든다. logo.webp 는 빨강+차콜 이미지라
+              /* ⚠️ 필터로 흰 로고를 만든다. logo-mark.webp 는 빨강+차콜 이미지라
                  색을 CSS 로 못 바꾸고, 픽셀의 75% 가 차콜이라 네이비 위에서
                  묻힌다(밝기만 올려서는 회색이 될 뿐이다).
                  ⚠️ **SVG 원본을 받으면 이 필터가 필요 없다**(README 5번).
                     지금 같은 필터를 네 곳이 쓴다 — 헤더 · 푸터 · 비교표 머리 ·
                     포지셔닝 맵 점. */
-              className="h-7 w-auto [filter:brightness(0)_invert(1)] sm:h-8 xl:h-9"
+              className="h-8 w-auto [filter:brightness(0)_invert(1)] sm:h-9 xl:h-10"
             />
           </Link>
 
