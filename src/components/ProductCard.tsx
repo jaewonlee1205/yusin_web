@@ -73,10 +73,9 @@ export default function ProductCard({ product }: { product: Product }) {
             로 커져 같은 줄 카드 셋과 그 아래가 전부 밀린다. 자리를 사진 위로
             옮겨 그 흔들림을 없앴다.
 
-            막은 brand-deep 65% 다. ⚠️ 2026-10-14 부터 **와인레드**라 호버할 때
-            사진이 붉게 물든다 — 색을 고르며 알고 받아들인 것이다. 호버한 카드를
-            찍어 픽셀로 재니 흰 "상세보기" 대비가 **9.5:1** 로 AAA(7:1)를 넘는다.
-            눈대중이 아니라, 가장 밝은 사진(진동기 -
+            막은 dark 65% 다. 사진 위에 깔리는 자리라 **중립 어두운 색**이어야
+            한다 — 한때 와인레드였는데 초록 작업판과 구리빛 부품이 통째로
+            흙빛으로 뭉개졌다. 눈대중이 아니라, 가장 밝은 사진(진동기 -
             흰 배경 3D 도면) 위에서도 흰 글자가 읽히는 값을 대비로 구했다.
             흰 바탕 기준 45%:2.73  55%:3.61  60%:4.18  65%:4.88  70%:5.71 이라,
             AA(4.5:1)를 넘기는 첫 값이 65% 다. 어두운 사진 위에서는 더 높다.
@@ -95,7 +94,7 @@ export default function ProductCard({ product }: { product: Product }) {
             그대로 보이고, 카드 전체가 누르는 자리다. */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 flex items-center justify-center bg-brand-deep/65 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          className="pointer-events-none absolute inset-0 flex items-center justify-center bg-dark/65 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         >
           <span className="flex translate-y-1 items-center gap-1.5 text-sm font-bold text-white transition-transform duration-300 group-hover:translate-y-0">
             상세보기

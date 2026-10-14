@@ -386,7 +386,7 @@ export default async function ProductDetailPage({
                 </Link>
                 <Link
                   href="/products/"
-                  className="rounded-xl border border-carbon/30 px-8 py-4 text-center text-15 font-semibold active:scale-[0.98] text-carbon transition-colors hover:border-carbon hover:bg-surface sm:flex-1"
+                  className="rounded-xl border border-dark-soft/30 px-8 py-4 text-center text-15 font-semibold active:scale-[0.98] text-dark-soft transition-colors hover:border-dark-soft hover:bg-surface sm:flex-1"
                 >
                   제품 목록
                 </Link>

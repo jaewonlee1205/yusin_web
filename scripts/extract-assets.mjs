@@ -359,9 +359,10 @@ async function makeBrandMarks() {
     await sharp(icon).resize(180, 180).png().toBuffer()
   );
 
-  // OG 이미지: 흰 바탕 + 로고, 하단에 깊은 레드 바.
-  // ⚠️ 2026-10-14 에 네이비(11,60,141) -> 차콜(33,27,29) -> 깊은 레드(74,16,12)
-  //    로 갈았다. globals.css 의 --color-brand-deep 과 같은 값이어야 한다.
+  // OG 이미지: 흰 바탕 + 로고, 하단에 어두운 바.
+  // ⚠️ globals.css 의 --color-dark 와 **같은 값**이어야 한다. 2026-10-14 에
+  //    네 번 바뀌었으니(그 전말은 globals.css 머리 주석에 있다) 토큰을 고치면
+  //    여기도 같이 고칠 것.
   const logo = await sharp(path.join(OUT, "logo.png")).toBuffer();
   const ogLogo = await sharp(logo).resize({ width: 760, fit: "inside" }).toBuffer();
   const ogLogoMeta = await sharp(ogLogo).metadata();
@@ -385,7 +386,7 @@ async function makeBrandMarks() {
             width: 1200,
             height: 96,
             channels: 4,
-            background: { r: 74, g: 16, b: 12, alpha: 1 },
+            background: { r: 13, g: 27, b: 51, alpha: 1 },
           },
         },
         left: 0,

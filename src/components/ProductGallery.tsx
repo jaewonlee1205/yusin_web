@@ -59,7 +59,7 @@ export default function ProductGallery({
                   aria-current={on ? "true" : undefined}
                   onClick={() => setPicked(i)}
                   className={`relative block aspect-[4/3] w-24 overflow-hidden rounded-lg border bg-white transition-colors ${
-                    on ? "border-brand" : "border-line hover:border-carbon/40"
+                    on ? "border-brand" : "border-line hover:border-dark-soft/40"
                   }`}
                 >
                   <Image

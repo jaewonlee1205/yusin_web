@@ -37,9 +37,10 @@ export default function ContactCTA() {
        걷어도 면이 죽지 않는다 — 오히려 페이지 끝의 포인트로 또렷해진다.
        (위쪽 선은 PageHero 아래쪽 선과 호응하던 것인데, 그쪽이 없어졌다.)
 
-       ⚠️ 2026-10-14 에 네이비(#0b3c8d)에서 로고 차콜로 갈았다. 그 파랑은
-          로고에 없는 색이었고, 레드 버튼이 바탕과 2.02:1 밖에 안 돼 버튼의
-          모양을 제 테두리가 아니라 흰 글자가 떠받치고 있었다. 지금은 3.32:1 다.
+       ⚠️ 2026-10-14 에 바탕색이 넷을 거쳤다(globals.css 머리 주석에 전말이
+          있다). 예전 네이비 #0b3c8d 는 레드 버튼과 2.02:1 밖에 안 돼 버튼의
+          모양을 제 테두리가 아니라 흰 글자가 떠받치고 있었다. 지금 dark 는
+          3.38:1 로, 거쳐 온 넷 중 가장 높다.
 
        ⚠️ relative 는 아래 그레인 겹의 기준이다. 빼면 그레인이 페이지
           전체로 퍼진다.
@@ -47,7 +48,7 @@ export default function ContactCTA() {
        ⚠️ 이 주석을 JSX 주석({ /* ... *\/ })으로 바꾸지 말 것. return (
           바로 뒤에 두면 주석과 <section> 이 **자식 둘**이 되어
           "Expected ',', got 'ident'" 로 빌드가 깨진다. */
-    <section className="relative bg-brand-deep">
+    <section className="relative bg-dark">
       {/* ⚠️ 그레인이 Container **앞**에 있다. DOM 순서상 글자가 위로 온다.
              단색 면이라 히어로(0.08)보다 진하게 0.12 를 준다. */}
       <div
@@ -147,9 +148,8 @@ export default function ContactCTA() {
                 전화 {site.tel}
               </a>
             </div>
-            {/* white/70 이 이 차콜 위에서 8.85:1 이다(네이비 때는 5.87:1 이었다).
-                한 단계 아래인 white/55 는 6.3:1 로 지금도 AA 를 넘지만, 크기를
-                낮춰 아래 단계로 읽히게 하는 쪽을 그대로 둔다. */}
+            {/* white/70 이 이 바탕 위에서 8.9:1 이다(예전 네이비 때는 5.88:1).
+                크기를 낮춰 아래 단계로 읽히게 하는 쪽을 그대로 둔다. */}
             <p className="text-xs leading-relaxed text-white/70">
               {site.hours.weekday} · {site.hours.holiday}
             </p>

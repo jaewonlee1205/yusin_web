@@ -193,7 +193,7 @@ function Node({
 }) {
   const styles = {
     brand: "bg-brand text-white",
-    dark: "bg-carbon text-white",
+    dark: "bg-dark-soft text-white",
   } as const;
 
   return (

@@ -79,7 +79,7 @@ export default function ProductBrowser() {
           aria-label="제품 분류"
           className="overflow-hidden rounded-2xl bg-white shadow-card"
         >
-          <p className="bg-carbon px-5 py-3.5 text-xs font-bold tracking-[0.08em] text-white">
+          <p className="bg-dark-soft px-5 py-3.5 text-xs font-bold tracking-[0.08em] text-white">
             제품 분류
           </p>
           <ul className="border-t border-line">
@@ -91,7 +91,7 @@ export default function ProductBrowser() {
                       레드 + 연한 배경(surface).
 
                       ⚠️ 2026-10-14 에 navy 에서 **레드**로 갈았다. 네이비를
-                         걷으면서 차콜로 내렸더니 선택된 항목이 회색이 되어
+                         걷으면서 어두운 중립색으로 내렸더니 선택된 항목이 회색이 되어
                          **꺼진 것처럼** 읽혔다. 선택·현재 위치는 레드가 맡는다.
                          제품 카드의 분류 라벨이 이미 레드라 서로 호응한다.
 
@@ -101,7 +101,7 @@ export default function ProductBrowser() {
                       라벨이 더 또렷해진다.
 
                       띠를 걷으면서 정렬도 맞았다. border-l-2 가 있을 때는
-                      글자가 22px 에서 시작해 위 차콜 헤더("제품 분류", px-5
+                      글자가 22px 에서 시작해 위 dark-soft 헤더("제품 분류", px-5
                       라 20px)와 2px 어긋나 있었다. 이제 두 x 가 같다. */}
                   <button
                     type="button"
@@ -134,7 +134,7 @@ export default function ProductBrowser() {
 
             빨강 버튼을 쓰지 않는다 — 페이지 맨 아래 ContactCTA 가 이미 빨강
             버튼이고, 한 화면에 같은 세기의 유도가 둘이면 둘 다 약해진다.
-            여기는 차콜 글자 링크로 조용히 둔다.
+            여기는 dark-soft 글자 링크로 조용히 둔다.
 
             문구는 배너 lead·ContactCTA·/contact lead 와 글자가 겹치지 않게
             새로 썼다. 같은 말을 두 번 읽게 하지 않는다. */}
@@ -148,10 +148,10 @@ export default function ProductBrowser() {
 
               ⚠️ 글자 링크를 테두리 박스로 바꿨다. 설명이 빠지니 글자 링크
                  하나만 남아 허전했다. **위 "빨강 버튼을 쓰지 않는다" 는 그대로
-                 유효하다** — 이 버튼은 차콜 테두리이고 바탕이 없다.
+                 유효하다** — 이 버튼은 dark-soft 테두리이고 바탕이 없다.
 
-                 색은 제품 상세의 "제품 목록" 버튼(border-carbon/30 … hover:
-                 border-carbon hover:bg-surface)에서 가져왔다. 사이트의 공통
+                 색은 제품 상세의 "제품 목록" 버튼(border-dark-soft/30 … hover:
+                 border-dark-soft hover:bg-surface)에서 가져왔다. 사이트의 공통
                  BTN 은 hover 가 brand 로 번져 여기 쓸 수 없다. */}
           {/* ⚠️ 화살표가 없다. 테두리 박스로 바꾸던 라운드에 오른쪽 화살표를
                  그대로 들고 왔는데(글자 링크 시절의 것이다) 걷어 달라는 요청에
@@ -163,7 +163,7 @@ export default function ProductBrowser() {
                  글자 하나뿐이면 할 일이 없다. justify-center 는 남긴다. */}
           <Link
             href="/contact/"
-            className="mt-4 flex items-center justify-center rounded-xl border border-carbon/30 px-4 py-2.5 text-13 font-semibold text-carbon transition hover:border-carbon hover:bg-surface active:scale-[0.98]"
+            className="mt-4 flex items-center justify-center rounded-xl border border-dark-soft/30 px-4 py-2.5 text-13 font-semibold text-dark-soft transition hover:border-dark-soft hover:bg-surface active:scale-[0.98]"
           >
             제작 문의
           </Link>
@@ -209,7 +209,7 @@ export default function ProductBrowser() {
                 className={`shrink-0 rounded-full border px-5 py-2.5 text-sm font-medium transition-colors ${
                   active
                     ? "border-brand bg-brand text-white"
-                    : "border-line bg-white text-ink-soft hover:border-carbon/40 hover:text-ink"
+                    : "border-line bg-white text-ink-soft hover:border-dark-soft/40 hover:text-ink"
                 }`}
               >
                 {f}

@@ -1607,7 +1607,7 @@ export const products: Product[] = [
        그대로 맞는다.
 
        ⚠️ 자막 대비를 다시 쟀다. 하단 22% 띠의 Y 평균 110.9(최소 94 ·
-          최대 121)로, 기존 일곱 편의 범위(89.9~116.4) 안이다. brand-deep/85
+          최대 121)로, 기존 일곱 편의 범위(89.9~116.4) 안이다. dark/85
           를 덮으면 흰 글씨 대비가 15:1 안팎이라 AAA(7:1)를 크게 넘는다. */
     video: {
       src: "/videos/product-urethane-coating.mp4",
