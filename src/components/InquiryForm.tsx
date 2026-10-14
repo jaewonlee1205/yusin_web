@@ -265,12 +265,17 @@ export default function InquiryForm() {
                성공 화면에 레드가 없는 것이 지금 상태다. 이 버튼은 행동이 아니라
                **화면을 닫는 것**이다.
 
+            ⚠️ hover 가 **ink** 다. 한때 brand-deep 이었는데, 2026-10-14 에
+               그 토큰이 brand-deep(와인레드)으로 바뀌면서 **차콜 버튼에 마우스를
+               올리면 빨개지는** 상태가 됐다. 같은 계열로 한 단계 어두워지는
+               것이 맞아 ink 로 돌렸다.
+
             ⚠️ 폭을 320px 로 묶는다. 바깥이 max-w-3xl(768px)이라 전폭으로 두면
                버튼 하나가 과하게 길어진다. */}
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="mx-auto mt-8 block w-full max-w-[20rem] rounded-xl bg-carbon py-3.5 text-15 font-bold text-white transition hover:bg-carbon-deep active:scale-[0.99]"
+          className="mx-auto mt-8 block w-full max-w-[20rem] rounded-xl bg-carbon py-3.5 text-15 font-bold text-white transition hover:bg-ink active:scale-[0.99]"
         >
           확인
         </button>

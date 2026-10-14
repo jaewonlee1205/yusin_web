@@ -19,7 +19,7 @@ import VideoEmbed from "./VideoEmbed";
  * 수단이다(videos.ts 머리 주석).
  *
  * 그리고 이쪽은 유튜브 파사드라 썸네일 위에 재생 버튼과 어두운
- * 겹(carbon-deep/25)이 이미 있다 — 거기에 자막 그라데이션을 더하면 두 겹이
+ * 겹(brand-deep/25)이 이미 있다 — 거기에 자막 그라데이션을 더하면 두 겹이
  * 된다.
  *
  * 카드에 호버를 두지 않는다. ProductCard 는 카드 전체가 링크라 떠오르는 것이
@@ -59,11 +59,11 @@ export default function VideoCard({
                밝기를 420프레임씩 재니 평균 Y 60~62, 가장 밝은 순간이 138.8
                이었다(금속 부품 쪽).
 
-               2026-10-14 에 막을 navy-deep 에서 carbon-deep 으로 갈았다 —
-               막 자체 luma 가 35.1 -> 28.4 로 내려가 **대비가 올라갔다**.
-               /85 를 덮은 뒤 흰 글씨 대비는 평균에서 16.0:1, 가장 밝은
-               순간(138.8)에도 13.8:1 이다(navy 때 각각 14.2 · 12.1).
-               AAA(7:1)의 두 배다.
+               2026-10-14 에 막이 두 번 바뀌었다 — navy-deep -> carbon-deep
+               -> brand-deep(와인레드). /85 를 덮은 뒤 흰 글씨 대비는 평균에서
+               14.9:1, 가장 밝은 순간(138.8)에도 12.9:1 이다
+               (navy 때 14.2 · 12.1 / 차콜 때 16.0 · 13.8).
+               AAA(7:1)의 두 배 가까이다.
                영상을 갈아 끼울 때 하단이 더 밝으면 다시 잰다.
 
             패딩이 ProductVideo 보다 좁은 폭에서 작다. 그쪽은 본문 전체 폭을
@@ -72,7 +72,7 @@ export default function VideoCard({
 
             pointer-events-none — 누를 것이 없는 장식 영상이라 마우스를
             가로채지 않는다. */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-carbon-deep/85 via-carbon-deep/40 to-transparent px-4 pb-4 pt-9 sm:px-5 sm:pb-5 sm:pt-10 lg:px-6 lg:pb-6 lg:pt-12">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-brand-deep/85 via-brand-deep/40 to-transparent px-4 pb-4 pt-9 sm:px-5 sm:pb-5 sm:pt-10 lg:px-6 lg:pb-6 lg:pt-12">
           <p className="text-13 font-medium leading-relaxed text-white sm:text-sm">
             {video.note}
           </p>

@@ -53,7 +53,7 @@ type Props = {
 const TONE = {
   white: "bg-white",
   surface: "bg-surface",
-  dark: "bg-carbon-deep text-white",
+  dark: "bg-brand-deep text-white",
 } as const;
 
 /*

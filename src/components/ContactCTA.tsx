@@ -47,7 +47,7 @@ export default function ContactCTA() {
        ⚠️ 이 주석을 JSX 주석({ /* ... *\/ })으로 바꾸지 말 것. return (
           바로 뒤에 두면 주석과 <section> 이 **자식 둘**이 되어
           "Expected ',', got 'ident'" 로 빌드가 깨진다. */
-    <section className="relative bg-carbon-deep">
+    <section className="relative bg-brand-deep">
       {/* ⚠️ 그레인이 Container **앞**에 있다. DOM 순서상 글자가 위로 온다.
              단색 면이라 히어로(0.08)보다 진하게 0.12 를 준다. */}
       <div

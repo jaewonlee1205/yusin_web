@@ -102,28 +102,30 @@ export default function ProductVideo({
                영상이 display:none 이 되어도 뒤에 깔린 정지컷 위에 설명이
                그대로 남는다.
 
-            ⚠️ 흰 글씨가 읽히는 것은 그라데이션 덕이다. **2026-10-14 에 막을
-               navy-deep 에서 carbon-deep 으로 갈면서 아홉 편을 다시 쟀다**
-               (막 자체 luma 35.1 -> 28.4 로 더 어두워져 대비가 올라갔다).
+            ⚠️ 흰 글씨가 읽히는 것은 그라데이션 덕이다. **2026-10-14 에 막이
+               두 번 바뀌어(navy-deep -> carbon-deep -> brand-deep) 그때마다
+               아홉 편을 다시 쟀다.**
 
                포스터의 하단 22% 띠 평균 Y 와, 그 위에 /85 를 덮은 뒤의
                흰 글자 대비 —
 
-                 영상            띠 Y    navy 때   지금(carbon)
-                 bowl-feeder      64.7   14.1:1  ->  15.9:1
-                 controller       87.0   13.5:1  ->  15.3:1
-                 linear-feeder    96.2   13.2:1  ->  15.0:1
-                 soundproof       100.4  13.1:1  ->  14.9:1
-                 urethane         101.9  13.1:1  ->  14.8:1
-                 hopper-feeder    117.4  12.7:1  ->  14.4:1
-                 vibrator         124.5  12.5:1  ->  14.2:1   <- 가장 밝음
+                 영상            띠 Y    차콜 때   지금(와인레드)
+                 bowl-feeder      64.7   15.9:1  ->  14.8:1
+                 controller       87.0   15.3:1  ->  14.3:1
+                 linear-feeder    96.2   15.0:1  ->  14.0:1
+                 soundproof       100.4  14.9:1  ->  13.9:1
+                 urethane         101.9  14.8:1  ->  13.9:1
+                 hopper-feeder    117.4  14.4:1  ->  13.5:1
+                 vibrator         124.5  14.2:1  ->  13.3:1   <- 가장 밝음
 
-               가장 밝은 진동기도 14.2:1 로 AAA(7:1)의 두 배다.
+               가장 밝은 진동기도 13.3:1 로 AAA(7:1)의 **두 배 가까이**다.
+               차콜에서 와인레드로 바뀌며 한 단계 내려갔지만(두 색의 luma 가
+               28.4 와 28.0 으로 거의 같아 차이가 작다) 여유가 충분하다.
                영상을 갈아 끼울 때 하단이 더 밝으면 다시 잰다.
 
             pointer-events-none — 누를 것이 없는 장식 영상이라 마우스를
             가로채지 않는다. */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-carbon-deep/85 via-carbon-deep/40 to-transparent px-5 pb-5 pt-12 sm:px-6 sm:pb-6">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-brand-deep/85 via-brand-deep/40 to-transparent px-5 pb-5 pt-12 sm:px-6 sm:pb-6">
           <p className="text-13 font-medium leading-relaxed text-white sm:text-sm">
             {video.note}
           </p>

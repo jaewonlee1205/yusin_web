@@ -79,7 +79,7 @@ export default function Home() {
 
       {/* 1. Hero — 헤더를 뺀 한 화면에 지표 줄까지 전부 들어가야 한다.
           화면이 낮아지면 패딩·글자·이미지가 clamp()로 같이 줄어든다. */}
-      <section className="hero-screen relative flex flex-col overflow-hidden bg-carbon-deep">
+      <section className="hero-screen relative flex flex-col overflow-hidden bg-brand-deep">
         {/* 배경 2 — 실제 피더가 도는 영상.
 
             유튜브 iframe 을 쓰지 않는다. 홈은 외부 요청이 0건이고(그러려고
@@ -168,12 +168,12 @@ export default function Home() {
             가장자리 비네트, 3D 도면 뒤를 눌러 주는 자리. 하위 페이지 배너는
             장식을 모두 걷어 바탕 한 장으로 세웠는데 홈만 다섯이라, 영상(제품이
             도는 모습이니 내용이다)과 이 오버레이만 남겼다. 바닥 그라디언트는
-            section 의 bg-carbon-deep 과 거의 같은 색을 한 번 더 까는 것이었고,
+            section 의 bg-brand-deep 과 거의 같은 색을 한 번 더 까는 것이었고,
             비네트와 도면 뒤 자리는 도면이 흰 금속이라 어두운 영상 위에서 그
             자체로 구분돼 없어도 읽힌다. */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-r from-carbon-deep via-carbon-deep/75 to-transparent"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-r from-brand-deep via-brand-deep/75 to-transparent"
         />
 
         <Container className="relative flex flex-1 items-center py-[clamp(1.5rem,4vh,3.5rem)]">
@@ -382,10 +382,10 @@ export default function Home() {
                  으로 다시 뽑아 눈으로 가렸다.
 
             ⚠️ 하단 22% 띠 Y 평균 107.3(최대 111.5). 기존 제품 영상 일곱 편이
-               66~115 이니 그 안이고, carbon-deep/85 를 덮으면 흰 글자 대비가
-               **14.7:1** 이라 AAA(7:1)의 두 배다.
-               (2026-10-14 에 막을 navy-deep 에서 갈면서 다시 쟀다 — 막이
-                더 어두워져 13.0 -> 14.7 로 올라갔다.) */}
+               66~115 이니 그 안이고, brand-deep/85 를 덮으면 흰 글자 대비가
+               **13.8:1** 이라 AAA(7:1)의 두 배 가까이다.
+               (2026-10-14 에 막이 두 번 바뀌며 다시 쟀다 —
+                navy 13.0 -> 차콜 14.7 -> 와인레드 13.8.) */}
         <ProductVideo
           video={{
             src: "/videos/performance.mp4",
