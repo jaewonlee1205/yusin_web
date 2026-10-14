@@ -1346,12 +1346,22 @@ export default function Home() {
                             ⚠️ 높이가 h-4(16px)다 — 머리행 글자가 13px 라 그에
                                맞췄다. 맵 점 라벨은 h-3.5 로 한 단계 작다. */}
                       {i === 0 ? (
+                      /* ⚠️⚠️ **필터로 흰 로고를 만든다**(brightness(0) invert(1)).
+                                logo-mark.webp 는 **빨강+차콜 이미지**라 색을 CSS 로
+                                지정할 수 없고, 픽셀의 **75% 가 차콜(#4d4244)** 이라
+                                네이비 면 위에서 통째로 묻힌다. brightness 를 1.2 ·
+                                1.35 · 1.8 로 올려 봤지만 차콜이 회색이 될 뿐이었다.
+
+                            ⚠️ **로고 SVG 원본을 받으면 이 필터가 필요 없다** —
+                               fill 로 흰색을 지정하면 된다(README 5번).
+                            ⚠️ 헤더·푸터의 로고는 **흰 바탕**이라 필터를 걸지 않는다.
+                               여기 두 곳(표 머리 · 맵 점)만이다. */
                         <Image
                           src="/images/logo-mark.webp"
                           alt={group}
                           width={129}
                           height={32}
-                          className="mx-auto h-4 w-auto"
+                          className="mx-auto h-4 w-auto [filter:brightness(0)_invert(1)]"
                         />
                       ) : (
                         group
@@ -1626,17 +1636,18 @@ export default function Home() {
               <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-surface sm:aspect-[5/2] xl:aspect-auto">
                 <div
                   aria-hidden="true"
-                  className="absolute right-0 top-0 bg-dark/[0.06]"
+                  className="absolute right-0 top-0 bg-dark"
                   style={{
                     width: `${POSITIONING_IDEAL.width}%`,
                     height: `${POSITIONING_IDEAL.height}%`,
                   }}
                 />
-                {/* ⚠️ **text-dark 다.** 2026-10-14 에 영역 음영이 레드에서
-                        네이비로 바뀌면서 글자도 따라갔다("빨간색 말고 네이비
-                        컬러 형태로"). 음영이 dark 6% on surface = #e8eaed 라
-                        실측 **약 13.4:1** — 레드이던 시절(brand-dark 5.70:1)
-                        보다 높다.
+                {/* ⚠️ **흰 글자다.** 영역이 꽉 찬 #0d1b33 이라 대비 17.19:1 로
+                        가장 또렷하다. 색이 세 번 갔다 —
+
+                          brand-dark  #b41f18 on 연한 분홍   5.70:1
+                          dark        #0d1b33 on 연한 회색  13.40:1
+                          **흰색**      #ffffff on 꽉 찬 네이비 **17.19:1**
 
                         ⚠️ 레드로 돌아갈 일이 있으면 **brand-dark 만** 쓸 것.
                            그때 재 둔 값이다 —
@@ -1644,8 +1655,8 @@ export default function Home() {
                              text-brand      #d5261e   4.37:1   X  아슬하게 미달
                              text-brand-dark #b41f18   5.70:1   O
                         12px bold 라 WCAG 의 "큰 글자" 예외(3:1)도 못 받는다.
-                        영역 음영을 진하게 바꾸면 이 값을 다시 잴 것. */}
-                <span className="absolute right-4 top-3.5 text-xs font-bold text-dark">
+                        영역 음영을 바꾸면 이 값을 다시 잴 것. */}
+                <span className="absolute right-4 top-3.5 text-xs font-bold text-white">
                   이상적
                 </span>
 
@@ -1655,13 +1666,19 @@ export default function Home() {
                     className="absolute -translate-x-1/2 translate-y-1/2 text-center"
                     style={{ left: `${point.x}%`, bottom: `${point.y}%` }}
                   >
-                    {/* ⚠️ 유신만 레드이고 한 단계 크다. ring 은 점을 키우지
-                           않고 무게만 더한다. */}
+                    {/* ⚠️⚠️ **유신 점이 흰색이다.** 꽉 찬 네이비 영역 **안**에
+                           있기 때문이다(72, 66). 색이 레드 -> dark -> 흰색으로
+                           갔는데, 가운데 단계에서는 **네이비 점이 네이비 영역에
+                           묻혔다.**
+                           ⚠️ 업계 일반 점은 영역 **밖**(25, 30)이라 muted 그대로다 —
+                              흰 점(네이비 위) vs 회색 점(회색 바탕 위)이라
+                              오히려 더 또렷하게 갈린다.
+                           ⚠️ ring 은 점을 키우지 않고 무게만 더한다. */}
                     <span
                       aria-hidden="true"
                       className={`mx-auto block rounded-full ${
                         point.self
-                          ? "h-3.5 w-3.5 bg-dark ring-4 ring-dark/15"
+                          ? "h-3.5 w-3.5 bg-white ring-4 ring-white/25"
                           : "h-2.5 w-2.5 bg-muted"
                       }`}
                     />
@@ -1673,12 +1690,13 @@ export default function Home() {
                           ⚠️ alt 를 비우지 말 것. 점 라벨이라 이름이 읽혀야
                              한다 — 장식이 아니다. */}
                     {point.self ? (
+                      /* ⚠️ 흰 로고다 — 까닭은 표 머리 로고 주석에 있다. */
                       <Image
                         src="/images/logo-mark.webp"
                         alt={point.label}
                         width={129}
                         height={32}
-                        className="mx-auto mt-2 h-3.5 w-auto"
+                        className="mx-auto mt-2 h-3.5 w-auto [filter:brightness(0)_invert(1)]"
                       />
                     ) : (
                       <span className="mt-2 block whitespace-nowrap text-xs text-muted">
