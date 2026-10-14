@@ -901,51 +901,6 @@ export default async function ProductDetailPage({
                  예시다" 라는 뜻이라, 규격표가 없으면 가리킬 것이 없다.
                  (표를 그리는 위 블록도 같은 조건을 쓴다 — 조건이 둘로
                  나뉜 것은 그 사이에 구동 · 옵션 목록이 끼어서다.) */}
-          {/* 제품 도면. **제품마다 한 장이 아니다.**
-
-              ⚠️⚠️ **일곱 중 다섯만 있다.** 우레탄 코팅은 공정이라 도면 자체가
-                    없고, 컨트롤러는 유신이 쓰는 제어기가 외부 제품이라 자사
-                    도면이 없다(products.ts 의 drawings 주석에 까닭이 있다).
-                    없는 제품에서는 이 블록이 **통째로 안 그려진다.**
-
-              ⚠️⚠️ **확대 장치를 붙이지 말 것.** 한 라운드 동안 그림을 <a
-                    target="_blank"> 로 감싸고 "도면 크게 보기 ↗" 를 달았는데,
-                    **그 기능이 필요 없다**는 말을 들어 걷었다. 대신 도면 자체를
-                    제품 하나.뷰 한둘로 잘라 **그 자리에서 읽히게** 했다.
-
-              ⚠️⚠️ **max-h 를 다시 걸지 말 것.** 높이를 묶으면 도면이 작아진다 —
-                    "제품도 잘 안 보이고 치수도 잘 안 보인다" 는 지적을 받은
-                    바로 그 원인이다. 대신 뽑을 때 가로세로비를 1:1~3:1 로
-                    맞춰 둔다(products.ts 의 drawings 주석).
-
-              ⚠️ **next/image 가 아니라 <img> 다.** 도면은 SVG 이고 이 사이트는
-                 images.unoptimized 라 next/image 로 얻을 것이 없다.
-                 ⚠️ SVG 에 width/height 가 들어 있어야 한다 — viewBox 만 있으면
-                    높이가 0 으로 잡혀 도면이 아예 안 보인다(겪었다).
-
-              ⚠️ 테두리만 두고 그림자를 주지 않는다. 도면은 선 그림이라
-                 그림자를 얹으면 종이가 아니라 카드처럼 보인다. */}
-          {product.drawings && (
-            <div className="mt-10 space-y-6">
-              {product.drawings.map((d) => (
-                <figure key={d.src}>
-                  <div className="overflow-hidden rounded-xl border border-line bg-white p-4 sm:p-6">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={d.src}
-                      alt={d.alt}
-                      loading="lazy"
-                      className="mx-auto block h-auto w-full"
-                    />
-                  </div>
-                  <figcaption className="mt-3 text-13 leading-relaxed text-ink-soft">
-                    {d.caption}
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
-          )}
-
           {product.specTable && (
           <div className="mt-8">
           <div className="flex items-start gap-2.5 rounded-xl bg-surface px-4 py-3">

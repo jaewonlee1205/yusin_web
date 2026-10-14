@@ -458,44 +458,6 @@ export type Product = {
     note: string;
   };
   /**
-   * 제품 도면. **일곱 중 다섯만 있고, 제품마다 한 장이 아니다.**
-   *
-   * USB 의 CAD(.dwg 36,812개)에서 뽑는다. 외부 프로그램 없이 WASM
-   * (@mlightcad/libredwg-web)으로 DWG 를 읽고 구역을 지정해 그 안의 엔티티만
-   * SVG 로 그린 것이다 — 도면 파일에는 배치(Layout)가 없고 모델 공간에 도면
-   * 수백 장이 늘어서 있어 구역을 직접 집어야 한다. 어느 파일의 어느 좌표를
-   * 썼는지는 README 2차 조사 절에 있다.
-   *
-   * ⚠️⚠️ **도면 한 장(시트)을 통째로 넣지 말 것.** 처음에 그렇게 했다가
-   *       "제품도 잘 안 보이고 치수도 잘 안 보인다" 는 말을 들었다. 표제란
-   *       패널.범례.일곱 기종이 한 화면에 들어가니 제품 하나가 손톱만 해졌다.
-   *       **한 장에 한 제품, 뷰 한둘**만 담는다. 세로로 길면 뷰를 갈라
-   *       여러 장으로 — 가로세로비를 1:1~3:1 로 두는 것이 기준이다.
-   *
-   * ⚠️⚠️ **치수가 붙은 제품 도면은 직진피더뿐이다.** 전수로 셌다 — 진동기
-   *       폴더 dwg 339개 중 치수 8개 이상인 것 1개, 호퍼 108개 중 1개(부품
-   *       가공도), 리니어 260개 중 0개, 호퍼.방음커버 조립도는 0개.
-   *       나머지는 "제품을 크게" 까지만 할 수 있다. **없는 치수를 만들어
-   *       넣지 않는다.**
-   *
-   * ⚠️ **없는 제품 둘**
-   *   우레탄 코팅 — 공정이라 도면 자체가 없다. 파일명에 "우레탄" 인 것은
-   *               리니어 방진 고무 부품(.ipt)뿐이다. 전수로 확인했다
-   *   컨트롤러   — 유신이 쓰는 제어기가 **외부 제품**이다(DS-100S · DS-210S ·
-   *               DSD-30F …). USB 에 있는 것은 그 제어기의 3D 모델과
-   *               **거치대(브라케트) 도면**뿐이고, 설명서는 PDF 라 그림으로
-   *               바꿀 수단이 없다. 비워 두기로 했다
-   *
-   * ⚠️ **SVG 다.** 선 그림이라 확대해도 안 깨지고 열 장 gzip 합계가 67KB 다.
-   *    래스터로 바꾸지 말 것.
-   */
-  drawings?: {
-    src: string;
-    alt: string;
-    /** 어느 기종의 무슨 뷰인가. 치수가 읽히면 그 수치도 적는다. */
-    caption: string;
-  }[];
-  /**
    * 상세 페이지 아래 "다른 제품" 에 띄울 제품의 slug.
    *
    * ⚠️ 개수를 맞추지 않는다 — 실제로 함께 쓰는 것만 적는다(지금 2~3개).
@@ -799,18 +761,6 @@ export const products: Product[] = [
       poster: "/images/videos/product-bowl-feeder.webp",
       note: "볼에서 올라온 금속 부품이 트랙 위에서 한 자세로 줄지어 나갑니다.",
     },
-    drawings: [
-      {
-        src: "/images/drawings/bowl-feeder-1.svg",
-        alt: "볼피더 2호 평면도 — 볼과 직진피더, 호퍼 투입구",
-        caption: "2호 평면도. 직진피더 슈트 길이 250 이 적혀 있습니다.",
-      },
-      {
-        src: "/images/drawings/bowl-feeder-2.svg",
-        alt: "볼피더 2호 정면도 — 볼·직진피더·호퍼·받침대",
-        caption: "2호 정면도. 볼피더와 호퍼가 받침대 위에 함께 섭니다.",
-      },
-    ],
     applications: [
       {
         name: "커넥터 · 단자 등 전자부품",
@@ -955,23 +905,6 @@ export const products: Product[] = [
       poster: "/images/videos/product-linear-feeder.webp",
       note: "볼에서 나온 부품이 직선 트랙을 타고 자세를 유지한 채 이송됩니다.",
     },
-    drawings: [
-      {
-        src: "/images/drawings/linear-feeder-1.svg",
-        alt: "직진피더 1호 도면 — 평면도·정면도·측면도",
-        caption: "1호. 상판 104 · 단 17 · 15 · 68 이 읽힙니다.",
-      },
-      {
-        src: "/images/drawings/linear-feeder-2.svg",
-        alt: "직진피더 2호 도면 — 평면도·정면도·측면도·저면도",
-        caption: "2호. 140 · 132 · 113.5 · 26.5 · 체결 M8 이 읽힙니다.",
-      },
-      {
-        src: "/images/drawings/linear-feeder-3.svg",
-        alt: "직진피더 3호 도면 — 평면도·정면도·측면도와 슈트 단면",
-        caption: "3호. 184 · 164 · 130 · 160 과 슈트 120 · 35 · 29 가 읽힙니다.",
-      },
-    ],
     applications: [
       {
         name: "볼피더 – 조립기 사이 부품 이송",
@@ -1106,18 +1039,6 @@ export const products: Product[] = [
       poster: "/images/videos/product-vibrator.webp",
       note: "진동만으로 부품이 볼 벽을 타고 나선으로 올라갑니다.",
     },
-    drawings: [
-      {
-        src: "/images/drawings/vibrator-1.svg",
-        alt: "진동기 4호신형 평면도 — 판스프링 네 조와 체결부",
-        caption: "4호신형 평면도. 판스프링이 네 방향으로 뻗습니다.",
-      },
-      {
-        src: "/images/drawings/vibrator-2.svg",
-        alt: "진동기 4호신형 정면도 — 상판·본체·받침",
-        caption: "4호신형 정면도. 위 상판에 볼이 얹히고 아래가 받침입니다.",
-      },
-    ],
     applications: [
       {
         name: "볼피더 구동부",
@@ -1246,7 +1167,9 @@ export const products: Product[] = [
       { label: "보충", value: "상부 커버를 열어 부품 투입" },
     ],
     specTable: {
-      caption: "형식명은 호퍼통 한 변의 치수입니다.",
+      caption: "호퍼통 한 변의 치수입니다.",
+      // ⚠️ "형식명은" 을 넣지 말 것 — 화면 앞머리가 이미 "형식명은 실제
+      //    기종명" 이라 "형식명은 실제 기종명 형식명은 호퍼통…" 으로 겹쳤다.
       columns: ["형식", "입력 전원", "구동", "본체 중량"],
       rows: [
         ["400", "220V", "기어드 모터", "약 18kg"],
@@ -1265,13 +1188,6 @@ export const products: Product[] = [
       poster: "/images/videos/product-hopper-feeder.webp",
       note: "볼이 가득 찬 상태로 공급이 이어집니다. 호퍼피더가 이 양을 자동으로 채웁니다.",
     },
-    drawings: [
-      {
-        src: "/images/drawings/hopper-feeder-1.svg",
-        alt: "호퍼피더 500×500 측면도와 정면도",
-        caption: "500×500(호퍼통 높이 200). 왼쪽이 측면, 오른쪽이 정면입니다.",
-      },
-    ],
     applications: [
       {
         name: "장시간 무인 운전 라인",
@@ -1407,18 +1323,6 @@ export const products: Product[] = [
       poster: "/images/videos/product-soundproof-cover.webp",
       note: "커버를 씌우기 전의 금속 부품 라인입니다. 이 충돌음을 15~20dB 낮춥니다.",
     },
-    drawings: [
-      {
-        src: "/images/drawings/soundproof-cover-1.svg",
-        alt: "사각 방음커버 등각투상도",
-        caption: "등각투상. 아래가 트인 쪽이 트랙이 빠져나가는 자리입니다.",
-      },
-      {
-        src: "/images/drawings/soundproof-cover-2.svg",
-        alt: "사각 방음커버 정면도와 측면도",
-        caption: "정면도와 측면도. 앞뒤 두 짝으로 나뉩니다.",
-      },
-    ],
     applications: [
       {
         name: "금속 부품 취급 라인",
@@ -1768,20 +1672,6 @@ for (const p of products) {
   }
   if (!p.video.poster.endsWith(".webp")) {
     throw new Error(`products.ts: ${p.slug} 의 video.poster 가 .webp 가 아니다`);
-  }
-
-  // 도면은 **SVG 여야 한다.** 선 그림이라 확대해도 안 깨지는 것이 이 자리의
-  // 전제다. 래스터를 넣으면 그 전제가 조용히 깨진다.
-  for (const d of p.drawings ?? []) {
-    if (!/^\/images\/drawings\/.+\.svg$/.test(d.src)) {
-      throw new Error(
-        `products.ts: ${p.slug} 의 drawings.src 가 /images/drawings/*.svg 가 아니다 (${d.src})`
-      );
-    }
-  }
-  // 빈 배열을 두지 않는다 — 화면이 "도면 있음" 으로 읽고 빈 칸을 남긴다.
-  if (p.drawings && p.drawings.length === 0) {
-    throw new Error(`products.ts: ${p.slug} 의 drawings 가 빈 배열이다. 없으면 필드를 빼라`);
   }
 
   // 특징은 2열 격자라 넷이어야 두 행이 꽉 찬다. 홀수면 마지막 행에 칸이
