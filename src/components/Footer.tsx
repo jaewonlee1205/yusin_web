@@ -132,7 +132,10 @@ export default function Footer() {
             img{max-width:100%} 에 눌린다. 기준은 lg 가 시작하는 1024px 다.
             거기서 여유가 1.7fr 37px / 1.6fr 26px / 1.5fr 14px 라 1.7fr 로 둔다. */}
         <div className="grid grid-cols-2 gap-10 sm:gap-x-12 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)] lg:gap-10">
-          <div className="col-span-2 sm:col-span-1">
+          {/* ⚠️ **flex h-full flex-col 이다.** 아래 전화 묶음의 mt-auto 가
+                 남는 높이를 먹어 **바닥에 내려앉게** 하려는 것이다 —
+                 로고와 채널 버튼은 위에 그대로 붙어 있다. */}
+          <div className="col-span-2 flex h-full flex-col sm:col-span-1">
             {/* block w-fit 이다. inline-block 으로 두면 인라인 baseline
                 여백 때문에 이 열이 5px 늘어 [제품] 열과 맞춰 둔 0px 정렬이
                 깨지고, w-fit 없이 block 만 두면 링크가 열 전체 폭(1440 에서
@@ -252,7 +255,16 @@ export default function Footer() {
                    다르다. 헤더를 보고 레드를 옮겨 붙이지 말 것.
 
                 ⚠️ 아이콘이 18px 다(헤더는 16px). 번호가 text-lg 라 크다. */}
-            <div className="mt-3 flex flex-col items-start gap-1">
+            {/* ⚠️ **mt-auto 다.** 이 열(181px)이 가장 긴 열(202px)보다
+                   21px 짧아서, 그 여유를 자동 여백이 먹고 전화 묶음이
+                   **[우레탄 코팅]·[납품실적] 줄에 맞춰 내려앉는다.**
+                   2026-10-14 에 "너무 올라간 느낌" 이라는 말을 듣고 바꿨다.
+
+                   ⚠️ **푸터 높이는 안 바뀐다** — 격자 행 높이는 가장 긴 열이
+                      정하고, 이 열은 그 안에서 자리만 옮기는 것이다.
+                   ⚠️ pt-3 는 여유가 0 일 때(좁은 폭에서 열이 쌓일 때)의
+                      최소 간격이다. 지우지 말 것. */}
+            <div className="mt-auto flex flex-col items-start gap-1 pt-3">
               {[
                 { tel: site.tel, Icon: PhoneIcon },
                 { tel: site.telMobile, Icon: MobileIcon },

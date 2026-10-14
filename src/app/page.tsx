@@ -172,7 +172,23 @@ export default function Home() {
                주지 않는다.
 
             ⚠️ 잘라 주는 overflow-hidden 은 바깥 section 에 이미 있다. */}
-        <ParallaxLayer className="pointer-events-none absolute inset-0 opacity-[0.3]">
+        {/* ⚠️⚠️ **lg 부터 영상이 오른쪽 절반을 차지하는 패널이 된다**
+               (left-1/2). 그 전에는 히어로 전체에 깔린 배경이었다 —
+               2026-10-14 에 "완전히 새롭게" 라는 요청에 **뼈대를 바꾼
+               것**이 이 한 줄이다. 영상이 배경에서 **물건을 보여 주는 면**
+               으로 올라선다.
+
+            ⚠️ 왜 50% 인가 — Container 는 가운데 정렬이라 그 **내용 가운데가
+               곧 섹션 가운데**다. 그래서 패널을 left-1/2 에 두고 글을
+               lg:grid-cols-2 로 가르면 **경계가 정확히 맞는다.** 42% 같은
+               값으로 바꾸면 글 칸 끝과 패널 경계가 어긋난다.
+
+            ⚠️ 패널이 되면서 불투명도를 0.3 -> 0.5 로 올렸다. 배경일 때는
+               글이 그 위에 얹혀 눌러야 했지만, 패널은 글이 없는 면이다.
+
+            ⚠️ **영상 요소는 하나뿐이다.** 폭만 바뀐다 — 두 벌을 두면
+               1.59MB 를 두 번 받는다. */}
+        <ParallaxLayer className="pointer-events-none absolute inset-0 opacity-[0.3] lg:left-1/2 lg:opacity-[0.5]">
           <Image
             src="/images/hero-poster.webp"
             alt=""
@@ -224,7 +240,7 @@ export default function Home() {
                (문의 띠는 단색이라 더 진하게 줄 수 있다). */}
         <div
           aria-hidden="true"
-          className="grain pointer-events-none absolute inset-0 opacity-[0.08] mix-blend-overlay"
+          className="grain pointer-events-none absolute inset-0 opacity-[0.08] mix-blend-overlay lg:left-1/2"
         />
 
         {/* 배경 3 — 글자가 읽히도록 덮는 네이비 오버레이.
@@ -241,37 +257,33 @@ export default function Home() {
             자체로 구분돼 없어도 읽힌다. */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-r from-dark via-dark/75 to-transparent"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-r from-dark via-dark/75 to-transparent lg:left-1/2 lg:via-dark/25"
+        />
+
+        {/* 배경 3.6 — 패널 **아래쪽**을 눌러 주는 막.
+
+            ⚠️ 진동기 선화가 이 위에 선다. 영상에는 밝은 구간(흰 부품이 몰린
+               곳)이 있어 막이 없으면 **흰 선이 흰 바탕에 묻힌다** — 실제로
+               3호·4호가 안 읽혔다. 제품 영상 자막과 같은 수법이다.
+
+            ⚠️ lg 부터만이다. 그 아래에서는 진동기가 영상 위가 아니라
+               단색 면 위에 선다(패널이 없다). */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-[62%] bg-gradient-to-t from-dark via-dark/80 to-transparent lg:left-1/2 lg:block"
         />
 
         {/* ⚠️ 세로 패딩이 4vh 였다. 진동기 줄을 전폭으로 내리면서 360x740
                에서 6px 넘쳤다 — 3.6vh 로 낮춰 위아래 6px 를 돌려받았다.
                ⚠️ 다시 올리기 전에 360x740 에서 재 볼 것. */}
-        <Container className="relative flex flex-1 items-center py-[clamp(1.25rem,3.6vh,3.5rem)] lg:[@media(min-height:701px)]:pb-32">
-          {/* ⚠️⚠️ **세로 한 줄이다.** 한때 lg:grid-cols-[1.1fr_1fr] 로
-                 글과 그림을 좌우로 갈랐는데, 그러면 진동기 넷이 오른쪽
-                 절반(504px)에 갇혀 4호가 172px 밖에 안 되고 **글·그림 아래
-                 KPI 띠까지 200px 이 통째로 비었다**(1280x820 실측).
-                 진동기 넷이 첫 화면의 용건이라 전폭으로 내렸다 —
-                 4호가 268px 로 커지고 빈 자리가 사라진다.
-                 ⚠️ 좌우 2단으로 되돌리지 말 것. */}
-          {/* ⚠️ 칸이 셋이다 — 글 · 구분선 · 라인업. 간격이 두 번 들어가므로
-                 값을 낮게 잡았다. 구분선 자체가 이미 갈라 주는 몫을 한다. */}
-          <div className="flex w-full flex-col gap-[clamp(0.875rem,2.2vh,1.75rem)]">
-            {/* ⚠️⚠️ **제목·본문은 왼쪽, 버튼은 오른쪽 끝이다.**
-                   한때 전부 가운데로 모았는데 "가운데 정렬만 한 수준" 이라는
-                   말을 들었다. 버튼을 제목 옆으로 보내면 두 가지가 풀린다 —
-                   가로로는 전폭을 쓰고, **세로로 약 80px 이 남는다**(버튼이
-                   제목 아래 한 줄을 통째로 차지하지 않는다).
-                   그 80px 이 아래 라인업과 SCROLL 의 숨 쉴 자리가 된다.
-
-                   관용구는 문의 CTA 띠(ContactCTA.tsx)에서 가져왔다 —
-                   minmax(0,1fr)_auto 는 왼쪽이 남는 폭을 다 먹고 오른쪽은
-                   버튼 실제 폭만 갖는다. 좁은 폭에서는 세로로 쌓인다.
-
-                   ⚠️ 가운데 정렬로 되돌리지 말 것. 한글은 왼쪽 정렬이 읽기
-                      편하고, 가운데로 모으면 다시 "무난" 해진다. */}
-            <div className="flex flex-col items-start gap-[clamp(1.25rem,3vh,2.25rem)] lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-12">
+        {/* ⚠️ lg 부터 **반반**이다. 왼쪽은 말, 오른쪽은 영상 패널 위의 물건.
+               items-end 라 둘 다 **바닥에 앉는다** — 위가 비는 것이 이
+               구성의 숨이다. */}
+        <Container className="relative flex flex-1 flex-col justify-end py-[clamp(1.25rem,3.6vh,3.5rem)] lg:grid lg:grid-cols-2 lg:items-end lg:gap-10 lg:[@media(min-height:701px)]:pb-28">
+            {/* 왼쪽 칸 — 말. lg 부터 **단색 면 위**에 선다(오른쪽 패널의
+                   영상이 여기까지 오지 않는다). 그래서 글 뒤가 조용하다.
+                   ⚠️ 가운데 정렬로 되돌리지 말 것. */}
+            <div className="flex flex-col items-start gap-[clamp(1.25rem,3vh,2.25rem)]">
               <div>
               {/* 로고의 F.A 가 무엇의 약자인지 풀어 주는 자리다.
                   로고에는 "유신 F.A SYSTEM" 만 크게 보이고 그 아래 작은
@@ -283,8 +295,11 @@ export default function Home() {
                   지표의 "34년 제작 경력". 덤으로 그 긴 문구(313px)가
                   320·360 에서 두 줄로 깨지던 것도 없어졌다(이건 216px 라
                   320 에서도 한 줄이다). */}
+              {/* ⚠️ **배지다.** 한때 빨간 작은 글자였는데 "바뀐 게 하나도
+                     없다" 는 말을 듣고 테두리 있는 캡슐로 바꿨다. 눈썹이
+                     글자에서 **물건**이 되면서 첫인상이 달라진다. */}
               <p
-                className="rise text-[clamp(0.625rem,1.1vh,0.75rem)] font-bold tracking-[0.25em] text-brand-light"
+                className="rise inline-flex items-center rounded-full border border-white/25 px-3 py-1 text-[clamp(0.5625rem,1.05vh,0.6875rem)] font-bold tracking-[0.22em] text-white/80"
                 style={{ animationDelay: "60ms" }}
               >
                 {site.tagline}
@@ -339,12 +354,10 @@ export default function Home() {
 
               </div>
 
-              {/* ⚠️ 둘째 칸이다. lg 부터 제목 오른쪽에 서고, 그 아래에서는
-                     본문 밑으로 내려온다.
-                     ⚠️ **mt 를 주지 말 것.** 바깥 묶음의 gap 이 이미 간격을
-                        맡는다 — 둘 다 주면 쌓였을 때 간격이 두 번 들어간다. */}
+              {/* ⚠️ **mt 를 주지 말 것.** 바깥 묶음의 gap 이 간격을 맡는다 —
+                     둘 다 주면 간격이 두 번 들어간다. */}
               <div
-                className="rise flex flex-row gap-3"
+                className="rise flex flex-row items-center gap-4"
                 style={{ animationDelay: "300ms" }}
               >
                 {/* ⚠️ 사이트에서 마그네틱을 쓰는 자리는 둘뿐이다 — 여기와
@@ -357,23 +370,22 @@ export default function Home() {
                   제품 살펴보기
                   <ArrowRight />
                 </MagneticLink>
+                {/* ⚠️ **상자가 아니라 글자 링크다.** 테두리 상자가 둘이면
+                       서로 겨뤄 1차(레드)가 묻힌다. 밑줄과 화살표가 누를
+                       곳임을 말한다. 상자로 되돌리지 말 것. */}
                 <Link
                   href="/contact"
-                  className="inline-flex items-center justify-center rounded-xl border border-white/45 px-6 py-4 text-15 font-semibold text-white transition hover:border-white/70 hover:bg-white/10 active:scale-[0.98] sm:px-8"
+                  className="group inline-flex items-center gap-1.5 px-1 py-4 text-15 font-semibold text-white/85 underline decoration-white/30 underline-offset-[6px] transition hover:text-white hover:decoration-white/70"
                 >
                   견적 문의하기
+                  <span className="transition-transform group-hover:translate-x-0.5">→</span>
                 </Link>
               </div>
             </div>
 
-            {/* 글과 라인업을 가르는 전폭 선. 선이 가로를 끝까지 쓰면서
-                구조가 생긴다 — 넷이 멀리 떨어져도 한 줄로 읽히는 근거다.
-                ⚠️ 라인업이 감춰지는 낮은 화면에서는 선도 같이 감춘다. */}
-            <div
-              aria-hidden="true"
-              className="h-px w-full bg-white/15 [@media(max-height:640px)]:hidden"
-            />
-
+            {/* ⚠️ 한때 여기에 전폭 구분선이 있었다. 2026-10-14 에 걷었다 —
+                "구분선 있다 보니깐 이상하다" 는 말이고, 지금은 **왼쪽 단색
+                면과 오른쪽 영상 패널의 경계**가 그 몫을 한다. 되살리지 말 것. */}
             {/* 진동기 네 기종. 이 회사의 강점이 "부품에 맞는 진동기를 골라
                 쓴다" 는 것이라, 첫 화면이 그 넷을 바로 보여 준다.
 
@@ -470,7 +482,6 @@ export default function Home() {
                 ))}
               </ul>
             </div>
-          </div>
 
           {/* ⚠️⚠️ 이 표시는 **절대배치**라 높이를 더하지 않는다. 그래서
                  자리는 위 Container 의 **아래 여백**이 비워 둔다. 표시가

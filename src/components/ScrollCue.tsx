@@ -10,7 +10,8 @@ import { useEffect, useState } from "react";
  *    주지 않으면 아래 내용과 겹친다 — 2026-10-14 에 진동기 이름표와 겹쳐
  *    통째로 걷었다가 되살린 적이 있다.
  *    page.tsx 의 Container 가 lg:[@media(min-height:701px)]:pb-32 로
- *    128px 를 비운다(표시가 64px 를 쓰고 64px 가 틈이다).
+ *    여백을 비운다. 표시가 쓰는 높이는 **선 44px + bottom-3 12px = 56px** 다
+ *    (글자를 걷기 전에는 64px 였다).
  *    **표시가 보이는 조건과 똑같은 조건**이어야 한다.
  *    ⚠️ sm(640)이 아니라 **lg(1024)부터**다 — 768x1024 에서 128px 를
  *       비우느라 히어로가 83px 넘쳤다. 태블릿에는 표시가 없어도 된다.
@@ -38,13 +39,13 @@ export default function ScrollCue() {
         hidden ? "opacity-0" : "opacity-100"
       }`}
     >
-      <span className="flex flex-col items-center gap-2">
-        <span className="text-10 font-bold uppercase tracking-[0.3em] text-white/45">
-          Scroll
-        </span>
-        <span className="relative block h-8 w-px overflow-hidden bg-white/15">
-          <span className="cue-line absolute inset-0 block bg-white/70" />
-        </span>
+      {/* ⚠️ **글자가 없다. 움직이는 선뿐이다.** 2026-10-14 에 "SCROLL 문구는
+             지우고 애니메이션만" 이라는 요청에 걷었다. 되살리지 말 것 —
+             글자를 되살리면 쓰는 높이가 44 -> 64px 로 늘어 page.tsx 의 예약
+             여백(pb-*)도 같이 키워야 한다.
+             aria-hidden 장식이라 글자가 없어도 접근성에 영향이 없다. */}
+      <span className="relative block h-11 w-px overflow-hidden bg-white/15">
+        <span className="cue-line absolute inset-0 block bg-white/70" />
       </span>
     </div>
   );
