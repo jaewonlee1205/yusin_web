@@ -99,7 +99,7 @@ const performanceKpis: Kpi[] = [
     value: "99.9",
     unit: "%",
     wide: true,
-    label: "4종 정확도",
+    label: "진동기 4종 정확도",
     note: "둘 다 회사가 제시한 값 — 한 기종만 쓰는 방식과 네 기종을 골라 쓰는 방식",
   },
   /* ⚠️ **숫자를 손으로 박지 말 것.** 보유 설비 페이지의 equipment 배열에서
@@ -968,6 +968,10 @@ export default function Home() {
                        한 칸 + 라벨 한 줄 "진동기 1종 → 4종" 로 붙여 놨더니
                                        어느 숫자의 라벨인지 안 붙었다
                      ⚠️ 라벨에 화살표를 다시 넣지 말 것 — 값 쪽 하나로 족하다.
+                     ⚠️ **양쪽 라벨이 둘 다 "진동기 N종 정확도" 다.** 한때
+                        뒤쪽을 "4종 정확도" 로 줄여 놓고 "앞이 이미 진동기를
+                        말했으니 대칭" 이라고 적었는데, **둘 다 9자인 지금이
+                        진짜 대칭**이다. 줄이지 말 것.
 
                  ⚠️⚠️ **이 화살표는 걷어낸 버튼 화살표와 쓰임이 다르다.**
                      버튼에서는 테두리 상자가 이미 "누를 곳" 이라고 말하는데
@@ -979,12 +983,16 @@ export default function Home() {
 
                  ⚠️⚠️ **비교 칸 숫자는 반응형이다. 고정 크기로 두지 말 것.**
                     2칸 폭을 쓰는데 내용이 덜 차 "여백 많으니 좀 더 크게" 를
-                    **두 번** 들어 34 -> 44 -> 56px 로 올렸는데, **320 에서는
-                    이 칸이 280px 뿐**이라 56px 이면 넘친다. 그래서 —
+                    **두 번** 들어 34 -> 44 -> 56px 로 올렸는데, 56 에서
+                    **"너무 큰 거 같아"** 가 돌아와 48 로 내렸다. 거쳐 온
+                    값이 34 · 44 · 56 · **48** 이다 — **56 이 상한**이라고
+                    보면 된다.
+                    ⚠️ **320 에서는 이 칸이 280px 뿐**이라 큰 값을 고정으로
+                       두면 넘친다. 그래서 —
 
                       320 · 390      36px
-                      640 ~ 1023     44px
-                      1024 이상      56px
+                      640 ~ 1023     40px
+                      1024 이상      48px
 
                     ⚠️ 화살표도 함께 올린다. 숫자만 키우면 가운데가 비어
                        보인다. mb-* 는 **라벨 줄만큼 화살표를 내려** 숫자
@@ -995,7 +1003,7 @@ export default function Home() {
               {kpi.from ? (
                 <div className="flex items-end gap-4 sm:gap-6 lg:justify-center">
                   <div className="text-center">
-                    <p className="text-[2.25rem] font-extrabold leading-none tracking-tight tabular-nums text-muted sm:text-[2.75rem] lg:text-[3.5rem]">
+                    <p className="text-[2.25rem] font-extrabold leading-none tracking-tight tabular-nums text-muted sm:text-[2.5rem] lg:text-[3rem]">
                       {kpi.from}
                       <span className="ml-0.5 text-lg font-bold">
                         {kpi.unit}
@@ -1005,9 +1013,9 @@ export default function Home() {
                       {kpi.fromLabel}
                     </p>
                   </div>
-                  <AxisArrow className="mb-8 h-6 w-6 sm:mb-9 sm:h-7 sm:w-7 lg:mb-11 lg:h-9 lg:w-9" />
+                  <AxisArrow className="mb-8 h-6 w-6 sm:mb-9 sm:h-7 sm:w-7 lg:mb-10 lg:h-8 lg:w-8" />
                   <div className="text-center">
-                    <p className="text-[2.25rem] font-extrabold leading-none tracking-tight tabular-nums text-ink sm:text-[2.75rem] lg:text-[3.5rem]">
+                    <p className="text-[2.25rem] font-extrabold leading-none tracking-tight tabular-nums text-ink sm:text-[2.5rem] lg:text-[3rem]">
                       {kpi.value}
                       <span className="ml-0.5 text-lg font-bold text-brand">
                         {kpi.unit}
