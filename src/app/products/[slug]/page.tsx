@@ -89,8 +89,19 @@ export default async function ProductDetailPage({
         current={product.name}
       />
 
-      {/* 제품 히어로 — 사진과 "무엇인지", 그리고 문의 버튼까지 첫 화면에 */}
-      <div className="py-12 sm:py-16">
+      {/* 제품 히어로 — 사진과 "무엇인지", 그리고 문의 버튼까지 첫 화면에
+
+          ⚠️⚠️ **2026-10-14 에 흰 바탕에서 네이비(dark #0d1b33)로 뒤집었다.**
+             "여기 경우 색상이 흰색으로 보이는데 [빵부스러기] 여기 색상하고
+             동일한 네이비 색상으로 변경이 필요해 보이고 텍스트는 흰색으로" 라는
+             말을 들었다. 바로 위 Breadcrumb 도 같은 dark 라 **둘이 한 덩어리**로
+             선다. 아래 FEATURES 부터는 흰 바탕 그대로다.
+
+          ⚠️ 사진 카드(ProductGallery)는 **흰 바탕 그대로 둔다.** 네이비 위에서
+             흰 카드가 오히려 또렷해진다. 썸네일의 선택 테두리도 border-brand
+             하나로 충분히 갈린다 — 비선택 border-line 은 흰 카드 가장자리라
+             네이비 위에서 보이지 않지만, 그래서 선택 표시가 더 분명하다. */}
+      <div className="bg-dark py-12 sm:py-16">
         <Container>
           {/* 오른쪽 칸을 왼쪽 사진에 줄 맞춘다.
 
@@ -203,10 +214,13 @@ export default async function ProductDetailPage({
                     또 읽으면 중복이고, 이 자리에서 뜻을 나르는 것은 옆의 분류
                     배지와 아래 제품명이다. */}
                 <div className="flex items-center justify-between gap-4">
-                  <p className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-bold tracking-[0.1em] text-ink-soft">
+                  {/* ⚠️ 네이비 바탕이라 line/surface/ink-soft 를 전부 흰색 계열로
+                         바꿨다. 점은 brand 가 아니라 **brand-light** 다 — 레드는
+                         이 바탕에서 3.38:1 이라 어둡게 가라앉는다. */}
+                  <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-bold tracking-[0.1em] text-white">
                     <span
                       aria-hidden="true"
-                      className="h-1.5 w-1.5 rounded-full bg-brand"
+                      className="h-1.5 w-1.5 rounded-full bg-brand-light"
                     />
                     {product.category}
                   </p>
@@ -215,15 +229,18 @@ export default async function ProductDetailPage({
                     alt=""
                     width={129}
                     height={32}
-                    className="h-7 w-auto shrink-0"
+                    /* ⚠️ 흰색 필터다. 이 섹션이 네이비가 되면서 빨강+차콜
+                       원본이 통째로 묻혔다 — 까닭은 Header.tsx 의 같은 자리에
+                       적혀 있다. 이로써 같은 필터를 쓰는 곳이 다섯이다. */
+                    className="h-7 w-auto shrink-0 [filter:brightness(0)_invert(1)]"
                   />
                 </div>
 
                 {/* 배너가 없으므로 제품명이 h1 이다. 검색에도 이쪽이 맞다. */}
-                <h1 className="mt-4 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+                <h1 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
                   {product.name}
                 </h1>
-                <p className="mt-2 text-sm font-medium uppercase tracking-[0.08em] text-muted">
+                <p className="mt-2 text-sm font-medium uppercase tracking-[0.08em] text-white/60">
                   {product.nameEn}
                 </p>
 
@@ -234,7 +251,7 @@ export default async function ProductDetailPage({
                         여기서 mb 로 받치면 auto 가 0 이어도 24px 은 남는다.
                         **사양 쪽에 mt-6 를 같이 주지 말 것** — flex-col 에서는
                         마진이 합쳐지지 않아 48px 이 된다. */}
-                <p className="mb-6 mt-6 text-lg font-medium leading-relaxed text-ink">
+                <p className="mb-6 mt-6 text-lg font-medium leading-relaxed text-white">
                   {product.summary}
                 </p>
 
@@ -286,11 +303,14 @@ export default async function ProductDetailPage({
                          한 라운드 동안 네 행을 bg-surface 판 하나로 합쳤다가
                          되돌렸다. 합치면 라벨과 값의 짝이 흐려진다.
 
-                      ⚠️ 바탕이 **흰 페이지**(body #ffffff)다. 그래서 이 행들이
-                         bg-surface(#f6f7f9) 회색으로 선다. 한동안 바깥에 흰
-                         카드가 있어 그 대비를 카드가 만들어 줬는데, 카드가
-                         없어진 지금은 페이지 바탕이 그 일을 한다 — 이 섹션에
-                         배경색을 깔면 "회색 안에 회색" 이 되어 띠가 사라진다.
+                      ⚠️⚠️ **바탕이 네이비가 되면서 행 색도 같이 뒤집혔다**
+                         (bg-surface → bg-white/[0.08]). 옛 주석은 이랬다 —
+                         "바탕이 흰 페이지(body #ffffff)라 이 행들이
+                         bg-surface(#f6f7f9) 회색으로 선다. 이 섹션에 배경색을
+                         깔면 '회색 안에 회색' 이 되어 띠가 사라진다." 바로 그
+                         일이 일어났으므로(2026-10-14) 행 색을 함께 옮겼다.
+                         ⚠️ bg-surface 로 되돌리지 말 것 — 네이비 위에서 밝은
+                            회색 덩어리가 되어 사진보다 먼저 눈에 들어온다.
 
                       ⚠️ 반경 xl(12px)은 이제 **홀로 선 값**이다. 한동안 바깥
                          카드가 2xl 이라 "중첩은 안쪽을 한 단계 작게" 를 따른
@@ -344,14 +364,14 @@ export default async function ProductDetailPage({
                   <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-y-1.5">
                     {product.specs.slice(0, 4).map((spec) => (
                       <Fragment key={spec.label}>
-                        <dt className="flex items-center gap-2.5 whitespace-nowrap rounded-l-xl bg-surface py-3 pl-4 pr-4 text-13 font-bold text-ink">
+                        <dt className="flex items-center gap-2.5 whitespace-nowrap rounded-l-xl bg-white/[0.08] py-3 pl-4 pr-4 text-13 font-bold text-white">
                           <span
                             aria-hidden="true"
-                            className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+                            className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-light"
                           />
                           {spec.label}
                         </dt>
-                        <dd className="flex items-center rounded-r-xl bg-surface py-3 pr-4 text-13 leading-snug text-ink-soft">
+                        <dd className="flex items-center rounded-r-xl bg-white/[0.08] py-3 pr-4 text-13 leading-snug text-white/70">
                           {spec.value}
                         </dd>
                       </Fragment>
@@ -386,7 +406,7 @@ export default async function ProductDetailPage({
                 </Link>
                 <Link
                   href="/products/"
-                  className="rounded-xl border border-dark-soft/30 px-8 py-4 text-center text-15 font-semibold active:scale-[0.98] text-dark-soft transition-colors hover:border-dark-soft hover:bg-surface sm:flex-1"
+                  className="rounded-xl border border-white/45 px-8 py-4 text-center text-15 font-semibold active:scale-[0.98] text-white transition-colors hover:border-white/70 hover:bg-white/10 sm:flex-1"
                 >
                   제품 목록
                 </Link>

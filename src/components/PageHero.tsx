@@ -57,29 +57,38 @@ export default function PageHero({
 
        ⚠️ relative 는 아래 장식 겹의 기준이다. 빼면 장식이 페이지 전체로 퍼진다. */
     <div className="relative overflow-hidden bg-dark">
-      {/* 동심원 파문. 진동이 퍼지는 모양이다 — 진동기를 만드는 회사라는 정체성과
-          맞고, **문의 띠가 쓰는 사선 면 · 점 격자와 어휘가 겹치지 않는다**.
-          "배경 장식도 고려해야 할 거 같고 ... 문의 띠하고는 다르게 해야 할 거
-          같고" 라는 말을 듣고 고른 자리다.
+      {/* 가로 선 격자. 설계 도면의 결이라 제조업 톤과 맞고, 문의 띠가 쓰는
+          **사선 면 · 점 격자와 어휘가 겹치지 않는다**.
 
-          ⚠️ 바깥 원일수록 흐리다(0.10 → 0.04). 파문이 퍼지며 약해지는 결이다.
-             넷을 같은 진하기로 두면 과녁처럼 보인다.
+          ⚠️⚠️ **한 라운드 동안 동심원 파문이었다가 걷었다.** 진동이 퍼지는
+             모양이라 진동기 회사와 맞는다고 골랐는데, "별로 안 예쁘고 잘
+             보이지도 않네 너무 연해서" 라는 말을 들었다. 진하기만 올려
+             (0.07 → 0.14, 원별 0.08~0.20) 다시 찍어 봤지만 **오른쪽에 큰 원
+             하나가 덩그러니 놓인 모양**이 여전히 어색했다. 지금 그대로 ·
+             진한 동심원 · 가로 선 격자 · 대각 그라디언트 · 장식 없음
+             다섯을 한 장에 놓고 고른 값이다. ⚠️ 동심원을 되살리지 말 것.
 
-          ⚠️ 원이 배너(240px)보다 커서 위아래가 잘린다. 파문의 한가운데만
-             보이는 것이 의도다 — 원 네 개를 다 보여 주면 장식이 주인공이 된다.
+          ⚠️ 48px 칸에 1px 선 하나다. 문의 띠의 점 격자와 같은 pattern 구조이고
+             <circle> 대신 가로 <path> 를 쓴다. currentColor 라 text-white 를
+             그대로 받는다.
 
-          ⚠️ **9개 페이지에 반복되는 면이다.** 눈에 먼저 들어오면 과한 것이다. */}
+          ⚠️ **9개 페이지에 반복되는 면이다.** 눈에 먼저 들어오면 과한 것이다.
+             0.07 은 선이 보이되 제목(17:1)보다 뒤에 서는 값으로 고른 것이다. */}
       <svg
         aria-hidden="true"
-        viewBox="0 0 560 560"
-        fill="none"
-        stroke="currentColor"
-        className="pointer-events-none absolute -right-20 top-1/2 h-[560px] w-[560px] -translate-y-1/2 text-white"
+        className="pointer-events-none absolute inset-0 h-full w-full text-white opacity-[0.07]"
       >
-        <circle cx="280" cy="280" r="70" opacity="0.1" />
-        <circle cx="280" cy="280" r="140" opacity="0.08" />
-        <circle cx="280" cy="280" r="210" opacity="0.06" />
-        <circle cx="280" cy="280" r="279.5" opacity="0.04" />
+        <defs>
+          <pattern
+            id="hero-lines"
+            width="48"
+            height="48"
+            patternUnits="userSpaceOnUse"
+          >
+            <path d="M0 0H48" fill="none" stroke="currentColor" strokeWidth="1" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#hero-lines)" />
       </svg>
       {/* 문의 띠와 같은 그레인 겹이다. 단색 면이라 히어로(0.08)보다 진하게 0.12. */}
       <div

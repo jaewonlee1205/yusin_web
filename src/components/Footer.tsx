@@ -141,8 +141,9 @@ export default function Footer() {
           35px 과 같다. 묶어 뒀을 때는 66px 로 그 두 배였다. */}
       <Container width="wide" className="pb-8 pt-12 sm:pt-16">
         {/* ⚠️⚠️ **첫 열 폭을 더는 로고가 정하지 않는다.** 2026-10-14 에 로고가
-            logo-mark 로 바뀌며 1024 기준 248 → **145px** 가 되어, 이제 통화 시간
-            줄과 전화번호 묶음이 그 폭을 쓴다. 같은 날 1024 에서 첫 열 286px ·
+            logo-mark 로 바뀌고 YUSIN 크기까지 되맞추면서 1024 기준 248 →
+            **81px** 가 되어, 이제 통화 시간 줄과 전화번호 묶음이 그 폭을 쓴다.
+            같은 날 1024 에서 첫 열 286px ·
             [제품] 218 · [회사] 168 · [고객지원] 168 이고 **네 열 바닥이 모두 같은
             선**에서 끝나는 것을 확인했다.
 
@@ -170,8 +171,11 @@ export default function Footer() {
                 height={32}
                 /* ⚠️ 흰 로고다 — 까닭은 Header.tsx 의 같은 자리에 적혀 있다.
                    ⚠️ 2026-10-14 에 헤더와 **같이** logo-mark 로 바꿨다. 한쪽만
-                      바꾸면 같은 페이지 위아래에서 로고가 달라진다. */
-                className="h-8 w-auto [filter:brightness(0)_invert(1)] sm:h-9"
+                      바꾸면 같은 페이지 위아래에서 로고가 달라진다.
+                   ⚠️ 높이 17/20px 은 헤더와 같은 셈이다 — 원래 logo.webp 의
+                      h-7/h-8 에서 YUSIN 잉크가 보이던 크기(16.7/19.1px)에
+                      맞춘 값이다. 환산식은 Header.tsx 에 있다. */
+                className="h-[17px] w-auto [filter:brightness(0)_invert(1)] sm:h-5"
               />
             </HomeLogoLink>
             {/* 바깥 채널 두 개. 목록 링크가 아니라 테두리 버튼이다 — 옆 세
