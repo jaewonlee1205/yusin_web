@@ -101,7 +101,7 @@ const LINK =
       검게 읽힌다 — 2026-10-14 에 "너무 검다" 는 말을 듣고 한 단계 내렸다.
       ⚠️ ink-soft 로 되돌리지 말 것. 눈에 같은 무게로 맞춘 값이다. */
 const CHANNEL_BUTTON =
-  "flex items-center justify-center rounded-full border border-white/25 p-2 text-white/70 transition hover:border-white/50 hover:text-white active:scale-95";
+  "flex items-center justify-center rounded-full border border-white/25 p-2 text-white transition hover:border-white/50 active:scale-95";
 
 /* 자간을 벌리지 않는다. 0.2em 으로 늘렸던 적이 있는데(Section 의 eyebrow 와
    맞춘 값이었다), eyebrow 는 한두 단어짜리 영문 꼬리표라 벌려도 읽히지만
@@ -183,6 +183,12 @@ export default function Footer() {
                   fill="currentColor" 라 위 CHANNEL_BUTTON 의 text-ink-soft 를
                   그대로 따르고, 마우스를 올리면 hover:text-ink 로 진해진다.
                   곧 **푸터 글자색과 같다.**
+
+                  ⚠️ **흰색이다.** 2026-10-14 에 white/70 에서 올렸다 —
+                     "유튜브, 네이버 로고 흰색으로 해 줘, 현재 회색처럼
+                     보이는데". 아래 무채색 통일은 그대로이고 **밝기만** 한
+                     단계 올린 것이다. hover 는 테두리(white/25 -> white/50)가
+                     맡는다 — 글자가 이미 흰색이라 색으로는 더 올릴 데가 없다.
 
                   ⚠️ 한때 유튜브는 브랜드 레드(#d5261e), 네이버는 제 초록
                      (#03C75A)이었다. 2026-10-14 에 "빨강 초록이 너무 이상해서

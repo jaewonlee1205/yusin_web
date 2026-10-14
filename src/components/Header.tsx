@@ -380,7 +380,22 @@ export default function Header() {
             </div>
             <Link
               href={headerCta.href}
-              className="rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98]"
+              /* ⚠️⚠️ **패딩이 위 12 / 아래 8 로 일부러 비대칭이다. py-2.5 로 되돌리지
+                 말 것.**
+
+                 py-2.5(10/10)일 때 **박스 기준으로는 정확히 가운데**였는데
+                 (글자 위 10px · 아래 10px 를 실측했다) "견적 문의 텍스트가
+                 가운데보다 조금 더 밑에 있는 거 같아" 라는 말을 들었다.
+                 **한글 글꼴의 시각 중심이 박스 중심보다 아래**라서다 — 글자가
+                 baseline 위에 서고 line-box 안에서 잉크가 아래로 쏠리는데,
+                 "견적 문의" 처럼 **받침이 없는 글자**에서 특히 두드러진다.
+
+                 10/10 · 11/9 · 12/8 을 3배로 확대해 비교하고 **12/8** 을 골랐다.
+
+              ⚠️ **합이 40px 여야 한다**(12 + 20 + 8). 옆 전화번호 묶음이 두 줄
+                 40px 이고 그 줄에 맞춰 잡은 높이다 — 위 전화번호 주석에 근거가
+                 있다. 패딩을 만질 때 합을 먼저 볼 것. */
+              className="rounded-xl bg-brand px-5 pb-2 pt-3 text-sm font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98]"
             >
               {headerCta.label}
             </Link>
