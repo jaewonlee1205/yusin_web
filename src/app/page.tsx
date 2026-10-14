@@ -329,7 +329,13 @@ export default function Home() {
               >
                 한두 기종으로는 안 되는 부품이 있습니다
                 <br />
-                <span className="text-brand-light">그래서 네 기종을</span>{" "}
+                {/* ⚠️ **"진동기" 를 빼지 말 것.** 2026-10-14 까지 "그래서 네
+                    기종을 갖췄습니다" 였는데 **무슨 기종인지 모른다**는 말을
+                    들었다 — 첫 줄의 "한두 기종" 도 마찬가지다. 둘째 줄이
+                    무엇인지 밝히면 첫 줄도 따라 읽힌다. */}
+                <span className="text-brand-light">
+                  그래서 진동기 네 기종을
+                </span>{" "}
                 {/* 좁은 칼럼에서 "갖췄 / 습니다"로 끊기지 않게 묶어 둔다 */}
                 <span className="whitespace-nowrap">갖췄습니다</span>
               </h1>
@@ -402,12 +408,22 @@ export default function Home() {
                 {/* ⚠️ 사이트에서 마그네틱을 쓰는 자리는 둘뿐이다 — 여기와
                        문의 CTA 띠의 "온라인 문의하기". 효과를 아끼지 않으면
                        아무것도 중요해 보이지 않는다. */}
+                {/* ⚠️ **화살표를 다시 넣지 말 것.** 2026-10-14 에 걷었다 —
+                       걷어 달라는 요청이고, 이 자리가 사이트에서 마지막으로
+                       남아 있던 화살표였다. 상자 모양이 이미 "누를 곳" 이라고
+                       말하므로 화살표는 같은 말을 두 번 하는 꼴이다.
+                       BTN 상수(홈 섹션 버튼 넷)와 바로 아래 2차 버튼,
+                       제품 목록 사이드바의 "제작 문의" 가 먼저 같은 처리를
+                       받았고, 문의 CTA 띠의 "온라인 문의하기" 도 같은 날
+                       함께 걷혔다.
+                   ⚠️ group 과 gap-2 도 함께 걷었다. group 은 화살표의
+                      group-hover:translate-x-1 하나만 쓰던 것이고, 자식이
+                      글자뿐이면 gap 은 할 일이 없다. */}
                 <MagneticLink
                   href="/products"
-                  className="group inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-6 py-4 text-15 font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:px-8"
+                  className="inline-flex items-center justify-center rounded-xl bg-brand px-6 py-4 text-15 font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:px-8"
                 >
                   제품 살펴보기
-                  <ArrowRight />
                 </MagneticLink>
                 {/* ⚠️ **상자다.** 한때 밑줄 글자 링크였는데 "디자인 너무
                        이상해, 박스로 감싸든 개선 필요" 라는 말을 들었다.
@@ -1529,23 +1545,3 @@ function AxisArrow({ className = "" }: { className?: string }) {
   );
 }
 
-/** CTA 버튼용 화살표. ProductCard·NavPanel과 같은 모양으로 맞췄다. */
-function ArrowRight() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className="shrink-0 transition-transform group-hover:translate-x-1"
-    >
-      <path d="M5 12h14" />
-      <path d="m12 5 7 7-7 7" />
-    </svg>
-  );
-}

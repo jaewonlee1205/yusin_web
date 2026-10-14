@@ -28,6 +28,38 @@ import { site, telHref } from "@/data/site";
  * [버튼 두 개] 밑에 [통화 가능 시간] 을 붙여 둔다. 전화를 걸라고 하면서 언제
  * 받는지 안 알려 주면 걸기 전에 망설이게 된다.
  */
+/* 문의 띠 배경에 까는 진동기 네 기종. **홈 첫 화면의 그 넷과 같은 그림**이다.
+
+   ⚠️⚠️ **여기 오기까지 세 번 갈아엎었다. 세로로 긴 그림을 넣지 말 것.**
+      이 띠는 **1280 x 250, 약 5:1** 이다. 한 장짜리 도면은 비율이 1.2~2:1
+      이라 —
+
+        크게 넣으면   위아래가 잘려 무슨 기계인지 모른다
+        안 잘리게 하면 폭 293px 로 작아져 왼쪽 구석에만 붙는다
+
+      진동기 4호 평면도(1.09:1) · 볼피더 정면도(1.23:1) 둘 다 그 이유로
+      "뒤에 볼피더인지 뭔지 잘 모르겠어" 라는 말을 들었다. 볼피더 평면 +
+      직진피더 + 호퍼를 한 줄로 세워 보기도 했는데 축척이 제각각이라
+      산만하고 버튼 자리까지 넘어갔다.
+
+      **넷을 가로로 세우면 2.8:1 이 되어 띠 비율에 맞는다.** 폭 648px 로
+      띠의 45% 를 차지해 가운데까지 오고, 위아래로 잘리지 않는다.
+
+   ⚠️⚠️ **높이 비율이 실제 값이다.** h 를 604(4호)로 나눈 값이고, 네 장은
+      같은 도면에서 같은 축척으로 잘라 왔다(page.tsx 의 VIBRATORS 주석에
+      전말이 있다). **임의로 고치면 거짓이 된다.**
+      ⚠️ 폭 비율(248:346:450:659)과 **다른 수**다. 한 번 폭 비율을 높이에
+         넣었다가 1호가 실제보다 작게 섰다.
+
+   ⚠️ page.tsx 의 VIBRATORS 를 import 하지 않는다 — 그쪽은 페이지 안에만
+      있는 상수다. 값이 바뀌면 **두 곳을 함께** 고친다. */
+const CTA_VIBRATORS = [
+  { no: 1, w: 248, h: 255 },
+  { no: 2, w: 346, h: 363 },
+  { no: 3, w: 450, h: 456 },
+  { no: 4, w: 659, h: 604 },
+];
+
 export default function ContactCTA() {
   return (
     /* 평평한 네이비 한 장이다.
@@ -49,57 +81,49 @@ export default function ContactCTA() {
           바로 뒤에 두면 주석과 <section> 이 **자식 둘**이 되어
           "Expected ',', got 'ident'" 로 빌드가 깨진다. */
     <section className="relative overflow-hidden bg-dark">
-      {/* 2호 호퍼 볼피더 정면도. 호퍼 · 볼 · 받침대가 한 대로 보인다.
+      {/* 진동기 네 기종을 가로로 세운 선화. 자세한 근거는 위
+             CTA_VIBRATORS 주석에 있다.
 
-          ⚠️⚠️ **한때 진동기 4호 평면도였다.** 첫 화면이 진동기 넷이라 같은
-             그림이 맨 위와 맨 아래에서 두 번 보였고, 2026-10-14 에 "진동기
-             이미지 말고 다른 이미지" 를 달라는 말에 바꿨다. 바로 옆 제목이
-             "맞는 피더를 설계해 드립니다" 라 **피더 한 대**가 더 붙는다.
-             ⚠️ 진동기로 되돌리지 말 것.
+          ⚠️ **홈 첫 화면과 같은 그림이다.** 홈에서는 같은 넷이 위아래로 두 번
+             보인다 — 알고 둔 것이다. 2026-10-14 에 다른 그림을 셋이나 걸어
+             봤는데(진동기 4호 한 장 · 볼피더 정면 · 볼피더+직진피더+호퍼)
+             전부 "뭔지 모르겠다" 로 돌아왔고, **이 띠 비율에 맞는 것은 넷을
+             나란히 세우는 것뿐**이었다. 그리고 이 CTA 는 /contact 를 뺀 9개
+             페이지에 들어가므로 **나머지 여덟 쪽에서는 처음 보는 그림**이다.
 
-          출처는 유신 USB 의 `2호 호퍼 볼피더 도면 2014.02.04.dwg` 이고,
-          구역과 두 번 잡은 전말은 **SVG 파일 머리 주석**에 적혀 있다.
-          2026-10-14 에 화면에서 걷은 도면 열 장 중 하나를 되살린 것인데,
-          거기서는 "제품을 크게" 보여 주는 용도라 치수가 없어 뺐다 —
-          **여기서는 장식**이라 치수가 없어도 된다. 나머지 아홉은 걷힌
-          그대로다.
-
-          ⚠️ **왼쪽** 가장자리를 넘어간다. 2026-10-14 에 오른쪽에서 옮겼다 —
-             오른쪽은 버튼 자리라 "사람들이 많이 누르는 곳인데 시각적으로
-             방해된다" 는 말을 들었다. 왼쪽은 제목·본문이 지나지만 제목이
-             큰 흰 굵은 글자(17.2:1)라 가는 선에 묻히지 않는다.
-             ⚠️ 불투명도가 0.16 이다. 0.07 로 두었더니 "너무 흐려서 잘 보이지도
+          ⚠️ **왼쪽**이다. 오른쪽은 버튼 자리라 "사람들이 많이 누르는 곳인데
+             시각적으로 방해된다" 는 말을 들었다. 지금 그림 오른쪽 끝이
+             672px, 버튼이 931px 부터라 259px 떨어져 있다.
+             ⚠️ 불투명도 0.16 이다. 0.07 로 두었더니 "너무 흐려서 잘 보이지도
                 않는다" 는 말을 들었다 — 내리지 말 것.
-             ⚠️ 오른쪽으로 되돌리지 말 것.
-
-          ⚠️⚠️ **띠 안에 다 들어간다**(h-95%). 진동기 때는 h-170% 로 위아래
-             88px 씩 잘라 냈는데, 그쪽은 **원형**이라 잘려도 티가 안 났다.
-             이 그림은 본체와 호퍼가 **가로로 두 덩어리**라 한쪽이 잘리면
-             무슨 기계인지 모르게 된다 — h 를 140~185% 로 넣어 보고 전부
-             버렸다. 띠가 가로로 길고(1440x250) 그림은 세로로 길어
-             (769x623) 생기는 일이다.
-             ⚠️ 그래서 폭이 293px 다. 진동기 때(460px)보다 작지만 **장식이
-                커지는 것보다 알아보는 것이 먼저**다.
-             ⚠️ left-4 다. 0 으로 두면 본체 상판 왼쪽이 가장자리에 닿는다.
-
-          ⚠️ section 의 overflow-hidden 이
-             잘라 준다 — 그 클래스를 빼면 띠 밖으로 삐져나온다.
 
           ⚠️ 자리가 **그레인보다 앞**이다. 그레인이 이 그림 위에도 얹혀야
              한 면으로 읽힌다.
 
-          ⚠️ 글과 버튼은 왼쪽·가운데에 있고 이 그림은 오른쪽 끝이라 대비에
-             영향이 없다. 불투명도를 올리면 그때는 영향이 생긴다.
+          ⚠️ 글은 왼쪽에 있어 그림과 겹치지만, 제목이 큰 흰 굵은 글자
+             (17.2:1)라 가는 선에 묻히지 않는다.
+
+          ⚠️ section 의 overflow-hidden 이 잘라 준다 — 그 클래스를 빼면 띠
+             밖으로 삐져나온다.
 
           ⚠️ 1024 아래에서는 감춘다 — 폭이 좁아지면 그림이 글 위로 올라온다. */}
-      <img
-        src="/images/cta/bowl-feeder.svg"
-        alt=""
+      <ul
         aria-hidden="true"
-        width={769}
-        height={623}
-        className="pointer-events-none absolute left-4 top-1/2 hidden h-[95%] w-auto -translate-y-1/2 opacity-[0.16] lg:block"
-      />
+        className="pointer-events-none absolute left-6 top-1/2 hidden h-[84%] -translate-y-1/2 items-end gap-8 opacity-[0.16] lg:flex"
+      >
+        {CTA_VIBRATORS.map((v) => (
+          <li key={v.no} className="flex h-full items-end">
+            <img
+              src={`/images/hero/vibrator-${v.no}.svg`}
+              alt=""
+              width={v.w}
+              height={v.h}
+              className="w-auto"
+              style={{ height: `${((v.h / 604) * 100).toFixed(1)}%` }}
+            />
+          </li>
+        ))}
+      </ul>
       {/* ⚠️ 그레인이 Container **앞**에 있다. DOM 순서상 글자가 위로 온다.
              단색 면이라 히어로(0.08)보다 진하게 0.12 를 준다. */}
       <div
@@ -169,26 +193,16 @@ export default function ContactCTA() {
               {/* ⚠️ transition(전체)이다. transition-colors 로 두면 색만
                      전환되어 active:scale 이 딱딱 끊긴다 — 이 파일이 한동안
                      그랬다. */}
+              {/* ⚠️ **화살표를 다시 넣지 말 것.** 2026-10-14 에 걷었다 —
+                     홈 히어로의 "제품 살펴보기" 와 같은 날 함께 걷힌 자리다.
+                     상자 모양이 이미 "누를 곳" 이라고 말한다.
+                 ⚠️ group 과 gap-2 도 함께 걷었다 — group 은 화살표의
+                    group-hover:translate-x-1 하나만 쓰던 것이다. */}
               <MagneticLink
                 href="/contact"
-                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-6 py-4 text-15 font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:px-8"
+                className="inline-flex items-center justify-center rounded-xl bg-brand px-6 py-4 text-15 font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:px-8"
               >
                 온라인 문의하기
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                  className="shrink-0 transition-transform group-hover:translate-x-1"
-                >
-                  <path d="M5 12h14" />
-                  <path d="m12 5 7 7-7 7" />
-                </svg>
               </MagneticLink>
               {/* 아이콘과 자릿수 정렬은 헤더 전화 링크와 같은 모양으로 맞춘다 */}
               <a
