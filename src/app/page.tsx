@@ -303,10 +303,25 @@ const VIBRATORS = [
 
      ⚠️ w/h 는 실제 치수가 아니다. 넷이 모두 「2호」 변종이라 높이가 비슷하다고
         보고 **잉크 높이를 420 으로 맞춘** 뒤 폭을 비율대로 뒀다. */
-  { no: "고주파 진동기", w: 391, h: 420, src: "/images/hero/vibrator-hifreq.webp", alt: "2호 고주파진동기" },
-  { no: "구형 진동기", w: 355, h: 420, src: "/images/hero/vibrator-round.webp", alt: "2호 구형진동기" },
-  { no: "옆코아 진동기", w: 324, h: 420, src: "/images/hero/vibrator-sidecore.webp", alt: "2호 옆코아진동기" },
-  { no: "75도 진동기", w: 383, h: 420, src: "/images/hero/vibrator-75deg.webp", alt: "2호 75도진동기" },
+  /* ⚠️⚠️ **cx 는 그림 안에서 「원통 몸통」이 선 자리다**(0~1, 0.5 가 박스 한가운데).
+     2026-10-15 에 "텍스트 위치 가운데에 있다는 느낌이 안 들어 … 진동기 원형으로
+     가운데 해야지, 옆에 다리까지 같이 계산되어서 옆으로 간 거 같은 느낌" 이라는
+     말을 듣고 넣었다. 그림 박스에는 **좌우로 뻗은 다리**가 들어 있고 기종마다
+     비대칭이라, 박스 한가운데와 몸통 한가운데가 다르다. 라벨은 cx 에 맞춘다.
+
+     ⚠️ 재는 법 — scratchpad/bodycx.mjs. 열마다 **알파 200 이상이 세로로 이어지는
+        최장 구간**을 재고, 그 최댓값의 60% 를 넘는 열들의 한가운데를 잡는다.
+        ⚠️ **픽셀 개수로 세면 안 된다** — 아래로 길게 뻗은 다리가 그 열에 더해져
+           다리 쪽이 몸통보다 두껍게 잡힌다(75도가 그래서 틀렸다).
+        ⚠️ **알파 128 로 자르면 안 된다** — 접지 그림자 알파가 최대 133 이라
+           그림자가 섞여 든다.
+        ⚠️ **질량 중심은 쓰지 않는다** — 다리가 가늘어도 길어서 중심을 끈다.
+     ⚠️⚠️ **그림을 다시 구우면 cx 도 다시 재야 한다.** 렌더 각도·다리 위치가
+        바뀌면 값이 통째로 달라진다. */
+  { no: "고주파 진동기", w: 391, h: 420, cx: 0.486, src: "/images/hero/vibrator-hifreq.webp", alt: "2호 고주파진동기" },
+  { no: "구형 진동기", w: 355, h: 420, cx: 0.445, src: "/images/hero/vibrator-round.webp", alt: "2호 구형진동기" },
+  { no: "옆코아 진동기", w: 324, h: 420, cx: 0.469, src: "/images/hero/vibrator-sidecore.webp", alt: "2호 옆코아진동기" },
+  { no: "75도 진동기", w: 383, h: 420, cx: 0.556, src: "/images/hero/vibrator-75deg.webp", alt: "2호 75도진동기" },
 ];
 
 /** 네 기종 도면 폭의 합. 화면 폭을 비율로 나눌 때 분모가 된다. */
@@ -663,8 +678,28 @@ export default function Home() {
                            있다. 지금은 틈 128 · 아래 131 로 대칭이라 그대로 둔다.
                      ⚠️ **진동기 크기는 안 줄었다**(1920~1280 에서 235x258).
                         --h 가 svh 기준이라 gap 과 무관하다 — 넘치지만 않으면
-                        된다. */}
-        <Container className="relative flex flex-1 flex-col justify-center gap-[clamp(1.25rem,calc(17.5svh-60px),8rem)] pt-[clamp(1.25rem,3.6vh,3.5rem)] pb-[clamp(1.25rem,calc(0.56svh+32px),3rem)]">
+                        된다.
+
+                  ⚠️⚠️ **2026-10-15(2) — 한 번 더 벌려 달라는 말에 `lg:` 로 갈랐다.**
+                     1280x720 은 그때 이미 **여유 0**(↓띠 36)이라 1px 도 더 줄
+                     수 없었는데, 큰 화면은 넉넉했다. 그래서 기본식은 그대로 두고
+                     **lg 이상에만** 기울기가 센 식을 얹었다 — 두 점 (720, 66) ·
+                     (1080, 158) 을 지나는 직선이다.
+
+                       기본      clamp(1.25rem, 17.5svh - 60px,  8rem)
+                       lg 이상   clamp(3rem,    25.6svh - 118px, 10rem)
+
+                       1024x768  79   1280x720  66(그대로)   1280x820  92
+                       1440x900 112   1920x1080 158
+
+                     ⚠️ **폰에 같은 식을 먹이면 오히려 줄어든다** — 375x667 은
+                        25.6svh-118 이 52 라 지금 57 보다 작다. 높이만으로는
+                        1280x720 과 375x667 을 가를 수 없어서(폰이 더 여유가
+                        많다) **폭으로 가르는 lg: 가 맞는 손잡이**다.
+                     ⚠️ 상한을 8rem → 10rem 으로 올렸다. 8rem(128px)이면 1920 이
+                        또 거기 걸려 한 발도 못 나간다 — 위에 같은 함정 기록이
+                        둘 있다. */}
+        <Container className="relative flex flex-1 flex-col justify-center gap-[clamp(1.25rem,calc(17.5svh-60px),8rem)] lg:gap-[clamp(3rem,calc(25.6svh-118px),10rem)] pt-[clamp(1.25rem,3.6vh,3.5rem)] pb-[clamp(1.25rem,calc(0.56svh+32px),3rem)]">
             {/* ⚠️⚠️ **글은 조연이다.** 이 화면의 용건은 아래 진동기 넷이고,
                    글이 커지면 그만큼 진동기가 작아진다 — 세로 예산이 하나뿐
                    이기 때문이다. 2026-10-14 에 "어필이 텍스트보다 진동기가
@@ -1008,7 +1043,14 @@ export default function Home() {
                         ⚠️ **두 줄이 다 한 줄씩이어야 한다.** 좁은 폭에서
                            「2호 옆코아진동기」가 접히면 그 칸만 세 줄이 되어
                            그림 윗선이 어긋난다. label-lines.mjs 로 잰다. */}
-                    <p className="text-center text-[clamp(0.625rem,1.2vh,0.8125rem)] font-bold leading-tight text-white">
+                    {/* ⚠️ 라벨 둘 다 **몸통 중심**으로 민다. translateX 의 % 는
+                           자기 요소 폭 기준인데 이 <p> 가 li 폭을 꽉 채우므로
+                           그대로 li 폭 기준이 된다. cx 의 근거는 위 VIBRATORS
+                           주석에 있다. */}
+                    <p
+                      className="text-center text-[clamp(0.625rem,1.2vh,0.8125rem)] font-bold leading-tight text-white"
+                      style={{ transform: `translateX(${((v.cx - 0.5) * 100).toFixed(2)}%)` }}
+                    >
                       {v.no}
                     </p>
                     {/* ⚠️ 그림과 **넉넉히** 떼어 놓는다. 8px 이던 때 "4호
@@ -1026,7 +1068,10 @@ export default function Home() {
                            **같은 2호의 네 형식**이라는 사실이 그래서 드러난다.
                         ⚠️ v.alt 는 지우지 않았다 — 되살릴 자리이고, 무엇을 그린
                            것인지 남기는 기록이다(img 는 alt="" 를 쓴다). */}
-                    <p className="mb-[clamp(0.75rem,1.6vh,1.25rem)] mt-0.5 text-center text-[clamp(0.5rem,1vh,0.6875rem)] leading-tight text-white/55 [@media(max-height:720px)]:mb-2">
+                    <p
+                      className="mb-[clamp(0.75rem,1.6vh,1.25rem)] mt-0.5 text-center text-[clamp(0.5rem,1vh,0.6875rem)] leading-tight text-white/55 [@media(max-height:720px)]:mb-2"
+                      style={{ transform: `translateX(${((v.cx - 0.5) * 100).toFixed(2)}%)` }}
+                    >
                       2호
                     </p>
                     {/* ⚠️ **alt 가 비어 있다.** 정식 이름이 바로 위에 글자로
