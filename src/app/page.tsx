@@ -1520,15 +1520,36 @@ export default function Home() {
             .map((p, i) => (
             <Fragment key={p.name}>
             <Reveal delay={i * 80} className="overflow-hidden rounded-2xl border border-line bg-white shadow-card">
-              {/* ⚠️⚠️ **칸 비율이 폭마다 다르다** — 작은 화면 16:9 · lg 정사각.
-                     lg 아래에서는 한 열로 쌓여 그림이 **전폭**을 받는데(768 에서
-                     720px), 정사각이면 그 높이가 그대로 720px 이 되어 O링 하나가
-                     화면을 덮는다. 16:9 칸에 담고 object-contain 으로 **가운데
-                     축소**하면 405px 로 내려온다.
+              {/* ⚠️⚠️⚠️ **이 칸이 섹션의 세로 길이를 정한다.** 행 높이는 카드가
+                     정하고(영상이 lg:h-full 로 따라간다), 카드 높이는 이 칸이
+                     정한다 — `칸 높이 + 글 132px = 행 높이`.
+
+                     2026-10-15 에 정사각이었다가 **4:3 으로 낮췄다.** "가로
+                     비율은 괜찮은데 이제 세로 비율이 너무 길게 느껴지는데" 를
+                     받았다. 1280 에서 재서 고른 것이다 —
+
+                       칸      행 높이   영상 칸      16:9 에서   지금에서
+                       1:1     450      742x450      7%         —
+                       **4:3   371      742x371      13%        −18%**  ← 골랐다
+                       3:2     344      742x344      21%        −24%
+                       16:9    311      742x311      34%        −31%
+
+                     ⚠️ **더 줄이면 영상이 더 잘린다.** 영상은 object-cover 라
+                        칸이 납작해질수록 위아래가 깎인다. 16:9(1.78)에서 멀어지는
+                        비율이 그 깎이는 양이다. 3:2 까지는 트랙이 남지만 16:9 에서는
+                        아래쪽 트랙이 잘리기 시작한다.
+                     ⚠️ **그림도 같은 비율로 굽는다.** 칸만 4:3 으로 바꾸고 정사각
+                        그림을 contain 하면 좌우에 40px 씩 비고 물체가 작아 보인다.
+                        scratchpad/bakecard.mjs 에 W=960 H=720 PAD=0.06.
+
+                  ⚠️ **폭 구분 없이 한 비율이다.** 한때 작은 화면만 16:9 였다 —
+                     정사각이던 때 lg 아래에서 그림이 전폭(768에서 720px)을 받아
+                     O링 하나가 화면을 덮었기 때문이다. 4:3 이면 540px 로 내려와
+                     그 장치가 필요 없다.
                   ⚠️ object-cover 가 아니라 **contain** 이다 — 부품 그림은 여백까지
                      포함해 구운 것이라 cover 로 자르면 물체가 잘린다. */}
-              <div className="aspect-[16/9] w-full overflow-hidden lg:aspect-square">
-                <img src={p.src} alt="" width={720} height={720} loading="lazy" decoding="async" className="h-full w-full object-contain" />
+              <div className="aspect-[4/3] w-full overflow-hidden">
+                <img src={p.src} alt="" width={960} height={720} loading="lazy" decoding="async" className="h-full w-full object-contain" />
               </div>
               <div className="border-t border-line px-5 py-4">
                 <p className="text-sm font-bold text-ink">{p.name}</p>
