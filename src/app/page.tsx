@@ -92,6 +92,12 @@ const performanceKpis: Kpi[] = [
         골라 쓰면" 으로 적었더니 **무슨 기종인지 모른다**는 지적을 받았다.
         "진동기" 를 앞에 붙이면 길어지므로 숫자로 줄였다 — 값의 95 → 99.9 와
         라벨의 1종 → 4종 이 같은 방향으로 읽힌다. */
+  /* ⚠️⚠️ **2026-10-15 에 이 칸을 걷었다.** 같은 말을 아래 부품 카드 셋이
+     하기 때문이다(각 부품에 1종 5% / 4종 0.1%). 한 섹션에서 같은 비교가
+     네 번 나오면 지친다.
+     되살리려면 아래 주석을 풀면 된다 — **렌더 코드(from 이 있는 칸의
+     비포–애프터 화살표 구조)는 그대로 살아 있다.** 그 구조를 두 번 고쳐
+     지금 모양이 됐으니(라벨을 각자 숫자 아래로) 지우지 말 것.
   {
     from: "95",
     fromLabel: "진동기 1종 정확도",
@@ -101,6 +107,7 @@ const performanceKpis: Kpi[] = [
     label: "진동기 4종 정확도",
     note: "둘 다 회사가 제시한 값 — 한 기종만 쓰는 방식과 네 기종을 골라 쓰는 방식",
   },
+  */
   /* ⚠️⚠️ **뒤 두 칸은 2026-10-14 에 첫 화면 지표 띠(STATS)와 맞바꿨다.**
      거기 있던 "55대 사내 가공 설비 · 30+년 1992년부터" 가 위로 올라가고,
      띠에 있던 이 둘이 내려왔다. **두 자리를 함께 보고 옮길 것** — 한쪽만
@@ -116,6 +123,33 @@ const performanceKpis: Kpi[] = [
     note: "전파 60Hz 기준 — 기종마다 다르다",
   },
 ];
+
+/* ⚠️⚠️ **피더로 공급하는 「고객 부품」 셋이다.** 2026-10-15 에 PERFORMANCE
+   자리의 영상을 걷고 이걸 넣었다 — "부품 한 3개 정도 기준으로 … 각 부품별로
+   진동기 에러율 나오게".
+
+   ⚠️⚠️ **CAD 가 아니라 사진을 보고 코드로 모델링한 것이다.** USB 를 뒤졌지만
+      고객 부품 CAD 는 한 개도 없었다(.ipt 는 전부 유신이 만드는 설비였고,
+      회사별 분류 폴더에는 3D 파일이 없다). 근거가 된 사진은 아래 photo 에
+      적어 두었다 — **실물과 다르다는 지적이 오면 그 사진으로 돌아간다.**
+      만드는 코드는 scratchpad/partrender.mjs 다.
+
+   ⚠️ 셋을 고른 까닭은 **형상이 서로 달라서**다. 원통은 구르고, 가는 핀은
+      엉키고, 가벼운 플라스틱은 튄다 — 「기종을 골라 써야 하는 이유」가
+      그림으로 보인다. 비슷한 것 셋을 놓으면 그 말이 죽는다. */
+const PARTS = [
+  { name: "부싱", trait: "금속 원통 — 구른다", src: "/images/parts/part-bushing.webp", photo: "261001(이노에이치).JPG" },
+  { name: "터미널 핀", trait: "가늘고 길다 — 엉킨다", src: "/images/parts/part-terminal.webp", photo: "260703(박사).JPG" },
+  { name: "커넥터 하우징", trait: "플라스틱 — 가볍다", src: "/images/parts/part-connector.webp", photo: "260904-1(아이비테크).JPG" },
+];
+
+/* ⚠️⚠️ **셋 다 같은 값이다.** 유신에게 물었더니 부품별 수치는 없다고 했다.
+   이 값은 홈 PERFORMANCE 가 쓰던 **95% / 99.9% 를 뒤집은 같은 값**이라
+   (100−95=5, 100−99.9=0.1) 새 주장이 늘지는 않았다.
+   ⚠️ 부품별 수치를 받으면 PARTS 각 줄에 one/four 를 붙이고 여기를 지운다.
+   ⚠️ 근거(어떤 부품·어떤 셈법·몇 개 중 몇 개)는 여전히 못 받았다 —
+      README 22번에 올라가 있다. **수치를 더 쪼개거나 키우지 말 것.** */
+const PART_ERROR = { one: "5", four: "0.1" };
 
 const VIBRATORS = [
   /* ⚠️⚠️ **2026-10-15 에 2D 평면도 SVG 넷에서 3D 렌더 넷으로 바꿨다.**
@@ -1222,6 +1256,14 @@ export default function Home() {
                66~115 이니 그 안이고, dark/85 를 덮으면 흰 글자 대비가
                **15.0:1** 이라 AAA(7:1)의 두 배다. (2026-10-14 에 막 색을
                여러 번 바꿔 가며 쟀고, 거쳐 온 넷 중 지금이 가장 높다.) */}
+        {/* ⚠️⚠️ **2026-10-15 — 이 자리에 있던 영상을 걷고 부품 카드 셋을 넣었다.**
+               "여기에 현재 동영상이잖아? 이거 말고 부품 한 3개 정도 기준으로 …
+               각 부품별로 진동기 에러율 나오게" 라는 말이다.
+
+               되살리려면 아래 주석을 풀면 된다. **performance.mp4 와 포스터는
+               지우지 않았다.** 위에 적힌 프레임 고르는 기준 셋과 하단 띠 대비
+               15.0:1 은 그때 다시 필요한 기록이다.
+               ⚠️ 덤으로 홈에서 1.59MB 영상 하나가 빠졌다.
         <ProductVideo
           video={{
             src: "/videos/performance.mp4",
@@ -1229,6 +1271,37 @@ export default function Home() {
             note: "트랙에 올라선 부싱이 간격을 지키며 한 줄로 빠져나갑니다.",
           }}
         />
+        */}
+
+        {/* ⚠️ **카드 바탕이 네이비다.** 이 섹션은 흰 바탕인데 부품이 밝은 금속이라
+               그냥 두면 묻힌다. 첫 화면 진동기와 **같은 바탕**(bg-dark)을 깔아
+               같은 조건으로 보이게 했다 — 렌더 설정도 같은 값이다.
+            ⚠️ 그림은 **정사각**이다(540x540). 카드 셋의 칸 높이가 흔들리지
+               않게 하려는 것이다 — 터미널 핀처럼 세로로 긴 것도 같은 칸을 쓴다.
+               진동기 쪽 bake.mjs 는 높이 420 정규화라 규칙이 다르다
+               (scratchpad/bakepart.mjs). */}
+        <ul className="grid gap-6 sm:grid-cols-3 sm:gap-7">
+          {PARTS.map((p, i) => (
+            <Reveal as="li" key={p.name} delay={i * 80} className="overflow-hidden rounded-2xl border border-line bg-dark">
+              <img src={p.src} alt="" width={540} height={540} loading="lazy" decoding="async" className="h-auto w-full" />
+              <div className="border-t border-white/10 px-5 py-4">
+                <p className="text-sm font-bold text-white">{p.name}</p>
+                <p className="mt-0.5 text-xs text-white/55">{p.trait}</p>
+                <dl className="mt-3 flex items-end gap-5 border-t border-white/10 pt-3">
+                  <div>
+                    <dt className="text-[0.6875rem] text-white/55">진동기 1종</dt>
+                    <dd className="text-lg font-bold leading-tight text-white/70">{PART_ERROR.one}%</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[0.6875rem] text-white/55">진동기 4종</dt>
+                    <dd className="text-lg font-bold leading-tight text-brand-light">{PART_ERROR.four}%</dd>
+                  </div>
+                  <p className="ml-auto pb-0.5 text-[0.6875rem] text-white/40">에러율</p>
+                </dl>
+              </div>
+            </Reveal>
+          ))}
+        </ul>
 
         {/* KPI 넷. 값 - 라벨 - 조건 세 줄이다.
 
@@ -1265,7 +1338,12 @@ export default function Home() {
                어긋났기 때문이다. **셋이 같은 34px 가 되면서 저절로 맞아
                걷었다**(밑줄차·윗선차 둘 다 0 을 확인했다).
                ⚠️ 비교 칸 숫자를 다시 키우면 이 클래스가 또 필요해진다. */}
-        <ul className="mt-10 grid gap-8 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4 lg:gap-7 lg:text-center">
+        {/* ⚠️ **칸이 넷에서 둘로 줄었다**(2026-10-15 에 비교 칸을 걷었다).
+               lg:grid-cols-4 를 그대로 두면 둘이 왼쪽 두 칸만 차지해 오른쪽
+               절반이 통째로 빈다. cols-2 로 줄이고 max-w 로 묶어 가운데에
+               세운다. ⚠️ 비교 칸을 되살리면 **cols-4 로 되돌리고 max-w 를
+               빼야 한다.** */}
+        <ul className="mt-10 grid gap-8 sm:grid-cols-2 lg:mx-auto lg:mt-12 lg:max-w-2xl lg:grid-cols-2 lg:gap-7 lg:text-center">
           {performanceKpis.map((kpi, i) => (
             <Reveal
               as="li"
