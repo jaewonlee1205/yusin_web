@@ -1301,30 +1301,50 @@ export default function Home() {
         />
         */}
 
-        {/* ⚠️ **카드 바탕이 네이비다.** 이 섹션은 흰 바탕인데 부품이 밝은 금속이라
-               그냥 두면 묻힌다. 첫 화면 진동기와 **같은 바탕**(bg-dark)을 깔아
-               같은 조건으로 보이게 했다 — 렌더 설정도 같은 값이다.
+        {/* ⚠️⚠️ **2026-10-15 — 카드 바탕을 네이비에서 흰색으로 바꿨다.**
+               "배경 네이비 색상으로 되어 있는데 흰색으로 하고 싶어. 제품 라인업
+               여기처럼" 이라는 말이다 — 제품 목록 카드와 결을 맞췄다.
+
+               ⚠️ 바탕을 바꾸면 **부품 색도 함께 바꿔야 한다.** 커넥터가 흰
+                  플라스틱이라 흰 바탕에서 묻혔다
+                  ("제품 색상은 부싱 이거하고 동일한 회색으로").
+
+                  ⚠️⚠️ **색만 맞췄더니 그래도 하얗게 떴다.** 커넥터 색을
+                     부싱과 같은 0.72,0.74,0.78 로 주고 다시 구웠는데 화면에서
+                     여전히 혼자 밝았다 — **metalness 가 밝기를 가른다.**
+                     커넥터는 0.06 이라 확산광을 그대로 받아 밝아지고, 부싱은
+                     0.85 라 어두운 방을 비추느라 중간 회색이 된다. 같은 색을
+                     줘도 **재질이 다르면 밝기가 다르다**.
+                     → metalness **0.70** · 색 **0.52,0.54,0.58** 로 내렸다.
+                     0.85(부싱과 완전히 같게)는 너무 번들거려 안 썼다 — 카드
+                     설명이 "플라스틱이라 가볍습니다" 라서 반사가 금속만큼
+                     또렷하면 글과 그림이 어긋난다. 세 판을 나란히 찍어 골랐다.
+                     값은 partrender.mjs 의 PC/PM/PR 환경변수다.
+               ⚠️ 접지 그림자도 0.52 → **0.18** 로 낮췄다. 네이비에서 맞춘
+                  값이라 흰 바탕에서는 진하게 보였다.
+               ⚠️ 글자색을 전부 뒤집었다 — white → ink, white/55 → muted,
+                  brand-light → brand(밝은 쪽은 어두운 바탕용이다).
             ⚠️ 그림은 **정사각**이다(540x540). 카드 셋의 칸 높이가 흔들리지
                않게 하려는 것이다 — 터미널 핀처럼 세로로 긴 것도 같은 칸을 쓴다.
                진동기 쪽 bake.mjs 는 높이 420 정규화라 규칙이 다르다
                (scratchpad/bakepart.mjs). */}
         <ul className="grid gap-6 sm:grid-cols-3 sm:gap-7">
           {PARTS.map((p, i) => (
-            <Reveal as="li" key={p.name} delay={i * 80} className="overflow-hidden rounded-2xl border border-line bg-dark">
+            <Reveal as="li" key={p.name} delay={i * 80} className="overflow-hidden rounded-2xl border border-line bg-white shadow-card">
               <img src={p.src} alt="" width={540} height={540} loading="lazy" decoding="async" className="h-auto w-full" />
-              <div className="border-t border-white/10 px-5 py-4">
-                <p className="text-sm font-bold text-white">{p.name}</p>
-                <p className="mt-0.5 text-xs text-white/55">{p.trait}</p>
-                <dl className="mt-3 flex items-end gap-5 border-t border-white/10 pt-3">
+              <div className="border-t border-line px-5 py-4">
+                <p className="text-sm font-bold text-ink">{p.name}</p>
+                <p className="mt-0.5 text-xs text-muted">{p.trait}</p>
+                <dl className="mt-3 flex items-end gap-5 border-t border-line pt-3">
                   <div>
-                    <dt className="text-[0.6875rem] text-white/55">진동기 1종</dt>
-                    <dd className="text-lg font-bold leading-tight text-white/70">{p.one}%</dd>
+                    <dt className="text-[0.6875rem] text-muted">진동기 1종</dt>
+                    <dd className="text-lg font-bold leading-tight text-ink-soft">{p.one}%</dd>
                   </div>
                   <div>
-                    <dt className="text-[0.6875rem] text-white/55">진동기 4종</dt>
-                    <dd className="text-lg font-bold leading-tight text-brand-light">{PART_ERROR.four}%</dd>
+                    <dt className="text-[0.6875rem] text-muted">진동기 4종</dt>
+                    <dd className="text-lg font-bold leading-tight text-brand">{PART_ERROR.four}%</dd>
                   </div>
-                  <p className="ml-auto pb-0.5 text-[0.6875rem] text-white/40">에러율</p>
+                  <p className="ml-auto pb-0.5 text-[0.6875rem] text-muted">에러율</p>
                 </dl>
               </div>
             </Reveal>
