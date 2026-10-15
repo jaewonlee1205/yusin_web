@@ -636,8 +636,35 @@ export default function Home() {
                         움직인다.
 
                   ⚠️ 1280x720 · 375x667 · 320x568 이 한계선이다(여유 0).
-                     pb 나 gap 을 더 키우기 전에 그 셋에서 재 볼 것. */}
-        <Container className="relative flex flex-1 flex-col justify-center gap-[clamp(1rem,calc(17.5svh-97px),6rem)] pt-[clamp(1.25rem,3.6vh,3.5rem)] pb-[clamp(1.25rem,calc(0.56svh+32px),3rem)]">
+                     pb 나 gap 을 더 키우기 전에 그 셋에서 재 볼 것.
+
+                  ⚠️⚠️ **2026-10-15 — gap 을 17.5svh−97 에서 17.5svh−60 으로
+                     내렸다**(상한도 6rem → 8rem). "진동기 이미지만 밑으로 좀더
+                     내려봐" 와 "이 텍스트 문구만 위로 좀더 올려봐" 를 함께
+                     받았는데, 이 Container 가 **justify-center** 라 **gap 하나가
+                     그 둘을 동시에 한다** — 가운데 정렬이므로 gap 이 커지면 글은
+                     위로, 진동기는 아래로 같이 벌어진다.
+
+                     ⚠️⚠️ **같은 일을 진동기 쪽 mt 로 하지 말 것.** 바로 앞
+                        요청에서 진동기 묶음에 mt-[clamp(0.5rem,3vh,2.5rem)] 를
+                        줬었는데, 그것은 **진동기만 내리고 글은 그대로** 둔다.
+                        이번에 걷어 gap 으로 합쳤다. 둘로 나뉘어 있으면 다음에
+                        조정할 때 어느 쪽을 만져야 하는지 알 수 없다.
+
+                     ⚠️ 상수 55 로 잡았다가 **1280x720 에서 +4px 넘쳤다.** 60 이
+                        그 한 점에서 여유 0 이 되는 값이다. 결과(틈 = 글↔진동기,
+                        ↓띠 = 진동기↔지표 띠):
+
+                          1920  틈 128 / ↓띠 131      1280x820  틈 84 / ↓띠 62
+                          1440  틈  98 / ↓띠  82      1280x720  틈 66 / ↓띠 36
+
+                        ⚠️ **1920 은 상한 8rem(128px)에 걸려 있다.** 더 벌리려면
+                           상한부터 올릴 것 — 위에 같은 함정에 한 번 빠진 기록이
+                           있다. 지금은 틈 128 · 아래 131 로 대칭이라 그대로 둔다.
+                     ⚠️ **진동기 크기는 안 줄었다**(1920~1280 에서 235x258).
+                        --h 가 svh 기준이라 gap 과 무관하다 — 넘치지만 않으면
+                        된다. */}
+        <Container className="relative flex flex-1 flex-col justify-center gap-[clamp(1.25rem,calc(17.5svh-60px),8rem)] pt-[clamp(1.25rem,3.6vh,3.5rem)] pb-[clamp(1.25rem,calc(0.56svh+32px),3rem)]">
             {/* ⚠️⚠️ **글은 조연이다.** 이 화면의 용건은 아래 진동기 넷이고,
                    글이 커지면 그만큼 진동기가 작아진다 — 세로 예산이 하나뿐
                    이기 때문이다. 2026-10-14 에 "어필이 텍스트보다 진동기가
@@ -838,7 +865,7 @@ export default function Home() {
                    합쳐 65+90+117+172px 로 서고 오른쪽 아래가 통째로 비었다.
                    폭을 100% 로 잡고 아래 calc 가 넷으로 나눈다. */}
             <div
-              className="rise-zoom mt-[clamp(0.5rem,3vh,2.5rem)] w-full [@media(max-height:640px)]:hidden"
+              className="rise-zoom w-full [@media(max-height:640px)]:hidden"
               style={{ animationDelay: "380ms" }}
             >
               {/* ⚠️⚠️ **ul 은 전폭이다. 남는 폭을 간격이 먹는다.**
@@ -991,8 +1018,16 @@ export default function Home() {
                            ⚠️ 라벨이 위로 올라가면서 이 여백이 **mt 에서 mb 로**
                               바뀌었다. 값과 까닭은 그대로다 — 줄이지 말 것.
                            ⚠️ 낮은 화면에서만 한 단계 줄인다(375x667). */}
+                    {/* ⚠️ **호수만 적는다.** 2026-10-15 에 여기 v.alt(「2호
+                           고주파진동기」)를 찍다가 "그냥 2호 이렇게만 나오게,
+                           뒤에 진동기명은 위에 나와 있으니깐" 이라는 말을 들었다.
+                           바로 위 줄이 기종을 말하므로 이 줄은 **호수**만 진다.
+                           넷이 모두 같은 글자가 되는 것은 의도다 — 네 기종이
+                           **같은 2호의 네 형식**이라는 사실이 그래서 드러난다.
+                        ⚠️ v.alt 는 지우지 않았다 — 되살릴 자리이고, 무엇을 그린
+                           것인지 남기는 기록이다(img 는 alt="" 를 쓴다). */}
                     <p className="mb-[clamp(0.75rem,1.6vh,1.25rem)] mt-0.5 text-center text-[clamp(0.5rem,1vh,0.6875rem)] leading-tight text-white/55 [@media(max-height:720px)]:mb-2">
-                      {v.alt}
+                      2호
                     </p>
                     {/* ⚠️ **alt 가 비어 있다.** 정식 이름이 바로 위에 글자로
                            보이므로, alt 를 그대로 두면 스크린리더가 같은 말을
