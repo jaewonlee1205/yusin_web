@@ -31,7 +31,11 @@ import type { Product } from "@/data/products";
  * 이어야 하므로 4:3 하나로 되돌리고, 크기는 그쪽 격자가 간격으로 잡는다.
  */
 export default function ProductCard({ product }: { product: Product }) {
-  const cover = product.images[0];
+  /* ⚠️ cover 가 있으면 그것을, 없으면 images[0] 을 쓴다.
+     2026-10-15 에 일곱 제품 카드를 **3D 렌더**로 바꾸면서 갈랐다 — 상세
+     갤러리는 images 를 그대로 쓰므로 **거기는 실물 사진**이다. 까닭은
+     products.ts 의 cover 주석에 있다. */
+  const cover = product.cover ?? product.images[0];
 
   return (
     <Link

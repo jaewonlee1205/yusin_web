@@ -487,6 +487,18 @@ export type Product = {
    */
   related: string[];
   images: { src: string; alt: string }[];
+  /** 제품 목록·관련제품 카드에만 쓰는 대표 그림. 없으면 images[0] 을 쓴다.
+   *
+   * ⚠️⚠️ **2026-10-15 — 카드만 3D 렌더로 바꿨다.** images 는 실물 사진 그대로
+   *    두었다 — 상세 갤러리가 같은 배열을 쓰므로 거기까지 3D 가 되면 "실제로
+   *    만드는 회사" 라는 증거가 사라진다. **카드는 3D, 갤러리는 사진**이다.
+   *
+   * ⚠️ 그림은 **4:3**(720x540)이다. ProductCard 의 사진 칸이 aspect-[4/3] 라
+   *    정사각을 넣으면 좌우가 잘린다(부품 카드용 bakepart.mjs 는 정사각이라
+   *    규칙이 다르다 — scratchpad/bakecard.mjs 를 쓴다).
+   * ⚠️ 렌더 설정은 첫 화면 진동기와 **같은 값**이다(환경맵·AO·접지 그림자).
+   *    scratchpad/prodrender.mjs. 각도만 제품마다 따로 골랐다. */
+  cover?: { src: string; alt: string };
 };
 
 /**
@@ -799,6 +811,11 @@ export const products: Product[] = [
     ],
     // specs 의 "옵션 = 방음커버, 호퍼피더, 직진피더 연결" 그대로다.
     related: ["linear-feeder", "hopper-feeder", "soundproof-cover"],
+    /* 출처 — 완제품/3호,정방향,단높은볼,함90.iam — 방음커버·원판 다섯 조각을 숨겨 볼이 보이게 했다 */
+    cover: {
+      src: "/images/cards/bowl-feeder.webp",
+      alt: "테이블 위에 선 볼피더 3D 도면. 나선 트랙이 보이는 볼과 배출 슈트",
+    },
     images: [
       {
         src: "/images/products/bowl-feeder-01.webp",
@@ -933,6 +950,11 @@ export const products: Product[] = [
     ],
     // specs 의 "설치 = 볼피더 배출구 직결", "구동 = 전자석 진동기 + 전용 컨트롤러".
     related: ["bowl-feeder", "vibrator", "controller"],
+    /* 출처 — 대-리니어/리니어조립.iam */
+    cover: {
+      src: "/images/cards/linear-feeder.webp",
+      alt: "본체 위에 트랙 받침판이 얹힌 직진피더 3D 도면",
+    },
     images: [
       {
         src: "/images/products/linear-feeder-01.webp",
@@ -1083,6 +1105,11 @@ export const products: Product[] = [
 
        ⚠️ 판스프링 넉 대와 파란 본체, 상부 플레이트가 보이는 것이 중요하다 —
           이 제품의 specs 가 "전자석 + 판스프링 진동" 이라고 적고 있다. */
+    /* 출처 — 2호고주파진동기.stp — 첫 화면과 같은 모델, 각도만 다르다 */
+    cover: {
+      src: "/images/cards/vibrator.webp",
+      alt: "2호 고주파진동기 3D 도면",
+    },
     images: [
       {
         src: "/images/products/vibrator-01.webp",
@@ -1224,6 +1251,11 @@ export const products: Product[] = [
        01 = 2026-06, 02 = 2025-10). 앞서는 PPT 원본의 2000년대 초 촬영본이었다.
        1920x1080 현장 사진에서 장비가 가운데 오도록 1200x900(4:3)으로 잘랐다 —
        ProductCard 가 4:3 칸이라 다른 비율이면 흰 띠가 남는다. */
+    /* 출처 — 350x350(한산타입호퍼)/350x350 호퍼조립.iam */
+    cover: {
+      src: "/images/cards/hopper-feeder.webp",
+      alt: "기둥 위에 사각 호퍼 통이 얹히고 배출 슈트가 나온 호퍼피더 3D 도면",
+    },
     images: [
       {
         src: "/images/products/hopper-feeder-01.webp",
@@ -1356,6 +1388,11 @@ export const products: Product[] = [
     // specs 의 "제작 = 볼피더 외경에 맞춰". 우레탄 코팅과 나란히 둔다 —
     // 소음을 줄이는 두 가지 방법이라 함께 검토하는 물건이다.
     related: ["bowl-feeder", "urethane-coating"],
+    /* 출처 — 완제품/3호,정방향,단높은볼,함90,호퍼사용.iam — 커버가 씌워진 완성 설비라 이 카드에 맞다 */
+    cover: {
+      src: "/images/cards/soundproof-cover.webp",
+      alt: "원통형 방음커버를 씌운 볼피더와 엘리베이터 호퍼 3D 도면",
+    },
     images: [
       {
         src: "/images/products/soundproof-cover-01.webp",
@@ -1508,6 +1545,11 @@ export const products: Product[] = [
           쓰는 까닭은 **앞의 520x490 보다 크고, 무엇보다 진짜 컨트롤러**여서다.
           USB 사진이 장비 전체를 멀리서 찍은 것이라 컨트롤러만 떼면 이보다
           크게 나오지 않는다. 더 가까이 찍은 사진을 받으면 그때 올린다. */
+    /* 출처 — 콘트롤박스/DS-210S.iam — .ipt 는 빈 케이스뿐이라 .iam 을 써야 한다 */
+    cover: {
+      src: "/images/cards/controller.webp",
+      alt: "다이얼 둘과 표시창이 있는 파츠피더 컨트롤러 3D 도면",
+    },
     images: [
       {
         src: "/images/products/controller-01.webp",
@@ -1651,6 +1693,11 @@ export const products: Product[] = [
     ],
     // specs 의 "적용 부위 = 볼 내면, 트랙, 직진피더 슈트".
     related: ["bowl-feeder", "linear-feeder"],
+    /* 출처 — 볼피더와 같은 모델에서 볼 조각만 코팅 색으로. 색 근거는 urethane-coating-01.webp */
+    cover: {
+      src: "/images/cards/urethane-coating.webp",
+      alt: "볼 안쪽 트랙에 연녹색 우레탄을 입힌 볼피더 3D 도면",
+    },
     images: [
       {
         src: "/images/products/urethane-coating-01.webp",
