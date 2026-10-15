@@ -255,7 +255,24 @@ export type Product = {
   features: {
     title: string;
     points: [string, string];
-    /** 글 오른쪽 48px 칸에 작게 서는 사진(public/images/features/).
+    /** 글 오른쪽 48px 칸에 작게 서는 그림(public/images/features/).
+     *
+     * ⚠️⚠️ **2026-10-15 — 영상 프레임에서 3D 렌더로 갈았다.** 그런데 이 넷은
+     *    **각기 따로 찍은 것이 아니라 한 장에서 잘라 낸 것**이다 —
+     *      1 전체 · 2 위(또는 왼쪽) · 3 가운데 · 4 아래(또는 오른쪽)
+     *    48px 에서는 각도를 조금 바꿔 봐야 **실루엣이 거의 같다.** 그보다
+     *    **보는 범위**를 가르는 쪽이 훨씬 잘 갈린다. scratchpad/bakefeat.mjs.
+     *
+     *    ⚠️ 자르는 방향이 제품마다 다르다 — 세로로 긴 것(볼피더·호퍼·방음커버·
+     *       우레탄)은 위아래로, 가로로 긴 것(직진피더·진동기·컨트롤러)은 좌우로
+     *       가른다. 가로로 긴 것을 위아래로 자르면 세 칸이 다 비슷한 띠가 된다.
+     *    ⚠️ **48px 로 깔고 pixelated 로 확대해 보고 골랐다**(scratchpad/tiny.mjs).
+     *       크게 그려 놓고 「멀쩡하다」고 하면 안 되는 자리다 — 컨트롤러는 그렇게
+     *       보다가 가운데·오른쪽 두 칸이 민무늬인 것을 놓칠 뻔했다(각도를 고쳤다).
+     *
+     * ⚠️ 옛 설명 — 전에는 영상 프레임(640x360)을 썼고 그 **원본도 같은 폴더에**
+     *    두었다. 지금은 96x96 **썸네일만** 둔다. 3D 는 언제든 다시 찍을 수 있어
+     *    더 큰 자리에 쓸 때를 위해 원본을 쟁여 둘 까닭이 없다.
      *
      * ⚠️⚠️ **-thumb 접미사가 붙은 96x96 판**이다. 원본(640x360)을 그대로
      *    걸면 48px 자리에 **13.3배** 짜리가 내려간다 — next.config 가
@@ -434,6 +451,23 @@ export type Product = {
    *       적은 것이다("볼피더 트랙을 한 줄로 올라오는 검은 커넥터"). 사진만
    *       갈아 끼우면 글이 거짓이 된다.
    */
+  /**
+   * 제품 상세 「적용 분야」. 16:9 · 4열이라 이 페이지에서 **그림이 가장 큰 자리**다.
+   *
+   * ⚠️⚠️ **2026-10-15 — 영상 프레임에서 3D 렌더로 갈았다.** 칸이 두 종류다 —
+   *      **부품 7칸**   그 제품이 다루는 물건. scratchpad/partshapes.mjs 로 그린다
+   *      **설비 12칸**  그 제품이 쓰이는 자리. 각도를 달리해 찍는다
+   *    각도와 짝은 scratchpad/apps.mjs 에 있다.
+   *
+   * ⚠️⚠️ **진동기·컨트롤러 칸에는 그 제품이 아니라 「쓰이는 설비」를 건다.**
+   *    「볼피더 속도 제어」라는 칸에 컨트롤러를 걸면 같은 물건을 한 페이지에서
+   *    두 번 보게 된다. 그 칸이 말하는 것은 **어디에 쓰이는가**이므로 볼피더를
+   *    건다. (바꾸기 전 사진들이 전부 볼 내부였던 것도 그 뜻이었던 듯하다.)
+   *
+   * ⚠️ 부품 넷(커넥터·스크루·용기캡·브래킷)과 셋(니플·수지·단자)은 **일반
+   *    형상**이다. 전에 쓰던 사진은 **고객이 보낸 샘플**이었다(USB 회사별 분류) —
+   *    일반 형상으로 그리면 누구의 것도 아니게 된다. 부품 카드와 같은 규칙이다.
+   */
   applications: (string | ApplicationCase)[];
   /**
    * 제품 상세 "구동 영상" 섹션에 거는 짧은 영상. 소리 없이 저절로 돌고
@@ -486,6 +520,31 @@ export type Product = {
    * 자기 자신을 빌드 때 잡는다.
    */
   related: string[];
+  /**
+   * 제품 상세 갤러리에 서는 그림.
+   *
+   * ⚠️⚠️ **2026-10-15 — 실물 사진에서 3D 렌더로 갈아 끼웠다.**
+   *    "여기 이미지 들 경우도 각 다른 각도로 3D 렌더링 된 이미지로 구성
+   *    하는게 나을 거 같고 제품 7개 전부다" 라는 말이다.
+   *
+   *    ⚠️ **한때는 반대였다.** 카드만 3D 로 바꾸면서 *"상세 갤러리까지 3D 가
+   *       되면 실제로 만드는 회사라는 증거가 사라진다"* 고 적어 두었는데,
+   *       그 뒤 **전부 3D 로** 가기로 정했다. 지금 실물이 남은 자리는
+   *       **영상 섹션과 거래처**뿐이다.
+   *
+   * ⚠️ 제품마다 **두 장**이고 서로 다른 쪽에서 본다. 카드(cover)의 az45 el25
+   *    와도 겹치지 않는다 — 같은 그림이 목록과 상세에 두 번 나오면 넘어온
+   *    보람이 없다. 각도는 scratchpad/gal.mjs 의 SHOTS 에 있다.
+   *
+   * ⚠️⚠️ **고도각을 35도 넘기지 않는다.** 볼피더·방음커버·우레탄은 그 위로
+   *    올리면 볼 **안쪽**이 보이는데, 이 CAD 의 볼은 삼각형이 2,625개뿐이라
+   *    나선 트랙이 스파이크 덩어리로 보인다(컨트롤러 케이스 하나가 79,164개다).
+   *    2026-10-15 에 재서 확인하고 **안쪽을 피해 구성**하기로 했다.
+   *    ⚠️ 정밀 STEP 을 받으면 이 제한이 풀린다 — README 21번.
+   *
+   * ⚠️ 컨트롤러는 한 장뿐이었는데 **두 장으로 맞췄다**(3D 는 각도만 바꾸면
+   *    되므로 비용이 거의 없다). 01 이 패널 정면, 02 가 비스듬한 쪽이다.
+   */
   images: { src: string; alt: string }[];
   /** 제품 목록·관련제품 카드에만 쓰는 대표 그림. 없으면 images[0] 을 쓴다.
    *
@@ -718,7 +777,7 @@ export const products: Product[] = [
           "그 부품만을 위한 트랙과 정렬 지그를 새로 설계",
         ],
         photo: "/images/features/bowl-feeder-1-thumb.webp",
-        photoAlt: "부품이 도는 볼과 트랙 전체",
+        photoAlt: "볼피더 전체",
       },
       {
         title: "네 가지 기본 볼 형상",
@@ -727,7 +786,7 @@ export const products: Product[] = [
           "형상이 정렬 자세와 시간당 처리량을 함께 결정",
         ],
         photo: "/images/features/bowl-feeder-2-thumb.webp",
-        photoAlt: "볼 안쪽 곡면과 트랙",
+        photoAlt: "볼과 배출 슈트",
       },
       {
         title: "소형부터 대형까지",
@@ -736,7 +795,7 @@ export const products: Product[] = [
           "부품 크기와 라인 소모량을 보고 볼 지름 결정",
         ],
         photo: "/images/features/bowl-feeder-3-thumb.webp",
-        photoAlt: "트랙을 오르는 부품 줄",
+        photoAlt: "볼 아래 진동부와 테이블 상판",
       },
       {
         title: "선별 · 방향 판별 지그",
@@ -745,7 +804,7 @@ export const products: Product[] = [
           "불량 형상은 트랙에서 떨어뜨려 뒷공정 부담 감소",
         ],
         photo: "/images/features/bowl-feeder-4-thumb.webp",
-        photoAlt: "볼 안쪽에 세운 선별 지그",
+        photoAlt: "테이블 프레임과 다리",
       },
     ],
     /* 99% 는 홈과 같은 근거다. 300개/분은 업계 일반값이고, 뒤 둘은 아래
@@ -825,22 +884,22 @@ export const products: Product[] = [
       {
         name: "커넥터 · 단자 등 전자부품",
         src: "/images/applications/connector.webp",
-        alt: "전자부품용 검은 커넥터 하우징",
+        alt: "위가 열린 사각 커넥터 하우징",
       },
       {
         name: "볼트 · 너트 · 나사 등 체결부품",
         src: "/images/applications/fastener.webp",
-        alt: "머리에 플랜지가 달린 검은 볼트",
+        alt: "둥근 머리에 나사산이 있는 스크루",
       },
       {
         name: "화장품 용기 캡 · 펌프 부품",
         src: "/images/applications/cosmetic.webp",
-        alt: "흰 수지 용기 캡",
+        alt: "옆면에 널링이 있는 원통형 용기 캡",
       },
       {
         name: "가전 · 전기기기 조립 부품",
         src: "/images/applications/appliance.webp",
-        alt: "구멍이 뚫린 금속 브래킷",
+        alt: "구멍 넷이 뚫린 ㄱ자 금속 브래킷",
       },
     ],
     // specs 의 "옵션 = 방음커버, 호퍼피더, 직진피더 연결" 그대로다.
@@ -860,11 +919,11 @@ export const products: Product[] = [
     images: [
       {
         src: "/images/products/bowl-feeder-01.webp",
-        alt: "구리 소형 부품을 정렬해 배출하고 있는 계단형 볼피더",
+        alt: "테이블 프레임 위에 선 볼피더. 볼과 배출 슈트가 보인다",
       },
       {
         src: "/images/products/bowl-feeder-02.webp",
-        alt: "스테인리스 볼과 다단 트랙으로 구성된 대형 볼피더",
+        alt: "볼피더를 반대쪽 낮은 눈높이에서 본 모습",
       },
     ],
   },
@@ -885,7 +944,7 @@ export const products: Product[] = [
           "조립기가 받는 자세까지 보고 슈트 모양을 결정",
         ],
         photo: "/images/features/linear-feeder-1-thumb.webp",
-        photoAlt: "직선 트랙 전체",
+        photoAlt: "직진피더 전체",
       },
       {
         title: "독립 진동 제어",
@@ -894,7 +953,7 @@ export const products: Product[] = [
           "라인이 멈추면 이쪽만 세웠다 다시 돌릴 수 있음",
         ],
         photo: "/images/features/linear-feeder-2-thumb.webp",
-        photoAlt: "트랙 앞쪽과 은색 부품",
+        photoAlt: "본체 왼쪽과 트랙 입구",
       },
       {
         title: "라인 길이에 맞춘 크기",
@@ -903,7 +962,7 @@ export const products: Product[] = [
           "짧으면 부품이 밀리고 길면 이송 중 자세가 흐트러짐",
         ],
         photo: "/images/features/linear-feeder-3-thumb.webp",
-        photoAlt: "트랙 끝과 부품 적재부",
+        photoAlt: "본체 가운데와 판스프링",
       },
       {
         title: "슈트 면을 직접 다듬는다",
@@ -912,7 +971,7 @@ export const products: Product[] = [
           "부품이 스치는 면이 거칠면 자세가 흐트러지기 때문",
         ],
         photo: "/images/features/linear-feeder-4-thumb.webp",
-        photoAlt: "트랙 면 클로즈업",
+        photoAlt: "트랙 출구 쪽",
       },
     ],
     /* 이송 속도만 업계 일반값이고 나머지 셋은 아래 specTable 에서 왔다
@@ -981,12 +1040,12 @@ export const products: Product[] = [
       {
         name: "볼피더 – 조립기 사이 부품 이송",
         src: "/images/applications/linear-transfer.webp",
-        alt: "직진피더 알루미늄 트랙 윗면",
+        alt: "본체와 판스프링 다리가 보이는 직진피더",
       },
       {
         name: "센서 검사 구간 통과 이송",
         src: "/images/applications/linear-inspect.webp",
-        alt: "트랙 끝에 모여 있는 은색 부품",
+        alt: "직진피더를 위에서 비스듬히 본 모습",
       },
     ],
     // specs 의 "설치 = 볼피더 배출구 직결", "구동 = 전자석 진동기 + 전용 컨트롤러".
@@ -999,11 +1058,11 @@ export const products: Product[] = [
     images: [
       {
         src: "/images/products/linear-feeder-01.webp",
-        alt: "대·중·소 세 가지 크기로 나란히 놓인 직진피더",
+        alt: "본체와 판스프링 다리가 보이는 직진피더",
       },
       {
         src: "/images/products/linear-feeder-02.webp",
-        alt: "직진피더 본체 구조를 보여 주는 3D 도면",
+        alt: "직진피더를 반대쪽에서 본 모습. 트랙 받침판과 스프링",
       },
     ],
   },
@@ -1029,7 +1088,7 @@ export const products: Product[] = [
           "모터가 없어 회전하며 마모되는 부분이 적음",
         ],
         photo: "/images/features/vibrator-1-thumb.webp",
-        photoAlt: "볼 안쪽 나선 트랙 전체",
+        photoAlt: "진동기 전체",
       },
       {
         title: "현장 튜닝 대응",
@@ -1038,7 +1097,7 @@ export const products: Product[] = [
           "납품 뒤 속도가 바뀌어도 전담 부서가 다시 잡아 드림",
         ],
         photo: "/images/features/vibrator-2-thumb.webp",
-        photoAlt: "나선 트랙 이음매",
+        photoAlt: "상부 플레이트",
       },
       {
         title: "전압까지 함께 조정",
@@ -1047,7 +1106,7 @@ export const products: Product[] = [
           "같은 피더라도 다루는 부품이 바뀌면 다시 맞춰야 함",
         ],
         photo: "/images/features/vibrator-3-thumb.webp",
-        photoAlt: "볼 안쪽 벽면",
+        photoAlt: "몸통 둘레와 코어 자리",
       },
       {
         title: "진동부만 바꿔 단다",
@@ -1056,7 +1115,7 @@ export const products: Product[] = [
           "설비를 새로 들이지 않아도 공급 속도가 돌아옴",
         ],
         photo: "/images/features/vibrator-4-thumb.webp",
-        photoAlt: "트랙이 붙은 자리",
+        photoAlt: "고정 브래킷과 바닥면",
       },
     ],
     /* 넷 모두 아래 specTable 과 구동 방식에서 왔다 — 이 제품은 수치가
@@ -1124,17 +1183,17 @@ export const products: Product[] = [
       {
         name: "볼피더 구동부",
         src: "/images/applications/vibrator-bowl.webp",
-        alt: "볼 안쪽 나선 트랙 윗부분",
+        alt: "낮은 눈높이에서 본 볼피더. 볼 아래 진동부가 보인다",
       },
       {
         name: "직진피더 구동부",
         src: "/images/applications/vibrator-linear.webp",
-        alt: "볼 안쪽 트랙 아래쪽 이음매",
+        alt: "직진피더 측면. 판스프링과 진동부",
       },
       {
         name: "기존 피더 진동부 교체",
         src: "/images/applications/vibrator-replace.webp",
-        alt: "볼 안쪽 트랙 이음매 클로즈업",
+        alt: "진동기 단독. 상부 플레이트와 고정 브래킷",
       },
     ],
     // specs 의 "적용 = 볼피더 하부, 직진피더 하부", "제어 = 파츠피더 컨트롤러 연결".
@@ -1154,11 +1213,11 @@ export const products: Product[] = [
     images: [
       {
         src: "/images/products/vibrator-01.webp",
-        alt: "파란 본체 위에 판스프링 네 대로 상부 플레이트를 받친 진동기",
+        alt: "원통형 진동기 본체. 상부 플레이트와 고정 브래킷",
       },
       {
         src: "/images/products/vibrator-02.webp",
-        alt: "판스프링과 중심 볼트가 드러난 진동기 구동부 근접",
+        alt: "진동기를 반대쪽에서 본 모습. 몸통 둘레의 코어 자리",
       },
     ],
   },
@@ -1178,7 +1237,7 @@ export const products: Product[] = [
           "한꺼번에 쏟지 않아 부품이 눌려 상하는 일이 없음",
         ],
         photo: "/images/features/hopper-feeder-1-thumb.webp",
-        photoAlt: "부품이 담긴 볼 전체",
+        photoAlt: "호퍼피더 전체",
       },
       {
         title: "무인 운전",
@@ -1187,7 +1246,7 @@ export const products: Product[] = [
           "야간과 주말처럼 사람이 없는 시간대 가동에 씀",
         ],
         photo: "/images/features/hopper-feeder-2-thumb.webp",
-        photoAlt: "볼 바닥에 쌓인 부품",
+        photoAlt: "사각 호퍼 통",
       },
       {
         title: "소모량에 맞춘 용량",
@@ -1196,7 +1255,7 @@ export const products: Product[] = [
           "크면 부품이 오래 머물고 작으면 자주 채워야 함",
         ],
         photo: "/images/features/hopper-feeder-3-thumb.webp",
-        photoAlt: "볼 왼쪽 벽면과 트랙",
+        photoAlt: "기둥과 배출 슈트",
       },
       {
         title: "라인과 함께 선다",
@@ -1205,7 +1264,7 @@ export const products: Product[] = [
           "볼 안에 넘치거나 눌려 상하는 일이 생기지 않음",
         ],
         photo: "/images/features/hopper-feeder-4-thumb.webp",
-        photoAlt: "트랙 출구 쪽",
+        photoAlt: "바닥 고정판",
       },
     ],
     /* "0명" 이 이 제품의 핵심이다 — 볼피더에 부품을 채워 넣는 일을 레벨
@@ -1278,12 +1337,12 @@ export const products: Product[] = [
       {
         name: "장시간 무인 운전 라인",
         src: "/images/applications/hopper-unattended.webp",
-        alt: "작은 부품이 가득 담긴 스테인리스 볼",
+        alt: "기둥 위에 사각 호퍼 통이 얹힌 호퍼피더",
       },
       {
         name: "소형 부품 대량 공급 공정",
         src: "/images/applications/hopper-bulk.webp",
-        alt: "볼 바닥에 쌓인 작은 부품",
+        alt: "호퍼피더를 반대쪽에서 본 모습",
       },
     ],
     // specs 의 "배출 = 볼피더 직상부 투입 슈트", "연동 = 볼피더 레벨 센서 신호".
@@ -1300,11 +1359,11 @@ export const products: Product[] = [
     images: [
       {
         src: "/images/products/hopper-feeder-01.webp",
-        alt: "투명 상부 커버와 배출 슈트를 갖춘 호퍼피더 본체",
+        alt: "기둥 위에 사각 호퍼 통이 얹힌 호퍼피더",
       },
       {
         src: "/images/products/hopper-feeder-02.webp",
-        alt: "다리와 고정 브래킷까지 보이는 호퍼피더 전체 모습",
+        alt: "호퍼피더의 배출 슈트 쪽. 통 아래로 부품이 내려간다",
       },
     ],
   },
@@ -1324,7 +1383,7 @@ export const products: Product[] = [
           "귀마개 없이 설비 앞에서 작업할 수 있는 수준",
         ],
         photo: "/images/features/soundproof-cover-1-thumb.webp",
-        photoAlt: "트랙과 금속 부품 전체",
+        photoAlt: "방음커버 설비 전체",
       },
       {
         title: "개폐형 구조",
@@ -1333,7 +1392,7 @@ export const products: Product[] = [
           "커버를 떼어 따로 보관해 둘 자리가 필요 없음",
         ],
         photo: "/images/features/soundproof-cover-2-thumb.webp",
-        photoAlt: "트랙 가까이 본 부품",
+        photoAlt: "원통형 커버 윗부분",
       },
       {
         title: "씌울 피더를 재서 만든다",
@@ -1342,7 +1401,7 @@ export const products: Product[] = [
           "틈이 생기면 소리가 그대로 빠져나가기 때문",
         ],
         photo: "/images/features/soundproof-cover-3-thumb.webp",
-        photoAlt: "볼 바깥 둘레",
+        photoAlt: "커버 몸통과 엘리베이터",
       },
       {
         title: "금속 부품 라인에 효과",
@@ -1351,7 +1410,7 @@ export const products: Product[] = [
           "수지 부품 라인은 원래 소리가 작은 편",
         ],
         photo: "/images/features/soundproof-cover-4-thumb.webp",
-        photoAlt: "줄지어 선 검은 금속 부품",
+        photoAlt: "받침 프레임",
       },
     ],
     /* 90dB 는 진동식 피더가 금속 부품을 다룰 때의 업계 일반값이다. 저감
@@ -1418,12 +1477,12 @@ export const products: Product[] = [
       {
         name: "금속 부품 취급 라인",
         src: "/images/applications/cover-metal.webp",
-        alt: "볼피더 트랙에 줄지어 선 검은 금속 부품",
+        alt: "방음커버를 씌운 볼피더 설비",
       },
       {
         name: "작업자 상주 구역 인접 설비",
         src: "/images/applications/cover-worker.webp",
-        alt: "볼 아래쪽 트랙과 금속 부품",
+        alt: "방음커버 설비를 옆에서 본 모습. 커버가 닫혀 있다",
       },
     ],
     // specs 의 "제작 = 볼피더 외경에 맞춰". 우레탄 코팅과 나란히 둔다 —
@@ -1437,11 +1496,11 @@ export const products: Product[] = [
     images: [
       {
         src: "/images/products/soundproof-cover-01.webp",
-        alt: "방음커버를 씌운 벌브 부품용 파츠피더. 투명 상부로 내부가 보인다",
+        alt: "원통형 방음커버를 씌운 볼피더와 엘리베이터 호퍼",
       },
       {
         src: "/images/products/soundproof-cover-02.webp",
-        alt: "스프링 부품용 파츠피더에 적용된 원통형 방음커버",
+        alt: "방음커버 설비를 반대쪽에서 본 모습",
       },
     ],
   },
@@ -1461,7 +1520,7 @@ export const products: Product[] = [
           "운전을 멈추지 않고도 세기를 바꿀 수 있음",
         ],
         photo: "/images/features/controller-1-thumb.webp",
-        photoAlt: "스테인리스 볼 전체",
+        photoAlt: "컨트롤러 전체",
       },
       {
         title: "볼 · 직진 개별 제어",
@@ -1470,7 +1529,7 @@ export const products: Product[] = [
           "한쪽만 빨라 부품이 밀리거나 끊기는 일을 막음",
         ],
         photo: "/images/features/controller-2-thumb.webp",
-        photoAlt: "트랙 왼쪽과 부품",
+        photoAlt: "패널 왼쪽 다이얼",
       },
       {
         title: "붙이거나 따로 둔다",
@@ -1479,7 +1538,7 @@ export const products: Product[] = [
           "설비 배치와 작업자 동선을 보고 자리를 정함",
         ],
         photo: "/images/features/controller-3-thumb.webp",
-        photoAlt: "볼 아래쪽 트랙",
+        photoAlt: "패널 가운데 표시창",
       },
       {
         title: "스위치와 다이얼뿐",
@@ -1488,7 +1547,7 @@ export const products: Product[] = [
           "교대 인원이 바뀌어도 따로 설명할 것이 없음",
         ],
         photo: "/images/features/controller-4-thumb.webp",
-        photoAlt: "볼 안쪽 바닥",
+        photoAlt: "패널 오른쪽 스위치",
       },
     ],
     /* 앞 셋은 아래 specTable 에서, 넷째는 이미 적혀 있는 사실을 수치로
@@ -1562,17 +1621,17 @@ export const products: Product[] = [
       {
         name: "볼피더 속도 제어",
         src: "/images/applications/controller-bowl.webp",
-        alt: "위에서 내려다본 스테인리스 볼 윗면",
+        alt: "컨트롤러가 속도를 맡는 볼피더",
       },
       {
         name: "직진피더 속도 제어",
         src: "/images/applications/controller-linear.webp",
-        alt: "볼 안쪽 바닥과 트랙 아래쪽",
+        alt: "컨트롤러가 속도를 맡는 직진피더",
       },
       {
         name: "호퍼피더 자동 공급 제어",
         src: "/images/applications/controller-hopper.webp",
-        alt: "부품이 둘러선 볼 위쪽",
+        alt: "컨트롤러가 공급을 맡는 호퍼피더",
       },
     ],
     // 바로 위 적용 분야 세 줄이 가리키는 제품 그대로다.
@@ -1594,7 +1653,11 @@ export const products: Product[] = [
     images: [
       {
         src: "/images/products/controller-01.webp",
-        alt: "전원 스위치와 진동 세기 다이얼이 보이는 파츠피더 컨트롤러 두 대",
+        alt: "컨트롤러 조작 패널. 진동 세기 다이얼 둘과 전원 스위치",
+      },
+      {
+        src: "/images/products/controller-02.webp",
+        alt: "컨트롤러를 비스듬히 본 모습. 케이스와 패널이 함께 보인다",
       },
     ],
   },
@@ -1618,7 +1681,7 @@ export const products: Product[] = [
           "방음커버와 함께 쓰면 소음 저감 효과가 겹침",
         ],
         photo: "/images/features/urethane-coating-1-thumb.webp",
-        photoAlt: "우레탄을 입힌 볼 전체",
+        photoAlt: "우레탄을 입힌 볼피더 전체",
       },
       {
         title: "부품 손상 방지",
@@ -1627,7 +1690,7 @@ export const products: Product[] = [
           "완성품 외관이 그대로 고객에게 가는 공정에 적합",
         ],
         photo: "/images/features/urethane-coating-2-thumb.webp",
-        photoAlt: "코팅면 가까이",
+        photoAlt: "연녹색 코팅면과 트랙",
       },
       {
         title: "샘플로 등급을 정한다",
@@ -1636,7 +1699,7 @@ export const products: Product[] = [
           "너무 매끄러우면 미끄러지고 거칠면 걸리기 때문",
         ],
         photo: "/images/features/urethane-coating-3-thumb.webp",
-        photoAlt: "볼 왼쪽 코팅면",
+        photoAlt: "볼 아래 진동부",
       },
       {
         title: "트랙 · 슈트에도 입힌다",
@@ -1645,7 +1708,7 @@ export const products: Product[] = [
           "한 곳만 입히면 그쪽만 조용해지기 때문",
         ],
         photo: "/images/features/urethane-coating-4-thumb.webp",
-        photoAlt: "우레탄을 입힌 볼과 트랙",
+        photoAlt: "테이블 프레임",
       },
     ],
     /* 앞 셋은 아래 specTable(UN-1~3 · 1~4mm · Shore A 60~80)이 그대로
@@ -1719,7 +1782,7 @@ export const products: Product[] = [
       {
         name: "도금 · 도장 부품",
         src: "/images/applications/urethane-plated.webp",
-        alt: "나사산이 있는 황동 니플",
+        alt: "육각 몸통에 나사산이 있는 황동 니플",
       },
       {
         name: "수지 · 세라믹 등 깨지기 쉬운 부품",
@@ -1729,7 +1792,7 @@ export const products: Product[] = [
       {
         name: "소음 저감이 필요한 라인",
         src: "/images/applications/urethane-noise.webp",
-        alt: "구리와 은색이 겹친 금속 단자",
+        alt: "링과 크림프 날개가 있는 구리 압착 단자",
       },
     ],
     // specs 의 "적용 부위 = 볼 내면, 트랙, 직진피더 슈트".
@@ -1742,11 +1805,11 @@ export const products: Product[] = [
     images: [
       {
         src: "/images/products/urethane-coating-01.webp",
-        alt: "우레탄 코팅이 적용된 볼피더 2기와 전용 컨트롤러",
+        alt: "볼 안쪽 트랙에 연녹색 우레탄을 입힌 볼피더",
       },
       {
         src: "/images/products/urethane-coating-02.webp",
-        alt: "우레탄 코팅 표면 거칠기 등급 UN-1, UN-2, UN-3 비교 샘플",
+        alt: "우레탄을 입힌 볼피더를 반대쪽에서 본 모습",
       },
     ],
   },
