@@ -26,8 +26,23 @@ import Reveal from "./Reveal";
  */
 export default function ProductVideo({
   video,
+  frame,
+  wrap = "",
 }: {
   video: { src: string; poster: string; note: string };
+  /** 영상 틀의 비율·높이. 기본은 전폭용이다(제품 상세 「구동 영상」).
+   *
+   * ⚠️⚠️ **lg:aspect-[3/1] 은 「전폭을 쓸 때」의 값이다.** 2026-10-15 에
+   *    홈 PERFORMANCE 가 이 컴포넌트를 **반폭**으로 쓰기 시작하면서
+   *    갈라졌다 — 반폭에 3:1 을 그대로 두면 너무 납작해진다.
+   *    거기서는 "aspect-video lg:aspect-auto lg:h-full" 을 넘겨, 옆에
+   *    선 부품 카드와 **같은 높이**가 되게 한다(영상은 object-cover 라
+   *    늘어나도 찌그러지지 않고 잘릴 뿐이다).
+   *    ⚠️ 바꾸면 **자막 띠의 대비를 다시 잰다** — 아래 주석에 15.0:1 로
+   *       적힌 그 값이다. 틀이 바뀌면 영상에서 보이는 자리가 달라진다. */
+  frame?: string;
+  /** 바깥 Reveal 에 얹을 클래스. 높이를 물려받게 할 때 쓴다(lg:h-full). */
+  wrap?: string;
 }) {
   const [load, setLoad] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -69,10 +84,10 @@ export default function ProductVideo({
   }, []);
 
   return (
-    <Reveal>
+    <Reveal className={wrap}>
       <div
         ref={ref}
-        className="relative aspect-video overflow-hidden rounded-2xl bg-surface lg:aspect-[3/1]"
+        className={`relative overflow-hidden rounded-2xl bg-surface ${frame ?? "aspect-video lg:aspect-[3/1]"}`}
       >
         <Image
           src={video.poster}

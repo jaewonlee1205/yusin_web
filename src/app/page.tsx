@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Container from "@/components/Container";
@@ -182,6 +183,25 @@ const performanceKpis: Kpi[] = [
       ⚠️ 배열을 보고 "순서가 틀렸다" 고 다시 세우지 말 것. 그러면 출처 구분이
          사라지고, 값이 바뀔 때마다 손으로 다시 맞춰야 한다.
 
+   ⚠️⚠️⚠️ **2026-10-15 — 화면에 서는 것은 둘뿐이다**(부싱 · O링).
+      "여기 6개 나오는데 2개로 줄여 주고 … 그 2개는 옆에 영상이 보이게" 라는
+      말이다. 고르는 기준은 **영상과 짝이 맞는가**였다 —
+
+        부싱  performance.mp4              녹색 볼 트랙을 도는 금속 원통
+        O링   product-urethane-coating.mp4  검은 코팅 볼에 가득한 고무 링
+
+      둘 다 **그 부품이 그대로 찍힌 영상**이라 글·그림·영상 셋이 같은 것을
+      가리킨다. 금속:고무 · 5%:8% 로 대비도 가장 세다. 나머지 넷에 맞는
+      영상은 없다(터미널핀·스크루·와셔는 아예 없고, 커넥터는 직진피더
+      영상의 흰 사출 부품이 결만 비슷하다).
+
+      ⚠️ **나머지 넷을 지우지 않는다.** 그림도 public/images/parts/ 에 그대로
+         둔다 — 영상이 생기면 `video` 한 덩이만 달면 다시 선다. 렌더가
+         `one && video` 로 거른다.
+      ⚠️⚠️ 화면에 남은 둘 중 **O링 8% 가 내가 잡은 잠정값**이다. 여섯일 때는
+         섞여 있었지만 이제 **절반이 잠정값**이다 — README 22번의 확인
+         요청이 그만큼 더 무거워졌다.
+
    ⚠️ 여섯을 고른 기준은 **걸리는 방식이 서로 달라야 한다**는 것이다 —
       구른다 · 엉킨다 · 튄다 · 방향을 가려야 한다 · 들러붙는다 · 겹친다.
       비슷한 것 여섯을 놓으면 「기종을 골라 써야 하는 이유」가 그림에서
@@ -197,11 +217,40 @@ const performanceKpis: Kpi[] = [
       (scratchpad/partrender.mjs). 앞 셋처럼 돌아갈 사진이 없으므로,
       실물과 다르다는 지적이 오면 **사진을 받아서** 고쳐야 한다. */
 const PARTS = [
-  { name: "부싱", trait: "금속 원통이라 구릅니다", one: "5", src: "/images/parts/part-bushing.webp", photo: "261001(이노에이치).JPG" },
+  {
+    name: "부싱",
+    trait: "금속 원통이라 구릅니다",
+    one: "5",
+    src: "/images/parts/part-bushing.webp",
+    photo: "261001(이노에이치).JPG",
+    /* ⚠️ 이 영상이 **바로 이 부품**이다 — 녹색 볼 트랙을 도는 금속 원통이
+       화면 가득이다. 글(「금속 원통이라 구릅니다」)과 그림과 영상 셋이
+       같은 것을 가리킨다. 영상을 바꾸려면 그 짝이 유지되는지 먼저 볼 것. */
+    video: {
+      src: "/videos/performance.mp4",
+      poster: "/images/performance-poster.webp",
+      note: "트랙에 올라선 부싱이 간격을 지키며 한 줄로 빠져나갑니다.",
+    },
+  },
   { name: "터미널 핀", trait: "가늘고 길어 엉킵니다", one: "7", src: "/images/parts/part-terminal.webp", photo: "260703(박사).JPG" },
   { name: "커넥터 하우징", trait: "플라스틱이라 가볍습니다", one: "6", src: "/images/parts/part-connector.webp", photo: "260904-1(아이비테크).JPG" },
   { name: "스크루", trait: "머리가 굵어 뒤집힙니다", one: "6", src: "/images/parts/part-screw.webp", photo: "" },   // ⚠️ 잠정값(내가 잡음)
-  { name: "O링", trait: "고무라 서로 들러붙습니다", one: "8", src: "/images/parts/part-oring.webp", photo: "" },      // ⚠️ 잠정값(내가 잡음)
+  {
+    name: "O링",
+    trait: "고무라 서로 들러붙습니다",
+    one: "8",   // ⚠️ 잠정값(내가 잡음)
+    src: "/images/parts/part-oring.webp",
+    photo: "",
+    /* ⚠️ 제품 상세(우레탄 코팅)의 구동 영상과 **같은 파일**이다. 거기서는
+       「코팅한 볼」이 주인공이고 여기서는 「그 안을 도는 O링」이 주인공이라,
+       자막을 달리 썼다. 같은 영상이 두 쪽에 나오지만 서로 다른 쪽에 있어
+       한 화면에서 겹치지는 않는다. */
+    video: {
+      src: "/videos/product-urethane-coating.mp4",
+      poster: "/images/videos/product-urethane-coating.webp",
+      note: "고무 오링이 우레탄을 입힌 볼 안쪽을 타고 올라갑니다.",
+    },
+  },
   { name: "와셔", trait: "얇아서 겹쳐 붙습니다", one: "7", src: "/images/parts/part-washer.webp", photo: "" },       // ⚠️ 잠정값(내가 잡음)
 ];
 
@@ -1348,22 +1397,26 @@ export default function Home() {
                66~115 이니 그 안이고, dark/85 를 덮으면 흰 글자 대비가
                **15.0:1** 이라 AAA(7:1)의 두 배다. (2026-10-14 에 막 색을
                여러 번 바꿔 가며 쟀고, 거쳐 온 넷 중 지금이 가장 높다.) */}
-        {/* ⚠️⚠️ **2026-10-15 — 이 자리에 있던 영상을 걷고 부품 카드 셋을 넣었다.**
-               "여기에 현재 동영상이잖아? 이거 말고 부품 한 3개 정도 기준으로 …
-               각 부품별로 진동기 에러율 나오게" 라는 말이다.
+        {/* ⚠️⚠️⚠️ **이 자리는 2026-10-15 하루에 두 번 뒤집혔다.** 다음에 또
+               헷갈릴 자리라 내력을 남긴다 —
 
-               되살리려면 아래 주석을 풀면 된다. **performance.mp4 와 포스터는
-               지우지 않았다.** 위에 적힌 프레임 고르는 기준 셋과 하단 띠 대비
-               15.0:1 은 그때 다시 필요한 기록이다.
-               ⚠️ 덤으로 홈에서 1.59MB 영상 하나가 빠졌다.
-        <ProductVideo
-          video={{
-            src: "/videos/performance.mp4",
-            poster: "/images/performance-poster.webp",
-            note: "트랙에 올라선 부싱이 간격을 지키며 한 줄로 빠져나갑니다.",
-          }}
-        />
-        */}
+                 ① 전폭 영상 하나(performance.mp4)
+                 ② **영상을 걷고 부품 카드 셋**   "이거 말고 부품 한 3개 정도
+                                                  기준으로 … 각 부품별로 진동기
+                                                  에러율 나오게"
+                 ③ 여섯으로 늘림              "6개 나오게 밑에 3개 더"
+                 ④ **둘로 줄이고 영상을 되살림**  "6개 나오는데 2개로 줄여 주고
+                                                  … 그 2개는 옆에 영상이 보이게"
+
+               ②에서 걷은 그 영상이 ④에서 **부싱 카드 옆으로 돌아왔다.** 자막도
+               그때 쓴 글 그대로다 — 그 영상이 찍고 있는 것이 바로 부싱이다.
+               지금은 PARTS 의 `video` 에 들어 있다(위 배열).
+
+               ⚠️ ②를 적을 때 **"되살리려면 아래 주석을 풀면 된다"** 고 적어
+                  두었던 것이 실제로 쓸모가 있었다. 걷을 때는 지우지 말고
+                  **왜 걷었는지와 되살리는 길**을 함께 남길 것.
+               ⚠️ 영상의 프레임 고르는 기준 셋과 하단 띠 대비 15.0:1 은 위
+                  주석에 그대로 있다 — 영상을 갈아 끼울 때 다시 읽을 것. */}
 
         {/* ⚠️⚠️ **2026-10-15 — 카드 바탕을 네이비에서 흰색으로 바꿨다.**
                "배경 네이비 색상으로 되어 있는데 흰색으로 하고 싶어. 제품 라인업
@@ -1388,11 +1441,21 @@ export default function Home() {
                   값이라 흰 바탕에서는 진하게 보였다.
                ⚠️ 글자색을 전부 뒤집었다 — white → ink, white/55 → muted,
                   brand-light → brand(밝은 쪽은 어두운 바탕용이다).
-            ⚠️ 그림은 **정사각**이다(540x540). 카드 셋의 칸 높이가 흔들리지
-               않게 하려는 것이다 — 터미널 핀처럼 세로로 긴 것도 같은 칸을 쓴다.
-               진동기 쪽 bake.mjs 는 높이 420 정규화라 규칙이 다르다
-               (scratchpad/bakepart.mjs). */}
-        <ul className="grid gap-6 sm:grid-cols-3 sm:gap-7">
+            ⚠️⚠️ **그림이 정사각에서 16:9 로 바뀌었다**(960x540). 옆에 서는
+               구동 영상이 16:9 라 정사각을 두면 카드가 영상의 **두 배 높이**가
+               된다. 같은 비율이면 높이 차가 글 영역(약 120px)뿐이다.
+               ⚠️ 나머지 넷(터미널핀·커넥터·스크루·와셔)은 **아직 정사각**이다.
+                  되살릴 때 16:9 로 다시 구울 것 — scratchpad/bakecard.mjs 에
+                  W=960 H=540 PAD=0.06 으로 준다. 정사각을 굽던 bakepart.mjs
+                  와는 다른 스크립트다. */}
+        {/* ⚠️⚠️ **격자가 2열이고 한 부품이 두 칸을 쓴다** — 카드와 영상이다.
+               1줄 부싱 | 영상 · 2줄 O링 | 영상.
+               lg 아래에서는 한 열로 쌓이는데, **부품 바로 아래 그 영상**이
+               오도록 Fragment 로 묶어 순서를 지킨다. 카드 넷을 먼저 깔고
+               영상 둘을 뒤에 두면 좁은 화면에서 짝이 어긋난다.
+            ⚠️ ul/li 가 아니라 div 다. 영상은 「목록 항목」이 아니라 그 항목에
+               딸린 그림이라, li 로 묶으면 스크린리더가 4개짜리 목록으로 읽는다. */}
+        <div className="grid gap-6 lg:grid-cols-2 lg:gap-7">
           {/* ⚠️ **one 이 없는 줄은 거른다.** 1종 에러율을 못 받은 부품이
                  수치 없는 카드로 서면 미완성으로 읽힌다. 값이 오면 PARTS 의
                  null 을 바꾸는 것만으로 카드가 늘어난다 — 여기는 안 고친다.
@@ -1416,11 +1479,12 @@ export default function Home() {
                     ⚠️ 동점이 둘이다(6 둘 · 7 둘). sort 는 **안정 정렬**이라
                        배열 순서가 그대로 남는다 — 결과적으로 **유신이 준 값이
                        잠정값보다 앞**에 선다. 노린 것은 아니지만 결이 맞다. */}
-          {PARTS.filter((p) => p.one)
+          {PARTS.filter((p) => p.one && p.video)
             .sort((a, b) => Number(a.one) - Number(b.one))
             .map((p, i) => (
-            <Reveal as="li" key={p.name} delay={i * 80} className="overflow-hidden rounded-2xl border border-line bg-white shadow-card">
-              <img src={p.src} alt="" width={540} height={540} loading="lazy" decoding="async" className="h-auto w-full" />
+            <Fragment key={p.name}>
+            <Reveal delay={i * 80} className="overflow-hidden rounded-2xl border border-line bg-white shadow-card">
+              <img src={p.src} alt="" width={960} height={540} loading="lazy" decoding="async" className="h-auto w-full" />
               <div className="border-t border-line px-5 py-4">
                 <p className="text-sm font-bold text-ink">{p.name}</p>
                 <p className="mt-0.5 text-xs text-muted">{p.trait}</p>
@@ -1437,8 +1501,34 @@ export default function Home() {
                 </dl>
               </div>
             </Reveal>
+            {/* ⚠️⚠️ **성능은 떨어지지 않았다.** 홈에 영상이 둘 늘어(696KB +
+                  930KB) 걱정했는데, 두 판을 **동시에 서빙해 번갈아** 재니
+                  새 75·75·75 / 옛 75·74·74 였다(LCP 5.45s : 5.52s).
+                  지연 로딩이라 Lighthouse 측정 구간(스크롤 없음)에서는 영상이
+                  LCP 에 안 걸린다. 총 바이트만 1.18 → 1.36MB 로 늘었다.
+                  ⚠️ 한 판씩 따로 재면 **잡음 ±13점**에 묻힌다 — 반드시 번갈아 잴 것.
+
+                ⚠️⚠️ **영상이 카드와 같은 높이로 선다.** 그냥 두면 카드가
+                   글 영역만큼(약 140px) 높아서 옆이 뭉텅 빈다. frame 으로
+                   lg 에서 비율을 풀고 높이를 물려받게 한다 —
+                   격자 칸(stretch) → Reveal(lg:h-full) → 영상 틀(lg:h-full).
+                   **셋이 한 줄이라도 끊기면 안 먹는다.**
+                ⚠️ 작은 화면에서는 aspect-video 그대로다. 한 열로 쌓이면
+                   맞출 상대가 없고, 영상만 길쭉해지면 자막이 멀어진다.
+                ⚠️ ProductVideo 안에 **이미 Reveal 이 있다** — 여기서 또 감싸면
+                   두 겹이 되어 높이가 한 칸 더 끊긴다. wrap 으로 넘긴다. */}
+            {/* ⚠️ filter 로 이미 걸렀지만 **타입은 그 사실을 모른다** —
+                   여기 한 번 더 보지 않으면 video 가 undefined 일 수 있다고 막는다. */}
+            {p.video && (
+              <ProductVideo
+                video={p.video}
+                frame="aspect-video lg:aspect-auto lg:h-full"
+                wrap="lg:h-full"
+              />
+            )}
+            </Fragment>
           ))}
-        </ul>
+        </div>
 
         {/* KPI 넷. 값 - 라벨 - 조건 세 줄이다.
 
