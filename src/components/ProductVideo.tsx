@@ -28,6 +28,7 @@ export default function ProductVideo({
   video,
   frame,
   wrap = "",
+  pos,
 }: {
   video: { src: string; poster: string; note: string };
   /** 영상 틀의 비율·높이. 기본은 전폭용이다(제품 상세 「구동 영상」).
@@ -43,6 +44,16 @@ export default function ProductVideo({
   frame?: string;
   /** 바깥 Reveal 에 얹을 클래스. 높이를 물려받게 할 때 쓴다(lg:h-full). */
   wrap?: string;
+  /** 잘리는 자리. object-cover 는 **가운데로** 자르는데, 틀이 납작할수록
+   *  위아래가 많이 깎인다.
+   *
+   *  ⚠️ 유신 영상은 **보여줄 것이 아래에 있다** — 트랙과 부품이 화면 중앙에서
+   *     아래쪽에 걸린다. 가운데로 자르면 정작 그게 깎인다. 홈 PARTS 섹션은
+   *     칸이 2.34:1(32% 잘림)이라 "object-[center_62%]" 로 **위를 더 자른다.**
+   *     50 · 62 · 72% 를 두 영상에 나란히 걸어 보고 골랐다 — 50 은 자막이
+   *     부싱 줄을 덮었고, 72 는 위쪽 가이드가 잘렸다.
+   *  ⚠️ 제품 상세는 3:1 전폭이라 사정이 다르다 — 기본값(가운데)을 쓴다. */
+  pos?: string;
 }) {
   const [load, setLoad] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -94,11 +105,11 @@ export default function ProductVideo({
           alt=""
           fill
           sizes="100vw"
-          className="object-cover"
+          className={`object-cover ${pos ?? ""}`}
         />
         {load && (
           <video
-            className="hero-video absolute inset-0 h-full w-full object-cover"
+            className={`hero-video absolute inset-0 h-full w-full object-cover ${pos ?? ""}`}
             poster={video.poster}
             autoPlay
             muted

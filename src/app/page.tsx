@@ -223,6 +223,13 @@ const PARTS = [
     one: "5",
     src: "/images/parts/part-bushing.webp",
     photo: "261001(이노에이치).JPG",
+    /* ⚠️⚠️ **치수는 3D 모델에서 읽은 값이다.** partshapes.mjs 의 부싱은
+       바깥 R9 · 안 R8.05 · 높이 9.4 로 그려져 있다 →
+         Ø18 x 9.4mm · 부피 π(9²−8.05²)×9.4 = 478mm³ × 7.85(강철) = 3.75g
+       ⚠️ **그 모델도 사진을 보고 그린 것이다**(USB 261001(이노에이치)).
+          실물과 다를 수 있다 — 유신이 보고 바로잡을 수 있게 숫자가 어디서
+          나왔는지 여기 적어 둔다. 화면에는 수치만 나간다. */
+    spec: { size: "Ø18 × 9.4mm", weight: "3.8g" },
     /* ⚠️ 이 영상이 **바로 이 부품**이다 — 녹색 볼 트랙을 도는 금속 원통이
        화면 가득이다. 글(「금속 원통이라 구릅니다」)과 그림과 영상 셋이
        같은 것을 가리킨다. 영상을 바꾸려면 그 짝이 유지되는지 먼저 볼 것. */
@@ -241,6 +248,12 @@ const PARTS = [
     one: "8",   // ⚠️ 잠정값(내가 잡음)
     src: "/images/parts/part-oring.webp",
     photo: "",
+    /* ⚠️ 치수는 토러스 R7.0 · 선경 r1.55 에서 읽었다 →
+         바깥 Ø17.1 · 선경 3.1mm · 부피 2π²Rr² = 332mm³ × 1.3(NBR) = 0.43g
+       ⚠️ O링은 **내경 × 선경**으로 적는 것이 업계 관행이지만(내경 10.9),
+          옆 칸 부싱이 바깥지름이라 **바깥지름으로 맞췄다**. 둘을 섞으면
+          나란히 놓인 두 수치가 다른 것을 재는 셈이 된다. */
+    spec: { size: "Ø17.1 · 선경 3.1mm", weight: "0.4g" },
     /* ⚠️ 제품 상세(우레탄 코팅)의 구동 영상과 **같은 파일**이다. 거기서는
        「코팅한 볼」이 주인공이고 여기서는 「그 안을 도는 O링」이 주인공이라,
        자막을 달리 썼다. 같은 영상이 두 쪽에 나오지만 서로 다른 쪽에 있어
@@ -1317,9 +1330,12 @@ export default function Home() {
 
              ① 「정확도는 진동기가 정합니다」
              ② 「에러율은 진동기가 정합니다」  "정확도 … 다 에러율로 바꿀 거야"
-             ③ 「부품별 진동기에 따른 에러율」  2026-10-15 — "부품별 진동기에
-                                              따른 에러율 이런식으로 하는게
-                                              나은거 같은데"
+             ③ 「부품별 진동기에 따른 에러율」
+             ④ **「이런 부품을 다룹니다」**     2026-10-15 — 카드에서 에러율을
+                                              걷고 **치수**를 넣으면서 제목도
+                                              따라왔다. eyebrow 도 PERFORMANCE
+                                              에서 **PARTS** 로 — 성능 이야기가
+                                              아니게 됐는데 그 말이 남으면 어긋난다.
 
           ②는 **진동기가 주어**라 「기종을 갖췄다」는 회사 쪽 말이었다. ③은
           **부품이 앞에 선다** — 아래 카드가 부품마다 다른 값(5·7·6)을 보이는
@@ -1328,7 +1344,7 @@ export default function Home() {
           ⚠️ 명사구라 사이트의 다른 문장형 제목과 결이 다르다. 그래도 둔다 —
              사용자가 고른 문구다. 바꿀 일이 생기면 **①②를 되살리지 말고**
              부품을 앞에 둔 채로 다시 쓸 것. */}
-      <Section eyebrow="PERFORMANCE" title="부품별 진동기에 따른 에러율">
+      <Section eyebrow="PARTS" title="이런 부품을 다룹니다">
         {/* 정지 사진이던 자리다. 피더가 무엇인지는 "부품이 돌다가 한 줄로
             서서 나간다" 는 움직임 자체라, 멈춘 사진으로는 절반만 전해졌다.
 
@@ -1515,7 +1531,7 @@ export default function Home() {
                     ⚠️ 동점이 둘이다(6 둘 · 7 둘). sort 는 **안정 정렬**이라
                        배열 순서가 그대로 남는다 — 결과적으로 **유신이 준 값이
                        잠정값보다 앞**에 선다. 노린 것은 아니지만 결이 맞다. */}
-          {PARTS.filter((p) => p.one && p.video)
+          {PARTS.filter((p) => p.video)
             .sort((a, b) => Number(a.one) - Number(b.one))
             .map((p, i) => (
             <Fragment key={p.name}>
@@ -1528,11 +1544,16 @@ export default function Home() {
                      비율은 괜찮은데 이제 세로 비율이 너무 길게 느껴지는데" 를
                      받았다. 1280 에서 재서 고른 것이다 —
 
-                       칸      행 높이   영상 칸      16:9 에서   지금에서
-                       1:1     450      742x450      7%         —
-                       **4:3   371      742x371      13%        −18%**  ← 골랐다
-                       3:2     344      742x344      21%        −24%
-                       16:9    311      742x311      34%        −31%
+                       칸      행 높이   영상 칸      16:9 에서
+                       1:1     450      742x450      7%
+                       4:3     371      742x371      13%
+                       **3:2   317      742x317      32%**  ← 지금
+                       16:9    284      742x284      47%
+
+                     ⚠️ 두 번 낮췄다 — "세로 비율이 너무 길게 느껴지는데"(1:1 →
+                        4:3) 그리고 "좀만 더 세로 크기 줄이면 좋겠어"(4:3 → 3:2).
+                        같은 날 에러율 줄이 치수 줄로 바뀌며 글 영역도 132 →
+                        105px 로 줄어, 둘이 합쳐 **450 → 317px** 가 됐다.
 
                      ⚠️ **더 줄이면 영상이 더 잘린다.** 영상은 object-cover 라
                         칸이 납작해질수록 위아래가 깎인다. 16:9(1.78)에서 멀어지는
@@ -1540,7 +1561,7 @@ export default function Home() {
                         아래쪽 트랙이 잘리기 시작한다.
                      ⚠️ **그림도 같은 비율로 굽는다.** 칸만 4:3 으로 바꾸고 정사각
                         그림을 contain 하면 좌우에 40px 씩 비고 물체가 작아 보인다.
-                        scratchpad/bakecard.mjs 에 W=960 H=720 PAD=0.06.
+                        scratchpad/bakecard.mjs 에 W=960 H=640 PAD=0.06.
 
                   ⚠️ **폭 구분 없이 한 비율이다.** 한때 작은 화면만 16:9 였다 —
                      정사각이던 때 lg 아래에서 그림이 전폭(768에서 720px)을 받아
@@ -1548,23 +1569,41 @@ export default function Home() {
                      그 장치가 필요 없다.
                   ⚠️ object-cover 가 아니라 **contain** 이다 — 부품 그림은 여백까지
                      포함해 구운 것이라 cover 로 자르면 물체가 잘린다. */}
-              <div className="aspect-[4/3] w-full overflow-hidden">
-                <img src={p.src} alt="" width={960} height={720} loading="lazy" decoding="async" className="h-full w-full object-contain" />
+              <div className="aspect-[3/2] w-full overflow-hidden">
+                <img src={p.src} alt="" width={960} height={640} loading="lazy" decoding="async" className="h-full w-full object-contain" />
               </div>
-              <div className="border-t border-line px-5 py-4">
+              <div className="border-t border-line px-5 py-3.5">
                 <p className="text-sm font-bold text-ink">{p.name}</p>
                 <p className="mt-0.5 text-xs text-muted">{p.trait}</p>
-                <dl className="mt-3 flex items-end gap-5 border-t border-line pt-3">
-                  <div>
-                    <dt className="text-[0.6875rem] text-muted">진동기 1종</dt>
-                    <dd className="text-lg font-bold leading-tight text-ink-soft">{p.one}%</dd>
-                  </div>
-                  <div>
-                    <dt className="text-[0.6875rem] text-muted">진동기 4종</dt>
-                    <dd className="text-lg font-bold leading-tight text-brand">{PART_ERROR.four}%</dd>
-                  </div>
-                  <p className="ml-auto pb-0.5 text-[0.6875rem] text-muted">에러율</p>
-                </dl>
+                {/* ⚠️⚠️ **2026-10-15 — 에러율에서 치수로 바꿨다.**
+                       "이것보다 그냥 제품 cm나 kg 몇인지 적는게 더 나은거 같다"
+                       라는 말이다. 걷힌 것은 「진동기 1종 5% / 4종 0.1% / 에러율」
+                       이고, **데이터(one · PART_ERROR)는 그대로 있다** — 되살릴
+                       자리다. 지우지 말 것.
+
+                    ⚠️ 단위가 **mm·g** 다. "cm나 kg" 라는 말을 받았지만 이
+                       부품들은 2cm·4g 짜리라 cm/kg 로 적으면 0.18cm · 0.0038kg
+                       이 되어 읽히지 않는다.
+                    ⚠️ **큰 숫자(text-lg)를 쓰지 않는다.** 에러율은 그 자체가
+                       주장이라 크게 썼지만 치수는 곁들이는 정보다. 덕분에 줄
+                       높이가 52 → 34px 로 줄어 섹션 세로가 함께 낮아졌다.
+                    ⚠️ 1024 에서 카드가 280px 다 — 두 덩이가 한 줄로 서는 여유가
+                       빠듯하니 **글자를 더 키우지 말 것**. */}
+                {/* ⚠️ 위 filter 가 video 로 걸렀지만 **타입은 spec 까지는 모른다** —
+                       지금은 둘이 짝이지만(영상이 있는 부품에만 치수를 적었다)
+                       언젠가 갈릴 수 있으니 여기서 한 번 더 본다. */}
+                {p.spec && (
+                  <dl className="mt-2.5 flex items-baseline gap-5 border-t border-line pt-2.5">
+                    <div>
+                      <dt className="text-[0.6875rem] text-muted">크기</dt>
+                      <dd className="text-13 font-bold leading-tight text-ink-soft">{p.spec.size}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-[0.6875rem] text-muted">무게</dt>
+                      <dd className="text-13 font-bold leading-tight text-ink-soft">{p.spec.weight}</dd>
+                    </div>
+                  </dl>
+                )}
               </div>
             </Reveal>
             {/* ⚠️⚠️ **성능은 떨어지지 않았다.** 홈에 영상이 둘 늘어(696KB +
@@ -1590,6 +1629,7 @@ export default function Home() {
                 video={p.video}
                 frame="aspect-video lg:aspect-auto lg:h-full"
                 wrap="lg:h-full"
+                pos="object-[center_62%]"
               />
             )}
             </Fragment>
