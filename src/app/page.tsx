@@ -4,7 +4,6 @@ import Container from "@/components/Container";
 import ContactCTA from "@/components/ContactCTA";
 import ProductCard from "@/components/ProductCard";
 import HeroBackgroundVideo from "@/components/HeroBackgroundVideo";
-import MagneticLink from "@/components/MagneticLink";
 import ParallaxLayer from "@/components/ParallaxLayer";
 import ProductVideo from "@/components/ProductVideo";
 import Section from "@/components/Section";
@@ -119,10 +118,29 @@ const performanceKpis: Kpi[] = [
 ];
 
 const VIBRATORS = [
-  { no: "1호", w: 248, h: 255, src: "/images/hero/vibrator-1.svg", alt: "진동기 1호 평면도" },
-  { no: "2호", w: 346, h: 363, src: "/images/hero/vibrator-2.svg", alt: "진동기 2호 신형 평면도" },
-  { no: "3호", w: 450, h: 456, src: "/images/hero/vibrator-3.svg", alt: "진동기 3호 신형 평면도" },
-  { no: "4호", w: 659, h: 604, src: "/images/hero/vibrator-4.svg", alt: "진동기 4호 신형 평면도" },
+  /* ⚠️⚠️ **2026-10-15 에 2D 평면도 SVG 넷에서 3D 그림 넷으로 바꿨다.**
+     옛 값은 1호 248x255 · 2호 346x363 · 3호 450x456 · 4호 659x604 (vibrator-1~4.svg)
+     였고, 그 w 가 **실제 치수 비**라 크기 차이가 "부품마다 골라 쓴다" 는 말을
+     눈으로 받쳤다. 파일은 지우지 않았다 — 되돌릴 자리다.
+
+     ⚠️ 그림의 출처가 **둘**이다.
+        고주파  2호고주파진동기.stp 를 occt-import-js(OpenCascade) 로 읽어
+                three.js 로 렌더(az45 el35). 실측 254x254x142mm
+        나머지 셋  .iam 은 Inventor 독자 포맷이라 지오메트리를 못 읽는다.
+                대신 파일 안(OLE2 스트림)에 Inventor 가 심어 둔 512x512
+                미리보기 PNG 를 꺼내 배경을 지우고 썼다
+        ⚠️ 한 장만 다시 만들면 결이 어긋난다. 넷을 같이 볼 것
+
+     ⚠️ **넷 다 채도를 뺐다.** 미리보기 셋은 Inventor 가 입힌 청록·베이지 색이
+        있는데 STEP 렌더는 회색뿐이라 나란히 두면 따로 놀았다.
+
+     ⚠️ w/h 는 더 이상 실제 치수가 아니다. 넷이 모두 「2호」 변종이라 높이가
+        비슷하다고 보고 **잉크 높이를 420 으로 맞춘** 뒤 폭을 비율대로 뒀다.
+        구형이 471 로 넓은 것은 그 그림만 옆에서 본 각도이기 때문이다. */
+  { no: "고주파 진동기", w: 374, h: 420, src: "/images/hero/vibrator-hifreq.webp", alt: "2호 고주파진동기" },
+  { no: "구형 진동기", w: 471, h: 420, src: "/images/hero/vibrator-round.webp", alt: "2호 구형진동기" },
+  { no: "옆코아 진동기", w: 383, h: 420, src: "/images/hero/vibrator-sidecore.webp", alt: "2호 옆코아진동기" },
+  { no: "75도 진동기", w: 390, h: 420, src: "/images/hero/vibrator-75deg.webp", alt: "2호 75도진동기" },
 ];
 
 /** 네 기종 도면 폭의 합. 화면 폭을 비율로 나눌 때 분모가 된다. */
@@ -558,46 +576,31 @@ export default function Home() {
 
               </div>
 
-              {/* ⚠️ **mt 를 주지 말 것.** 바깥 묶음의 gap 이 간격을 맡는다 —
-                     둘 다 주면 간격이 두 번 들어간다. */}
-              <div
-                className="rise flex flex-row items-center gap-4"
-                style={{ animationDelay: "300ms" }}
-              >
-                {/* ⚠️ 사이트에서 마그네틱을 쓰는 자리는 둘뿐이다 — 여기와
-                       문의 CTA 띠의 "온라인 문의하기". 효과를 아끼지 않으면
-                       아무것도 중요해 보이지 않는다. */}
-                {/* ⚠️ **화살표를 다시 넣지 말 것.** 2026-10-14 에 걷었다 —
-                       걷어 달라는 요청이고, 이 자리가 사이트에서 마지막으로
-                       남아 있던 화살표였다. 상자 모양이 이미 "누를 곳" 이라고
-                       말하므로 화살표는 같은 말을 두 번 하는 꼴이다.
-                       BTN 상수(홈 섹션 버튼 넷)와 바로 아래 2차 버튼,
-                       제품 목록 사이드바의 "제작 문의" 가 먼저 같은 처리를
-                       받았고, 문의 CTA 띠의 "온라인 문의하기" 도 같은 날
-                       함께 걷혔다.
-                   ⚠️ group 과 gap-2 도 함께 걷었다. group 은 화살표의
-                      group-hover:translate-x-1 하나만 쓰던 것이고, 자식이
-                      글자뿐이면 gap 은 할 일이 없다. */}
-                <MagneticLink
-                  href="/products"
-                  className="inline-flex items-center justify-center rounded-xl bg-brand px-6 py-4 text-15 font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:px-8"
-                >
-                  제품 살펴보기
-                </MagneticLink>
-                {/* ⚠️ **상자다.** 한때 밑줄 글자 링크였는데 "디자인 너무
-                       이상해, 박스로 감싸든 개선 필요" 라는 말을 들었다.
-                       1차(레드 채움)와 겹쳐 보이지 않게 **옅은 바탕**을 깔아
-                       두 버튼의 무게를 가른다.
-                   ⚠️ **화살표를 넣지 말 것.** 1차 버튼에만 둔다 — 둘 다
-                      있으면 같은 말을 두 번 하고, 글자 뒤에 떨어진 화살표가
-                      따로 노는 것으로 읽힌다. */}
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center rounded-xl border border-white/35 bg-white/[0.06] px-6 py-4 text-15 font-semibold text-white transition hover:border-white/60 hover:bg-white/[0.12] active:scale-[0.98] sm:px-8"
-                >
-                  견적 문의하기
-                </Link>
-              </div>
+              {/* ⚠️⚠️ **히어로 버튼 둘을 2026-10-15 에 걷었다.** "제품 살펴보기 /
+                     견적 문의하기 이거 문구는 삭제해도 될 거 같은데" 라는 말이다.
+                     첫 화면에서 행동 유도가 빠지지만, 헤더의 「견적 문의」가 늘 떠
+                     있고 스크롤하면 문의 띠가 있어 길이 끊기지는 않는다.
+
+                  되살리려면 — 바깥 묶음이 flex-row items-center **gap-4** 에
+                  animationDelay **300ms** 였고, 안쪽에 mt 를 주지 않았다(바깥
+                  묶음의 gap 이 간격을 맡는다. 둘 다 주면 간격이 두 번 들어간다).
+
+                    1차  MagneticLink href="/products" 「제품 살펴보기」
+                         rounded-xl bg-brand px-6 py-4 text-15 font-semibold
+                         text-white hover:bg-brand-dark active:scale-[0.98] sm:px-8
+                    2차  Link href="/contact" 「견적 문의하기」
+                         rounded-xl border border-white/35 bg-white/[0.06] …
+                         hover:border-white/60 hover:bg-white/[0.12]
+
+                  ⚠️ 되살리더라도 **화살표를 넣지 말 것.** 2026-10-14 에 사이트에서
+                     마지막으로 남아 있던 화살표를 걷어 낸 자리다 — 상자 모양이
+                     이미 "누를 곳" 이라고 말한다.
+                  ⚠️ 2차를 **밑줄 글자 링크로 되돌리지 말 것.** "디자인 너무 이상해,
+                     박스로 감싸든 개선 필요" 라는 말을 듣고 상자가 된 것이고,
+                     1차(레드 채움)와 겹쳐 보이지 않게 옅은 바탕을 깔아 둘의 무게를
+                     갈라 두었다.
+                  ⚠️ MagneticLink import 도 함께 걷었다. 지금 사이트에서 마그네틱을
+                     쓰는 자리는 **문의 띠의 「온라인 문의하기」 하나**다. */}
             </div>
 
             {/* ⚠️ 한때 여기에 전폭 구분선이 있었다. 2026-10-14 에 걷었다 —
@@ -646,14 +649,14 @@ export default function Home() {
                      ul 은 100% 를 쓰며, **남는 폭 전부를 간격 셋이 나눈다.**
 
                      --h    가장 큰 4호의 **높이** 상한
-                     --span 네 그림 **폭의 합** = --h / 0.3544
-                            0.3544 = (549/1419) x (503/549)
+                     --span 네 그림 **폭의 합** = --h / 0.2596
+                            0.2596 = 420 / 1618 (가장 높은 그림 h / 네 폭의 합)
                             1419 는 네 폭의 합(207+288+375+549)
                      li     calc(var(--span) * 그 기종 폭 / 1419)
                      gap    (100% - --span) / 3   ← 남는 폭을 셋이 나눈다
 
                      ⚠️ --span 에 min() 이 걸려 있다. 화면이 높고 좁으면
-                        --h/0.3544 가 100% 를 넘어 **간격이 음수**가 된다.
+                        --h/0.2596 가 100% 를 넘어 **간격이 음수**가 된다.
 
                      ⚠️⚠️ **아래 비율 숫자를 손대면 거짓이 된다.** 넷은 같은
                         도면에서 같은 축척으로 잘라 온 것이고 그 비가 곧
@@ -687,7 +690,7 @@ export default function Home() {
                              414 390 375 360  폭         126 117 111 105
                              320x568    (라인업 감춤)     -
 
-                           --span 이 min(--h/0.3544, 100% - 3rem) 이고
+                           --span 이 min(--h/0.2596, 100% - 3rem) 이고
                            Container 안쪽이 1088px 이라, 1440 이상에서는
                            1040px 에서 폭이 먼저 막는다. 좁은 폭에서는
                            화면 폭 자체가 막는다. **높이가 상한인 구간은
@@ -703,7 +706,7 @@ export default function Home() {
 
                         ⚠️⚠️ **1280x820 은 폭 상한 경계에 올라앉아 있다.**
                            이것 때문에 두 번 재서 맞췄다. --h 가 368.6 보다
-                           크면 --h/0.3544 가 1040 을 넘어 **폭이 먼저 막고**,
+                           크면 --h/0.2596 가 1040 을 넘어 **폭이 먼저 막고**,
                            그러면 --h 를 줄여도 4호가 402px 에서 꼼짝하지
                            않는다. 실제로 0.78svh - 262 로 720 을 잡았을 때
                            820 은 여전히 +2px 넘쳤다 — 높이를 깎았는데도
@@ -749,7 +752,7 @@ export default function Home() {
                            1440 에서 4호가 402px 그대로였다. 기본값은 여기
                            var() 의 **두 번째 인자**로 둔다. */
                   ["--span" as string]:
-                    "min(calc(var(--h) / 0.3544), var(--cap, calc(100% - 3rem)))",
+                    "min(calc(var(--h) / 0.2596), var(--cap, calc(100% - 3rem)))",
                   gap: "max(0.5rem, calc((100% - var(--span)) / 3))",
                 }}
               >
