@@ -55,7 +55,7 @@ import { featuredVideos } from "@/data/videos";
       ⚠️ **업계 일반값(진동수 · 연속 가동 · 납기)을 여기 다시 넣지 말 것.**
          어느 피더 업체나 같은 숫자를 쓴다.
 
-   ⚠️⚠️ **99.9% 와 첫 화면 지표 띠의 「0.1% 오류율」은 같은 값이다**
+   ⚠️⚠️ **99.9% 와 첫 화면 지표 띠의 「0.1% 에러율」은 같은 값이다**
       (100 − 99.9 = 0.1). 둘 다 유신이 준 수치다. **한쪽만 고치면 사이트
       안에서 어긋난다** — 고칠 때 page.tsx 의 STATS 첫 칸도 함께 본다.
       측정 조건을 받으면 두 자리에 함께 붙인다(README 22번).
@@ -333,6 +333,12 @@ const STATS = [
      2026-10-14 에 유신 쪽에서 "오류율은 0.1" 로 넣으라고 알려 준 수치다 —
      내가 재거나 지어낸 값이 아니다.
 
+     ⚠️ **2026-10-15 에 화면 표기를 「오류율」에서 「에러율」로 바꿨다.**
+        "0.1% 오류율 아니라 0.1% 에러율 이렇게 바꾸는 게 맞는 거 같고" 라는
+        말이다. 값은 그대로이고 **부르는 말만** 바뀌었다 — 유신이 준 말이
+        원래 "오류율은 0.1" 이었으므로 위 인용은 그대로 둔다. 홈 PERFORMANCE
+        의 99.9% 도 같은 값인데 그쪽 라벨은 「정확도」라 손대지 않았다.
+
      ⚠️ 이것은 **성능 주장**이라 거래처가 근거를 물으면 대야 한다
         (표시광고법). 측정 조건(어떤 부품 · 어떤 기준 · 몇 개 중 몇 개)을
         받으면 화면에 작게 덧붙인다. README 자료 요청 표에 적어 두었다.
@@ -361,7 +367,7 @@ const STATS = [
   {
     value: "0.1",
     count: false,
-    unit: "% 오류율",
+    unit: "% 에러율",
     note: "부품마다 맞춰서",
   },
   {
@@ -749,7 +755,7 @@ export default function Home() {
                      보유하고 현재까지 선택적 사용 중". 제목이 이익을 말하고
                      이 줄이 수단을 말한다. 위 h1 주석에 그 내력이 있다.
 
-                  ⚠️ 지표 띠 첫 칸이 이미 「0.1% 오류율」이라 "오류율" 이 한
+                  ⚠️ 지표 띠 첫 칸이 이미 「0.1% 에러율」이라 비슷한 말이 한
                      화면에 두 번 나온다. 역할이 달라 그대로 둔다 — 지표는
                      **결과 수치**, 이 줄은 **이유**다. 다만 이 줄에 **수치는
                      넣지 않는다**(95%/99.9% 의 근거를 아직 못 받았다).
@@ -760,7 +766,7 @@ export default function Home() {
                      재고 내린 결론이다 — 폰 2줄은 받아들인다.
 
                   ⚠️ "걸림과 자세 흐트러짐을 줄입니다" 를 덜어냈다. 그 이득은
-                     **바로 아래 지표 띠 첫 칸(0.1% 오류율)** 이 말한다.
+                     **바로 아래 지표 띠 첫 칸(0.1% 에러율)** 이 말한다.
                      같은 말을 두 번 하지 않는다. */}
               <p
                 className="rise mt-[clamp(0.5rem,1.4vh,0.875rem)] max-w-xl text-[clamp(0.8125rem,1.6vh,1rem)] leading-relaxed text-white/75"
@@ -832,7 +838,7 @@ export default function Home() {
                    합쳐 65+90+117+172px 로 서고 오른쪽 아래가 통째로 비었다.
                    폭을 100% 로 잡고 아래 calc 가 넷으로 나눈다. */}
             <div
-              className="rise-zoom w-full [@media(max-height:640px)]:hidden"
+              className="rise-zoom mt-[clamp(0.5rem,3vh,2.5rem)] w-full [@media(max-height:640px)]:hidden"
               style={{ animationDelay: "380ms" }}
             >
               {/* ⚠️⚠️ **ul 은 전폭이다. 남는 폭을 간격이 먹는다.**
@@ -960,21 +966,44 @@ export default function Home() {
                       width: `calc(var(--span) * ${(v.w / VIBRATOR_SPAN).toFixed(4)})`,
                     }}
                   >
-                    <img
-                      src={v.src}
-                      alt={v.alt}
-                      width={v.w}
-                      height={v.h}
-                      className="h-auto w-full"
-                    />
+                    {/* ⚠️⚠️ **라벨이 그림 위에 있다.** 2026-10-15 에 "텍스트
+                           현재 이미지 밑에 있는데 위로 올려주고" 라는 말에
+                           옮겼다. 같은 말에서 두 줄이 됐다 — 위가 통칭
+                           (고주파 진동기), 아래가 정식 이름(2호 고주파진동기).
+                           정식 이름은 그전까지 img 의 alt 에만 있었다.
+
+                        ⚠️ **그림 넷의 높이는 서로 같다.** li 폭이
+                           span x w/SPAN 이고 img 가 w-full h-auto 라
+                           높이 = span x 420/SPAN 으로 **w 가 약분된다.**
+                           그래서 라벨을 위로 올려도 그림 윗선이 가지런하다
+                           (ul 의 items-end 는 그대로 둔다).
+
+                        ⚠️ **두 줄이 다 한 줄씩이어야 한다.** 좁은 폭에서
+                           「2호 옆코아진동기」가 접히면 그 칸만 세 줄이 되어
+                           그림 윗선이 어긋난다. label-lines.mjs 로 잰다. */}
+                    <p className="text-center text-[clamp(0.625rem,1.2vh,0.8125rem)] font-bold leading-tight text-white">
+                      {v.no}
+                    </p>
                     {/* ⚠️ 그림과 **넉넉히** 떼어 놓는다. 8px 이던 때 "4호
                            텍스트 때문에 진동기가 잘린 것 같다" 는 말을 두 번
                            들었다 — 도면의 받침대가 닫히지 않고 끝나는 모양
                            이라, 글자가 바짝 붙으면 글자가 자른 것처럼 읽힌다.
+                           ⚠️ 라벨이 위로 올라가면서 이 여백이 **mt 에서 mb 로**
+                              바뀌었다. 값과 까닭은 그대로다 — 줄이지 말 것.
                            ⚠️ 낮은 화면에서만 한 단계 줄인다(375x667). */}
-                    <p className="mt-[clamp(0.75rem,1.6vh,1.25rem)] text-center text-[clamp(0.625rem,1.2vh,0.8125rem)] font-bold text-white [@media(max-height:720px)]:mt-2">
-                      {v.no}
+                    <p className="mb-[clamp(0.75rem,1.6vh,1.25rem)] mt-0.5 text-center text-[clamp(0.5rem,1vh,0.6875rem)] leading-tight text-white/55 [@media(max-height:720px)]:mb-2">
+                      {v.alt}
                     </p>
+                    {/* ⚠️ **alt 가 비어 있다.** 정식 이름이 바로 위에 글자로
+                           보이므로, alt 를 그대로 두면 스크린리더가 같은 말을
+                           두 번 읽는다. 이름은 위 <p> 가 맡는다. */}
+                    <img
+                      src={v.src}
+                      alt=""
+                      width={v.w}
+                      height={v.h}
+                      className="h-auto w-full"
+                    />
                     {/* ⚠️ 한때 여기에 중량(약 3kg …)이 있었다. 2026-10-14 에
                            "약 3kg 이거는 필요 없어" 라는 말에 걷었다 —
                            세로 14px 을 진동기에 돌려주고 줄이 간결해진다.
