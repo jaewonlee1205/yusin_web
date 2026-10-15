@@ -95,6 +95,9 @@ const performanceKpis: Kpi[] = [
   /* ⚠️⚠️ **2026-10-15 에 이 칸을 걷었다.** 같은 말을 아래 부품 카드 셋이
      하기 때문이다(각 부품에 1종 5% / 4종 0.1%). 한 섹션에서 같은 비교가
      네 번 나오면 지친다.
+     ⚠️ **되살릴 때는 에러율로 바꿔 넣을 것.** 2026-10-15 에 사이트의 성능
+        표기가 전부 에러율이 됐다(95%/99.9% → 5%/0.1%). 아래 값은 당시
+        기록이라 그대로 둔다.
      되살리려면 아래 주석을 풀면 된다 — **렌더 코드(from 이 있는 칸의
      비포–애프터 화살표 구조)는 그대로 살아 있다.** 그 구조를 두 번 고쳐
      지금 모양이 됐으니(라벨을 각자 숫자 아래로) 지우지 말 것.
@@ -2034,9 +2037,16 @@ export default function Home() {
                            px/py 는 평범하게 동작한다.** 뒤바뀌는 것은
                            writing-mode 가 걸린 span 뿐이다. */}
               <div className="flex flex-col items-center justify-between rounded-full bg-surface px-1.5 py-5">
+                {/* ⚠️⚠️ 2026-10-15 에 「정확도」에서 **「에러율」**로 바꿨다. 표의
+                       에러율 행이 이 축의 근거다. **에러율은 낮을수록 좋아서**
+                       「이상적」 영역이 위에서 **아래로** 내려갔다(bottom-0).
+                       두 점의 상하도 뒤집혔다 — 유신이 아래, 업계가 위.
+                    ⚠️ 위아래 화살표는 **양방향**이라 뜻이 뒤집혀도 그대로 쓴다.
+                    ⚠️ 세 글자라 좁은 칸에서도 안 깨진다 — 글자를 바꿀 때는
+                       390 과 1024 에서 재 볼 것. */}
                 <AxisArrow className="rotate-[-90deg]" />
                 <span className="text-13 font-bold leading-none text-ink-soft [writing-mode:vertical-rl]">
-                  정확도
+                  에러율
                 </span>
                 <AxisArrow className="rotate-90" />
               </div>
@@ -2062,7 +2072,7 @@ export default function Home() {
               <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-surface sm:aspect-[5/2] xl:aspect-auto">
                 <div
                   aria-hidden="true"
-                  className="absolute right-0 top-0 bg-dark"
+                  className="absolute bottom-0 right-0 bg-dark"
                   style={{
                     width: `${POSITIONING_IDEAL.width}%`,
                     height: `${POSITIONING_IDEAL.height}%`,
@@ -2082,7 +2092,7 @@ export default function Home() {
                              text-brand-dark #b41f18   5.70:1   O
                         12px bold 라 WCAG 의 "큰 글자" 예외(3:1)도 못 받는다.
                         영역 음영을 바꾸면 이 값을 다시 잴 것. */}
-                <span className="absolute right-4 top-3.5 text-xs font-bold text-white">
+                <span className="absolute bottom-3.5 right-4 text-xs font-bold text-white">
                   이상적
                 </span>
 
