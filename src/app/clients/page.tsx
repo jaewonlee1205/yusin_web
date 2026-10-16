@@ -3,7 +3,7 @@ import ClientGrid from "@/components/ClientGrid";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
-import { clients } from "@/data/clients";
+import { clientsByIndustry, otherClients } from "@/data/clients";
 
 export const metadata: Metadata = {
   title: "납품실적",
@@ -44,24 +44,60 @@ export default function ClientsPage() {
         lead="1992년 설립 이후 조립·검사 라인의 부품 공급을 자동화해 왔습니다."
       />
 
-      {/* 격자 하나뿐이다. 전에는 리드("전기·전자부품부터 제약, 화장품
-          용기까지…")와 각주("위 목록은 회사 소개 자료 기준이며…")가 붙어
-          있었고, 그 아래 "산업별 납품 분야" 섹션이 같은 거래처 이름을 산업별로
-          한 번 더 늘어놓았다. 셋 다 걷었다 — 격자가 34개사를 이미 다 보여 주는
-          자리에서 같은 말을 세 번 하고 있었다.
+      {/* ⚠️⚠️⚠️ **2026-10-16 — 산업별로 다시 나눴다.** 유신에게서
+          *"분야별로 나눈거라 매출쪽 기준으로 순위 잡는거 … 고객이 딱 봤을때
+          신뢰있고 큰 회사랑 일하면 믿음이 가는것 처럼 이거 중요한데"* 를 받았다.
 
-          clients.ts 의 clientIndustries 데이터는 남아 있다(미아라는 경고를
-          그쪽에 적어 뒀다). */}
-      {/* ⚠️⚠️ **2026-10-16 — 제목에서 숫자를 뺐다.** 유신에게서
-          *"문구에서 숫자는 뺄거야"* 와 함께 틀을 받았다 —
+          ⚠️ **전에 한 번 걷어냈던 자리다.** 그때는 리드와 각주와 "산업별 납품
+             분야" 섹션이 **격자가 이미 보여 준 이름을 한 번 더** 늘어놓고
+             있었다. 지금은 다르다 — **격자 자체를 분야로 나눈 것**이라
+             이름이 두 번 나오지 않는다.
+
+          ⚠️ 분야에 들어간 것은 **45곳뿐**이고 80곳이 「그 밖」이다. 적어 보이지만
+             **짐작으로 채우지 않은 결과**다(clients.ts 의 `industryMembers`
+             주석에 왜 못 밝혔는지 적어 뒀다). 유신이 정식 상호를 알려 주시면
+             바로 늘어난다.
+
+          ⚠️⚠️ `whole` 을 **반드시** 넘긴다. 격자를 쪼개면 칸 수가 24를 밑돌아
+             ClientGrid 가 **칸마다 관찰자를 다시 붙인다** — 고쳐 놓은
+             *"빨리 스크롤 내리면 늦게 나와 기달려야"* 가 되살아난다. */}
+      {/* ⚠️⚠️ **2026-10-16 — 제목이 두 번 바뀐 자리다.** 거쳐 온 말을 남긴다 —
+
+            ① 「주요 거래처 34개사」 → 「주요 거래처 ${totalClients}개사」
+            ② 「유신 F.A 시스템은 긍정적인 파트너십을 구축하여 협력합니다」
+            ③ **「거래처 현황」**
+
+          ①→② 는 *"문구에서 숫자는 뺄거야"* 였다. 숫자를 넣으면 **거래처가 늘
+          때마다 제목이 따라 움직인다.** ② 는 유신이 준 틀을 그대로 쓴 것이다 —
           *"누리디에스엠(주)은 긍정적인 파트너십을 구축하여 협력합니다."*
-          전에는 `주요 거래처 ${totalClients}개사` 였다. 숫자를 넣으면
-          **거래처가 늘 때마다 제목이 따라 움직인다.** 지금 문장은 그렇지 않다. */}
-      <Section
-        eyebrow="ALL CLIENTS"
-        title="유신 F.A 시스템은 긍정적인 파트너십을 구축하여 협력합니다"
-      >
-        <ClientGrid names={clients} />
+
+          ②→③ 은 같은 날 다시 들은 말이다 — *"힙니다/집니다 이런식으로 다로
+          끝나지 말고 … 제목 같은 느낌으로"*. ② 를 올리고 보니 **사이트에서 혼자
+          문장형**이었다. 다른 제목은 전부 명사구다 — 공정별 보유 설비 · 부품별
+          구동 영상 · 제품 라인업 · 제작 사양 · 조직도 · 오시는 길.
+          ⚠️ **홈의 「주요 거래처」와 겹치지 않게** 「현황」을 골랐다. 홈은 열둘만
+             보여 주고 여기는 전부다. */}
+      <Section eyebrow="ALL CLIENTS" title="거래처 현황">
+        <div className="space-y-10 sm:space-y-12">
+          {clientsByIndustry.map((group) => (
+            <div key={group.name}>
+              <h3 className="mb-4 text-15 font-semibold text-ink sm:mb-5 sm:text-base">
+                {group.name}
+              </h3>
+              <ClientGrid names={group.members} whole />
+            </div>
+          ))}
+
+          {/* ⚠️ 제목을 「그 밖의 거래처」로 적는다. *"기타"* 라고 쓰면 **덜
+              중요한 곳**처럼 읽히는데, 여기 있는 까닭은 **이름이 흔하거나
+              약칭이라 업종을 못 밝힌 것**이지 작아서가 아니다. */}
+          <div>
+            <h3 className="mb-4 text-15 font-semibold text-ink sm:mb-5 sm:text-base">
+              그 밖의 거래처
+            </h3>
+            <ClientGrid names={otherClients} whole />
+          </div>
+        </div>
       </Section>
 
       <ContactCTA />

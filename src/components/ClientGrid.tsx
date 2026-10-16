@@ -42,12 +42,23 @@ import type { Client } from "@/data/clients";
 export default function ClientGrid({
   names,
   className = "",
+  whole = false,
 }: {
   /** 이름만 주면 글자로, { name, logo } 를 주면 로고로 그린다. */
   names: (string | Client)[];
   className?: string;
+  /**
+   * 칸이 몇 개든 **격자 전체를 한 번에** 띄운다.
+   *
+   * ⚠️⚠️ **분야별로 격자를 나눌 때 반드시 켜야 한다.** 아래 `many` 는 *이
+   *    격자*의 칸 수만 본다 — 125곳을 일곱 분야로 쪼개면 격자마다 24칸을
+   *    밑돌아 **칸마다 IntersectionObserver 가 다시 생긴다.** 관찰자 수는
+   *    쪼개기 전과 같으므로, 고쳐 놓은 *"빨리 스크롤 내리면 늦게 나와
+   *    기달려야"* 가 **그대로 되살아난다.**
+   */
+  whole?: boolean;
 }) {
-  const many = names.length > 24;
+  const many = whole || names.length > 24;
   const CELL =
     "flex h-20 items-center justify-center rounded-xl border border-line bg-white px-4 text-center transition-colors hover:bg-surface sm:h-24";
 
