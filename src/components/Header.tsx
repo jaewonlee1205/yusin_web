@@ -208,8 +208,21 @@ export default function Header() {
                    빠듯해 h-8 을 유지한다(h-9 면 로고가 279px 라 메뉴에 밀려
                    찌그러진다)" 는 단서가 붙어 있었다. 로고가 145px 로 줄면서
                    그 압박 자체가 사라졌다. */}
+            {/* ⚠️⚠️⚠️ **2026-10-16 — 흰색 필터에서 logo-mark-navy.webp 로 바꿨다.**
+               "회사 로고에 Y하고 S는 빨간색이라 로고에 빨간색 느낌은 살려야 할거 같고"
+               라는 말이다. 그전에는 [filter:brightness(0)_invert(1)] 로 **통째로 흰색**
+               이라 Y·S 의 빨강이 사라져 있었다.
+            
+               ⚠️ **CSS 필터로는 색마다 다르게 칠할 수 없다.** 그래서 픽셀을 갈라
+                  구운 판이다 — 채도가 낮은 차콜 획은 흰색으로, 높은 Y·S 는 원본 빨강
+                  (rgb 222,79,74)으로 두고 경계는 섞었다. scratchpad/logo-navy2.mjs.
+               ⚠️ **brand(#d5261e)·brand-light(#ff6b5e) 판도 구워 나란히 봤지만**
+                  원본 색을 골랐다 — 로고는 기업 자산이라 그 색이 근거다.
+               ⚠️ 흰 바탕인 /company 는 **원본 logo-mark.webp 그대로**다. 거기는 처음부터
+                  필터가 없어 빨강이 보이고 있었다 — 건드리지 않는다.
+               ⚠️ SVG 원본을 받으면 이 판이 필요 없다(README 5번). */}
             <Image
-              src="/images/logo-mark.webp"
+              src="/images/logo-mark-navy.webp"
               alt={site.name}
               width={129}
               height={32}
@@ -220,7 +233,7 @@ export default function Header() {
                  ⚠️ **SVG 원본을 받으면 이 필터가 필요 없다**(README 5번).
                     지금 같은 필터를 네 곳이 쓴다 — 헤더 · 푸터 · 비교표 머리 ·
                     포지셔닝 맵 점. */
-              className="h-[17px] w-auto [filter:brightness(0)_invert(1)] sm:h-5 xl:h-[22px]"
+              className="h-[17px] w-auto sm:h-5 xl:h-[22px]"
             />
           </Link>
 

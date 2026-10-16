@@ -244,15 +244,28 @@ export default async function ProductDetailPage({
                     />
                     {product.category}
                   </p>
+                  {/* ⚠️⚠️⚠️ **2026-10-16 — 흰색 필터에서 logo-mark-navy.webp 로 바꿨다.**
+                     "회사 로고에 Y하고 S는 빨간색이라 로고에 빨간색 느낌은 살려야 할거 같고"
+                     라는 말이다. 그전에는 [filter:brightness(0)_invert(1)] 로 **통째로 흰색**
+                     이라 Y·S 의 빨강이 사라져 있었다.
+                  
+                     ⚠️ **CSS 필터로는 색마다 다르게 칠할 수 없다.** 그래서 픽셀을 갈라
+                        구운 판이다 — 채도가 낮은 차콜 획은 흰색으로, 높은 Y·S 는 원본 빨강
+                        (rgb 222,79,74)으로 두고 경계는 섞었다. scratchpad/logo-navy2.mjs.
+                     ⚠️ **brand(#d5261e)·brand-light(#ff6b5e) 판도 구워 나란히 봤지만**
+                        원본 색을 골랐다 — 로고는 기업 자산이라 그 색이 근거다.
+                     ⚠️ 흰 바탕인 /company 는 **원본 logo-mark.webp 그대로**다. 거기는 처음부터
+                        필터가 없어 빨강이 보이고 있었다 — 건드리지 않는다.
+                     ⚠️ SVG 원본을 받으면 이 판이 필요 없다(README 5번). */}
                   <Image
-                    src="/images/logo-mark.webp"
+                    src="/images/logo-mark-navy.webp"
                     alt=""
                     width={129}
                     height={32}
                     /* ⚠️ 흰색 필터다. 이 섹션이 네이비가 되면서 빨강+차콜
                        원본이 통째로 묻혔다 — 까닭은 Header.tsx 의 같은 자리에
                        적혀 있다. 이로써 같은 필터를 쓰는 곳이 다섯이다. */
-                    className="h-7 w-auto shrink-0 [filter:brightness(0)_invert(1)]"
+                    className="h-7 w-auto shrink-0"
                   />
                 </div>
 
