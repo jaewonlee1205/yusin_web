@@ -34,6 +34,30 @@ export default function PhotoLightbox({
   const [open, setOpen] = useState<number | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const openerRef = useRef<HTMLButtonElement | null>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * 분류를 고르면 **격자 머리가 화면 밖일 때만** 끌어 올린다.
+   *
+   * ⚠️⚠️ 유신이 짚었다 — *"밑으로 스크롤 계속하고 옆에 진동기 버튼 누르면 …
+   *    사용자가 다시 위로 스크롤 해서 올려야해. **제품 라인업 여기서는** …
+   *    옆에 버튼 누르면 위로 알아서 스크롤 해서 올려져서"*.
+   *    `ProductBrowser.tsx` 가 이미 하던 일인데 여기만 빠져 있었다.
+   *    **같은 장치는 같게 움직여야 한다.**
+   * ⚠️ 위로 벗어났을 때만 건드린다. 맨 위에서 눌렀는데 화면이 튀면 더 나쁘다.
+   * ⚠️ 부드럽게 올리지 않는다 — 내용이 바뀐 자리를 바로잡는 동작이라
+   *    즉시 옮기는 쪽이 자연스럽다.
+   */
+  const STICK_TOP = 96; // 헤더 81px + 15px. ProductBrowser 와 같은 값
+  const pick = (next: string | null) => {
+    const el = resultRef.current;
+    if (el) {
+      const top = el.getBoundingClientRect().top;
+      if (top < STICK_TOP) window.scrollTo(0, window.scrollY + top - STICK_TOP);
+    }
+    setFilter(next);
+    setOpen(null);
+  };
 
   /* ⚠️ 거르는 법은 **포함**이다 — 「볼피더」를 누르면 ["볼피더","직진피더"] 도
      나와야 한다. 한 틀에 둘이 올라간 설비를 볼피더에서 빼면 안 된다. */
@@ -138,10 +162,7 @@ export default function PhotoLightbox({
                       <button
                         type="button"
                         aria-pressed={active}
-                        onClick={() => {
-                          setFilter(k);
-                          setOpen(null);
-                        }}
+                        onClick={() => pick(k)}
                         className={`flex w-full items-center gap-2 px-5 py-3 text-left text-sm transition-colors ${
                           active
                             ? "bg-surface font-bold text-brand"
@@ -158,7 +179,7 @@ export default function PhotoLightbox({
           </aside>
         )}
 
-        <div className="min-w-0 flex-1">
+        <div ref={resultRef} className="min-w-0 flex-1">
           {kinds && kinds.length > 1 && (
             /* 모바일용 칩. ⚠️ **숫자는 넣지 않는다**(제품 쪽에서도 뺐다). */
             <div className="mb-5 flex flex-wrap gap-2 lg:hidden">
@@ -169,10 +190,7 @@ export default function PhotoLightbox({
                     key={k ?? "전체"}
                     type="button"
                     aria-pressed={active}
-                    onClick={() => {
-                      setFilter(k);
-                      setOpen(null);
-                    }}
+                    onClick={() => pick(k)}
                     className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
                       active
                         ? "border-brand bg-brand text-white"
@@ -200,6 +218,15 @@ export default function PhotoLightbox({
               aria-label={`${w.alt} — 크게 보기`}
               className="group relative block aspect-[3/2] w-full overflow-hidden rounded-xl border border-line bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
             >
+              {/* ⚠️⚠️ **사진이 오기 전 자리를 메우는 스켈레톤.** 유신이 짚었다 —
+                  *"이미지 불러오기 전에 이게 뜨는데 … 로딩 애니메이션이 뜬다거나"*.
+                  그림이 없을 때 브라우저가 `alt` 를 **글자로 그린다.**
+                  ⚠️ 아래 Image 의 `text-transparent` 가 그 글자를 숨기고,
+                     이 칸이 **옅은 회색 + 아주 느린 펄스**로 자리를 지킨다.
+                     스크린리더는 `alt` 를 그대로 읽는다 — 눈에만 안 보인다.
+                  ⚠️ 155칸에 상태를 하나씩 두지 않는다. **CSS 만으로** 한다 —
+                     사진이 뜨면 그 위를 덮으므로 끌 필요가 없다. */}
+              <span className="skeleton absolute inset-0 bg-line/60" aria-hidden />
               <Image
                 src={w.src}
                 alt={w.alt}
@@ -207,11 +234,11 @@ export default function PhotoLightbox({
                 height={667}
                 loading="lazy"
                 sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                className="relative h-full w-full object-cover text-transparent transition-transform duration-500 group-hover:scale-[1.03]"
               />
               <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-dark/85 via-dark/40 to-transparent px-3 pb-2.5 pt-8 text-left sm:px-4 sm:pb-3 sm:pt-10">
                 <span className="block text-13 font-medium leading-relaxed text-white sm:text-sm">
-                  {w.kinds.join(" + ")}
+                  {w.kinds.join(" · ")}
                 </span>
               </span>
                 </button>
@@ -265,14 +292,6 @@ export default function PhotoLightbox({
             </>
           )}
 
-          {/* ⚠️⚠️ **번호를 사진 위로 올렸다.** 유신이 짚었다 — *"글자가 짧고
-              긴거에 따라 **텍스트 위치가 왔다 갔다** 하는 것도 디자인적으로
-              이상해"*. 번호와 기종이 **한 줄에 있으니** 기종이 길어질 때마다
-              번호가 밀렸다. 위아래로 떼면 서로 영향이 없다. */}
-          <p className="pointer-events-none absolute top-5 left-1/2 -translate-x-1/2 text-13 tabular-nums text-white/40 sm:top-7">
-            {open! + 1} / {shown.length}
-          </p>
-
           <figure onClick={(e) => e.stopPropagation()} className="flex max-h-full w-full max-w-5xl flex-col items-center">
             <Image
               key={cur.full}
@@ -286,10 +305,22 @@ export default function PhotoLightbox({
             />
             {/* ⚠️ 기종은 **배지**로 둔다. 글자만 있으면 *"텍스트만 있으니깐
                 이상"* 했다. 테두리를 두르면 **덩어리로 보여** 길이가 달라도
-                자리가 흔들리는 느낌이 없다. */}
+                자리가 흔들리는 느낌이 없다.
+                ⚠️⚠️ **번호를 이 배지 안으로 들였다.** 한 번 사진 위로 올렸다가
+                   *"아래 봤다 위에 봤다 하면 불편"* 을 들었다. 처음 한 줄이었을
+                   때는 *"글자 길이에 따라 위치가 왔다 갔다"* 였고 — **둘 다
+                   맞는 말**이다. 한 배지 안에 넣으면 **테두리가 둘을 한 덩어리로
+                   묶어** 길이가 변해도 흔들려 보이지 않으면서 눈도 한 번만
+                   움직인다. 가운데 얇은 세로선이 둘을 가른다.
+                ⚠️ 번호 색을 white/40 → **white/70** 으로 올렸다 —
+                   *"글자가 너무 어두워서 잘 안보이네"*. */}
             <figcaption className="mt-5">
-              <span className="inline-flex items-center rounded-full border border-white/15 bg-white/[0.07] px-4 py-1.5 text-13 font-medium text-white/90 backdrop-blur-sm sm:text-sm">
-                {cur.kinds.join(" + ")}
+              <span className="inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/[0.07] px-4 py-1.5 text-13 backdrop-blur-sm sm:text-sm">
+                <span className="font-medium text-white/90">{cur.kinds.join(" · ")}</span>
+                <span className="h-3.5 w-px bg-white/20" aria-hidden />
+                <span className="tabular-nums text-white/70">
+                  {open! + 1} / {shown.length}
+                </span>
               </span>
             </figcaption>
           </figure>

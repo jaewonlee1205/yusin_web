@@ -67,6 +67,20 @@ export default function ProductVideo({
   pos?: string;
 }) {
   const [load, setLoad] = useState(false);
+  /**
+   * 영상이 **실제로 재생을 시작했는지**. 그때까지는 숨긴다.
+   *
+   * ⚠️⚠️ 유신이 짚었다 — *"페이지 이동 많이 한다음 … 밑으로 스크롤 해서
+   *    내리면 … 영상이 **뭔가 흐릿하게 이상한게 뜨고** 영상이 실행돼"*.
+   *    페이지를 오가며 영상이 **캐시에 남으면**, 재생 준비가 끝나기 전에
+   *    `<video>` 가 먼저 자리를 차지하고 **첫 프레임이 덜 디코딩된 채**
+   *    흐릿하게 그려진다. 처음 들어왔을 때는 받는 데 시간이 걸려 그 구간이
+   *    안 보이지만, 캐시에서 오면 그 순간이 눈에 띈다.
+   * ⚠️ `onPlaying` 뒤에 보여 주면 그 사이에는 **뒤에 깔린 포스터**가 그대로
+   *    보인다 — 새로 받을 것이 없는 그림이다.
+   * ⚠️ `poster` 속성은 **그대로 둔다.** JS 가 막힌 환경의 마지막 보루다.
+   */
+  const [playing, setPlaying] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -120,13 +134,22 @@ export default function ProductVideo({
         />
         {load && (
           <video
-            className={`hero-video absolute inset-0 h-full w-full object-cover ${pos ?? ""}`}
+            className={`hero-video absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
+              playing ? "opacity-100" : "opacity-0"
+            } ${pos ?? ""}`}
             poster={video.poster}
             autoPlay
             muted
             loop
             playsInline
             preload="auto"
+            /* ⚠️⚠️ **둘 다 받는다.** `onPlaying` 만 걸면 재생이 시작되지 않는
+               환경에서 영상이 **영영 숨겨진다** — 실제로 헤드리스 Chromium 은
+               H.264 코덱이 없어 readyState 가 0 에서 멈춘다(검사하다 걸렸다).
+               `onLoadedData` 는 **첫 프레임이 디코딩된** 시점이라, 흐릿하게
+               그려지는 구간은 이미 지나 있고 재생 여부와는 무관하다. */
+            onLoadedData={() => setPlaying(true)}
+            onPlaying={() => setPlaying(true)}
           >
             <source src={video.src} type="video/mp4" />
           </video>

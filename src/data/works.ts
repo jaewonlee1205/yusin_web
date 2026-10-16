@@ -119,7 +119,7 @@ export const works: Work[] = [
   { src: "/images/works/work-034.webp", full: "/images/works/full/work-034.webp", kinds: ["직진피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 직진피더와 표면처리" }, // 직진피더 + 표면처리
   { src: "/images/works/work-035.webp", full: "/images/works/full/work-035.webp", kinds: ["볼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 표면처리" }, // 볼피더 + 표면처리
   { src: "/images/works/work-036.webp", full: "/images/works/full/work-036.webp", kinds: ["볼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더" }, // 볼피더
-  { src: "/images/works/work-037.webp", full: "/images/works/full/work-037.webp", kinds: ["호퍼", "방음커버"], alt: "유신 F.A 시스템이 제작·납품한 호퍼와 방음커버" }, // 호퍼 + 방음커버
+  { src: "/images/works/work-037.webp", full: "/images/works/full/work-037.webp", kinds: ["호퍼피더", "방음커버"], alt: "유신 F.A 시스템이 제작·납품한 호퍼와 방음커버" }, // 호퍼 + 방음커버
   { src: "/images/works/work-038.webp", full: "/images/works/full/work-038.webp", kinds: ["볼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 표면처리" }, // 볼피더 + 표면처리
   { src: "/images/works/work-039.webp", full: "/images/works/full/work-039.webp", kinds: ["볼피더", "직진피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 직진피더" }, // 볼피더 + 직진피더
   { src: "/images/works/work-040.webp", full: "/images/works/full/work-040.webp", kinds: ["볼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더" }, // 볼피더
@@ -130,30 +130,30 @@ export const works: Work[] = [
   { src: "/images/works/work-045.webp", full: "/images/works/full/work-045.webp", kinds: ["볼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더" }, // 볼피더
   { src: "/images/works/work-046.webp", full: "/images/works/full/work-046.webp", kinds: ["볼피더", "방음커버"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 방음커버" }, // 볼피더 + 방음커버
   { src: "/images/works/work-047.webp", full: "/images/works/full/work-047.webp", kinds: ["볼피더", "직진피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 직진피더와 표면처리" }, // 볼피더 + 직진피더 + 표면처리
-  { src: "/images/works/work-048.webp", full: "/images/works/full/work-048.webp", kinds: ["볼피더", "호퍼", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼와 표면처리" }, // 볼피더 + 호퍼 + 표면처리
+  { src: "/images/works/work-048.webp", full: "/images/works/full/work-048.webp", kinds: ["볼피더", "호퍼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼와 표면처리" }, // 볼피더 + 호퍼 + 표면처리
   { src: "/images/works/work-049.webp", full: "/images/works/full/work-049.webp", kinds: ["볼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 표면처리" }, // 볼피더 + 표면처리
   { src: "/images/works/work-050.webp", full: "/images/works/full/work-050.webp", kinds: ["볼피더", "방음커버"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 방음커버" }, // 볼피더 + 방음커버
   { src: "/images/works/work-051.webp", full: "/images/works/full/work-051.webp", kinds: ["볼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더" }, // 볼피더
   { src: "/images/works/work-052.webp", full: "/images/works/full/work-052.webp", kinds: ["볼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 표면처리" }, // 볼피더 + 표면처리
   { src: "/images/works/work-053.webp", full: "/images/works/full/work-053.webp", kinds: ["볼피더", "방음커버"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 방음커버" }, // 볼피더 + 방음커버
   { src: "/images/works/work-054.webp", full: "/images/works/full/work-054.webp", kinds: ["볼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더" }, // 볼피더
-  { src: "/images/works/work-055.webp", full: "/images/works/full/work-055.webp", kinds: ["볼피더", "호퍼", "방음커버"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼와 방음커버" }, // 볼피더 + 호퍼 + 방음커버
+  { src: "/images/works/work-055.webp", full: "/images/works/full/work-055.webp", kinds: ["볼피더", "호퍼피더", "방음커버"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼와 방음커버" }, // 볼피더 + 호퍼 + 방음커버
   { src: "/images/works/work-056.webp", full: "/images/works/full/work-056.webp", kinds: ["볼피더", "방음커버"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 방음커버" }, // 볼피더 + 방음커버
   { src: "/images/works/work-057.webp", full: "/images/works/full/work-057.webp", kinds: ["볼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 표면처리" }, // 볼피더 + 표면처리
-  { src: "/images/works/work-058.webp", full: "/images/works/full/work-058.webp", kinds: ["볼피더", "호퍼", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼와 표면처리" }, // 볼피더 + 호퍼 + 표면처리
-  { src: "/images/works/work-059.webp", full: "/images/works/full/work-059.webp", kinds: ["볼피더", "호퍼", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼와 표면처리" }, // 볼피더 + 호퍼 + 표면처리
-  { src: "/images/works/work-060.webp", full: "/images/works/full/work-060.webp", kinds: ["호퍼", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 호퍼와 표면처리" }, // 호퍼 + 표면처리
-  { src: "/images/works/work-061.webp", full: "/images/works/full/work-061.webp", kinds: ["호퍼"], alt: "유신 F.A 시스템이 제작·납품한 호퍼" }, // 호퍼
+  { src: "/images/works/work-058.webp", full: "/images/works/full/work-058.webp", kinds: ["볼피더", "호퍼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼와 표면처리" }, // 볼피더 + 호퍼 + 표면처리
+  { src: "/images/works/work-059.webp", full: "/images/works/full/work-059.webp", kinds: ["볼피더", "호퍼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼와 표면처리" }, // 볼피더 + 호퍼 + 표면처리
+  { src: "/images/works/work-060.webp", full: "/images/works/full/work-060.webp", kinds: ["호퍼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 호퍼와 표면처리" }, // 호퍼 + 표면처리
+  { src: "/images/works/work-061.webp", full: "/images/works/full/work-061.webp", kinds: ["호퍼피더"], alt: "유신 F.A 시스템이 제작·납품한 호퍼" }, // 호퍼
   { src: "/images/works/work-062.webp", full: "/images/works/full/work-062.webp", kinds: ["볼피더", "방음커버"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 방음커버" }, // 볼피더 + 방음커버
   { src: "/images/works/work-063.webp", full: "/images/works/full/work-063.webp", kinds: ["볼피더", "방음커버"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 방음커버" }, // 볼피더 + 방음커버
-  { src: "/images/works/work-064.webp", full: "/images/works/full/work-064.webp", kinds: ["볼피더", "호퍼"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼" }, // 볼피더 + 호퍼
+  { src: "/images/works/work-064.webp", full: "/images/works/full/work-064.webp", kinds: ["볼피더", "호퍼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼" }, // 볼피더 + 호퍼
   { src: "/images/works/work-065.webp", full: "/images/works/full/work-065.webp", kinds: ["볼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더" }, // 볼피더
-  { src: "/images/works/work-066.webp", full: "/images/works/full/work-066.webp", kinds: ["볼피더", "호퍼", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼와 표면처리" }, // 볼피더 + 호퍼 + 표면처리
+  { src: "/images/works/work-066.webp", full: "/images/works/full/work-066.webp", kinds: ["볼피더", "호퍼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼와 표면처리" }, // 볼피더 + 호퍼 + 표면처리
   { src: "/images/works/work-067.webp", full: "/images/works/full/work-067.webp", kinds: ["볼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 표면처리" }, // 볼피더 + 표면처리
   { src: "/images/works/work-068.webp", full: "/images/works/full/work-068.webp", kinds: ["볼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더" }, // 볼피더
-  { src: "/images/works/work-069.webp", full: "/images/works/full/work-069.webp", kinds: ["볼피더", "호퍼"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼" }, // 볼피더 + 호퍼
-  { src: "/images/works/work-070.webp", full: "/images/works/full/work-070.webp", kinds: ["호퍼", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 호퍼와 표면처리" }, // 호퍼 + 표면처리
-  { src: "/images/works/work-071.webp", full: "/images/works/full/work-071.webp", kinds: ["호퍼"], alt: "유신 F.A 시스템이 제작·납품한 호퍼" }, // 호퍼
+  { src: "/images/works/work-069.webp", full: "/images/works/full/work-069.webp", kinds: ["볼피더", "호퍼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼" }, // 볼피더 + 호퍼
+  { src: "/images/works/work-070.webp", full: "/images/works/full/work-070.webp", kinds: ["호퍼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 호퍼와 표면처리" }, // 호퍼 + 표면처리
+  { src: "/images/works/work-071.webp", full: "/images/works/full/work-071.webp", kinds: ["호퍼피더"], alt: "유신 F.A 시스템이 제작·납품한 호퍼" }, // 호퍼
   { src: "/images/works/work-072.webp", full: "/images/works/full/work-072.webp", kinds: ["볼피더", "직진피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 직진피더" }, // 볼피더 + 직진피더
   { src: "/images/works/work-073.webp", full: "/images/works/full/work-073.webp", kinds: ["볼피더", "방음커버"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 방음커버" }, // 볼피더 + 방음커버
   { src: "/images/works/work-074.webp", full: "/images/works/full/work-074.webp", kinds: ["볼피더", "방음커버"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 방음커버" }, // 볼피더 + 방음커버
@@ -171,18 +171,18 @@ export const works: Work[] = [
   { src: "/images/works/work-086.webp", full: "/images/works/full/work-086.webp", kinds: ["볼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 표면처리" }, // 볼피더 + 표면처리
   { src: "/images/works/work-087.webp", full: "/images/works/full/work-087.webp", kinds: ["볼피더", "직진피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 직진피더와 표면처리" }, // 볼피더 + 직진피더 + 표면처리
   { src: "/images/works/work-088.webp", full: "/images/works/full/work-088.webp", kinds: ["볼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 표면처리" }, // 볼피더 + 표면처리
-  { src: "/images/works/work-089.webp", full: "/images/works/full/work-089.webp", kinds: ["볼피더", "호퍼", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼와 표면처리" }, // 볼피더 + 호퍼 + 표면처리
+  { src: "/images/works/work-089.webp", full: "/images/works/full/work-089.webp", kinds: ["볼피더", "호퍼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼와 표면처리" }, // 볼피더 + 호퍼 + 표면처리
   { src: "/images/works/work-090.webp", full: "/images/works/full/work-090.webp", kinds: ["볼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 표면처리" }, // 볼피더 + 표면처리
-  { src: "/images/works/work-091.webp", full: "/images/works/full/work-091.webp", kinds: ["호퍼"], alt: "유신 F.A 시스템이 제작·납품한 호퍼" }, // 호퍼
+  { src: "/images/works/work-091.webp", full: "/images/works/full/work-091.webp", kinds: ["호퍼피더"], alt: "유신 F.A 시스템이 제작·납품한 호퍼" }, // 호퍼
   { src: "/images/works/work-092.webp", full: "/images/works/full/work-092.webp", kinds: ["볼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더" }, // 볼피더
   { src: "/images/works/work-093.webp", full: "/images/works/full/work-093.webp", kinds: ["볼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더" }, // 볼피더
   { src: "/images/works/work-094.webp", full: "/images/works/full/work-094.webp", kinds: ["볼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더" }, // 볼피더
   { src: "/images/works/work-095.webp", full: "/images/works/full/work-095.webp", kinds: ["볼피더", "직진피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 직진피더" }, // 볼피더 + 직진피더
   { src: "/images/works/work-096.webp", full: "/images/works/full/work-096.webp", kinds: ["볼피더", "방음커버"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 방음커버" }, // 볼피더 + 방음커버
-  { src: "/images/works/work-097.webp", full: "/images/works/full/work-097.webp", kinds: ["호퍼"], alt: "유신 F.A 시스템이 제작·납품한 호퍼" }, // 호퍼
+  { src: "/images/works/work-097.webp", full: "/images/works/full/work-097.webp", kinds: ["호퍼피더"], alt: "유신 F.A 시스템이 제작·납품한 호퍼" }, // 호퍼
   { src: "/images/works/work-098.webp", full: "/images/works/full/work-098.webp", kinds: ["볼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더" }, // 볼피더
   { src: "/images/works/work-099.webp", full: "/images/works/full/work-099.webp", kinds: ["볼피더", "직진피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 직진피더와 표면처리" }, // 볼피더 + 직진피더 + 표면처리
-  { src: "/images/works/work-100.webp", full: "/images/works/full/work-100.webp", kinds: ["호퍼", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 호퍼와 표면처리" }, // 호퍼 + 표면처리
+  { src: "/images/works/work-100.webp", full: "/images/works/full/work-100.webp", kinds: ["호퍼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 호퍼와 표면처리" }, // 호퍼 + 표면처리
   { src: "/images/works/work-101.webp", full: "/images/works/full/work-101.webp", kinds: ["볼피더", "방음커버"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 방음커버" }, // 볼피더 + 방음커버
   { src: "/images/works/work-102.webp", full: "/images/works/full/work-102.webp", kinds: ["볼피더", "직진피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 직진피더" }, // 볼피더 + 직진피더
   { src: "/images/works/work-103.webp", full: "/images/works/full/work-103.webp", kinds: ["볼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더" }, // 볼피더
@@ -200,8 +200,8 @@ export const works: Work[] = [
   { src: "/images/works/work-115.webp", full: "/images/works/full/work-115.webp", kinds: ["볼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 표면처리" }, // 볼피더 + 표면처리
   { src: "/images/works/work-116.webp", full: "/images/works/full/work-116.webp", kinds: ["볼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더" }, // 볼피더
   { src: "/images/works/work-117.webp", full: "/images/works/full/work-117.webp", kinds: ["볼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더" }, // 볼피더
-  { src: "/images/works/work-118.webp", full: "/images/works/full/work-118.webp", kinds: ["볼피더", "호퍼"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼" }, // 볼피더 + 호퍼
-  { src: "/images/works/work-119.webp", full: "/images/works/full/work-119.webp", kinds: ["호퍼", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 호퍼와 표면처리" }, // 호퍼 + 표면처리
+  { src: "/images/works/work-118.webp", full: "/images/works/full/work-118.webp", kinds: ["볼피더", "호퍼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 호퍼" }, // 볼피더 + 호퍼
+  { src: "/images/works/work-119.webp", full: "/images/works/full/work-119.webp", kinds: ["호퍼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 호퍼와 표면처리" }, // 호퍼 + 표면처리
   { src: "/images/works/work-120.webp", full: "/images/works/full/work-120.webp", kinds: ["볼피더", "직진피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 직진피더와 표면처리" }, // 볼피더 + 직진피더 + 표면처리
   { src: "/images/works/work-121.webp", full: "/images/works/full/work-121.webp", kinds: ["볼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더" }, // 볼피더
   { src: "/images/works/work-122.webp", full: "/images/works/full/work-122.webp", kinds: ["볼피더"], alt: "유신 F.A 시스템이 제작·납품한 볼피더" }, // 볼피더
@@ -225,7 +225,7 @@ export const works: Work[] = [
   { src: "/images/works/work-140.webp", full: "/images/works/full/work-140.webp", kinds: ["볼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 표면처리" }, // 볼피더 + 표면처리
   { src: "/images/works/work-141.webp", full: "/images/works/full/work-141.webp", kinds: ["볼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 표면처리" }, // 볼피더 + 표면처리
   { src: "/images/works/work-142.webp", full: "/images/works/full/work-142.webp", kinds: ["볼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 표면처리" }, // 볼피더 + 표면처리
-  { src: "/images/works/work-143.webp", full: "/images/works/full/work-143.webp", kinds: ["호퍼", "직진피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 호퍼와 직진피더와 표면처리" }, // 호퍼 + 직진피더 + 표면처리
+  { src: "/images/works/work-143.webp", full: "/images/works/full/work-143.webp", kinds: ["호퍼피더", "직진피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 호퍼와 직진피더와 표면처리" }, // 호퍼 + 직진피더 + 표면처리
   { src: "/images/works/work-144.webp", full: "/images/works/full/work-144.webp", kinds: ["볼피더", "직진피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 직진피더와 표면처리" }, // 볼피더 + 직진피더 + 표면처리
   { src: "/images/works/work-145.webp", full: "/images/works/full/work-145.webp", kinds: ["볼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 표면처리" }, // 볼피더 + 표면처리
   { src: "/images/works/work-146.webp", full: "/images/works/full/work-146.webp", kinds: ["볼피더", "표면처리"], alt: "유신 F.A 시스템이 제작·납품한 볼피더와 표면처리" }, // 볼피더 + 표면처리
@@ -246,7 +246,7 @@ export const totalWorks = works.length;
  * 분류 버튼에 쓸 기종. **사진이 있는 것만** 낸다.
  * ⚠️ 순서를 고정한다 — 사진이 늘고 줄 때마다 버튼이 자리를 바꾸면 안 된다.
  */
-export const workKinds: string[] = ["볼피더", "직진피더", "진동기", "호퍼", "방음커버", "컨트롤러", "표면처리"].filter((k) =>
+export const workKinds: string[] = ["볼피더", "직진피더", "진동기", "호퍼피더", "방음커버", "컨트롤러", "표면처리"].filter((k) =>
   works.some((w) => w.kinds.includes(k)),
 );
 
