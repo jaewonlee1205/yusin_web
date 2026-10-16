@@ -30,7 +30,12 @@ export default function BackToTop() {
   return (
     <button
       type="button"
-      onClick={scrollToTop}
+      /* ⚠️⚠️ `onClick={scrollToTop}` 으로 바로 넘기면 **이벤트 객체가 첫 인자로
+         들어간다.** 2026-10-16 에 scrollToTop 이 `instant` 를 받게 되면서,
+         MouseEvent 가 truthy 라 이 버튼까지 **즉시 이동**이 돼 버렸다
+         (타입 검사가 잡았다). 이 버튼은 「올려 달라」는 요청이고 **움직임
+         자체가 응답**이라 부드럽게 올라가야 한다. 괄호로 감싸 끊어 둔다. */
+      onClick={() => scrollToTop()}
       aria-label="맨 위로"
       aria-hidden={!shown}
       tabIndex={shown ? 0 : -1}

@@ -1,13 +1,32 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CATEGORIES } from "@/data/products";
+import { products } from "@/data/products";
 import { site } from "@/data/site";
 import { InquiryError, submitInquiry } from "@/lib/inquiry";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-const TOPICS = [...CATEGORIES, "전용기 제작", "기존 설비 수리 · 튜닝", "기타"];
+/**
+ * 고를 수 있는 것 — **제품 일곱 + 그 밖의 셋**.
+ *
+ * ⚠️⚠️ **2026-10-16 — 분류명에서 제품명으로 갈았다.** 유신에게서 받았다 —
+ *    *"**파츠피더 / 구동기** 이런식으로 제품 분류 기준이 아니라
+ *      **볼피더 / 진동기** 처럼 제품명으로 하자"*.
+ *    전에는 `CATEGORIES`(파츠피더 · 직진피더 · **구동부** · 호퍼피더 ·
+ *    방음커버 · 컨트롤러 · **표면처리**)를 썼다. 그건 `/products` 사이드바가
+ *    쓰는 **분류 이름**이다 — 거기서는 맞지만, 문의 폼은 *무엇을 문의하는지*
+ *    고르는 자리라 **제품 이름**이어야 한다. 「구동부」를 찾는 사람은 없다.
+ * ⚠️ `products` 배열 순서를 그대로 따른다 — 제품 페이지에 늘어선 차례와
+ *    같아야 같은 물건으로 읽힌다.
+ * ⚠️ `/products` 사이드바는 **건드리지 않는다.** 거기 머리말이 「제품 분류」다.
+ */
+const TOPICS = [
+  ...products.map((p) => p.name),
+  "전용기 제작",
+  "기존 설비 수리 · 튜닝",
+  "기타",
+];
 
 /**
  * 입력칸은 테두리 대신 바탕색으로 칸을 그린다. 선이 하나 줄면 폼 전체에서
@@ -30,7 +49,7 @@ const fieldLine = `${field} h-14`;
 const label = "mb-2.5 block text-sm font-medium text-muted";
 
 /**
- * 문의 분야 — **네모 체크박스**. 여러 개를 고를 수 있다.
+ * 문의 제품 — **네모 체크박스**. 여러 개를 고를 수 있다.
  *
  * 생김새가 세 번 바뀌었다.
  *
@@ -83,12 +102,12 @@ const boxBase =
 const boxLabel =
   "text-sm leading-snug text-ink-soft transition-colors peer-checked:font-semibold peer-checked:text-ink";
 /**
- * 개인정보 동의 체크박스. 위 문의 분야와 **같은 상자**이고 mt-0.5 만 다르다 —
+ * 개인정보 동의 체크박스. 위 문의 제품와 **같은 상자**이고 mt-0.5 만 다르다 —
  * 글이 두 줄이라 첫 줄 가운데에 맞춘다.
  *
  * ⚠️ 한때 네이티브 체크박스(h-4 w-4 accent-[#d5261e])였다. 그때 주석에
  *    "저쪽은 네이비, 여기는 레드다 — 반드시 눌러야 넘어가는 한 줄이라 색으로
- *    알린다" 고 적어 두었는데, 문의 분야와 같은 모양으로 해 달라는 요청에
+ *    알린다" 고 적어 두었는데, 문의 제품와 같은 모양으로 해 달라는 요청에
  *    뒤집었다. 같은 모양에 다른 색이면 둘이 다른 장치로 읽힌다.
  *    이제 폼 안의 레드는 제출 버튼 하나뿐이다.
  *
@@ -107,7 +126,7 @@ const boxLabel =
  */
 const boxAgree = `mt-0.5 ${boxBase}`;
 /**
- * 문의 분야 "전체 선택" 상자. 분야 칸과 같은 모양에 **중간 상태**가 더해진다.
+ * 문의 제품 "전체 선택" 상자. 제품 칸과 같은 모양에 **중간 상태**가 더해진다.
  *
  * peer-indeterminate: 는 일부만 골랐을 때다 — 바탕을 네이비로 채우되 체크
  * 대신 가로줄을 보인다. indeterminate 는 HTML 속성이 아니라 DOM 프로퍼티라
@@ -122,7 +141,7 @@ export default function InquiryForm() {
   const [error, setError] = useState("");
 
   /**
-   * 고른 문의 분야. **"전체 선택" 때문에 상태를 들였다.**
+   * 고른 문의 제품. **"전체 선택" 때문에 상태를 들였다.**
    *
    * 그 전까지 분야 체크박스는 비제어였다(DOM 이 상태를 들고 handleSubmit 이
    * FormData.getAll 로 읽었다). 전체 선택은 "열 개가 다 켜졌는가" 를 알아야
@@ -353,7 +372,7 @@ export default function InquiryForm() {
       </div>
 
       <fieldset>
-        <legend className={label}>문의 분야</legend>
+        <legend className={label}>문의 제품</legend>
         {/* **열이 맞는 격자다.** 한때 flex-wrap 이라 줄마다 개수가 달라
             들쭉날쭉했는데, 가지런히 정렬해 달라는 요청에 격자로 바꿨다.
 
@@ -384,7 +403,7 @@ export default function InquiryForm() {
               ⚠️ name 을 주지 않는다. name="category" 를 붙이면 메일 본문
                  "문의분야" 에 "전체 선택" 이라는 값이 섞여 들어간다.
 
-              ⚠️ 분야 칸과 **같은 네모 상자**를 쓴다(boxBase). 다른 모양을
+              ⚠️ 제품 칸과 **같은 네모 상자**를 쓴다(boxBase). 다른 모양을
                  주면 격자 안에서 혼자 튄다. 대신 라벨을 늘 굵게 둬서, 고르지
                  않은 상태에서도 분야 이름과 성격이 다르다는 것을 보인다.
 
@@ -402,7 +421,7 @@ export default function InquiryForm() {
               checked={allOn}
               onChange={() => setPicked(allOn ? [] : [...TOPICS])}
               className="peer sr-only"
-              aria-label="문의 분야 전체 선택"
+              aria-label="문의 제품 전체 선택"
             />
             <span className={boxAll}>
               <svg
@@ -523,7 +542,7 @@ export default function InquiryForm() {
               <path d="M20 6 9 17l-5-5" />
             </svg>
           </span>
-          {/* ⚠️ 고르면 **첫 줄만** 굵어진다(위 문의 분야 라벨과 같은 처리).
+          {/* ⚠️ 고르면 **첫 줄만** 굵어진다(위 문의 제품 라벨과 같은 처리).
               아래 작은 고지 문구까지 같이 굵어지면 두 줄이 한 덩어리로
               무거워진다 — 거기는 text-xs text-muted 그대로 둔다. */}
           <span className="transition-colors peer-checked:font-semibold peer-checked:text-ink">

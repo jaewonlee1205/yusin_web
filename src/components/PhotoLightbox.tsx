@@ -47,16 +47,38 @@ export default function PhotoLightbox({
    * ⚠️ 위로 벗어났을 때만 건드린다. 맨 위에서 눌렀는데 화면이 튀면 더 나쁘다.
    * ⚠️ 부드럽게 올리지 않는다 — 내용이 바뀐 자리를 바로잡는 동작이라
    *    즉시 옮기는 쪽이 자연스럽다.
+   *
+   * ⚠️⚠️⚠️ **스크롤을 리렌더 *뒤에* 한다.** 처음에는 ProductBrowser 처럼
+   *    `scrollTo` 를 먼저 하고 `setFilter` 를 했는데, 유신이 짚었다 —
+   *    *"방음커버나 표면처리 누르고 밑으로 스크롤 한다음 호퍼피더 버튼 누르면
+   *      **다른것들보다 훨씬 더 위로 올라가는** 버그"*. 재서 보니 —
+   *
+   *      표면처리 → 호퍼피더   끝난 자리 **y=0**   격자 머리 596
+   *      방음커버 → 호퍼피더   y=310              286
+   *      볼피더  → 직진피더   y=456              140 ✓
+   *
+   *    분류를 바꾸면 **문서 높이가 확 줄어든다**(69칸 → 19칸은 1,900px). 먼저
+   *    옮겨 둔 스크롤을 브라우저가 **최대값으로 잘라** 버려서, 바닥 근처에
+   *    있었을수록 더 많이 올라간다.
+   *    ⚠️ **ProductBrowser 에서 빌려 온 코드다.** 거기는 제품이 일곱이라
+   *       높이가 비슷해 티가 안 났다 — 여기는 **155 ↔ 2** 다.
+   *       **그쪽에서 괜찮았다는 것이 여기서도 괜찮다는 뜻은 아니다.**
+   *    그래서 ① 먼저 상태를 바꾸고 ② `requestAnimationFrame` 으로 **새 레이아웃이
+   *    선 뒤에** ③ **문서 기준 절대 좌표**로 옮긴다. 절대 좌표라 브라우저가
+   *    중간에 스크롤을 잘라도 결과가 같다.
    */
   const STICK_TOP = 96; // 헤더 81px + 15px. ProductBrowser 와 같은 값
   const pick = (next: string | null) => {
-    const el = resultRef.current;
-    if (el) {
-      const top = el.getBoundingClientRect().top;
-      if (top < STICK_TOP) window.scrollTo(0, window.scrollY + top - STICK_TOP);
-    }
     setFilter(next);
     setOpen(null);
+    requestAnimationFrame(() => {
+      const el = resultRef.current;
+      if (!el) return;
+      const absTop = el.getBoundingClientRect().top + window.scrollY;
+      if (window.scrollY > absTop - STICK_TOP) {
+        window.scrollTo(0, Math.max(0, absTop - STICK_TOP));
+      }
+    });
   };
 
   /* ⚠️ 거르는 법은 **포함**이다 — 「볼피더」를 누르면 ["볼피더","직진피더"] 도

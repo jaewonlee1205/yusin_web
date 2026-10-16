@@ -30,7 +30,7 @@ export default function HomeLogoLink({
     <Link
       href="/"
       aria-label={label}
-      onClick={(e) => handleSameRouteClick(e, pathname, "/")}
+      onClick={(e) => handleSameRouteClick(e, pathname, "/", true)}
       className={className}
     >
       {children}

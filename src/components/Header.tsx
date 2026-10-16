@@ -172,7 +172,7 @@ export default function Header() {
         <div className="flex h-16 items-center justify-between gap-4 sm:h-20 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
           <Link
             href="/"
-            onClick={(e) => onSameRouteClick(e, "/")}
+            onClick={(e) => handleSameRouteClick(e, pathname, "/", true)}
             className="shrink-0 transition-opacity hover:opacity-70 active:opacity-55 lg:justify-self-start"
             aria-label={`${site.name} 홈으로`}
           >
