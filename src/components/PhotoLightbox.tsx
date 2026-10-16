@@ -109,38 +109,87 @@ export default function PhotoLightbox({
 
   return (
     <>
-      {kinds && kinds.length > 1 && (
-        /* ⚠️ 생김새를 `ProductBrowser` 의 칩과 맞춘다 — 사이트 안에서 같은
-           장치는 같게 보여야 한다. ⚠️ **숫자는 넣지 않는다**(제품 쪽에서도 뺐다). */
-        <div className="mb-5 flex flex-wrap gap-2 sm:mb-6">
-          {[null, ...kinds].map((k) => {
-            const active = filter === k;
-            return (
-              <button
-                key={k ?? "전체"}
-                type="button"
-                aria-pressed={active}
-                onClick={() => {
-                  setFilter(k);
-                  setOpen(null);
-                }}
-                className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors sm:px-5 sm:py-2.5 ${
-                  active
-                    ? "border-brand bg-brand text-white"
-                    : "border-line bg-white text-ink-soft hover:border-dark-soft/40 hover:text-ink"
-                }`}
-              >
-                {k ?? "전체"}
-              </button>
-            );
-          })}
-        </div>
-      )}
+      {/* ⚠️⚠️ **2026-10-16 — 분류를 위 칩에서 옆 패널로 옮겼다.** 유신이
+          짚었다 — *"제품 분류 여기 처럼 **옆에 패널로** 나오게 하는게 더 좋은거
+          같아 … 지금 구조에서는 사용자가 **위로 올린다음 눌러야** 되잖아"*.
+          맞는 말이다. 사진이 155장이라 아래까지 내려가면 칩이 화면 밖으로
+          사라지고, 분류를 바꾸려면 맨 위까지 되돌아가야 했다.
+          ⚠️ 구조와 값은 `ProductBrowser` 에서 그대로 가져왔다 —
+             `lg:items-start` 가 없으면 **aside 가 행 높이를 꽉 채워 sticky 가
+             죽는다.** `lg:top-24`(96px)는 헤더 81px 에 15px 을 띄운 값이다.
+          ⚠️ **모바일에서는 칩을 그대로** 둔다(ProductBrowser 도 그렇다). 좁은
+             화면에 세로 목록을 얹으면 사진이 보이기까지 한참 내려야 한다. */}
+      <div className="lg:flex lg:items-start lg:gap-8">
+        {kinds && kinds.length > 1 && (
+          <aside className="hidden lg:sticky lg:top-24 lg:block lg:w-52 lg:shrink-0">
+            <nav
+              aria-label="기종"
+              className="overflow-hidden rounded-2xl bg-white shadow-card"
+            >
+              {/* 머리말은 「기종」 — 배너가 이미 WORKS 라 영문을 또 쓰지 않는다. */}
+              <p className="bg-dark-soft px-5 py-3.5 text-xs font-bold tracking-[0.08em] text-white">
+                기종
+              </p>
+              <ul className="border-t border-line">
+                {[null, ...kinds].map((k) => {
+                  const active = filter === k;
+                  return (
+                    <li key={k ?? "전체"}>
+                      <button
+                        type="button"
+                        aria-pressed={active}
+                        onClick={() => {
+                          setFilter(k);
+                          setOpen(null);
+                        }}
+                        className={`flex w-full items-center gap-2 px-5 py-3 text-left text-sm transition-colors ${
+                          active
+                            ? "bg-surface font-bold text-brand"
+                            : "font-medium text-ink-soft hover:bg-surface hover:text-ink"
+                        }`}
+                      >
+                        {k ?? "전체"}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+          </aside>
+        )}
 
-      <ul
-        className={`grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-2.5 lg:grid-cols-4 ${className}`}
-      >
-        {shown.map((w, i) => (
+        <div className="min-w-0 flex-1">
+          {kinds && kinds.length > 1 && (
+            /* 모바일용 칩. ⚠️ **숫자는 넣지 않는다**(제품 쪽에서도 뺐다). */
+            <div className="mb-5 flex flex-wrap gap-2 lg:hidden">
+              {[null, ...kinds].map((k) => {
+                const active = filter === k;
+                return (
+                  <button
+                    key={k ?? "전체"}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => {
+                      setFilter(k);
+                      setOpen(null);
+                    }}
+                    className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                      active
+                        ? "border-brand bg-brand text-white"
+                        : "border-line bg-white text-ink-soft hover:border-dark-soft/40 hover:text-ink"
+                    }`}
+                  >
+                    {k ?? "전체"}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          <ul
+            className={`grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-2.5 lg:grid-cols-3 xl:grid-cols-4 ${className}`}
+          >
+            {shown.map((w, i) => (
           <li key={w.src}>
             <button
               type="button"
@@ -165,10 +214,12 @@ export default function PhotoLightbox({
                   {w.kinds.join(" + ")}
                 </span>
               </span>
-            </button>
-          </li>
-        ))}
-      </ul>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
 
       {cur && mounted && createPortal(
         <div
@@ -214,6 +265,14 @@ export default function PhotoLightbox({
             </>
           )}
 
+          {/* ⚠️⚠️ **번호를 사진 위로 올렸다.** 유신이 짚었다 — *"글자가 짧고
+              긴거에 따라 **텍스트 위치가 왔다 갔다** 하는 것도 디자인적으로
+              이상해"*. 번호와 기종이 **한 줄에 있으니** 기종이 길어질 때마다
+              번호가 밀렸다. 위아래로 떼면 서로 영향이 없다. */}
+          <p className="pointer-events-none absolute top-5 left-1/2 -translate-x-1/2 text-13 tabular-nums text-white/40 sm:top-7">
+            {open! + 1} / {shown.length}
+          </p>
+
           <figure onClick={(e) => e.stopPropagation()} className="flex max-h-full w-full max-w-5xl flex-col items-center">
             <Image
               key={cur.full}
@@ -222,16 +281,15 @@ export default function PhotoLightbox({
               width={1600}
               height={1067}
               sizes="(min-width: 1024px) 64rem, 100vw"
-              className="h-auto max-h-[78vh] w-auto max-w-full rounded-lg object-contain"
+              className="h-auto max-h-[76vh] w-auto max-w-full rounded-lg object-contain"
               priority
             />
-            {/* ⚠️ 캡션을 **아래 가운데 한 줄**로 모은다. 앞 판은 양 끝으로
-                벌어져 있어 눈이 두 번 움직였다. 기종을 앞, 번호를 뒤에 연하게. */}
-            <figcaption className="mt-4 flex items-center gap-2.5 text-13 sm:text-sm">
-              <span className="font-medium text-white/90">{cur.kinds.join(" + ")}</span>
-              <span className="text-white/25" aria-hidden>·</span>
-              <span className="tabular-nums text-white/45">
-                {open! + 1} / {shown.length}
+            {/* ⚠️ 기종은 **배지**로 둔다. 글자만 있으면 *"텍스트만 있으니깐
+                이상"* 했다. 테두리를 두르면 **덩어리로 보여** 길이가 달라도
+                자리가 흔들리는 느낌이 없다. */}
+            <figcaption className="mt-5">
+              <span className="inline-flex items-center rounded-full border border-white/15 bg-white/[0.07] px-4 py-1.5 text-13 font-medium text-white/90 backdrop-blur-sm sm:text-sm">
+                {cur.kinds.join(" + ")}
               </span>
             </figcaption>
           </figure>
