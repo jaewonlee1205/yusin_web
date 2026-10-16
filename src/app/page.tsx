@@ -9,11 +9,11 @@ import ParallaxLayer from "@/components/ParallaxLayer";
 import ProductVideo from "@/components/ProductVideo";
 import Section from "@/components/Section";
 import { equipmentTotals } from "@/data/company";
-import ClientGrid from "@/components/ClientGrid";
+import PhotoGrid from "@/components/PhotoGrid";
 import Reveal from "@/components/Reveal";
 import ScrollCue from "@/components/ScrollCue";
 import StatCounter from "@/components/StatCounter";
-import { featuredClients } from "@/data/clients";
+import { featuredWorks } from "@/data/works";
 import { type Kpi, products } from "@/data/products";
 import { site } from "@/data/site";
 import VideoCard from "@/components/VideoCard";
@@ -2341,7 +2341,14 @@ export default function Home() {
         </Section>
       )}
 
-      {/* 6. 주요 거래처 */}
+      {/* 6. 납품 설비 */}
+      {/* ⚠️⚠️⚠️ **2026-10-16 — 거래처 이름 격자를 걷고 설비 사진으로 바꿨다.**
+             유신이 *"홈 같은 경우도 거래처에서 사진으로 교체"* 라고 짚었다.
+             `/clients` 만 바꾸면 홈에는 거래처 이름이 남아 **한 사이트에서
+             두 말을 하게 된다.**
+          ⚠️ 홈은 **여덟 장만** 올린다. 이 쪽은 히어로 영상이 성능을 지배하는
+             자리라(메모리에 적어 둔 것), 사진을 많이 얹을 데가 아니다.
+             전체는 `/clients` 에 56장이 있다. */}
       {/* ⚠️⚠️ **2026-10-15 — 회색 면이 VIDEO 에서 여기로 옮겨 왔다.**
              WHY YUSIN(흰)을 걷으면서 **PRODUCTS(회색)와 VIDEO(회색)가 붙어
              버렸다.** 둘 다 -mt + 둥근 위 모서리로 「회색 면이 흰 섹션 위로
@@ -2364,20 +2371,18 @@ export default function Home() {
       <Section
         className="-mt-8 rounded-t-[2rem] sm:-mt-12 sm:rounded-t-[2.5rem]"
         tone="surface"
-        eyebrow="CLIENTS"
-        title="주요 거래처"
+        eyebrow="WORKS"
+        title="납품 설비"
         action={
           /* 격자 아래에 있던 것을 제목 줄로 올린다. 바로 위 VIDEO 섹션이
              "영상 전체 보기" 를 같은 자리에 두는데 여기만 아래에 있어,
              같은 성격의 두 섹션이 달라 보였다. */
           <Link href="/clients" className={BTN}>
-            거래처 전체 보기
+            납품실적 전체 보기
           </Link>
         }
       >
-        <Reveal>
-          <ClientGrid names={featuredClients} />
-        </Reveal>
+        <PhotoGrid items={featuredWorks} />
       </Section>
 
       {/* 7. 문의 CTA */}
