@@ -30,9 +30,17 @@ import type { Client } from "@/data/clients";
  *       띄운다 — 관찰자가 하나다. 홈은 12칸이라 지금처럼 차례로 올라온다.
  *
  * **로고**: `logo` 가 있으면 이미지를, 없으면 이름을 그린다.
- * ⚠️ 섞이면 격자가 고르지 않아 보이므로 로고는 **높이를 맞추고**(폭 자유)
- *    **회색조로 한 단계 눌러** 글자 칸과 무게를 맞춘다. hover 에서 원색으로.
  * ⚠️ **2026-10-16 — 로고 여섯이 들어왔다**(clients.ts 의 `logos`).
+ * ⚠️⚠️ **같은 날 회색조를 걷었다.** 처음에는 *"섞이면 격자가 고르지 않아
+ *    보이므로"* `grayscale opacity-80` 으로 한 단계 눌러 글자 칸과 무게를
+ *    맞추고 hover 에서만 원색으로 돌렸다. 유신이 보고 *"회사 로고 회색 말고
+ *    원본 색깔 보이게"* 라고 했다.
+ *    **고르게 보이려다 로고를 넣은 뜻을 반쯤 지우고 있었다** — 125칸 가운데
+ *    여섯만 로고인데, 그 여섯이 눈에 띄는 것이 **넣은 까닭**이다.
+ *    ⚠️ 되돌릴 일이 생겨도 **hover 쌍(`hover:grayscale-0 hover:opacity-100`)을
+ *       함께** 되살려야 한다. 한쪽만 남기면 평상시와 hover 가 같아진다.
+ * ⚠️ **높이는 여전히 맞춘다**(폭 자유) — 칸 높이가 흔들리지 않게 하는 것은
+ *    색과 상관없는 일이다.
  * ⚠️ `max-w-full` 이 꼭 있어야 한다. MR인프라오토 로고는 **가로:세로가 8:1** 이라
  *    높이만 48px 로 맞추면 폭이 390px 가 된다 — 390px 화면의 2열 칸(약 160px)을
  *    **훌쩍 넘어 잘린다.** 폭을 먼저 맞추면 높이가 줄 뿐 다 보인다.
@@ -71,7 +79,7 @@ export default function ClientGrid({
         alt={name}
         width={160}
         height={48}
-        className="max-h-10 w-auto max-w-full object-contain opacity-80 grayscale transition hover:opacity-100 hover:grayscale-0 sm:max-h-12"
+        className="max-h-10 w-auto max-w-full object-contain sm:max-h-12"
       />
     ) : (
       <span className="text-sm font-medium leading-snug text-ink-soft sm:text-15">

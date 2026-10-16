@@ -3,7 +3,7 @@ import ClientGrid from "@/components/ClientGrid";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
-import { clientsByIndustry, otherClients } from "@/data/clients";
+import { clients } from "@/data/clients";
 
 export const metadata: Metadata = {
   title: "납품실적",
@@ -44,23 +44,26 @@ export default function ClientsPage() {
         lead="1992년 설립 이후 조립·검사 라인의 부품 공급을 자동화해 왔습니다."
       />
 
-      {/* ⚠️⚠️⚠️ **2026-10-16 — 산업별로 다시 나눴다.** 유신에게서
-          *"분야별로 나눈거라 매출쪽 기준으로 순위 잡는거 … 고객이 딱 봤을때
-          신뢰있고 큰 회사랑 일하면 믿음이 가는것 처럼 이거 중요한데"* 를 받았다.
+      {/* ⚠️⚠️⚠️ **2026-10-16 — 산업별로 나눴다가 같은 날 되돌렸다.**
+          유신에게서 *"분야별로 나눈거라 매출쪽 기준으로 순위 … 이거 중요한데"*
+          를 받아 일곱 분야 + 「그 밖의 거래처」로 쪼갰는데, 보고 나서
+          *"분야별로 보이는거 그냥 하지 말자"* 를 들었다.
 
-          ⚠️ **전에 한 번 걷어냈던 자리다.** 그때는 리드와 각주와 "산업별 납품
-             분야" 섹션이 **격자가 이미 보여 준 이름을 한 번 더** 늘어놓고
-             있었다. 지금은 다르다 — **격자 자체를 분야로 나눈 것**이라
-             이름이 두 번 나오지 않는다.
+          ⚠️ **왜 안 됐는지 적어 둔다.** 분야에 든 것이 **46곳**이고 **79곳이
+             「그 밖」**이었다. 그러면 분류가 *어떤 분야에 납품하는지* 를
+             알려 주는 대신 ***"대부분은 분류 못 했다"* 를 드러낸다.**
+             격자를 나누는 것 자체가 틀린 게 아니라 **채워진 비율이 문제**였다.
+             「그 밖」이 소수가 될 만큼 업종이 밝혀지면 그때 다시 볼 일이다.
 
-          ⚠️ 분야에 들어간 것은 **45곳뿐**이고 80곳이 「그 밖」이다. 적어 보이지만
-             **짐작으로 채우지 않은 결과**다(clients.ts 의 `industryMembers`
-             주석에 왜 못 밝혔는지 적어 뒀다). 유신이 정식 상호를 알려 주시면
-             바로 늘어난다.
+          ⚠️ **데이터는 지우지 않고 재워 두었다** — clients.ts 의
+             `industryMembers` · `clientsByIndustry` · `otherClients`.
+             되살리려면 **여기 한 곳만** 고치면 된다.
 
-          ⚠️⚠️ `whole` 을 **반드시** 넘긴다. 격자를 쪼개면 칸 수가 24를 밑돌아
-             ClientGrid 가 **칸마다 관찰자를 다시 붙인다** — 고쳐 놓은
-             *"빨리 스크롤 내리면 늦게 나와 기달려야"* 가 되살아난다. */}
+          ⚠️ **매출 순서는 그대로다.** 이번에 걷어내라고 한 것은 *분야로 나눠
+             보이는 것* 이고, 순위는 *"이거 중요한데"* 로 따로 짚은 것이다.
+
+          ⚠️ `whole` 은 넘기지 않는다. 125칸이면 ClientGrid 가 **스스로**
+             `names.length > 24` 로 한 덩어리 Reveal 을 고른다. */}
       {/* ⚠️⚠️ **2026-10-16 — 제목이 두 번 바뀐 자리다.** 거쳐 온 말을 남긴다 —
 
             ① 「주요 거래처 34개사」 → 「주요 거래처 ${totalClients}개사」
@@ -78,26 +81,7 @@ export default function ClientsPage() {
           ⚠️ **홈의 「주요 거래처」와 겹치지 않게** 「현황」을 골랐다. 홈은 열둘만
              보여 주고 여기는 전부다. */}
       <Section eyebrow="ALL CLIENTS" title="거래처 현황">
-        <div className="space-y-10 sm:space-y-12">
-          {clientsByIndustry.map((group) => (
-            <div key={group.name}>
-              <h3 className="mb-4 text-15 font-semibold text-ink sm:mb-5 sm:text-base">
-                {group.name}
-              </h3>
-              <ClientGrid names={group.members} whole />
-            </div>
-          ))}
-
-          {/* ⚠️ 제목을 「그 밖의 거래처」로 적는다. *"기타"* 라고 쓰면 **덜
-              중요한 곳**처럼 읽히는데, 여기 있는 까닭은 **이름이 흔하거나
-              약칭이라 업종을 못 밝힌 것**이지 작아서가 아니다. */}
-          <div>
-            <h3 className="mb-4 text-15 font-semibold text-ink sm:mb-5 sm:text-base">
-              그 밖의 거래처
-            </h3>
-            <ClientGrid names={otherClients} whole />
-          </div>
-        </div>
+        <ClientGrid names={clients} />
       </Section>
 
       <ContactCTA />
