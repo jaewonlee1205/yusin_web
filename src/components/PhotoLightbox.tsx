@@ -66,15 +66,45 @@ export default function PhotoLightbox({
    *    그래서 ① 먼저 상태를 바꾸고 ② `requestAnimationFrame` 으로 **새 레이아웃이
    *    선 뒤에** ③ **문서 기준 절대 좌표**로 옮긴다. 절대 좌표라 브라우저가
    *    중간에 스크롤을 잘라도 결과가 같다.
+   *
+   * ⚠️⚠️⚠️⚠️ **위 「최대값으로 잘라」는 틀린 진단이었다.** 2026-10-16 에
+   *    유신이 다시 짚었다 — *"표면처리 버튼 누르고 **스크롤 하지 않은 상태에서**
+   *    호퍼피더 버튼 누르면 위로 많이 올라가는데?"*. **두 번 연속** 누를 때만
+   *    남아 있었다. 프레임마다 찍어 보니(abs = 격자 머리의 문서상 위치) —
+   *
+   *      f0  y=456  resTop= 96  abs=552  docH=2200  maxY=1300   <- rAF 가 도는 자리
+   *      f1  y=456  resTop= 96  abs=552  docH=2200  maxY=1300
+   *      f2  y=310  resTop=242  abs=552  docH=2054  maxY=1154   <- 브라우저가 내렸다
+   *      f3~ y=310  resTop=242  abs=552  docH=2054
+   *
+   *    `abs` 는 **552 로 내내 같다** — 격자 머리의 문서상 위치는 분류와 무관하다.
+   *    내 rAF 는 f1 에서 돌았고 `456 > 552-96` 이 **거짓**이라 아무것도 하지
+   *    않았다. 그 뒤 **f2 에서 브라우저가 스스로** 456 → 310 으로 내렸다.
+   *    maxY 가 1154 라 **456 은 유효한 값이었다 — 잘린 것이 아니다.**
+   *    범인은 **스크롤 앵커링**이다. 브라우저는 내용이 바뀌면 *화면에 보이던
+   *    것*을 제자리에 두려고 스크롤을 자동 보정하는데, 앵커로 잡던 사진이
+   *    사라지면서 146px 를 끌어내렸다.
+   *    ⚠️ **내가 무엇을 하든 그 뒤에 덮어쓴다.** 그래서 격자에
+   *       `[overflow-anchor:none]` 을 걸어 **보정을 끈다**(그 자리 주석 참고).
+   *       런타임에 `auto` 로 되살려 보면 유신이 짚은 두 각본이 **그대로**
+   *       재현된다 — 격자 머리가 552 · 242(96 이어야 한다). **이 한 줄이
+   *       고침이다.**
+   *    ⚠️ 아래에서 `absTop` 을 **클릭 직전에** 재 두는 것은 **대비**다.
+   *       그것만으로 고쳐지는지는 확인하지 않았다. rAF 시점은 레이아웃이
+   *       흔들리는 중이라 거기서 다시 재는 것보다 안전하다는 판단이다.
    */
   const STICK_TOP = 96; // 헤더 81px + 15px. ProductBrowser 와 같은 값
   const pick = (next: string | null) => {
+    // ⚠️ **지금**(레이아웃이 안정된 상태) 잰다. 위 프레임 로그의 abs 가 552 로
+    //    내내 같았던 것이, 분류가 바뀌어도 이 값이 유효하다는 증거다.
+    const el = resultRef.current;
+    const absTop = el
+      ? el.getBoundingClientRect().top + window.scrollY
+      : null;
     setFilter(next);
     setOpen(null);
+    if (absTop === null) return;
     requestAnimationFrame(() => {
-      const el = resultRef.current;
-      if (!el) return;
-      const absTop = el.getBoundingClientRect().top + window.scrollY;
       if (window.scrollY > absTop - STICK_TOP) {
         window.scrollTo(0, Math.max(0, absTop - STICK_TOP));
       }
@@ -201,7 +231,22 @@ export default function PhotoLightbox({
           </aside>
         )}
 
-        <div ref={resultRef} className="min-w-0 flex-1">
+        {/* ⚠️⚠️ **[overflow-anchor:none] — 브라우저의 스크롤 보정을 끈다.**
+            분류을 바꾸면 사라지는 사진을 앵커로 잡고 있던 브라우저가, 내
+            `scrollTo` 가 끝난 **다음 프레임에** 스크롤을 혼자 끌어내렸다
+            (위 pick 주석의 프레임 로그). 분류를 바꾸는 것은 **사용자가 시킨
+            일**이라 어디를 볼지는 내가 정해야 하고, 브라우저가 옛 화면을
+            붙잡아 둘 자리가 아니다.
+            ⚠️ 끄는 것이 위험한 경우는 **스크롤 중에 위쪽 내용이 끼어들 때**다.
+               이 격자는 칸마다 aspect-[3/2] 로 높이가 **미리 정해져** 있어
+               사진이 늦게 와도 아래가 밀리지 않는다 — 끌 수 있는 조건이다.
+            ⚠️ 바깥 칸과 <ul> **둘 다**에 건다. 앵커 후보는 격자 안의 사진들인데
+               한 쪽만 끄면 다른 쪽이 후보로 남는다.
+            Tailwind 에 유틸리티가 없어 임의 값으로 쓴다. */}
+        <div
+          ref={resultRef}
+          className="min-w-0 flex-1 [overflow-anchor:none]"
+        >
           {kinds && kinds.length > 1 && (
             /* 모바일용 칩. ⚠️ **숫자는 넣지 않는다**(제품 쪽에서도 뺐다). */
             <div className="mb-5 flex flex-wrap gap-2 lg:hidden">
@@ -227,7 +272,8 @@ export default function PhotoLightbox({
           )}
 
           <ul
-            className={`grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-2.5 lg:grid-cols-3 xl:grid-cols-4 ${className}`}
+            /* [overflow-anchor:none] — 바로 위 칸의 주석 참고. */
+            className={`grid grid-cols-2 gap-2 [overflow-anchor:none] sm:grid-cols-3 sm:gap-2.5 lg:grid-cols-3 xl:grid-cols-4 ${className}`}
           >
             {shown.map((w, i) => (
           <li key={w.src}>
