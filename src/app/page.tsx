@@ -9,7 +9,7 @@ import ParallaxLayer from "@/components/ParallaxLayer";
 import ProductVideo from "@/components/ProductVideo";
 import Section from "@/components/Section";
 import { equipmentTotals } from "@/data/company";
-import PhotoGrid from "@/components/PhotoGrid";
+import PhotoLightbox from "@/components/PhotoLightbox";
 import Reveal from "@/components/Reveal";
 import ScrollCue from "@/components/ScrollCue";
 import StatCounter from "@/components/StatCounter";
@@ -2382,7 +2382,7 @@ export default function Home() {
           </Link>
         }
       >
-        <PhotoGrid items={featuredWorks} />
+        <PhotoLightbox items={featuredWorks} />
       </Section>
 
       {/* 7. 문의 CTA */}

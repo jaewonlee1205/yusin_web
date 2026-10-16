@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
-import PhotoGrid from "@/components/PhotoGrid";
+import PhotoLightbox from "@/components/PhotoLightbox";
 import Section from "@/components/Section";
 import { works } from "@/data/works";
 
@@ -64,7 +64,7 @@ export default function ClientsPage() {
              칸마다 관찰자를 걸면 *"빨리 스크롤 내리면 늦게 나와 기달려야"* 가
              되살아난다 — ClientGrid 에서 이미 겪은 일이다. */}
       <Section eyebrow="WORKS" title="납품 설비">
-        <PhotoGrid items={works} />
+        <PhotoLightbox items={works} />
       </Section>
 
       <ContactCTA />
