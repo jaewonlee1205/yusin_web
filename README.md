@@ -73,7 +73,7 @@ export const videos: Video[] = [
 
 | 자리 | 파일 | 보이는 방식 |
 |---|---|---|
-| 첫 화면 배경 | `public/videos/hero.mp4` (469KB) | 어두운 남색 오버레이가 덮여 불투명도 0.38 |
+| 첫 화면 배경 | `public/videos/hero.mp4` (482KB) | 어두운 남색 오버레이가 덮여 불투명도 0.38 |
 | PERFORMANCE | `public/videos/performance.mp4` (680KB) | 오버레이 없이 밝게, lg 에서 3:1 로 잘림 |
 
 가르면 캐시가 안 듣습니다 — 홈 전송량이 842KB 한 개에서 **1125KB 두 개**가
@@ -123,7 +123,25 @@ export const videos: Video[] = [
 #   ⚠️ **CRF 만 35 다**(아래 performance 는 33). 움직임이 많은 장면이라 33 에서
 #      566KB 가 나왔다. 오버레이 0.3 뒤에서는 33·35·37 이 구분되지 않아 35 로
 #      내려 469KB 를 맞췄다 — 나란히 찍어 확인했다.
-ffmpeg -ss 44 -t 7 -i MAH04099.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 35 -movflags +faststart   -vf scale=1280:720 public/videos/hero.mp4
+#   ⚠️⚠️ **끝 0.5초를 처음 0.5초에 디졸브해 얹는다(크로스페이드 루프).**
+#      <video loop> 는 끝 프레임 다음에 **첫 프레임을 그대로** 잇는다. 실사
+#      영상이라 7초 뒤 캡 자리가 처음과 같을 리 없어 그 순간 장면이 튄다 —
+#      "영상 다 보여지고 다시 처음 영상부터 시작 하는 과정에서 시작영상하고
+#      끝 영상하고 프레임이 잘 안맞아서 이상하게 보이는 현상" 을 들은 자리다.
+#      그래서 **7.5초를 뽑아 끝 0.5초를 처음에 겹쳐** 7초로 만든다.
+#      겹치는 길이는 0.3 · 0.5 · 0.8 을 만들어 **이음새를 나란히 놓고** 골랐다
+#      (0.3 은 덜 지워지고 0.8 은 잔상이 오래 간다).
+#      ⚠️ **이 방법이 안 듣는 영상도 있다.** 카메라가 움직이거나 장면이 크게
+#         바뀌면 두 장면이 통째로 겹쳐 보인다. 이 영상은 카메라가 고정이고
+#         배경이 같아 **흐릿한 잔상** 정도로만 보인다. 영상을 갈 때 다시 확인할 것.
+#      ⚠️ scale 을 -vf 가 아니라 **filter_complex 안**에 둔다 — 둘을 같이 쓰면 충돌한다.
+ffmpeg -ss 44 -t 7.5 -i MAH04099.MP4 -filter_complex \
+ "[0:v]scale=1280:720,split[v0][v1]; \
+  [v0]trim=0:7,setpts=PTS-STARTPTS[a]; \
+  [v1]trim=7:7.5,setpts=PTS-STARTPTS,format=yuva420p,fade=t=out:st=0:d=0.5:alpha=1[b]; \
+  [a][b]overlay=eof_action=pass,format=yuv420p[v]" \
+ -map "[v]" -an -c:v libx264 -profile:v main -pix_fmt yuv420p \
+ -crf 35 -movflags +faststart public/videos/hero.mp4
 
 # (거쳐 온 히어로 — 테콘 230702 MAH02496 64초(흰 부품) · MAH07267 88초(볼 전체 구도))
 
@@ -138,6 +156,9 @@ ffmpeg -ss 0 -i public/videos/performance.mp4 -frames:v 1   -c:v libwebp -qualit
 ```
 
 - `-an` 무음 — 소리가 있으면 브라우저가 자동재생을 막습니다
+- ⚠️ **루프 이음새는 따로 봐야 합니다.** 첫 프레임만 보거나 재생 여부만 보는
+  검사로는 안 잡힙니다 — 영상의 **끝 몇 장과 처음 몇 장을 이어 붙여** 그 경계에서
+  장면이 튀는지 봅니다(`scratchpad/seam.mjs`). 오버레이를 씌운 판으로도 봅니다
 - `-movflags +faststart` — 메타데이터를 앞에 두어 받는 즉시 재생됩니다
 - **구간은 눈으로 고르지 말고 수치로 고릅니다.** 조건이 셋입니다 —
   ① 흔들리지 않을 것 ② 사람·물체가 안 들어올 것 ③ 피더가 돌고 있을 것.
