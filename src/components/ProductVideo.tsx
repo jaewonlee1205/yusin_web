@@ -29,6 +29,7 @@ export default function ProductVideo({
   frame,
   wrap = "",
   pos,
+  delay = 0,
 }: {
   video: { src: string; poster: string; note: string };
   /** 영상 틀의 비율·높이. 기본은 전폭용이다(제품 상세 「구동 영상」).
@@ -44,6 +45,16 @@ export default function ProductVideo({
   frame?: string;
   /** 바깥 Reveal 에 얹을 클래스. 높이를 물려받게 할 때 쓴다(lg:h-full). */
   wrap?: string;
+  /** 나타나는 시점을 늦춘다(ms).
+   *
+   * ⚠️⚠️ **2026-10-16 — 이 prop 이 없어서 홈 PARTS 의 네 행이 어긋났다.**
+   *    카드 쪽은 Reveal 에 delay={i * 80} 을 주어 행마다 늦추는데 여기는
+   *    delay 가 없어 늘 0 이었다. 그래서 **첫 행만 카드와 영상이 동시**에
+   *    뜨고, 둘째 행부터는 영상이 80 · 160 · 240ms 씩 먼저 떴다 —
+   *    *"영상이 먼저 생기고 그다음 3D 렌더링이 생겨 … 둘이 같이 생겨야"*.
+   *    부르는 쪽에서 **카드와 같은 값**을 넘기면 나란히 뜬다.
+   * ⚠️ 기본 0 이라 다른 쪽(제품 상세 등)은 그대로다. */
+  delay?: number;
   /** 잘리는 자리. object-cover 는 **가운데로** 자르는데, 틀이 납작할수록
    *  위아래가 많이 깎인다.
    *
@@ -95,7 +106,7 @@ export default function ProductVideo({
   }, []);
 
   return (
-    <Reveal className={wrap}>
+    <Reveal delay={delay} className={wrap}>
       <div
         ref={ref}
         className={`relative overflow-hidden rounded-2xl bg-surface ${frame ?? "aspect-video lg:aspect-[3/1]"}`}
