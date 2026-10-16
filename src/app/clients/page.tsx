@@ -7,7 +7,14 @@ import { clients, totalClients } from "@/data/clients";
 
 export const metadata: Metadata = {
   title: "납품실적",
-  description: `LS산전, 린나이 코리아, 보령제약, 한국단자공업 등 ${totalClients}개사에 파츠피더를 납품해 온 유신 F.A 시스템의 주요 거래처입니다.`,
+  /* ⚠️⚠️ **2026-10-16 — 예시 회사를 갈았다.** 전에는 LS산전 · 린나이 코리아 ·
+     보령제약 · 한국단자공업 이었는데 **앞 셋이 목록에서 빠졌다**(USB 에
+     작업 기록이 없어 뺀 곳이다). 검색 결과에 나가는 글이라 **목록에 없는
+     회사를 적어 두면 안 된다.**
+     ⚠️ 지금 적은 넷은 **작업 건수가 가장 많은 곳**이다(대성 372건 · 크리온
+        219 · 3제이 205 · 아이비테크 148). 알려진 이름은 아니지만,
+        적어도 **근거가 있는 이름**이다. */
+  description: `대성, 크리온, 3제이, 아이비테크 등 ${totalClients}개사에 파츠피더를 납품해 온 유신 F.A 시스템의 주요 거래처입니다.`,
 };
 
 export default function ClientsPage() {
