@@ -32,8 +32,10 @@ import type { Client } from "@/data/clients";
  * **로고**: `logo` 가 있으면 이미지를, 없으면 이름을 그린다.
  * ⚠️ 섞이면 격자가 고르지 않아 보이므로 로고는 **높이를 맞추고**(폭 자유)
  *    **회색조로 한 단계 눌러** 글자 칸과 무게를 맞춘다. hover 에서 원색으로.
- * ⚠️ 지금은 로고가 하나도 없다 — USB 에 거래처 로고가 없고, 인터넷에서 받는
- *    것은 상표권과 「엉뚱한 회사」 위험이 있다(src/data/clients.ts 주석 참고).
+ * ⚠️ **2026-10-16 — 로고 여섯이 들어왔다**(clients.ts 의 `logos`).
+ * ⚠️ `max-w-full` 이 꼭 있어야 한다. MR인프라오토 로고는 **가로:세로가 8:1** 이라
+ *    높이만 48px 로 맞추면 폭이 390px 가 된다 — 390px 화면의 2열 칸(약 160px)을
+ *    **훌쩍 넘어 잘린다.** 폭을 먼저 맞추면 높이가 줄 뿐 다 보인다.
  *
  * 움직임을 끈 사람에게는 globals.css 가 곧바로 보여 준다.
  */
@@ -58,7 +60,7 @@ export default function ClientGrid({
         alt={name}
         width={160}
         height={48}
-        className="max-h-10 w-auto object-contain opacity-80 grayscale transition hover:opacity-100 hover:grayscale-0 sm:max-h-12"
+        className="max-h-10 w-auto max-w-full object-contain opacity-80 grayscale transition hover:opacity-100 hover:grayscale-0 sm:max-h-12"
       />
     ) : (
       <span className="text-sm font-medium leading-snug text-ink-soft sm:text-15">

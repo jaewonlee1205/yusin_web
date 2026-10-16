@@ -3,7 +3,7 @@ import ClientGrid from "@/components/ClientGrid";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
-import { clients, totalClients } from "@/data/clients";
+import { clients } from "@/data/clients";
 
 export const metadata: Metadata = {
   title: "납품실적",
@@ -14,7 +14,13 @@ export const metadata: Metadata = {
      ⚠️ 지금 적은 넷은 **작업 건수가 가장 많은 곳**이다(대성 372건 · 크리온
         219 · 3제이 205 · 아이비테크 148). 알려진 이름은 아니지만,
         적어도 **근거가 있는 이름**이다. */
-  description: `대성, 크리온, 3제이, 아이비테크 등 ${totalClients}개사에 파츠피더를 납품해 온 유신 F.A 시스템의 주요 거래처입니다.`,
+  /* ⚠️⚠️ **2026-10-16 — 숫자를 뺐다.** 유신에게서 *"문구에서 숫자는 뺄거야"* 를
+     받았다. 전에는 `${totalClients}개사` 를 꽂아 두어 거래처가 늘거나 줄 때마다
+     문장을 다시 봐야 했다. 이름 넷은 **작업 건수가 가장 많은 곳**으로 남긴다
+     (대성 372건 · 크리온 219 · 3제이 205 · 아이비테크 148) — 검색 결과에 나가는
+     글이라 **근거 있는 이름**이어야 한다. */
+  description:
+    "대성, 크리온, 3제이, 아이비테크를 비롯한 거래처에 파츠피더를 납품해 온 유신 F.A 시스템의 주요 거래처입니다.",
 };
 
 export default function ClientsPage() {
@@ -46,7 +52,15 @@ export default function ClientsPage() {
 
           clients.ts 의 clientIndustries 데이터는 남아 있다(미아라는 경고를
           그쪽에 적어 뒀다). */}
-      <Section eyebrow="ALL CLIENTS" title={`주요 거래처 ${totalClients}개사`}>
+      {/* ⚠️⚠️ **2026-10-16 — 제목에서 숫자를 뺐다.** 유신에게서
+          *"문구에서 숫자는 뺄거야"* 와 함께 틀을 받았다 —
+          *"누리디에스엠(주)은 긍정적인 파트너십을 구축하여 협력합니다."*
+          전에는 `주요 거래처 ${totalClients}개사` 였다. 숫자를 넣으면
+          **거래처가 늘 때마다 제목이 따라 움직인다.** 지금 문장은 그렇지 않다. */}
+      <Section
+        eyebrow="ALL CLIENTS"
+        title="유신 F.A 시스템은 긍정적인 파트너십을 구축하여 협력합니다"
+      >
         <ClientGrid names={clients} />
       </Section>
 
