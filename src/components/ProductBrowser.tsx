@@ -22,8 +22,15 @@ type Filter = "전체" | ProductCategory;
 
 const FILTERS: Filter[] = ["전체", ...CATEGORIES];
 
-const countOf = (f: Filter) =>
-  f === "전체" ? products.length : products.filter((p) => p.category === f).length;
+/* ⚠️⚠️ **2026-10-16 — 분류마다 붙어 있던 개수를 전부 뺐다.** 유신에게서
+   *"제품에서 숫자 빼자 7개 / 7 / 1 이거 등 여기에 숫자는 빠져도 될 거 같아"* 를
+   받았다. 맞는 말이다 — 제품이 **일곱 종**이라 분류마다 1 이 붙어 있었고,
+   **세는 데 뜻이 없는 숫자**가 화면을 어지럽혔다.
+   그래서 `countOf` 를 지웠다. 되살리려면 —
+     const countOf = (f: Filter) =>
+       f === "전체" ? products.length : products.filter((p) => p.category === f).length;
+   ⚠️ 되살릴 일이 생기면 **제품이 몇 종인지부터 보라.** 분류 수와 제품 수가
+      비슷하면 숫자는 전부 1 이 되어 아무것도 알려 주지 않는다. */
 
 /** 사이드바가 붙는 높이(lg:top-24)와 같은 값. 헤더(81px)를 15px 띄운다. */
 const STICK_TOP = 96;
@@ -107,20 +114,15 @@ export default function ProductBrowser() {
                     type="button"
                     aria-pressed={active}
                     onClick={() => pick(f)}
-                    className={`flex w-full items-center justify-between gap-2 px-5 py-3 text-left text-sm transition-colors ${
+                    /* ⚠️ 개수를 빼면서 `justify-between` 도 함께 뺐다 —
+                       오른쪽에 밀어 놓을 것이 없어졌다. */
+                    className={`flex w-full items-center gap-2 px-5 py-3 text-left text-sm transition-colors ${
                       active
                         ? "bg-surface font-bold text-brand"
                         : "font-medium text-ink-soft hover:bg-surface hover:text-ink"
                     }`}
                   >
                     {f}
-                    <span
-                      className={`text-xs tabular-nums ${
-                        active ? "text-brand" : "text-muted"
-                      }`}
-                    >
-                      {countOf(f)}
-                    </span>
                   </button>
                 </li>
               );
@@ -213,13 +215,6 @@ export default function ProductBrowser() {
                 }`}
               >
                 {f}
-                <span
-                  className={`ml-1.5 text-xs tabular-nums ${
-                    active ? "text-white/60" : "text-muted"
-                  }`}
-                >
-                  {countOf(f)}
-                </span>
               </button>
             );
           })}
@@ -231,17 +226,17 @@ export default function ProductBrowser() {
             윗변이 사이드바 카드 윗변보다 40px 아래라, 두 열의 윗부분이
             어긋나 보였다.
 
-            왼쪽에 고른 분류를 적는다. 숫자만 있으면 지금 무엇을 보고 있는지
-            알 수 없고, 분류를 바꿔도 7 -> 1 처럼 수만 바뀐다. */}
-        <div className="mt-6 flex h-[45px] items-center justify-between border-b border-line lg:mt-0">
+            왼쪽에 고른 분류를 적는다.
+
+            ⚠️⚠️ **2026-10-16 — 오른쪽의 「N개」를 뺐다.** 전에는 이 주석이
+               *"숫자만 있으면 지금 무엇을 보고 있는지 알 수 없고, 분류를 바꿔도
+               7 → 1 처럼 수만 바뀐다"* 고 적어 두었는데 — **그 말이 숫자를
+               빼야 할 이유였다.** 제품이 일곱 종이라 분류를 고르면 거의 늘 1 이
+               뜬다. 유신이 *"숫자 빼자"* 라고 짚었다.
+               이제 **이름만** 남아 지금 무엇을 보고 있는지가 분명하다. */}
+        <div className="mt-6 flex h-[45px] items-center border-b border-line lg:mt-0">
           <p className="text-sm font-bold text-ink">
             {filter === "전체" ? "전체 제품" : filter}
-          </p>
-          <p className="text-sm text-ink-soft">
-            <span className="font-bold tabular-nums text-ink">
-              {visible.length}
-            </span>
-            개
           </p>
         </div>
 

@@ -1,55 +1,63 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { Work } from "@/data/works";
 
 /**
- * 납품 설비 사진 — 격자와 크게보기.
+ * 납품 설비 사진 — 격자 · 분류 버튼 · 크게보기.
  *
- * ⚠️⚠️ **격자까지 이 안에 들어 있다.** 처음에는 격자(서버)와 크게보기(클라이언트)를
- *    가르려 했는데, 칸을 누르면 열리는 구조라 **칸 자체가 클라이언트여야 한다.**
- *    가르면 서버 격자가 클라이언트 칸을 감싸는 꼴이 되어 얻는 것이 없다.
- *    ⚠️ 그래서 **`works.ts` 만 서버에서 넘겨받는다** — 31장 목록은 번들이 아니라
- *       페이지 HTML 로 간다.
+ * ⚠️⚠️ **격자까지 이 안에 들어 있다.** 칸을 누르면 열리는 구조라 **칸 자체가
+ *    클라이언트여야 한다.** 서버 격자가 클라이언트 칸을 감싸 봐야 얻는 것이 없다.
+ *    목록은 `works.ts` 에서 넘겨받으므로 번들이 아니라 페이지 HTML 로 간다.
  *
- * ⚠️ 사진은 **두 벌**이다(`works.ts` 주석 참고). 격자는 `src`(1000px),
- *    크게보기는 `full`(1800px). **열 때만** 큰 것을 받는다 —
- *    `output: "export"` 라 Next.js 가 리사이즈해 주지 않기 때문이다.
+ * ⚠️ 사진은 **두 벌**이다(`works.ts` 주석). 격자는 `src`(1000px), 크게보기는
+ *    `full`(1600px). **열 때만** 큰 것을 받는다 — `output: "export"` 라
+ *    Next.js 가 리사이즈해 주지 않기 때문이다.
  *
- * ⚠️ 자막 띠는 `ProductVideo` 의 것과 **같은 값**을 쓴다
+ * ⚠️ 자막 띠는 `ProductVideo` 와 **같은 값**을 쓴다
  *    (`from-dark/85 via-dark/40 to-transparent`). 사이트 안에서 사진과 영상이
  *    같은 말투여야 한다.
  */
 export default function PhotoLightbox({
   items,
+  kinds,
   className = "",
 }: {
   items: Work[];
+  /** 분류 버튼에 쓸 기종. 안 주면 버튼을 내지 않는다(홈). */
+  kinds?: string[];
   className?: string;
 }) {
+  const [filter, setFilter] = useState<string | null>(null);
   const [open, setOpen] = useState<number | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const openerRef = useRef<HTMLButtonElement | null>(null);
 
-  /* ⚠️⚠️ **크게보기는 포털로 `body` 에 붙인다.** 처음에는 그냥 `fixed z-50` 으로
-     두었는데 **헤더가 그 위에 떴다.** 헤더도 `z-50` 이고 `sticky` 라 **자기
-     쌓임 맥락**을 만드는데, 크게보기는 Section 안에 있어 **그 맥락에 갇힌다** —
-     z-index 를 아무리 올려도 밖으로 못 나간다.
+  /* ⚠️ 거르는 법은 **포함**이다 — 「볼피더」를 누르면 ["볼피더","직진피더"] 도
+     나와야 한다. 한 틀에 둘이 올라간 설비를 볼피더에서 빼면 안 된다. */
+  const shown = useMemo(
+    () => (filter ? items.filter((w) => w.kinds.includes(filter)) : items),
+    [items, filter],
+  );
+
+  /* ⚠️⚠️ **크게보기는 포털로 `body` 에 붙인다.** 그냥 `fixed` 로 두면 **헤더가
+     그 위에 뜬다.** 헤더도 `z-50` 이고 `sticky` 라 자기 쌓임 맥락을 만드는데,
+     크게보기는 Section 안에 있어 **그 맥락에 갇힌다** — z-index 를 아무리
+     올려도 밖으로 못 나간다.
      ⚠️ 포털은 서버에서 렌더할 수 없으므로 **마운트된 뒤에만** 쓴다. */
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
   const close = useCallback(() => {
     setOpen(null);
-    // 열었던 칸으로 포커스를 돌려준다 — 키보드로 보던 사람이 길을 잃지 않게
     openerRef.current?.focus();
   }, []);
 
   const move = useCallback(
-    (d: number) => setOpen((i) => (i === null ? null : (i + d + items.length) % items.length)),
-    [items.length],
+    (d: number) => setOpen((i) => (i === null ? null : (i + d + shown.length) % shown.length)),
+    [shown.length],
   );
 
   useEffect(() => {
@@ -60,7 +68,6 @@ export default function PhotoLightbox({
       else if (e.key === "ArrowRight") move(1);
       else if (e.key === "ArrowLeft") move(-1);
       else if (e.key === "Tab") {
-        // 포커스를 가둔다
         const f = dialogRef.current?.querySelectorAll<HTMLElement>("button");
         if (!f?.length) return;
         const first = f[0];
@@ -76,10 +83,8 @@ export default function PhotoLightbox({
     };
     document.addEventListener("keydown", onKey);
 
-    /* ⚠️ 배경 스크롤을 잠근다. 안 잠그면 크게 띄워 둔 채 뒤가 움직여
-       닫았을 때 엉뚱한 자리에 서 있게 된다.
-       ⚠️ 스크롤막대가 사라지며 폭이 바뀌어 **내용이 옆으로 튀는 것**을
-          padding 으로 막는다. */
+    /* ⚠️ 배경 스크롤을 잠근다. 스크롤막대가 사라지며 폭이 바뀌어 **내용이 옆으로
+       튀는 것**은 padding 으로 막는다. */
     const gap = window.innerWidth - document.documentElement.clientWidth;
     const prev = document.body.style.cssText;
     document.body.style.overflow = "hidden";
@@ -93,14 +98,49 @@ export default function PhotoLightbox({
     };
   }, [open, close, move]);
 
-  const cur = open === null ? null : items[open];
+  const cur = open === null ? null : shown[open];
+
+  /* 크게보기의 단추들. ⚠️ 앞 판은 `bg-white/10` 원이었는데 유신이
+     *"화살표 버튼 x 버튼 흐리게 처리된 것 등 … 너무 촌스러워서 토스 스타일처럼
+     미니멀하고 깔끔하게"* 라고 했다. **배경을 걷고 선만** 남긴다 —
+     평소 white/50, hover 에서 흰색. 누를 자리는 44px 로 그대로 둔다. */
+  const ICON =
+    "grid h-11 w-11 place-items-center rounded-full text-white/50 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/60";
 
   return (
     <>
+      {kinds && kinds.length > 1 && (
+        /* ⚠️ 생김새를 `ProductBrowser` 의 칩과 맞춘다 — 사이트 안에서 같은
+           장치는 같게 보여야 한다. ⚠️ **숫자는 넣지 않는다**(제품 쪽에서도 뺐다). */
+        <div className="mb-5 flex flex-wrap gap-2 sm:mb-6">
+          {[null, ...kinds].map((k) => {
+            const active = filter === k;
+            return (
+              <button
+                key={k ?? "전체"}
+                type="button"
+                aria-pressed={active}
+                onClick={() => {
+                  setFilter(k);
+                  setOpen(null);
+                }}
+                className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors sm:px-5 sm:py-2.5 ${
+                  active
+                    ? "border-brand bg-brand text-white"
+                    : "border-line bg-white text-ink-soft hover:border-dark-soft/40 hover:text-ink"
+                }`}
+              >
+                {k ?? "전체"}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       <ul
         className={`grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-2.5 lg:grid-cols-4 ${className}`}
       >
-        {items.map((w, i) => (
+        {shown.map((w, i) => (
           <li key={w.src}>
             <button
               type="button"
@@ -120,10 +160,9 @@ export default function PhotoLightbox({
                 sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               />
-              {/* 자막 — ProductVideo 와 같은 그라데이션·같은 글자 크기 */}
               <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-dark/85 via-dark/40 to-transparent px-3 pb-2.5 pt-8 text-left sm:px-4 sm:pb-3 sm:pt-10">
                 <span className="block text-13 font-medium leading-relaxed text-white sm:text-sm">
-                  {w.kind}
+                  {w.kinds.join(" + ")}
                 </span>
               </span>
             </button>
@@ -138,29 +177,27 @@ export default function PhotoLightbox({
           aria-modal="true"
           aria-label={cur.alt}
           onClick={close}
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-dark/95 p-4 sm:p-8"
+          /* ⚠️ 배경을 **거의 검정**으로 깐다. 사진 말고는 볼 것이 없어야 한다.
+             ⚠️ 여는 전환은 **페이드 + 아주 작은 확대**다. 세로 이동은 쓰지
+                않는다 — 스크롤 리빌에서 걷어낸 그 움직임이다.
+                globals.css 의 prefers-reduced-motion 이 함께 꺼 준다. */
+          className="lightbox fixed inset-0 z-[60] flex flex-col items-center justify-center bg-[#07090c]/[0.97] p-4 backdrop-blur-sm sm:p-10"
         >
-          {/* 닫기 — 오른쪽 위 */}
-          <button
-            type="button"
-            onClick={close}
-            aria-label="닫기"
-            className="absolute right-3 top-3 z-10 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white sm:right-5 sm:top-5"
-          >
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden>
+          <button type="button" onClick={close} aria-label="닫기" className={`${ICON} absolute right-3 top-3 z-10 sm:right-6 sm:top-6`}>
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={1.5} aria-hidden>
               <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
             </svg>
           </button>
 
-          {items.length > 1 && (
+          {shown.length > 1 && (
             <>
               <button
                 type="button"
                 onClick={(e) => { e.stopPropagation(); move(-1); }}
                 aria-label="이전 사진"
-                className="absolute left-2 z-10 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white sm:left-5"
+                className={`${ICON} absolute left-1 z-10 sm:left-6`}
               >
-                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden>
+                <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={1.5} aria-hidden>
                   <path d="M15 5l-7 7 7 7" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
@@ -168,34 +205,33 @@ export default function PhotoLightbox({
                 type="button"
                 onClick={(e) => { e.stopPropagation(); move(1); }}
                 aria-label="다음 사진"
-                className="absolute right-2 z-10 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white sm:right-5"
+                className={`${ICON} absolute right-1 z-10 sm:right-6`}
               >
-                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden>
+                <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={1.5} aria-hidden>
                   <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
             </>
           )}
 
-          {/* 사진 — 배경을 눌러 닫으므로 여기서는 전파를 막는다 */}
-          <figure
-            onClick={(e) => e.stopPropagation()}
-            className="relative max-h-full w-full max-w-5xl"
-          >
+          <figure onClick={(e) => e.stopPropagation()} className="flex max-h-full w-full max-w-5xl flex-col items-center">
             <Image
               key={cur.full}
               src={cur.full}
               alt={cur.alt}
-              width={1800}
-              height={1200}
+              width={1600}
+              height={1067}
               sizes="(min-width: 1024px) 64rem, 100vw"
-              className="h-auto max-h-[78vh] w-full rounded-xl object-contain"
+              className="h-auto max-h-[78vh] w-auto max-w-full rounded-lg object-contain"
               priority
             />
-            <figcaption className="mt-3 flex items-center justify-between gap-4 text-13 text-white/80 sm:text-sm">
-              <span className="font-medium text-white">{cur.kind}</span>
-              <span className="tabular-nums text-white/60">
-                {open! + 1} / {items.length}
+            {/* ⚠️ 캡션을 **아래 가운데 한 줄**로 모은다. 앞 판은 양 끝으로
+                벌어져 있어 눈이 두 번 움직였다. 기종을 앞, 번호를 뒤에 연하게. */}
+            <figcaption className="mt-4 flex items-center gap-2.5 text-13 sm:text-sm">
+              <span className="font-medium text-white/90">{cur.kinds.join(" + ")}</span>
+              <span className="text-white/25" aria-hidden>·</span>
+              <span className="tabular-nums text-white/45">
+                {open! + 1} / {shown.length}
               </span>
             </figcaption>
           </figure>

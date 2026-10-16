@@ -3,7 +3,7 @@ import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import PhotoLightbox from "@/components/PhotoLightbox";
 import Section from "@/components/Section";
-import { works } from "@/data/works";
+import { workKinds, works } from "@/data/works";
 
 export const metadata: Metadata = {
   title: "납품실적",
@@ -64,7 +64,7 @@ export default function ClientsPage() {
              칸마다 관찰자를 걸면 *"빨리 스크롤 내리면 늦게 나와 기달려야"* 가
              되살아난다 — ClientGrid 에서 이미 겪은 일이다. */}
       <Section eyebrow="WORKS" title="납품 설비">
-        <PhotoLightbox items={works} />
+        <PhotoLightbox items={works} kinds={workKinds} />
       </Section>
 
       <ContactCTA />

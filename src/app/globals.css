@@ -408,6 +408,28 @@ body {
 }
 
 /*
+  크게보기(PhotoLightbox)가 열릴 때. 유신이 *"토스 스타일처럼 미니멀하고
+  깔끔하게"* 를 요청해 **페이드 + 아주 작은 확대**만 쓴다.
+
+  ⚠️ **세로 이동은 쓰지 않는다.** 바로 위 .reveal 에서 걷어낸 그 움직임이다.
+  ⚠️ 아래 prefers-reduced-motion 블록이 이것도 함께 꺼 준다.
+*/
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.lightbox {
+  animation: lightbox-in 0.2s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/*
   대표이사 서명의 붓글씨. 인쇄체 이름이 먼저 뜨고 한 박자 뒤 들어온다 —
   서명하는 순간처럼 보이게. 부모 Reveal 이 is-visible 을 받으면 시작한다.
   JS 가 막힌 경우는 layout.tsx 의 <noscript> 가 되살린다.
@@ -585,7 +607,8 @@ body {
   .rise-zoom,
   .reveal,
   .sign-ink,
-  .org-node {
+  .org-node,
+  .lightbox {
     opacity: 1 !important;
     transform: none !important;
   }
