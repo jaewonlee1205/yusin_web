@@ -232,22 +232,89 @@ export default function PhotoLightbox({
     document.body.style.overflow = "hidden";
     if (gap > 0) document.body.style.paddingRight = `${gap}px`;
 
-    dialogRef.current?.querySelector("button")?.focus();
-
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.cssText = prev;
     };
   }, [open, close, move]);
 
+  /* ⚠️⚠️⚠️ **첫 포커스는 열 때 한 번만 준다**(2026-10-19). 위 effect 의
+     deps 에 `open` 이 있어 **사진을 넘길 때마다** 이 줄이 다시 돌았다 —
+     「다음 사진」을 마우스로 누르면 포커스가 **닫기 버튼으로 끌려가고**, 거기서
+     Enter/Space 를 치면 **크게보기가 닫힌다.** 재현해서 확인했다.
+     유신이 말한 *"잘못 눌러가지고 … x 처리 되서 뒤로 가지다"* 의 키보드
+     경로가 이것이다.
+     ⚠️ 그래서 effect 를 갈랐다. deps 는 `open` 하나지만 **null → 값**
+        전이에서만 일한다(ref 로 가린다). 닫히면 ref 를 되돌려 다음에 다시
+        열 때 또 준다. 포커스 복귀(openerRef)는 close 안에 그대로 있다. */
+  const focused = useRef(false);
+  useEffect(() => {
+    if (open === null) {
+      focused.current = false;
+      return;
+    }
+    if (focused.current) return;
+    focused.current = true;
+    dialogRef.current?.querySelector("button")?.focus();
+  }, [open]);
+
   const cur = open === null ? null : shown[open];
 
   /* 크게보기의 단추들. ⚠️ 앞 판은 `bg-white/10` 원이었는데 유신이
      *"화살표 버튼 x 버튼 흐리게 처리된 것 등 … 너무 촌스러워서 토스 스타일처럼
      미니멀하고 깔끔하게"* 라고 했다. **배경을 걷고 선만** 남긴다 —
-     평소 white/50, hover 에서 흰색. 누를 자리는 44px 로 그대로 둔다. */
+     평소 white/50, hover 에서 흰색. 누를 자리는 44px 로 그대로 둔다.
+
+     ⚠️⚠️⚠️ **2026-10-19 — 선만 남기되, 굵고 밝고 넓게 고쳤다.** 유신이
+        *"오른쪽 왼쪽 화살표하고 위에 X 표시 같은 경우 시각적으로 잘 안보이고
+        특히 화살표 경우는 너무 작아서 잘못 눌러가지고 빈 화면 클릭하면 x 처리
+        되서 뒤로 가지다 보니깐 화살표 크기를 더 키우는게 UI 적으로 좋은거 같고"*
+        라고 했다. 찍어서 4배로 키워 보니 **넓은 검정 공백 한가운데 회색 꺾은선
+        두 획**이었다 — 1.5px 획에 흰색 50%다.
+
+        고친 것 넷 —
+          · 색 white/50 → **white/80**(hover 흰색)
+          · 획 strokeWidth 1.5 → **2**
+          · 아이콘 화살표 24 → **28/32px**, X 20 → **24/28px**
+          · 누를 자리 44x44 → 화살표는 **세로로 긴 56x80(sm 64x112)**,
+            X 는 **48(sm 56)**
+
+        ⚠️ **화살표를 세로로 길게 한 것이 "잘못 눌러" 에 대한 답이다.**
+           44x44 둘레가 전부 배경이고 배경 클릭은 닫기라, 세로로 몇십 픽셀만
+           빗나가도 창이 닫혔다. 112px 높이면 그 사고가 거의 사라진다.
+           **배경 클릭 = 닫기는 그대로 둔다** — 표준 동작이고, 없애면 닫는 길이
+           X 하나뿐이 된다. 유신이 불평한 것은 "잘못 눌러" 이지 닫기가 아니다.
+        ⚠️⚠️ **배경 원은 되살리지 않는다.** 위 주석의 "촌스럽다" 가 바로 그것이다.
+           hover 의 `bg-white/10` 도 **걷었다** — 길쭉해진 버튼에 반투명 판이
+           뜨면 그 원이 더 큰 꼴로 돌아온다.
+        ⚠️ **drop-shadow 를 한 겹 깐다.** 390 에서는 화살표가 사진 위에 겹치는데,
+           밝은 사진이면 흰 선이 묻힌다. 원을 깔지 않고 대비를 얻는 길이다.
+        ⚠️ 세로 자리를 `top-1/2 -translate-y-1/2` 로 **명시**했다. 다만
+           **보이는 자리는 하나도 안 바뀐다**(450 → 450) — 전에도 top 이
+           없어 정적 위치로 화면 중앙에 섰다. 뜻이 분명해진 것뿐이다.
+           ⚠️ 사진 중심은 화면 중심보다 **27px 위**다. figure 가 사진과 캡션
+              배지를 **함께** 세로 가운데 두기 때문이다(배지 블록 53px 의
+              절반). 보정하지 않는다 — 보정값이 배지 높이에 묶여, 배지를
+              손댈 때마다 다시 재야 하는 숨은 결합이 생긴다. 버튼이 112px 라
+              27px 은 버튼 안에 묻힌다.
+
+        ⚠️⚠️⚠️ **눌림 반응이 없었다.** README 의 「움직임」이 *"누름 반응이
+           모든 버튼에 있습니다 — 아이콘 버튼 0.95. **터치에는 hover 가
+           없으므로 새 버튼을 만들면 반드시 넣으세요**"* 라고 적어 뒀는데
+           이 셋만 빠져 있었다. 즉 **폰에서 화살표를 눌러도 아무 신호가 없었다** —
+           hover 는 터치에 안 듣고 scale 도 없었다. 비슷한 사진이 이어지면
+           "안 눌렸나? 잘못 눌렀나?" 가 된다. 유신이 말한 *"잘못 눌러"* 의
+           절반이 여기 있다고 본다. `active:scale-95` 를 넣었다.
+           ⚠️ `transition-colors` → `transition` 도 함께다. 색만 전환하면
+              scale 이 딱딱 끊긴다(README 가 같은 말을 적어 뒀고
+              ContactCTA 가 한동안 그랬다).
+        ⚠️ `focus-visible:outline-none` 을 걷었다 — **죽은 코드였다.**
+           globals.css 의 전역 :focus-visible 은 **캐스케이드 레이어 밖**이라
+           레이어 안의 Tailwind 유틸리티를 무조건 이긴다(그 파일 608~612줄이
+           같은 함정을 적어 뒀다). 그래서 포커스 테두리는 지금도 brand 빨강
+           2px 이고 앞으로도 그렇다. 거의 검정인 배경 위라 잘 보인다. */
   const ICON =
-    "grid h-11 w-11 place-items-center rounded-full text-white/50 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/60";
+    "grid place-items-center text-white/80 drop-shadow-[0_1px_3px_rgba(0,0,0,0.75)] transition hover:text-white active:scale-95 focus-visible:ring-1 focus-visible:ring-white/60";
 
   return (
     <>
@@ -426,15 +493,32 @@ export default function PhotoLightbox({
           role="dialog"
           aria-modal="true"
           aria-label={cur.alt}
-          onClick={close}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) close();
+          }}
           /* ⚠️ 배경을 **거의 검정**으로 깐다. 사진 말고는 볼 것이 없어야 한다.
              ⚠️ 여는 전환은 **페이드 + 아주 작은 확대**다. 세로 이동은 쓰지
                 않는다 — 스크롤 리빌에서 걷어낸 그 움직임이다.
                 globals.css 의 prefers-reduced-motion 이 함께 꺼 준다. */
+          /* ⚠️⚠️ **배경을 눌렀을 때만 닫는다**(2026-10-19). 전에는
+             `onClick={close}` 라 **여기까지 버블링된 모든 클릭**이 닫았다 —
+             사진 위에서 눌러 배경에서 손을 떼는 **드래그**도 공통 조상인
+             이 div 에서 click 이 나 닫혔다. target 검사 한 줄이면 막힌다.
+             ⚠️ figure(아래)와 화살표의 stopPropagation 은 **그대로 둔다.**
+                이제는 없어도 되지만, 둘 중 하나만 믿는 것보다 둘 다 두는 쪽이
+                앞으로 구조가 바뀌어도 안전하다. */
           className="lightbox fixed inset-0 z-[60] flex flex-col items-center justify-center bg-[#07090c]/[0.97] p-4 backdrop-blur-sm sm:p-10"
         >
-          <button type="button" onClick={close} aria-label="닫기" className={`${ICON} absolute right-3 top-3 z-10 sm:right-6 sm:top-6`}>
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={1.5} aria-hidden>
+          <button
+            type="button"
+            onClick={close}
+            aria-label="닫기"
+            className={`${ICON} absolute right-2 top-2 z-10 h-12 w-12 rounded-full sm:right-6 sm:top-6 sm:h-14 sm:w-14`}
+          >
+            {/* 20 → 24px, 굵기 1.5 → 2.5. README 「아이콘」의 크기 다섯 단계
+                (11 · 14 · 16 · 20 · 24)와 굵기 2.5 에 맞췄다 — 여기 1.5 가
+                그 문서에 없던 예외였다. */}
+            <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={2.5} aria-hidden>
               <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
             </svg>
           </button>
@@ -445,9 +529,13 @@ export default function PhotoLightbox({
                 type="button"
                 onClick={(e) => { e.stopPropagation(); move(-1); }}
                 aria-label="이전 사진"
-                className={`${ICON} absolute left-1 z-10 sm:left-6`}
+                className={`${ICON} absolute left-2 top-1/2 z-10 h-20 w-14 -translate-y-1/2 rounded-2xl sm:left-6 sm:h-28 sm:w-16`}
               >
-                <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={1.5} aria-hidden>
+                {/* ⚠️ 28px 은 README 의 다섯 단계(11 · 14 · 16 · 20 · 24)
+                    **밖**이다. 유신이 *"화살표 크기를 더 키우는게 UI 적으로
+                    좋은거 같고"* 라고 콕 집어 말해 한 단계를 더 뒀다. X 는
+                    24px 로 스케일 안에 있다 — 화살표만 예외다. */}
+                <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth={2.5} aria-hidden>
                   <path d="M15 5l-7 7 7 7" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
@@ -455,9 +543,9 @@ export default function PhotoLightbox({
                 type="button"
                 onClick={(e) => { e.stopPropagation(); move(1); }}
                 aria-label="다음 사진"
-                className={`${ICON} absolute right-1 z-10 sm:right-6`}
+                className={`${ICON} absolute right-2 top-1/2 z-10 h-20 w-14 -translate-y-1/2 rounded-2xl sm:right-6 sm:h-28 sm:w-16`}
               >
-                <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={1.5} aria-hidden>
+                <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth={2.5} aria-hidden>
                   <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
