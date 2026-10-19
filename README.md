@@ -246,7 +246,7 @@ ffmpeg -ss 0 -i public/videos/performance.mp4 -frames:v 1   -c:v libwebp -qualit
 
 ### 제품 영상 미리보기 만들기
 
-홈 '제품 영상' 두 장은 **소리 없는 로컬 mp4**가 저절로 돕니다
+홈 '제품 영상' **네 장**은 **소리 없는 로컬 mp4**가 저절로 돕니다
 (`public/videos/preview-*.mp4`). 누르면 그때 유튜브로 바뀝니다.
 
 > ⚠️ 한때 유튜브 임베드에 `autoplay&mute&loop&controls=0` 을 걸어 미리보기를
@@ -259,6 +259,18 @@ ffmpeg -ss 14 -t 7 -i 더블유비.MP4   -an -c:v libx264 -profile:v main -pix_f
 
 # 볼 내부 선별 지그 (유튜브 KiiYXbIajog)
 ffmpeg -ss 53 -t 7 -i MAH05268.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 31 -preset slow -g 48 -movflags +faststart   -vf scale=1280:720 public/videos/preview-bowl-jig.mp4
+
+# 커넥터 부품 정렬 (유튜브 qbBMoY2g_WE) — 2026-10-19 추가
+ffmpeg -ss 82.2 -t 7.2 -i MAH07514.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 31 -preset slow -g 48 -movflags +faststart   -vf scale=1280:720 public/videos/preview-connector.mp4
+
+# 플라스틱 블록 정렬 (유튜브에 없는 홈 전용) — 2026-10-19 추가
+# 원본이 1440x1080 4:3 이라 crop 으로 16:9 를 먼저 뽑고, 60fps 를 30 으로 줄입니다.
+ffmpeg -ss 4.7 -t 7.4 -i 00093.MTS   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 31 -preset slow -g 48 -movflags +faststart   -vf "crop=1440:810:0:135,fps=30,scale=1280:720" public/videos/preview-white-blocks.mp4
+
+# 포스터 — 네 장 모두 **그 클립의 첫 프레임**이어야 합니다(아래 설명)
+for v in preview-metal-parts preview-bowl-jig preview-connector preview-white-blocks; do
+  ffmpeg -i public/videos/$v.mp4 -vf "select=eq(n,0)" -frames:v 1     -c:v libwebp -compression_level 6 -quality 85 public/images/videos/$v.webp
+done
 ```
 
 - **원본 촬영본은 저장소에 없습니다.** `yusin-web` 바로 위 폴더의
@@ -272,6 +284,15 @@ ffmpeg -ss 53 -t 7 -i MAH05268.MP4   -an -c:v libx264 -profile:v main -pix_fmt y
 - `-an` 무음 — 소리가 있으면 브라우저가 자동재생을 막습니다
 - 새로 만들면 `src/data/videos.ts` 의 `preview` 에 경로를 적습니다.
   **그 필드가 있는 영상만 홈에 올라갑니다**(`featuredVideos`)
+- **포스터는 그 클립의 첫 프레임**으로 굽고 `poster` 에 적습니다. 빠뜨리면
+  유튜브 썸네일로 떨어지는데, 같은 촬영본이라도 **다른 순간**이라 영상이
+  시작할 때 그림이 한 번 번쩍입니다(디졸브를 걷어 낸 뒤로 드러난 결입니다)
+- **자르는 지점을 눈대중으로 고르지 않습니다.** 끝 프레임이 첫 프레임으로
+  툭 돌아가므로 그 둘이 닮은 구간을 찾아야 합니다. 원본을 10fps·48×27
+  회색으로 훑어 `(i, j)` 쌍의 RMSE 를 전부 재고, 아무것도 안 움직이는 구간은
+  움직임 크기로 걸러 냅니다(빈 볼이 이음새 점수만 좋게 나옵니다). 네 장의
+  이음새 — 커넥터 **28.7** · 흰 블록 **38.6** · 볼 지그 72.6 · 금속 부품
+  **88.7**. 뒤의 둘은 눈대중으로 자른 옛 것이라 거칩니다
 
 **유튜브 영상 ↔ 원본 촬영본 대조표** (썸네일을 프레임과 맞춰 확인했습니다)
 
@@ -279,8 +300,14 @@ ffmpeg -ss 53 -t 7 -i MAH05268.MP4   -an -c:v libx264 -profile:v main -pix_fmt y
 |---|---|---|---|
 | `DzUOtS_O2ko` | 소형 부품 정렬 · 에어 선별 | **없음** (검정·연두 볼 + 에어 노즐 장면이 원본 넷에 없습니다) | — |
 | `_zG4dYTCWpc` | 금속 부품 정렬 | `더블유비.MP4` | ✅ |
-| `qbBMoY2g_WE` | 커넥터 부품 정렬 | `MAH07514.MP4` — 제품 상세 볼피더가 2026-10 까지 쓰던 촬영본입니다 | — |
+| `qbBMoY2g_WE` | 커넥터 부품 정렬 | `MAH07514.MP4` — 제품 상세 볼피더가 2026-10 까지 쓰던 촬영본입니다 | ✅ |
 | `KiiYXbIajog` | 볼 내부 선별 지그 | `MAH05268.MP4` | ✅ |
+| (없음) | 플라스틱 블록 정렬 | `00093.MTS` — 유튜브에 없는 **홈 전용** 한 편입니다 | ✅ |
+
+> ⚠️ 2026-10-19 — 한때 이 표가 `qbBMoY2g_WE` 를 "홈에 못 올린다(원본이
+> `hero.mp4` 와 같은 촬영본이라 같은 장면이 두 번 돈다)" 고 적었습니다.
+> **틀렸습니다.** 프레임을 뽑아 보니 `hero.mp4` 는 초록 볼 위 **파란 캡**,
+> `MAH07514` 는 초록 볼 위 **검정·흰 커넥터**입니다.
 
 ### 제품 사진 교체하기
 

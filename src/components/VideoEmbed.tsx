@@ -47,7 +47,18 @@ export default function VideoEmbed({
   const ref = useRef<HTMLDivElement>(null);
   const isPreview = preview && !!video.preview;
   const watchUrl = `https://www.youtube.com/watch?v=${video.id}`;
+  /** /videos 파사드가 쓰는 그림 — 누르면 유튜브가 뜨니 유튜브 썸네일이 맞다. */
   const poster = `/images/videos/${video.id}.webp`;
+  /**
+   * 홈 미리보기가 쓰는 그림. **그 클립의 첫 프레임**(videos.ts 의 poster).
+   *
+   * ⚠️ 유튜브 썸네일로 떨어지면 안 되는 자리다. 같은 촬영본이라도 **다른
+   *    순간**이라, 영상이 첫 프레임을 그리는 순간 그림이 바뀐다. 디졸브가
+   *    있던 동안은 그 바뀜이 페이드에 묻혔는데, 디졸브를 걷어 낸 뒤
+   *    (2b0c906) 는 그대로 번쩍임이 된다. 네 편 모두 poster 를 채워 두었다 —
+   *    ?? 갈래는 빠뜨렸을 때의 보험이지 쓰라고 둔 길이 아니다.
+   */
+  const previewPoster = video.poster ?? poster;
 
   // 한 번 들어오면 관찰을 끊는다 — 오르내릴 때마다 영상을 다시 받을 이유가
   // 없다.
@@ -100,7 +111,7 @@ export default function VideoEmbed({
         {/* 영상이 받아지는 동안 검은 칸이 보이지 않게 깔아 둔다. 아래
             <video> 가 숨겨지는 '움직임 줄이기' 설정에서도 이 그림이 남는다. */}
         <Image
-          src={poster}
+          src={previewPoster}
           alt=""
           fill
           sizes="(min-width: 640px) 50vw, 100vw"
@@ -112,11 +123,14 @@ export default function VideoEmbed({
           // prefers-reduced-motion 블록이 이 클래스를 display:none 으로
           // 숨긴다(히어로.PERFORMANCE 영상과 같은 처리다).
           //
-          // poster 가 위 Image 와 같은 파일이라 썸네일에서 영상으로 바뀌는
-          // 순간이 보이지 않는다.
+          // poster 가 위 Image 와 같은 파일이고, 그 파일이 **이 클립의 첫
+          // 프레임**이라 그림 → 영상으로 바뀌는 순간이 보이지 않는다.
+          // (한때 유튜브 썸네일을 썼다. 위 Image 와 같은 파일이기는 했지만
+          //  클립의 첫 프레임이 아니라, 영상이 첫 프레임을 그릴 때 한 번
+          //  번쩍였다 — previewPoster 주석 참고.)
           <video
             className="hero-video absolute inset-0 h-full w-full object-cover"
-            poster={poster}
+            poster={previewPoster}
             autoPlay
             muted
             loop

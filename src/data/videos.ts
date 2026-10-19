@@ -26,6 +26,8 @@
  *
  * 썸네일은 scripts/fetch-video-thumbs.mjs 가 public/images/videos/<id>.webp 로
  * 받아 둔다. 영상 ID를 늘리거나 바꾸면 `npm run video-thumbs` 를 다시 돌린다.
+ * ⚠️ 그 썸네일은 /videos 파사드용이다. 홈 미리보기의 포스터는 따로 굽는다
+ *    (아래 poster 주석).
  */
 export type Video = {
   id: string;
@@ -47,6 +49,23 @@ export type Video = {
    * 저장소에 없다(yusin-web 바로 위 폴더).
    */
   preview?: string;
+  /**
+   * 홈 미리보기의 첫 화면(public/images/videos/). **그 미리보기 mp4 의 첫
+   * 프레임**이어야 한다.
+   *
+   * 없으면 VideoEmbed 가 유튜브 썸네일로 떨어지는데, 그건 **다른 그림**이다 —
+   * 같은 촬영본이라도 다른 순간이라 영상이 뜨는 순간 그림이 **한 번 바뀐다**.
+   * 디졸브가 있던 동안은 그 바뀜이 페이드에 묻혔지만, 디졸브를 걷어 낸 뒤
+   * (2b0c906) 는 그대로 번쩍임으로 보인다.
+   *
+   * 굽는 법 — ffmpeg -i <미리보기> -vf "select=eq(n,0)" -frames:v 1
+   *           -c:v libwebp -compression_level 6 -quality 85 <포스터>
+   * 네 장 다 첫 프레임과 SSIM 0.990~0.991 로 맞춰 두었다.
+   *
+   * ⚠️ /videos 파사드는 이걸 쓰지 않는다 — 거기선 유튜브 썸네일이 맞다
+   *    (누르면 유튜브가 뜨니, 유튜브가 보여 줄 그림이어야 한다).
+   */
+  poster?: string;
 };
 
 export const videos: Video[] = [
@@ -62,33 +81,82 @@ export const videos: Video[] = [
     title: "금속 부품 정렬",
     note: "구멍 뚫린 판금 브래킷이 트랙을 타고 한 방향으로 올라갑니다.",
     preview: "/videos/preview-metal-parts.mp4",
+    poster: "/images/videos/preview-metal-parts.webp",
   },
   {
     id: "qbBMoY2g_WE",
     title: "커넥터 부품 정렬",
     note: "커넥터 하우징이 볼에서 트랙으로 올라서며 자세를 잡습니다.",
-    // 원본은 있다(MAH07514). 다만 그것이 hero.mp4 와 같은 촬영본이라, 홈에
-    // 올리면 바로 위 PERFORMANCE 영상과 같은 장면이 두 번 돈다.
+    preview: "/videos/preview-connector.mp4",
+    poster: "/images/videos/preview-connector.webp",
+    // ⚠️ 한때 여기에 "원본(MAH07514)이 hero.mp4 와 같은 촬영본이라 홈에 올리면
+    //    같은 장면이 두 번 돈다" 고 적혀 있었다. **틀렸다.** 두 영상에서 프레임을
+    //    뽑아 보니 hero.mp4 는 **초록 볼 위 파란 캡**이고 MAH07514 는 **초록 볼
+    //    위 검정·흰 커넥터**다. 유튜브 썸네일과도 맞는다. 그래서 홈에 올렸다.
+    //    잘라 쓴 구간은 82.2초부터 7.2초 — 아래 featuredVideos 주석의 이음새 표.
   },
   {
     id: "KiiYXbIajog",
     title: "볼 내부 선별 지그",
     note: "볼 안쪽에 세운 지그가 지나가는 부품의 자세를 가려냅니다.",
     preview: "/videos/preview-bowl-jig.mp4",
+    poster: "/images/videos/preview-bowl-jig.webp",
   },
 ];
 
 /**
- * 홈에 맛보기로 띄울 둘. 나머지는 /videos 에서 본다.
+ * 유튜브 영상이 아니라 **홈에만 서는 미리보기 한 편.**
+ *
+ * ⚠️ videos[] 에 넣지 말 것. id 가 유튜브 id 가 아니라 리액트 키 겸 파일
+ *    이름이라, videos[] 에 들어가면 /videos 가 열리지 않는 유튜브 파사드를
+ *    만든다(VideoEmbed 는 preview 가 없으면 id 로 유튜브를 건다).
+ *
+ * 왜 이것이 필요한가 — 유신이 홈 미리보기를 **넷**으로 늘려 달라 했는데
+ * 유튜브 영상은 넷이지만 그중 "소형 부품 정렬 · 에어 선별"(DzUOtS_O2ko)은
+ * 원본 촬영본을 못 찾아 미리보기를 못 만든다(위 주석). 그래서 넷째 칸을
+ * 유튜브에 없는 촬영본(00093.MTS)으로 채웠다.
+ *
+ * ⚠️ 부품 이름은 **눈에 보이는 대로만** 적었다 — 반투명 흰 플라스틱 블록이
+ *    강통 볼에서 나선 트랙을 타고 한 줄로 오른다. 품명을 모른다.
+ */
+const HOME_ONLY: Video[] = [
+  {
+    id: "white-blocks",
+    title: "플라스틱 블록 정렬",
+    note: "반투명 블록이 볼 벽을 따라 한 줄로 올라섭니다.",
+    preview: "/videos/preview-white-blocks.mp4",
+    poster: "/images/videos/preview-white-blocks.webp",
+  },
+];
+
+/**
+ * 홈에 맛보기로 띄울 **넷**. 나머지는 /videos 에서 본다.
  *
  * 한때 videos.slice(0, 2) 였다. 미리보기 파일이 있는 것만 고르도록 바꾼
  * 것은, 홈 두 장이 서로 다른 방식(하나는 영상이 돌고 하나는 멈춘 썸네일)
- * 으로 서면 나란히 둔 뜻이 없어지기 때문이다.
+ * 으로 서면 나란히 둔 뜻이 없어지기 때문이다. 그 규칙은 그대로 두고 수만
+ * 넷으로 늘렸다 — VideoCard 가 lg 부터 2열이니 2x2 로 선다.
  *
- * ⚠️ preview 가 둘 미만이면 홈 카드도 그만큼 줄어든다. 영상을 더하거나 뺄
- *    때 이 수를 본다.
+ * ⚠️ 지금 딱 넷이다(유튜브 셋 + 홈 전용 하나). 하나라도 빠지면 홈 격자의
+ *    마지막 줄이 한 칸만 남는다. 영상을 더하거나 뺄 때 이 수를 본다.
+ *
+ * ⚠️ 루프 이음새 — 미리보기는 끝에서 첫 프레임으로 **툭 돌아간다**(디졸브를
+ *    걷어 냈다, 2b0c906). 그 튐의 크기를 10fps·48x27 회색에서 첫·끝 프레임
+ *    RMSE 로 쟀다. 작을수록 매끄럽다 —
+ *
+ *      흰 블록(00093.MTS 4.7초+7.4초)      38.6
+ *      커넥터(MAH07514 82.2초+7.2초)       28.7
+ *      볼 지그(기존)                       72.6
+ *      금속 부품(기존)                     88.7
+ *
+ *    새로 자른 둘은 전수 탐색((i,j) 쌍 전부, 멈춘 구간은 움직임으로 걸러)으로
+ *    고른 값이다. 기존 둘이 두세 배 거친데, 다시 자르려면 원본에서 다시
+ *    뽑아야 한다(아직 안 했다).
  */
-export const featuredVideos = videos.filter((v) => v.preview).slice(0, 2);
+export const featuredVideos = [
+  ...videos.filter((v) => v.preview),
+  ...HOME_ONLY,
+].slice(0, 4);
 
 /* 채널 주소는 site.ts 의 site.youtube 로 옮겼다 — 푸터가 모든 페이지에
    걸게 되면서 영상 데이터가 아니라 회사 상수가 됐다. */
