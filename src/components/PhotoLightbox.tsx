@@ -485,12 +485,39 @@ export default function PhotoLightbox({
                    묶어** 길이가 변해도 흔들려 보이지 않으면서 눈도 한 번만
                    움직인다. 가운데 얇은 세로선이 둘을 가른다.
                 ⚠️ 번호 색을 white/40 → **white/70** 으로 올렸다 —
-                   *"글자가 너무 어두워서 잘 안보이네"*. */}
-            <figcaption className="mt-5">
-              <span className="inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/[0.07] px-4 py-1.5 text-13 backdrop-blur-sm sm:text-sm">
-                <span className="font-medium text-white/90">{cur.kinds.join(" · ")}</span>
-                <span className="h-3.5 w-px bg-white/20" aria-hidden />
-                <span className="tabular-nums text-white/70">
+                   *"글자가 너무 어두워서 잘 안보이네"*.
+                ⚠️⚠️⚠️ **2026-10-19 — 폭을 고정했다. 테두리만으로는 모자랐다.**
+                   바로 위에 *"테두리를 두르면 덩어리로 보여 길이가 달라도
+                   자리가 흔들리는 느낌이 없다"* 고 적어 뒀는데, 유신이 다시
+                   짚었다 — *"글자 크기에 따라 계속 크기가 커졌다 작아졌다 하는게
+                   max 크기로 맞춰서 이것좀 통일감 있게 … 서로 고정 되어서
+                   안움직이게"*. **그 판단이 틀렸다.** 재 보니 1440 에서 배지가
+                   **142.1 ~ 275.3px**(차 133.2px)로 들썩이고 가운데 구분선이
+                   **66.6px** 좌우로 움직였다. 테두리는 덩어리로 묶어 줄 뿐
+                   덩어리 자체가 커졌다 작아졌다 하는 것은 못 막는다.
+
+                   폭은 **글자를 재서** 정했다 — 최장 기종
+                   「호퍼피더 · 직진피더 · 표면처리」가 184.8px(14px 기준),
+                   최장 번호 「155 / 155」가 60px, 여백(px-4 32 + gap-3 둘 24 +
+                   구분선 1)이 57px → 합 **301.8px**. 그래서 **w-80(320px)** 이다.
+                   ⚠️ **번호 칸을 w-16(64px)으로 고정**하면 「1 / 16」(홈
+                      featuredWorks 열여섯 장)이든 「155 / 155」든 자리가 같고,
+                      배지 폭이 고정이라 **구분선 x 도 따라서 고정**된다.
+                      기종 칸은 남은 199px 를 flex-1 로 받는다(최장 184.8px).
+                   ⚠️ 기종 칸의 truncate 는 **넘칠 때만 쓰는 안전장치**다.
+                      크게보기는 글을 다 보여 주는 자리라 평소엔 잘리면 안 된다 —
+                      폭을 그렇게 잡았다. 격자 쪽 truncate 와 뜻이 다르다.
+                   ⚠️ 390 에서도 들어간다 — 뷰포트 390 − p-4 좌우 32 = 358px.
+                      max-w-full 로 한 번 더 막는다.
+                   ⚠️ 번호를 배지 밖으로 빼지 않는다. 위 주석의 *"아래 봤다 위에
+                      봤다 하면 불편"* 은 그대로 유효하다. */}
+            <figcaption className="mt-5 w-full">
+              <span className="mx-auto flex w-80 max-w-full items-center gap-3 rounded-full border border-white/15 bg-white/[0.07] px-4 py-1.5 text-13 backdrop-blur-sm sm:text-sm">
+                <span className="min-w-0 flex-1 truncate text-center font-medium text-white/90">
+                  {cur.kinds.join(" · ")}
+                </span>
+                <span className="h-3.5 w-px shrink-0 bg-white/20" aria-hidden />
+                <span className="w-16 shrink-0 text-center tabular-nums text-white/70">
                   {open! + 1} / {shown.length}
                 </span>
               </span>
