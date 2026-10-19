@@ -85,11 +85,33 @@ export default function VideoCard({
     );
   }
 
-  /* ── /videos: 제목 + 설명 두 단 ─────────────────────────────────── */
+  /* ── /videos: 기종 라벨 + 제목 두 단 ───────────────────────────── */
   //
-  // h-full 과 글 칸의 flex-1 이 카드 높이를 맞춘다. note 가 넓은 화면에서는
-  // 한 줄, 좁은 화면에서는 두 줄이 되는데(글상자가 486px 와 223px 로 두 배
-  // 차이다) 그래도 한 행 안에서 아랫변이 가지런하다.
+  // ⚠️⚠️ **2026-10-19 — 설명 줄(note)을 걷었다.** 유신이 *"이런 문구는
+  //    지우고"* 라고 했다. 글 칸이 세 단(기종 · 제목 · 설명)에서 **두 단**이
+  //    됐다.
+  //
+  // ⚠️ **영상 길이를 그 자리에 넣지 않았다.** 같은 말에 *"현재 영상 길이
+  //    어느정도인지 나오게"* 가 함께 있었는데, ffprobe 로 재 보니
+  //    public/videos 의 mp4 **열여섯 편이 전부 7초**다(README 의 ffmpeg
+  //    명령이 전부 -t 7 로 잘랐다). 로컬로 도는 여덟 칸에 붙이면 「7초」가
+  //    여덟 번 찍힌다. 유튜브 넷은 길이가 저장소에 없고 받아 올 길도 없다
+  //    (썸네일 스크립트는 이미지만 GET, oEmbed 는 duration 을 안 준다,
+  //    Data API 는 키가 필요하다). 그래서 유신에게 물어 **「길이는 접고
+  //    카드를 간결하게」** 를 골랐다.
+  //    videoKinds 주석이 분류마다 개수를 안 적는 까닭과 **같은 문제**다 —
+  //    열두 칸에 같은 값이 찍히면 아무것도 알려 주지 않는다.
+  //    ⚠️ 유튜브 넷의 길이를 유신에게서 받으면 그때 다시 본다(README 의
+  //       「받아야 할 자료」). 로컬 여덟은 원본을 다시 잘라야 뜻이 생긴다.
+  //
+  // h-full 과 글 칸의 flex-1 이 카드 높이를 맞춘다. flex-1 은 note 에 있던
+  // 것을 **제목으로 옮겼다** — 아랫변을 미는 것은 글 칸의 마지막 줄이어야
+  // 한다.
+  //
+  // ⚠️ 아래는 note 가 있던 때의 기록이다. 지우지 않는다 — 되살리면 다시
+  //    유효하다. 「note 가 넓은 화면에서는 한 줄, 좁은 화면에서는 두 줄이
+  //    되는데(글상자가 486px 와 223px 로 두 배 차이다) 그래도 한 행 안에서
+  //    아랫변이 가지런하다.」
   //
   // 홈 쪽은 글 칸이 없어 두 장이 순수 aspect-video 다 — 거기서는 높이가
   // 저절로 같아 이 장치가 필요 없다.
@@ -114,12 +136,17 @@ export default function VideoCard({
         <p className="text-xs font-bold tracking-[0.08em] text-brand">
           {video.kinds.join(" · ")}
         </p>
-        <p className="mt-2 text-15 font-bold leading-snug text-ink">
+        {/* ⚠️ flex-1 이 제목에 있다 — 아래 설명 줄을 걷으면서 옮겼다
+               (머리 주석). note **필드는 videos.ts 에 그대로 있다** —
+               홈 자막과 제품 상세가 계속 쓴다. 이 카드에서만 안 건다. */}
+        <p className="mt-2 flex-1 text-15 font-bold leading-snug text-ink">
           {video.title}
         </p>
-        <p className="mt-1.5 flex-1 text-13 leading-relaxed text-ink-soft">
-          {video.note}
-        </p>
+        {/* 2026-10-19 에 걷은 설명 줄. 되살리려면 이 세 줄을 되살리고
+            위 제목에서 flex-1 을 떼면 된다.
+            <p className="mt-1.5 flex-1 text-13 leading-relaxed text-ink-soft">
+              {video.note}
+            </p> */}
       </div>
     </div>
   );
