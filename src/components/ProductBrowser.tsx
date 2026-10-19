@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRef, useState } from "react";
 import ProductCard from "./ProductCard";
 import { CATEGORIES, products, type ProductCategory } from "@/data/products";
@@ -137,46 +136,28 @@ export default function ProductBrowser() {
           </ul>
         </nav>
 
-        {/* 사이드바는 354px 인데 격자는 1400px 가까이 된다. 붙어서 따라다니는
-            자리라, 스크롤 내내 왼쪽 아래가 비어 보였다. 그 자리를 전환으로
-            쓴다.
+        {/* ⚠️⚠️⚠️ **2026-10-19 — 「목록에 없는 부품인가요? / 제작 문의」 카드를
+            걷었다.** 유신이 *"이거는 삭제 하는게 나을거 같다"* 라고 했다.
 
-            빨강 버튼을 쓰지 않는다 — 페이지 맨 아래 ContactCTA 가 이미 빨강
-            버튼이고, 한 화면에 같은 세기의 유도가 둘이면 둘 다 약해진다.
-            여기는 dark-soft 글자 링크로 조용히 둔다.
+            ⚠️ **그래서 이 자리가 다시 빈다.** 카드가 여기 있던 까닭이 그
+               주석이었다 — *"사이드바는 354px 인데 격자는 1400px 가까이 된다.
+               붙어서 따라다니는 자리라, 스크롤 내내 왼쪽 아래가 비어 보였다.
+               그 자리를 전환으로 쓴다."* 걷으면 그 상태로 돌아간다.
+               문의로 가는 길은 **헤더 [견적 문의] · 쪽 맨 아래 ContactCTA ·
+               푸터** 셋이 그대로 맡는다.
 
-            문구는 배너 lead·ContactCTA·/contact lead 와 글자가 겹치지 않게
-            새로 썼다. 같은 말을 두 번 읽게 하지 않는다. */}
-        <div className="mt-4 rounded-2xl bg-white p-5 shadow-card">
-          <p className="text-sm font-bold leading-relaxed text-ink">
-            목록에 없는 부품인가요?
-          </p>
-          {/* 한때 여기에 "형태가 달라도 만듭니다. 샘플을 보고 정합니다." 두
-              줄이 있었다. 걷어 달라는 요청에 뺐다 — 제목 한 줄이 이미 같은
-              것을 묻고 있어 뜻이 줄지 않는다.
-
-              ⚠️ 글자 링크를 테두리 박스로 바꿨다. 설명이 빠지니 글자 링크
-                 하나만 남아 허전했다. **위 "빨강 버튼을 쓰지 않는다" 는 그대로
-                 유효하다** — 이 버튼은 dark-soft 테두리이고 바탕이 없다.
-
-                 색은 제품 상세의 "제품 목록" 버튼(border-dark-soft/30 … hover:
-                 border-dark-soft hover:bg-surface)에서 가져왔다. 사이트의 공통
-                 BTN 은 hover 가 brand 로 번져 여기 쓸 수 없다. */}
-          {/* ⚠️ 화살표가 없다. 테두리 박스로 바꾸던 라운드에 오른쪽 화살표를
-                 그대로 들고 왔는데(글자 링크 시절의 것이다) 걷어 달라는 요청에
-                 뺐다. 박스 자체가 이미 누를 곳임을 말하므로 화살표는 같은 말을
-                 두 번 하는 꼴이었다.
-
-                 group 과 gap-1.5 도 함께 걷었다 — group 은 화살표의
-                 group-hover:translate-x-1 하나만 쓰던 것이고, gap 은 자식이
-                 글자 하나뿐이면 할 일이 없다. justify-center 는 남긴다. */}
-          <Link
-            href="/contact/"
-            className="mt-4 flex items-center justify-center rounded-xl border border-dark-soft/30 px-4 py-2.5 text-13 font-semibold text-dark-soft transition hover:border-dark-soft hover:bg-surface active:scale-[0.98]"
-          >
-            제작 문의
-          </Link>
-        </div>
+            되살릴 때를 위해 그때의 판단을 남긴다 —
+              · **빨강 버튼을 쓰지 않았다.** 쪽 맨 아래 ContactCTA 가 이미
+                빨강이고, 한 화면에 같은 세기의 유도가 둘이면 둘 다 약해진다.
+                dark-soft 테두리에 바탕 없는 박스였다(색은 제품 상세의
+                "제품 목록" 버튼에서 가져왔다 — 공통 BTN 은 hover 가 brand 로
+                번져 여기 쓸 수 없었다).
+              · **화살표도 설명 두 줄도 이미 걷힌 뒤였다.** 박스 자체가 누를
+                곳임을 말하므로 화살표는 같은 말을 두 번 하는 꼴이었고,
+                제목 한 줄이 설명이 하던 질문을 그대로 하고 있었다.
+              · 문구는 배너 lead · ContactCTA · /contact lead 와 글자가
+                겹치지 않게 새로 쓴 것이었다.
+            마크업 전문은 git 에 있다. */}
       </aside>
 
       {/* min-w-0 — 없으면 플렉스 항목의 최소 폭이 내용 크기라 그리드가
