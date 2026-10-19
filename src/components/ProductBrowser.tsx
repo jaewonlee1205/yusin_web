@@ -86,7 +86,11 @@ export default function ProductBrowser() {
           aria-label="제품 분류"
           className="overflow-hidden rounded-2xl bg-white shadow-card"
         >
-          <p className="bg-dark-soft px-5 py-3.5 text-xs font-bold tracking-[0.08em] text-white">
+          {/* ⚠️ **가운데 정렬이다**(2026-10-19). 유신이 *"이거 왼쪽 정렬로
+                 되어 있는데 가운데 정렬로 하면 좋겠고"* 라고 했다. 제작사례의
+                 「기종」 거르개(PhotoLightbox)와 **같은 마크업**이라 둘을 함께
+                 바꿨다 — 한쪽만 바꾸면 같은 부품이 쪽마다 달라 보인다. */}
+          <p className="bg-dark-soft px-5 py-3.5 text-center text-xs font-bold tracking-[0.08em] text-white">
             제품 분류
           </p>
           <ul className="border-t border-line">
@@ -115,8 +119,11 @@ export default function ProductBrowser() {
                     aria-pressed={active}
                     onClick={() => pick(f)}
                     /* ⚠️ 개수를 빼면서 `justify-between` 도 함께 뺐다 —
-                       오른쪽에 밀어 놓을 것이 없어졌다. */
-                    className={`flex w-full items-center gap-2 px-5 py-3 text-left text-sm transition-colors ${
+                       오른쪽에 밀어 놓을 것이 없어졌다.
+                       ⚠️ 2026-10-19 에 **가운데 정렬**이 됐다(위 머리글 주석).
+                          `gap-2` 도 그때 걷었다 — 자식이 글자 하나뿐이라
+                          벌릴 것이 없고, 가운데 정렬에서는 더더욱 없다. */
+                    className={`flex w-full items-center justify-center px-5 py-3 text-center text-sm transition-colors ${
                       active
                         ? "bg-surface font-bold text-brand"
                         : "font-medium text-ink-soft hover:bg-surface hover:text-ink"
