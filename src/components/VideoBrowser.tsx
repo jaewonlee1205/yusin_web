@@ -2,7 +2,9 @@
 
 import { useMemo, useRef, useState } from "react";
 import VideoCard from "./VideoCard";
+import { YoutubeIcon } from "./icons";
 import { videoKinds, videoLibrary } from "@/data/videoLibrary";
+import { site } from "@/data/site";
 
 /**
  * /videos 의 영상 목록 — 옆 기종 거르개 + 격자.
@@ -116,6 +118,48 @@ export default function VideoBrowser() {
             })}
           </ul>
         </nav>
+
+        {/* ⚠️⚠️ **2026-10-19(2) — 「영상 더 보기」가 제목 줄에서 여기로 왔다.**
+            유신이 *"여기 밑에 스크롤 하면 똑같이 옆에 따라오는거 한개 만들어서
+            유튜브 채널로 이동 이런거로 해서 하는게 나을거 같은데"* 라고 했다.
+            전에는 videos 쪽 page 의 `Section action` 이었다 — 거기 적어 둔
+            까닭("위에 있으면 채널에 더 있다를 먼저 알리게 된다")은 **틀린
+            것이 아니라 밀렸다.** 거르개가 sticky 라 이 자리는 **스크롤 내내
+            따라오고**, 격자를 다 보고 나서도 손에 닿는다.
+
+            ⚠️ 마크업 뼈대는 `ProductBrowser` 에 있던 「목록에 없는
+               부품인가요? / 제작 문의」 카드다(08489d4 에서 걷혔다). 구조상
+               **정확히 같은 자리**라 가져다 폭만 맞췄다.
+
+            ⚠️ **빨강 채움을 쓰지 않는다.** 쪽 맨 아래 ContactCTA 가 이미
+               빨강이고, 한 화면에 같은 세기의 유도가 둘이면 둘 다 약해진다.
+               유튜브 아이콘만 text-brand 다 — 걷힌 버튼과 같은 꼴이다.
+            ⚠️ **화살표를 넣지 않는다.** 테두리 상자가 이미 누를 곳임을
+               말한다. 이 저장소에서 네 번 걷힌 장식이다.
+            ⚠️ **lg 미만에서는 안 보인다**(aside 가 hidden lg:block). 끊기지
+               않는다 — 유튜브 채널은 **푸터에 모든 쪽마다** 아이콘 버튼으로
+               걸려 있다(Footer.tsx).
+            ⚠️ 글자는 208px 폭에서 **재서 정했다.** 글칸이 168px(p-5),
+               버튼 글칸이 136px(+px-4)뿐이라 「유튜브 채널로 이동」 같은
+               긴 말은 두 줄이 된다. 글을 늘릴 때 다시 잰다. */}
+        <div className="mt-4 rounded-2xl bg-white p-5 shadow-card">
+          {/* ⚠️ text-center 다. 걷힌 「제작 문의」 카드는 왼쪽 정렬이었는데,
+                 그쪽 거르개는 글이 왼쪽에 붙는 목록이었다. 여기 기종 목록은
+                 **가운데 정렬**이라(바로 위 nav) 왼쪽에 붙이면 같은 폭 안에
+                 축이 둘이 된다. 찍어 보고 고쳤다. */}
+          <p className="text-center text-sm font-bold leading-relaxed text-ink">
+            유튜브에 더 있습니다
+          </p>
+          <a
+            href={site.youtube}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 flex items-center justify-center gap-2 rounded-xl border border-dark-soft/30 px-4 py-2.5 text-13 font-semibold text-dark-soft transition hover:border-dark-soft hover:bg-surface active:scale-[0.98]"
+          >
+            <YoutubeIcon className="shrink-0 text-brand" />
+            채널 보기
+          </a>
+        </div>
       </aside>
 
       {/* ⚠️⚠️ **[overflow-anchor:none] — 브라우저의 스크롤 보정을 끈다.**

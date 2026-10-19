@@ -3,8 +3,10 @@ import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import Section from "@/components/Section";
 import VideoBrowser from "@/components/VideoBrowser";
-import { YoutubeIcon } from "@/components/icons";
-import { site } from "@/data/site";
+/* ⚠️ 한때 여기에 `import { YoutubeIcon } from "@/components/icons";` 와
+   `import { site } from "@/data/site";` 가 있었다. 2026-10-19(2) 에
+   유튜브 버튼이 옆 거르개 아래로 옮겨 가면서 둘 다 쓸 데가 없어졌다 —
+   지금은 VideoBrowser 가 그 둘을 쓴다. 되살리려면 이 줄을 다시 쓴다. */
 
 export const metadata: Metadata = {
   title: "영상자료",
@@ -53,25 +55,18 @@ export default function VideosPage() {
 
           유튜브 버튼은 제목 줄 오른쪽에 둔다(Section 의 action). 격자 아래에
           혼자 있을 때는 눈에 걸리지 않았고, 위에 있으면 "채널에 더 있다" 를
-          먼저 알리게 된다. */}
-      <Section
-        eyebrow="IN OPERATION"
-        title="기종별 구동 영상"
-        action={
-          <a
-            href={site.youtube}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 rounded-xl border border-line bg-white px-5 py-3.5 text-sm font-semibold text-ink transition hover:border-brand/40 hover:text-brand active:scale-[0.98]"
-          >
-            {/* 글자에서 "유튜브" 를 뺐다. 왼쪽 아이콘이 이미 유튜브를
-                가리키므로 뜻이 흐려지지 않고, 제목 줄에 함께 서는 자리라
-                짧을수록 좋다. */}
-            <YoutubeIcon className="shrink-0 text-brand" />
-            영상 더 보기
-          </a>
-        }
-      >
+          먼저 알리게 된다.
+
+          ⚠️⚠️⚠️ **2026-10-19(2) — 그 버튼이 여기서 빠졌다.** 유신이
+             *"여기 밑에 스크롤 하면 똑같이 옆에 따라오는거 한개 만들어서
+             유튜브 채널로 이동 이런거로"* 라고 해서 **옆 거르개 아래**로
+             옮겼다(VideoBrowser 의 aside, 거기 내력이 있다). 위 문단은
+             틀린 것이 아니라 밀렸다 — 거르개가 sticky 라 새 자리는
+             **스크롤 내내 따라오고** 격자를 다 본 뒤에도 손에 닿는다.
+             ⚠️ 이로써 `Section` 의 `action` 을 쓰는 곳이 **사이트에 없다.**
+                prop 은 지우지 않았다 — Section.tsx 의 그 자리 주석에
+                적어 두었다. */}
+      <Section eyebrow="IN OPERATION" title="기종별 구동 영상">
         {/* ⚠️⚠️ **영상에는 리빌이 없다**(2026-10-19). 유신이 *"동영상 생기는
             것 보다 그냥 애니메이션 적용 안하는 편이 더 좋을거 같네"* 라고 해서
             영상이 보이는 곳 전부에서 걷었다. 그 경고는 VideoBrowser 안에도
