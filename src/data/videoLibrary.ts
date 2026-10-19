@@ -66,11 +66,56 @@ const productVideos: Video[] = products.map((p) => ({
   poster: p.video.poster,
 }));
 
+/**
+ * 영상 길이(초). **한 자리에 모은다** — 열두 편이 세 군데(videos ·
+ * HOME_ONLY · products)에서 오는데, 길이를 쓰는 곳은 `/videos` 카드
+ * 하나뿐이라 거기 가까운 여기가 맞다.
+ *
+ * ⚠️⚠️ **출처가 둘이고 성격도 둘이다.**
+ *
+ *   유튜브 넷 — 2026-10-19 에 공개 페이지의 `lengthSeconds` 를 받아 왔다.
+ *      유신이 영상을 다시 올리면 바뀌므로 **그때 다시 받는다.**
+ *      받는 법: watch 페이지 HTML 에서 lengthSeconds 를 찾으면 된다
+ *      (oEmbed 는 길이를 안 주고 Data API 는 키가 필요하다).
+ *
+ *   로컬 여덟 — `ffprobe` 로 쟀다. **전부 7초다**(product 일곱이 7.007,
+ *      white-blocks 가 7.4). README 의 ffmpeg 가 전부 `-t 7` 로 자른
+ *      장식 클립이기 때문이다.
+ *
+ * ⚠️⚠️⚠️ **여덟 칸에 「0:07」이 똑같이 찍히는 것은 흠이 아니라 설명이다.**
+ *    2026-10-19(3) 에 길이를 한 번 접었던 까닭이 바로 그것이었는데
+ *    (*"여덟 칸에 7초가 여덟 번"*), 유신이 1열로 바꾸며 다시 물었다 —
+ *    *"이제 공간에 여유가 있다보니 영상 길이도 넣어도 될거 같은데"*.
+ *    그래서 **로컬에는 「반복」을 함께 적는다**(VideoEmbed 의 배지).
+ *    「0:07 반복」은 *"이건 짧은 반복 클립이지 본 영상이 아니다"* 를
+ *    누르기 전에 알려 준다 — 전에는 눌러 봐야 알았다.
+ * ⚠️ 「반복」 여부는 여기 적지 않는다. `src` 가 있으면 로컬이고 로컬이면
+ *    반복이다(VideoEmbed 의 `isLocal` 과 같은 조건). 두 번 적으면 어긋난다.
+ * ⚠️ 영상을 더하면 **여기도 더한다.** 빠뜨리면 배지만 안 붙고 조용히
+ *    지나간다 — 눈으로 열두 칸을 센다.
+ */
+const SECONDS: Record<string, number> = {
+  // 유튜브 넷 (받아 온 값)
+  DzUOtS_O2ko: 26,
+  _zG4dYTCWpc: 89,
+  qbBMoY2g_WE: 129,
+  KiiYXbIajog: 126,
+  // 홈 전용 하나 + 제품 구동 일곱 (ffprobe)
+  "white-blocks": 7,
+  "bowl-feeder": 7,
+  "linear-feeder": 7,
+  vibrator: 7,
+  "hopper-feeder": 7,
+  "soundproof-cover": 7,
+  controller: 7,
+  "urethane-coating": 7,
+};
+
 export const videoLibrary: Video[] = [
   ...videos,
   ...HOME_ONLY,
   ...productVideos,
-];
+].map((v) => ({ ...v, seconds: SECONDS[v.id] }));
 
 /**
  * 거르개에 쓸 기종. **영상이 있는 것만** 낸다.

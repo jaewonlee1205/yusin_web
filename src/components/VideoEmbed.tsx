@@ -251,6 +251,32 @@ export default function VideoEmbed({
         </button>
       )}
 
+      {/* ⚠️⚠️ **2026-10-19(4) — 길이 배지.** 유신이 1열로 바꾸며
+             *"이제 공간에 여유가 있다보니 영상 길이도 넣어도 될거 같은데"*
+             라고 했다. 값과 출처는 videoLibrary 의 SECONDS 주석에 있다.
+
+          ⚠️ **로컬에는 「반복」을 붙인다.** 로컬 여덟은 전부 7초라 그냥
+             길이만 적으면 「0:07」이 여덟 번 찍힌다 — 그래서 지난 판에
+             한 번 접었던 것이다. 「0:07 반복」이면 그 되풀이가 **설명**이
+             된다(짧은 구동 클립이지 본 영상이 아니다).
+          ⚠️ 자리는 **포스터 오른쪽 아래**다. 유튜브가 쓰는 자리라 설명이
+             필요 없고, 글 칸에 넣으면 빨강 굵은 기종 라벨과 성격이 섞인다.
+          ⚠️ **누르면 사라진다**(playing 이면 안 낸다). 재생 중에는 플레이어
+             자신의 시간 표시가 있고, 로컬 갈래는 controls 막대가 바로 이
+             자리에 뜬다.
+          ⚠️ `pointer-events-none` — 바로 아래 재생 버튼이 inset-0 이라
+             배지가 그 모서리를 덮는다. 없으면 오른쪽 아래가 안 눌린다.
+          ⚠️ 빨강을 쓰지 않는다. 11px 은 README 의 다섯 단계 안이다. */}
+      {!playing && video.seconds !== undefined && (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute bottom-3 right-3 rounded-md bg-dark/80 px-2 py-1 text-11 font-semibold leading-none text-white"
+        >
+          {`${Math.floor(video.seconds / 60)}:${String(video.seconds % 60).padStart(2, "0")}`}
+          {isLocal && " 반복"}
+        </span>
+      )}
+
       {/* 스크립트가 꺼져 있으면 유튜브로 보낸다. 로컬 영상은 갈 유튜브
           쪽이 없으므로 내지 않는다 — 제품 상세에 같은 영상이 있다. */}
       {!isLocal && (

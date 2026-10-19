@@ -117,6 +117,16 @@ export type Video = {
    *    (누르면 유튜브가 뜨니, 유튜브가 보여 줄 그림이어야 한다).
    */
   poster?: string;
+  /**
+   * 영상 길이(초). **videoLibrary.ts 에서만 채운다** — 홈은 안 쓴다.
+   *
+   * ⚠️ 출처가 둘이라 섞이면 안 된다. 유튜브 넷은 **공개 페이지의
+   *    lengthSeconds** 를 받아 온 값이고, 로컬 여덟은 **ffprobe 로 잰**
+   *    값이다. 어느 쪽이든 **영상을 갈면 다시 잰다.**
+   * ⚠️ 없으면 배지를 안 단다(VideoEmbed). 길이를 모르는 영상이 생겨도
+   *    칸이 깨지지 않는다.
+   */
+  seconds?: number;
 };
 
 export const videos: Video[] = [
