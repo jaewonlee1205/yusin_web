@@ -1282,6 +1282,32 @@ const STATS = [
            나란히 내려 둔 둘이 크기가 어긋나 더 엉성해 보였다.
         ④ **폭이 화면을 안 따랐다.** 390 에서도 127px 그대로였다.
 
+      ⚠️⚠️⚠️ **2026-10-19(3) — 2px 먹테를 1px 로 낮췄다.** 유신이
+         *"여기 테두리가 너무 굵어 가지고 시각적으로 볼때 나쁘지는 않는데
+         시각적으로 너무 강조되는 느낌이라 조금 더 자연스러운 느낌으로"*
+         라고 했다. **2px 가 틀렸던 것이 아니라 세다**는 말이다 — 아래
+         다섯 안 비교는 그대로 유효하고, 거기서 굵기 한 칸만 내렸다.
+         ⚠️ 전수로 확인하니 `border-2` 는 **사이트에서 이 버튼 하나뿐**
+            이었다. 나머지는 전부 1px 이다. 즉 이 버튼만 체계 밖에 있었다.
+         ⚠️ 넷을 홈 PRODUCTS 자리에 실제로 얹어 1440/390 에서 찍어 보고
+            골랐다(scratchpad 의 u-btn-*.png) —
+              · **지금(2px 먹색)** 무겁다. 유신이 짚은 그것이다
+              · **(a) 1px line** 너무 옅다. 흰 카드로 읽히고 누를 곳으로
+                안 보인다 — 바탕이 surface 라 흰 면이 이미 떠 있다
+              · **(b) 1px dark-soft 30%** 골랐다. 윤곽은 분명한데 먹색 선이
+                주던 강조가 빠진다
+              · **(c) 1px 먹색** 2px 보다 가볍지만 **검은 선은 그대로**라
+                "자연스럽게" 에 덜 닿는다
+         ⚠️ **폭 · 글자 · 높이는 안 건드렸다**(max-w-xs · 15px 굵게 · py-4).
+            유신이 짚은 것은 굵기다. 아래 ①~④ 로 적어 둔 문제(작다 ·
+            폭이 다르다 · 화면을 안 따른다)를 되돌리지 않는다.
+         ⚠️ **hover 의 먹색 채움은 그대로 둔다.** 정지 상태가 조용해진
+            만큼 눌리는 신호는 남아야 한다. `hover:border-ink` 를 함께
+            걸어 채워질 때 테두리도 같이 먹색이 되게 했다 — 안 그러면
+            먹색 면 위에 회색 테두리가 한 겹 남는다.
+         ⚠️ 1px 테두리에 **30% 투명도**는 유튜브 카드의 「채널 보기」와
+            같은 값이다(VideoBrowser). 사이트에서 조용한 1px 버튼의 말투다.
+
       고친 것 — **2px 먹색 테두리 · w-full max-w-xs(320px) · py-4 · 15px 굵게**,
       hover 에서 **먹색을 채운다.** 지난 판에 표 위아래를 2px 먹색으로 닫았는데
       그것과 **같은 말투**다. 둘의 폭이 320px 로 같아지고, 390 에서는 화면을
@@ -1320,7 +1346,7 @@ const STATS = [
    ⚠️ 홈 PROCESS 카드 안의 화살표는 **다른 것이다.** 거기는 "다음 단계가
       있다" 는 표식이라 그대로 둔다. */
 const BTN =
-  "inline-flex w-full max-w-xs items-center justify-center rounded-xl border-2 border-ink bg-white px-6 py-4 text-15 font-bold text-ink transition hover:bg-ink hover:text-white active:scale-[0.98]";
+  "inline-flex w-full max-w-xs items-center justify-center rounded-xl border border-dark-soft/30 bg-white px-6 py-4 text-15 font-bold text-ink transition hover:border-ink hover:bg-ink hover:text-white active:scale-[0.98]";
 
 export default function Home() {
   return (
