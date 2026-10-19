@@ -2624,9 +2624,11 @@ export default function Home() {
              유신이 *"홈 같은 경우도 거래처에서 사진으로 교체"* 라고 짚었다.
              `/clients` 만 바꾸면 홈에는 거래처 이름이 남아 **한 사이트에서
              두 말을 하게 된다.**
-          ⚠️ 홈은 **여덟 장만** 올린다. 이 쪽은 히어로 영상이 성능을 지배하는
-             자리라(메모리에 적어 둔 것), 사진을 많이 얹을 데가 아니다.
-             전체는 `/clients` 에 56장이 있다. */}
+          ⚠️ 홈은 **열여섯 장**이다(2026-10-19, 유신 요청으로 여덟에서 늘렸다).
+             히어로 영상이 성능을 지배하는 자리인 것은 그대로지만, 늘어난
+             362KB 는 lazy 라 첫 화면에 들어오지 않는다 — works.ts 의
+             featuredWorks 주석에 잰 값을 적어 두었다.
+             전체는 `/clients` 에 155장이 있다. */}
       {/* ⚠️⚠️ **2026-10-15 — 회색 면이 VIDEO 에서 여기로 옮겨 왔다.**
              WHY YUSIN(흰)을 걷으면서 **PRODUCTS(회색)와 VIDEO(회색)가 붙어
              버렸다.** 둘 다 -mt + 둥근 위 모서리로 「회색 면이 흰 섹션 위로
@@ -2660,7 +2662,12 @@ export default function Home() {
           </Link>
         }
       >
-        <PhotoLightbox items={featuredWorks} reveal />
+        {/* ⚠️ cols 를 주어 **홈만 3열을 건너뛴다**(2 → 4). 2026-10-19 에 사진이
+            여덟에서 열여섯이 되면서, 3열이 끼는 폭마다 마지막 줄에 **한 칸만**
+            남았다(16 = 3x5 + 1). 16 을 나누어떨어뜨리는 열 수는 2 와 4 뿐이다.
+            PhotoLightbox 의 cols 주석에 폭별 칸 크기와, 클래스 덧붙이기로 하면
+            안 되는 까닭을 적었다. */}
+        <PhotoLightbox items={featuredWorks} reveal cols="grid-cols-2 md:grid-cols-4" />
       </Section>
 
       {/* 7. 문의 CTA */}

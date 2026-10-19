@@ -42,13 +42,15 @@ export default function PhotoLightbox({
   items,
   kinds,
   reveal = false,
+  cols = "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4",
   className = "",
 }: {
   items: Work[];
   /** 분류 버튼에 쓸 기종. 안 주면 버튼을 내지 않는다(홈). */
   kinds?: string[];
   /**
-   * 격자를 **스크롤 리빌**로 띄운다 — 여덟 장이 **한 번에**.
+   * 격자를 **스크롤 리빌**로 띄운다 — 홈 **열여섯 장이 한 번에**
+   * (2026-10-19 에 여덟에서 늘었다).
    *
    * ⚠️⚠️ 유신이 짚었다 — *"여기 애니메이션 적용이 되야 할 거 같고 메인
    *    페이지 쪽이야"*. 홈에서 **리빌이 없는 유일한 콘텐츠 섹션**이었다.
@@ -61,6 +63,33 @@ export default function PhotoLightbox({
    *    (155개)은 사라졌지만 **다시 뜨는 산만함**은 그대로다.
    */
   reveal?: boolean;
+  /**
+   * 격자의 **열 수 전체**. 기본값은 /clients 가 쓰는 것이다.
+   *
+   * ⚠️⚠️ 클래스 문자열에 `lg:grid-cols-4` 를 **덧붙이지 말 것.** Tailwind 는
+   *    같은 변형(lg)끼리 충돌하면 class 속성의 순서가 아니라 **생성된 CSS 의
+   *    순서**로 이긴 쪽을 정한다 — 어느 쪽이 적용될지 알 수 없다. 그래서
+   *    기본 문자열을 통째로 **갈아 끼우는** prop 으로 두었다.
+   *
+   * 홈이 `grid-cols-2 md:grid-cols-4` 로 바꿔 쓰는 까닭 — 2026-10-19 에 홈
+   * 사진이 여덟에서 **열여섯**이 됐다(유신 요청). **16 을 나누어떨어뜨리는
+   * 열 수는 2 와 4 뿐**이라, 3열이 끼면 어느 폭에서든 마지막 줄에 한 칸만
+   * 남는다(16 = 3x5 + 1). 기본값대로 두고 찍어 보니 768 에서 정말 그랬고,
+   * 다섯 줄 끝에 외톨이 한 칸이 **덜 만든 것처럼** 보였다. 그래서 홈만 3열을
+   * 건너뛴다 —
+   *
+   *     ~639   2열  8줄 딱     (칸 175px — 390 기준)
+   *   640~767  2열  8줄 딱     (칸 300px)
+   *   768~     4열  4줄 딱     (칸 176px — 모바일 2열 칸과 같은 크기다)
+   *
+   * md(768)에서 4열로 가도 칸이 모바일 칸보다 작아지지 않는 것이 고른 점이다.
+   * sm(640)부터 4열로 하면 칸이 142px 이 되어 모바일보다 **작아진다** — 자막이
+   * 사진을 덮으므로 거기까지 내리지 않는다.
+   *
+   * ⚠️ `/clients` 는 155장이라 3열에서 끝줄이 두 칸 남는다(155 = 3x51 + 2).
+   *    외톨이가 아니므로 기본값을 그대로 쓴다.
+   */
+  cols?: string;
   className?: string;
 }) {
   const [filter, setFilter] = useState<string | null>(null);
@@ -310,7 +339,7 @@ export default function PhotoLightbox({
           <Group on={reveal}>
           <ul
             /* [overflow-anchor:none] — 바로 위 칸의 주석 참고. */
-            className={`grid grid-cols-2 gap-2 [overflow-anchor:none] sm:grid-cols-3 sm:gap-2.5 lg:grid-cols-3 xl:grid-cols-4 ${className}`}
+            className={`grid gap-2 [overflow-anchor:none] sm:gap-2.5 ${cols} ${className}`}
           >
             {shown.map((w, i) => (
           <li key={w.src}>
