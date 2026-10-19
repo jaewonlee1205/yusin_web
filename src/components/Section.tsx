@@ -44,8 +44,29 @@ type Props = {
    *
    * ⚠️ align="center" 와 같이 쓰지 않는다 — 가운데로 모은 제목 옆에 오른쪽
    *    액션이 붙으면 축이 둘이 되어 읽는 자리가 흔들린다.
+   *
+   * ⚠️⚠️ **「전체 보기」류는 action 이 아니라 footer 다**(2026-10-19).
+   *    아래 footer 주석 참고. action 은 `/videos` 의 「영상 더 보기」처럼
+   *    **그 섹션을 다 보기 전에 알려야 하는** 바깥 링크만 남았다.
    */
   action?: ReactNode;
+  /**
+   * 내용 **아래**에 가운데로 둘 링크·버튼.
+   *
+   * ⚠️⚠️ **2026-10-19 — 유신이 자리를 아래로 내려 달라고 했다.**
+   *    *"이거 영상 전체 보기 / 제작사례 전체 보기 이런 전체 보기 경우
+   *    밑에다가 배치 하는게 나은거 같은데 … 사용자가 그러면 밑으로 스크롤
+   *    하다가 다시 위로 올려야 하니깐"*.
+   *
+   *    맞는 말이고, **내가 반대로 옮겨 놨던 자리**다 — page.tsx 의 WORKS
+   *    주석이 "격자 아래에 있던 것을 제목 줄로 올린다" 고 적고 있었다.
+   *    그때 근거는 "두 섹션이 달라 보인다" 였는데, 둘을 **함께** 아래로
+   *    내리면 그 근거도 그대로 지켜진다.
+   *
+   * ⚠️ action 과 함께 쓰지 않는다 — 같은 섹션에서 나가는 길이 둘이면
+   *    어느 쪽도 눈에 걸리지 않는다.
+   */
+  footer?: ReactNode;
   id?: string;
   className?: string;
 };
@@ -99,6 +120,7 @@ export default function Section({
   size = "default",
   align = "left",
   action,
+  footer,
   id,
   className = "",
 }: Props) {
@@ -160,6 +182,11 @@ export default function Section({
           </div>
         )}
         {children}
+        {/* ⚠️ mt 가 섹션의 pb(16/20 → 20/28)보다 작다. 버튼이 내용에 붙고
+            섹션 바닥과는 떨어져야 "이 섹션의 이어가기" 로 읽힌다. */}
+        {footer && (
+          <div className="mt-10 flex justify-center sm:mt-12">{footer}</div>
+        )}
       </Container>
     </section>
   );
