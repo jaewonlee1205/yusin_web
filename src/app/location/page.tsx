@@ -5,6 +5,7 @@ import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import { site, telHref } from "@/data/site";
+import { gridColumns } from "@/lib/gridColumn";
 
 export const metadata: Metadata = {
   title: "오시는 길",
@@ -196,6 +197,9 @@ export default function LocationPage() {
       wide: true,
     },
   ];
+
+  /** 연락처 표에서 칸마다의 열 번호(0부터). 아래 dl 주석 참고. */
+  const cellCols = gridColumns(cells.length, 2, (i) => !!cells[i].wide);
 
   return (
     <>
@@ -430,8 +434,30 @@ export default function LocationPage() {
 
                   dl/dt/dd 는 그대로다. 라벨-값은 용어-정의가 맞고, 접근성
                   검사(dlitem)가 dt.dd 를 dl 직계로 요구한다. */}
-              <dl className="grid border-t border-line [&>*:last-child]:border-b-0 lg:grid-cols-2">
-                {cells.map((cell) => (
+              {/* ⚠️⚠️⚠️ **2026-10-19 — 선 둘을 고쳤다.** 유신이 회사 개요
+                     표와 **함께** 짚었다 — *"구분이 잘 안 되는 것 처럼
+                     보여서 시각적으로 봤을때 약간 보기가 불편한게 있는데"*.
+                     까닭과 측정은 company/page.tsx 의 같은 자리 주석에 있다.
+
+                     여기는 **가로선이 원래 이어져 있었다**(gap-x 가 없다).
+                     그래서 둘만 더했다 —
+
+                       · **열 사이에 세로 hairline** — 둘째 열 칸에
+                         lg:border-l. 전폭 행(주소 · 운영 시간)에는 안 붙인다.
+                         전화|팩스 · 이메일|주차 가 짝으로 읽힌다.
+                       · **2px 먹색 표머리** — border-t border-line →
+                         border-t-2 border-ink. 여기서는 이 선이 **지도와 표
+                         사이**에 놓인다. 찍어 보니 특히 잘 듣는다 — 그 전에는
+                         지도 아래가 연한 선 하나로 그냥 끊겨 있었다.
+
+                     ⚠️ 여백은 안 건드렸다. 칸에 이미 px-5 sm:px-7 이 있어
+                        세로선 양옆이 20~28px 씩 벌어진다(회사 개요는 그 여백이
+                        없어 lg:pr-12 / lg:pl-12 을 따로 줬다). */}
+              {/* ⚠️ 둘째 열은 **데이터에서 센다** — gridColumns 머리 주석 참고.
+                     지금 데이터는 비전폭 넷(전화·팩스·이메일·주차)이 앞이고
+                     전폭 둘(주소·운영 시간)이 뒤다. DOM 좌표로 재서 확인했다. */}
+              <dl className="grid border-t-2 border-ink [&>*:last-child]:border-b-0 lg:grid-cols-2">
+                {cells.map((cell, i) => (
                   <div
                     key={cell.label}
                     /* ⚠️ items-center 다. 이 dl 이 lg:grid-cols-2 라 같은
@@ -449,7 +475,11 @@ export default function LocationPage() {
                        ⚠️ px-5 sm:px-7 이 **행에** 있다(위 dl 주석 참고).
                           dl 로 옮기면 선이 카드 전폭을 잃는다. */
                     className={`flex items-center gap-4 border-b border-line px-5 py-4 sm:px-7 ${
-                      cell.wide ? "lg:col-span-2" : ""
+                      cell.wide
+                        ? "lg:col-span-2"
+                        : cellCols[i] === 0
+                          ? ""
+                          : "lg:border-l"
                     }`}
                   >
                     <dt className="w-16 shrink-0 text-13 font-bold text-muted sm:w-20">

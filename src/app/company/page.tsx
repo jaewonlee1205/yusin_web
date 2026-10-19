@@ -12,6 +12,10 @@ import {
   philosophyMotto,
 } from "@/data/company";
 import { site, telHref, yearsInBusiness } from "@/data/site";
+import { gridColumns } from "@/lib/gridColumn";
+
+/** 개요 표에서 칸마다의 열 번호(0부터). 아래 dl 주석 참고. */
+const OVERVIEW_COLS = gridColumns(overview.length, 2, (i) => !!overview[i].wide);
 
 /**
  * 대표이사 서명 전용 붓글씨체. 이 페이지 서명 한 줄에서만 쓴다.
@@ -357,9 +361,54 @@ export default function CompanyPage() {
                그때의 근거였다. 래퍼가 끼면 dl > div > dt/dd 구조가 깨지므로
                행 자체를 Reveal 로 만들었던 것이다. 이제 Reveal 은 **dl 바깥**
                이라 그 걱정이 없다(연락처 표가 원래 그 꼴이다). */}
+        {/* ⚠️⚠️⚠️ **2026-10-19 — 선 셋을 고쳤다.** 유신이 *"표 디자인 지금도
+               나쁘지는 않은데 … 구분이 잘 안 되는 것 처럼 보여서 시각적으로
+               봤을때 약간 보기가 불편한게 있는데"* 라고 했다.
+
+               1440 에서 찍어 2배로 잘라 키워 보니 까닭이 셋이었다 —
+
+                 ① **가로선이 열 사이에서 끊겼다.** lg:gap-x-12 가 행 구분선을
+                    48px 씩 잘라 **두 토막**으로 냈다. 작은 목록 둘이 나란히
+                    선 꼴이라 한 표로 읽히지 않았다.
+                 ② **열 사이에 경계가 없었다.** 왼쪽 값과 오른쪽 라벨 사이가
+                    그냥 빈 폭이라, 가로선 한 줄이 네 칸을 가로질러 **어느
+                    값이 어느 라벨의 것인지** 눈이 짚지 못했다.
+                 ③ **표머리가 없었다.** border-t border-line 한 줄이 행 선과
+                    **색도 두께도 같아서** 표가 시작하는 자리가 안 섰다.
+
+               ③ 은 **전에 한 번 들은 말**이다 — 보유 설비 표에 *"구분선은
+               있어야 뭔가 할거 같은데 단순 표만 있다 보니깐 시각적으로 보기
+               너무 이상한데"*. 그때도 2px 먹색 표머리로 고쳤다(f4be41a 의
+               company/facility/page.tsx 주석에 측정이 남아 있다).
+
+               고친 것은 **선 셋**이다 —
+
+                 · **가로선을 잇는다** — lg:gap-x-12 를 걷고 같은 48px 를
+                   **칸 안쪽 여백**으로 옮겼다(왼쪽 칸 lg:pr-12, 오른쪽 칸
+                   lg:pl-12). 틈이 여백이 되면 **선은 이어지고 사이는 그대로**
+                   벌어진다. 좁아지지 않는다 — 2열 한 칸이 544px 인데 가장 긴
+                   비전폭 내용이 라벨 80 + gap 16 + 회사명 229 = **325px** 다.
+                 · **열 사이에 세로 hairline** — 둘째 열 칸에 lg:border-l.
+                   전폭 행에는 안 붙인다.
+                 · **2px 먹색 표머리** — border-t border-line → border-t-2
+                   border-ink. 행 선(#e5e7eb)과 **두께·색 둘 다** 다르다.
+
+               ⚠️ **라벨 칸에 음영을 까는 안도 찍어 봤다.** 더 확실히 갈리지만
+                  *"선뿐인 목록"* 이라는 이 표의 성격이 사라진다 — 연락처·제품
+                  규격표와 한 식구인 것이 그 성격이다. 세로 hairline 은 선례가
+                  이미 있다(page.tsx·products/[slug]/page.tsx 의 lg:border-l).
+               ⚠️ **셋을 함께 고쳤다.** 하나만 고치면 식구가 어긋난다. */}
+        {/* ⚠️⚠️ **둘째 열을 데이터에서 센다.** CSS 에는 "격자에서 둘째 열에
+               놓인 칸" 을 집는 선택자가 없고, nth-child(2n) 은 전폭 행이
+               하나 끼는 순간 어긋난다. gridColumns 머리 주석 참고.
+               ⚠️ 지금 데이터는 비전폭 여덟(회사명·설립연도·자본금·대표·
+                  대표번호·팩스·이메일·홈페이지)이 앞에 몰려 있고 전폭 셋
+                  (소재지·주 사업·제작 품목)이 뒤다. DOM 좌표로 재서 이
+                  계산과 같은지 확인했다 — 빈칸도 없다.
+               ⚠️ **행을 더하거나 wide 를 섞으면 다시 잰다.** */}
         <Reveal>
-        <dl className="grid border-t border-line lg:grid-cols-2 lg:gap-x-12">
-          {overview.map((row) => (
+        <dl className="grid border-t-2 border-ink lg:grid-cols-2">
+          {overview.map((row, i) => (
             <div
               key={row.label}
               /* ⚠️ items-center 다. 대표번호처럼 값이 여러 줄인 행에서 라벨이
@@ -367,7 +416,11 @@ export default function CompanyPage() {
                  items-center 를 쓴다 — 거기는 2열 격자 행의 높이를 두 칸이
                  나눠 갖기 때문이고, 여기는 값 자체가 여러 줄이기 때문이다. */
               className={`flex items-center gap-4 border-b border-line py-4 ${
-                row.wide ? "lg:col-span-2" : ""
+                row.wide
+                  ? "lg:col-span-2"
+                  : OVERVIEW_COLS[i] === 0
+                    ? "lg:pr-12"
+                    : "lg:border-l lg:pl-12"
               }`}
             >
               <dt className="w-16 shrink-0 text-13 font-bold text-muted sm:w-20">

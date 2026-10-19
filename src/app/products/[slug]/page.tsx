@@ -929,11 +929,43 @@ export default async function ProductDetailPage({
                 지금은 선이 전부 border 라 그 문제가 없다.
               · p-px 로 바깥 테두리를 만들면 반경 16px 모서리에서 1px 가 곡선을
                 따라 가늘어져 끊겨 보였다. **지금은 바깥 테두리 자체가 없다.** */}
-          <dl className="mt-8 grid border-t border-line sm:grid-cols-3 sm:gap-x-12 sm:border-b">
-            {product.specs.slice(4).map((spec) => (
+          {/* ⚠️⚠️⚠️ **2026-10-19 — 선 셋을 고쳤다.** 유신이 회사 개요·연락처
+                 표를 짚었는데(*"구분이 잘 안 되는 것 처럼 보여서"*), 그 셋은
+                 **같은 꼴로 맞춰 둔 한 식구**라 여기도 함께 간다. 하나만
+                 고치면 식구가 어긋난다. 까닭과 측정은 company/page.tsx 의
+                 같은 자리 주석에 있다.
+
+                   · **가로선을 잇는다** — sm:gap-x-12 가 행 선을 **세 토막**
+                     으로 내고 있었다. 같은 48px 를 칸 안쪽 여백으로 옮기면
+                     선은 이어지고 사이는 그대로 벌어진다.
+                     ⚠️⚠️ **여백은 틈의 절반씩(24px)이다.** 처음에 양쪽 다
+                        48px 를 줬다가 가운데 칸이 **원래보다 64px 좁아졌다** —
+                        틈이 48px 일 때 한 열의 글상자가 330.7px 였는데 266px 가
+                        되어, 「튜닝」 값(한 줄에 292px 필요)이 **두 줄로 접혔다.**
+                        세로선이 틈 한가운데 서려면 양옆이 24px 씩이면 된다.
+                        지금 글상자는 339 / 315 / 339px 다.
+                   · **열 사이에 세로 hairline** — 둘째·셋째 열 칸에
+                     sm:border-l.
+                   · **2px 먹색 표머리** — border-t border-line → border-t-2
+                     border-ink.
+
+                 ⚠️ **줄 끝 칸에는 오른쪽 여백을 안 준다.** 오른쪽에 아무것도
+                    없는데 24px 를 떼면 글상자만 좁아진다. 지금 이 표는 칸이
+                    늘 **둘**이라(specs.slice(4)) 셋째 열이 비어 있어, 둘째
+                    칸이 바로 줄 끝이다. 이 한 줄 덕에 1024 에서 「튜닝」 값
+                    (한 줄에 292px 필요)이 **펴진다** — 296px 가 된다.
+                    ⚠️ 고치기 전에는 그 자리가 288px 라 **접혀 있었다.**
+                 ⚠️ 여기는 전폭(wide) 행이 없다 — 열은 그냥 i % 3 이다. */}
+          <dl className="mt-8 grid border-t-2 border-ink sm:grid-cols-3 sm:border-b">
+            {product.specs.slice(4).map((spec, i) => (
               <div
                 key={spec.label}
-                className="border-b border-line py-4 sm:border-b-0"
+                className={`border-b border-line py-4 sm:border-b-0 ${
+                  i % 3 === 0 ? "" : "sm:border-l sm:pl-6"
+                } ${
+                  // 줄 끝(셋째 열이거나 마지막 칸)에는 오른쪽 여백이 필요 없다
+                  i % 3 === 2 || i === product.specs.length - 5 ? "" : "sm:pr-6"
+                }`}
               >
                 <dt className="text-13 font-bold text-muted">{spec.label}</dt>
                 <dd className="mt-1 text-15 leading-relaxed text-ink">
