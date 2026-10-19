@@ -1354,7 +1354,32 @@ const STATS = [
             걸어 채워질 때 테두리도 같이 먹색이 되게 했다 — 안 그러면
             먹색 면 위에 회색 테두리가 한 겹 남는다.
          ⚠️ 1px 테두리에 **30% 투명도**는 유튜브 카드의 「채널 보기」와
-            같은 값이다(VideoBrowser). 사이트에서 조용한 1px 버튼의 말투다.
+            같은 값이었다(VideoBrowser). 사이트에서 조용한 1px 버튼의
+            말투다. ⚠️ 그 카드는 2026-10-19(4) 에 걷혔다 — 값의 출처만
+            여기 남는다.
+
+      ⚠️⚠️⚠️ **2026-10-19(4) — 바탕을 흰색에서 투명으로 바꿨다.** 유신이
+         짚었다 — *"제품 전체 보기 / 제작실적 전체 보기 이거 두개는
+         뒷배경이 회색 같은데 이거 버튼 백그라운드 컬러도 … 뒷배경 색하고
+         동일한 회색으로 해야지 통일감 있어서 디자인이 이쁜거 같거든"*.
+         재 보니 그대로였다 —
+
+           PRODUCTS  bg-surface  rgb(246,247,249)   버튼만 흰 상자로 떠 있었다
+           VIDEO     bg-white    rgb(255,255,255)   그래서 여기만 괜찮아 보였다
+           WORKS     bg-surface  rgb(246,247,249)   떠 있었다
+
+         ⚠️ **섹션마다 값을 넘기지 않고 `bg-white` 를 걷었다.** 투명이면
+            회색 섹션에서 회색, 흰 섹션에서 흰색이 **저절로** 된다.
+            나중에 섹션 바탕을 바꿔도 버튼이 따라온다 — 한 클래스로 셋이
+            다 맞는 쪽이 낫다.
+         ⚠️ 세 자리 모두 **단색 바탕**이라 투명으로 둬도 글자가 묻히지
+            않는다. 그림이나 그라데이션 위에 이 버튼을 놓게 되면 그때
+            다시 본다.
+         ⚠️ 1px + 투명이라 **더 옅어졌다.** 1440/390 에서 다시 찍어
+            「누를 것으로 읽히는가」를 봤다 — 테두리와 굵은 글씨가 남아
+            상자로 읽힌다. 더 옅어지면 테두리부터 한 칸 올린다.
+         ⚠️ hover 의 먹색 채움은 그대로다. 바탕이 비어 있을수록 눌리는
+            신호가 더 필요하다.
 
       고친 것 — **2px 먹색 테두리 · w-full max-w-xs(320px) · py-4 · 15px 굵게**,
       hover 에서 **먹색을 채운다.** 지난 판에 표 위아래를 2px 먹색으로 닫았는데
@@ -1394,7 +1419,7 @@ const STATS = [
    ⚠️ 홈 PROCESS 카드 안의 화살표는 **다른 것이다.** 거기는 "다음 단계가
       있다" 는 표식이라 그대로 둔다. */
 const BTN =
-  "inline-flex w-full max-w-xs items-center justify-center rounded-xl border border-dark-soft/30 bg-white px-6 py-4 text-15 font-bold text-ink transition hover:border-ink hover:bg-ink hover:text-white active:scale-[0.98]";
+  "inline-flex w-full max-w-xs items-center justify-center rounded-xl border border-dark-soft/30 px-6 py-4 text-15 font-bold text-ink transition hover:border-ink hover:bg-ink hover:text-white active:scale-[0.98]";
 
 export default function Home() {
   return (
