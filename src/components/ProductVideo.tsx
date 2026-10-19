@@ -70,6 +70,51 @@ export default function ProductVideo({
    * ⚠️ `onPlaying` 뒤에 보여 주면 그 사이에는 **뒤에 깔린 포스터**가 그대로
    *    보인다 — 새로 받을 것이 없는 그림이다.
    * ⚠️ `poster` 속성은 **그대로 둔다.** JS 가 막힌 환경의 마지막 보루다.
+   *
+   * ⚠️⚠️⚠️ **포스터는 반드시 그 영상의 「첫 프레임」이어야 한다.**
+   *    아래 `transition-opacity duration-300` 이 포스터 위로 영상을 겹쳐
+   *    띄우는데, 둘이 같은 그림이면 **아무것도 안 보이고** 다른 그림이면
+   *    **300ms 짜리 디졸브**가 된다.
+   *
+   *    2026-10-19 에 유신이 짚었다 — *"처음 시작하고 … **흐리게 처리**
+   *    된다음 … 처음에 스크롤 내리면 엄청 이상하게 보여"*. 재어 보니
+   *    **다섯 편의 포스터가 전혀 다른 프레임**이었다(SSIM 1.0 = 같은 그림) —
+   *
+   *      part-seal                0.119 → 0.996
+   *      product-urethane-coating 0.157 → 0.992
+   *      performance              0.207 → 0.992
+   *      part-pin                 0.311 → 0.995
+   *      part-bracket             0.377 → 0.995
+   *
+   *    까닭은 **영상만 갈고 포스터를 안 구운 것**이다. 다섯 편 모두
+   *    2026-10-16 에 다시 자른 파일이고, 같은 날 바뀐 hero.mp4 는 포스터도
+   *    함께 만들어 0.986 이라 멀쩡했다.
+   *
+   *    ⚠️ **영상을 갈아 끼우면 포스터도 같은 날 다시 굽는다.** 한 줄이다 —
+   *      ffmpeg -i <영상> -vf "select=eq(n,0)" -frames:v 1    *             -c:v libwebp -compression_level 6 -quality 85 <포스터>
+   *    ⚠️ 재는 법 (0.97 아래면 다시 굽는다) —
+   *      ffmpeg -i <영상> -i <포스터> -filter_complex    *        "[0:v]select=eq(n,0),scale=320:180,format=gray,setpts=N[a];
+   *         [1:v]scale=320:180,format=gray,setpts=N[b];[a][b]ssim=-"    *        -frames:v 1 -f null -
+   *    ⚠️ quality 85 는 **옛 포스터 크기(26~51KB)에 맞춘 값**이다. 키우면
+   *       LCP 에 걸린다 — 지금 다섯은 34~47KB 다.
+   *
+   * ── 아직 남은 것 — **루프 이음새** (2026-10-19 에 재 두었다)
+   *
+   *    끝 프레임 ↔ 첫 프레임 SSIM 이다. 낮을수록 7초마다 **장면이 툭 바뀐다.**
+   *    유신이 이번엔 *"포스터만"* 으로 정했으므로 손대지 않았다 —
+   *    고치려면 원본 촬영본에서 **앞뒤가 이어지는 구간**으로 다시 잘라야 한다.
+   *
+   *      part-pin                 0.960  ✓     product-bowl-feeder      0.548  △
+   *      part-bracket             0.952  ✓     product-soundproof-cover 0.242  ✗
+   *      part-seal                0.935  ✓     preview-bowl-jig         0.211  ✗
+   *      hero                     0.890  ✓     product-controller       0.182  ✗
+   *      product-urethane-coating 0.863  ✓     product-linear-feeder    0.119  ✗
+   *      performance              0.806  ✓     product-vibrator         0.118  ✗
+   *                                            preview-metal-parts      0.088  ✗
+   *
+   *    ⚠️ 포스터를 고친 다섯 편은 **전부 왼쪽(이음새가 좋은 쪽)**이다 —
+   *       홈 PARTS 는 이번 판으로 깨끗해졌다. 끊기는 일곱은 제품 상세와
+   *       홈 미리보기 쪽이다.
    */
   const [playing, setPlaying] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
