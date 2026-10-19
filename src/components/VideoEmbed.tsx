@@ -23,10 +23,20 @@ import type { Video } from "@/data/videos";
  *      보였다.
  *
  * ── 그 밖 (/videos) ──────────────────────────────────────────────────
- * 유튜브 파사드다. 썸네일과 재생 버튼만 먼저 그리고, 누를 때 iframe 으로
- * 바꾼다. iframe 을 처음부터 박아 두면 페이지를 열기만 해도 유튜브 스크립트와
+ * 파사드다. 정지컷과 재생 버튼만 먼저 그리고, 누를 때 비로소 영상을 건다.
+ * iframe 을 처음부터 박아 두면 페이지를 열기만 해도 유튜브 스크립트와
  * 쿠키 요청이 따라붙는다. 썸네일은 public/images/videos/ 에 받아 둔 것이라,
  * 누르기 전까지 유튜브로 나가는 요청이 하나도 없다.
+ *
+ * ⚠️⚠️ **2026-10-19 — 누른 뒤가 둘로 갈린다.** /videos 가 제품 구동 영상
+ *    일곱(로컬 mp4)까지 함께 걸게 되면서다(videoLibrary.ts).
+ *
+ *      video.src 있음   그 자리에서 <video controls> 로 돈다
+ *      없음             지금까지처럼 youtube-nocookie iframe
+ *
+ *    **누르기 전은 열둘이 똑같다** — 정지컷 + 흰 재생 원. 한쪽만 저절로
+ *    돌면 videos.ts(featuredVideos 주석)가 경고한 그 꼴이 된다. 즉
+ *    "하나는 영상이 돌고 하나는 멈춘 썸네일" 로 나란히 서는 것.
  *
  * 어느 쪽이든 자리는 aspect-video 로 미리 잡아 둔다 — 영상.iframe 으로 바뀔
  * 때 아래 내용이 밀리지 않는다. 테두리.모서리.바탕(흰색)은 감싸는 VideoCard
@@ -47,8 +57,21 @@ export default function VideoEmbed({
   const ref = useRef<HTMLDivElement>(null);
   const isPreview = preview && !!video.preview;
   const watchUrl = `https://www.youtube.com/watch?v=${video.id}`;
-  /** /videos 파사드가 쓰는 그림 — 누르면 유튜브가 뜨니 유튜브 썸네일이 맞다. */
-  const poster = `/images/videos/${video.id}.webp`;
+  /** 로컬 mp4 를 들고 있는 영상인가(제품 구동 영상 일곱 + 홈 전용 한 편) */
+  const isLocal = !!video.src;
+  /**
+   * /videos 파사드가 쓰는 그림.
+   *
+   * 유튜브 영상이면 **유튜브 썸네일**이 맞다 — 누르면 유튜브가 뜨니,
+   * 유튜브가 보여 줄 그림이어야 한다.
+   *
+   * ⚠️ 로컬 영상은 유튜브 id 가 없어 그 경로에 파일이 없다. 그쪽은 제
+   *    poster(그 클립의 첫 프레임)를 쓴다 — 누르면 **같은 파일**이 도니
+   *    그림이 바뀌지 않는다. ?? 갈래는 poster 를 빠뜨렸을 때의 보험이다.
+   */
+  const poster = isLocal
+    ? video.poster ?? `/images/videos/${video.id}.webp`
+    : `/images/videos/${video.id}.webp`;
   /**
    * 홈 미리보기가 쓰는 그림. **그 클립의 첫 프레임**(videos.ts 의 poster).
    *
@@ -147,10 +170,28 @@ export default function VideoEmbed({
     );
   }
 
-  /* ── /videos: 유튜브 파사드 ─────────────────────────────────────── */
+  /* ── /videos: 파사드 ────────────────────────────────────────────── */
   return (
     <div className="relative aspect-video overflow-hidden bg-black">
-      {playing ? (
+      {playing && isLocal ? (
+        /* ⚠️ controls 가 **있다.** 홈 미리보기는 누를 것이 없는 장식 영상이라
+              컨트롤이 없지만, 여기는 사용자가 "보겠다" 고 누른 본 영상이다.
+              유튜브 갈래가 플레이어를 통째로 주는 것과 같은 자리다.
+           ⚠️ muted 를 걸지 않는다 — 누른 뒤라 자동재생 정책에 걸리지 않고,
+              소리를 죽이면 유튜브 갈래와 결이 갈린다. 혹시 브라우저가
+              autoPlay 를 막아도 controls 가 있어 막다른 길이 되지 않는다.
+           ⚠️ 클립이 7초 안팎이라 loop 를 건다. 한 번 돌고 멈추면 검은 칸이
+              남는다. */
+        <video
+          src={video.src}
+          poster={poster}
+          controls
+          autoPlay
+          loop
+          playsInline
+          className="absolute inset-0 h-full w-full bg-black object-contain"
+        />
+      ) : playing ? (
         <iframe
           // autoplay=1 — 누르는 동작 자체가 재생 의사라 한 번 더 누르게 하지 않는다.
           src={`https://www.youtube-nocookie.com/embed/${video.id}?autoplay=1&rel=0`}
@@ -203,7 +244,9 @@ export default function VideoEmbed({
         </button>
       )}
 
-      {/* 스크립트가 꺼져 있으면 유튜브로 보낸다 */}
+      {/* 스크립트가 꺼져 있으면 유튜브로 보낸다. 로컬 영상은 갈 유튜브
+          쪽이 없으므로 내지 않는다 — 제품 상세에 같은 영상이 있다. */}
+      {!isLocal && (
       <noscript>
         <a
           href={watchUrl}
@@ -214,6 +257,7 @@ export default function VideoEmbed({
           {video.title} — 유튜브에서 보기
         </a>
       </noscript>
+      )}
     </div>
   );
 }

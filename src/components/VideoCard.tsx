@@ -98,7 +98,23 @@ export default function VideoCard({
       <VideoEmbed video={video} preview={preview} />
 
       <div className="flex flex-1 flex-col border-t border-line p-5">
-        <p className="text-15 font-bold leading-snug text-ink">
+        {/* ⚠️⚠️ **2026-10-19 — 기종 라벨이 붙었다.** /videos 에 기종 거르개가
+               서면서(VideoBrowser) 카드도 제가 어느 기종인지 말해야 한다.
+               거르개를 「컨트롤러」로 좁혀 놓고 한참 보다가 「전체」로 돌아오면,
+               라벨이 없으면 어느 칸이 왜 거기 있었는지 알 수 없다.
+
+            ProductCard 의 분류 라벨과 **같은 꼴**이다(text-xs · 굵게 ·
+            tracking-[0.08em] · brand). 제품 카드와 영상 카드가 같은 격자
+            말투를 쓰는 쪽이 낫다.
+
+            ⚠️ 빨강 **글자**다. 빨강 **채움**은 「견적 문의」 전용이라는 규칙과
+               어긋나지 않는다(README 색 위계).
+            ⚠️ 홈 갈래에는 넣지 않는다. 거기는 거르개가 없어 라벨이 답할
+               물음이 없고, 자막 한 줄이 영상 위에 겹치는 꼴이다. */}
+        <p className="text-xs font-bold tracking-[0.08em] text-brand">
+          {video.kinds.join(" · ")}
+        </p>
+        <p className="mt-2 text-15 font-bold leading-snug text-ink">
           {video.title}
         </p>
         <p className="mt-1.5 flex-1 text-13 leading-relaxed text-ink-soft">
