@@ -245,7 +245,24 @@ export const nav: NavItem[] = [
     ],
   },
   { href: "/products", label: "제품", childrenFrom: "products" },
-  { href: "/clients", label: "납품실적" },
+  /* ⚠️⚠️ **2026-10-19 — 「납품실적」에서 「제작사례」로 바꿨다.** 유신이
+        *"납품실적이 아니라 적용사레나 이미지 자료 이런식으로 다른 문구로
+        표현 하면 좋을거 같은데"* 라고 했다.
+
+        맞는 말이었다 — 2026-10-16 에 그 페이지가 **거래처 이름 격자에서
+        납품 설비 사진 155장**으로 갈아탔는데(works.ts 머리 주석) 간판만
+        「납품실적」·CLIENTS 로 남아 **내용과 어긋나 있었다.** 거래처 이름은
+        한 줄도 안 나온다.
+
+        ⚠️ 「적용사례」로 가지 않은 까닭 — 제품 상세에 이미 **「적용 분야」**
+           칩이 있다(products/[slug]/page.tsx). 거래처가 둘을 같은 것으로 읽는다.
+        ⚠️ **URL 은 /clients 그대로다.** 이미 나간 링크를 깨뜨릴 까닭이 없다 —
+           파일 이름도 sitemap.ts 도 안 바꿨다. 폴더 이름과 화면 글자가 다른
+           것은 알고 둔 것이다.
+        ⚠️ 함께 바뀌는 다섯 곳 — Footer.tsx · clients/page.tsx 의 metadata 와
+           PageHero(eyebrow 도 CLIENTS → WORKS) · 홈의 「제작사례 전체 보기」.
+           **한 자리만 고치면 어긋난다.** */
+  { href: "/clients", label: "제작사례" },
   { href: "/videos", label: "영상자료" },
   { href: "/location", label: "오시는 길" },
   { href: "/contact", label: "문의하기" },

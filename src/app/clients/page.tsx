@@ -6,7 +6,7 @@ import Section from "@/components/Section";
 import { workKinds, works } from "@/data/works";
 
 export const metadata: Metadata = {
-  title: "납품실적",
+  title: "제작사례",
   /* ⚠️⚠️⚠️ **2026-10-16 — 거래처 이름에서 설비 사진으로 갈았다.**
      전에는 *"대성, 크리온, 3제이, 아이비테크를 비롯한 거래처에…"* 였다.
      유신이 *"고객사 보여주는거 말고 우리가 납품한거 이미지로"* 라고 정했으므로
@@ -34,9 +34,14 @@ export default function ClientsPage() {
           ⚠️ 개수는 넣지 않는다. 전에는 바로 아래 제목이 "주요 거래처 34개사"
              라 배너가 같은 숫자를 한 번 더 말하는 것이 문제였는데, 지금은
              아래가 사진이라 **셀 숫자 자체가 없다.** 넣을 까닭이 사라졌다. */}
+      {/* ⚠️⚠️ **2026-10-19 — CLIENTS/「납품실적」에서 WORKS/「제작사례」로.**
+             거래처 이름을 한 줄도 안 쓰는 쪽에 CLIENTS 가 붙어 있었다.
+             WORKS 는 **홈의 같은 격자 섹션이 이미 쓰는 eyebrow** 이고
+             데이터도 works.ts·featuredWorks 라 셋이 한 말이 된다.
+             까닭은 site.ts 의 nav 주석에 적어 두었다. */}
       <PageHero
-        eyebrow="CLIENTS"
-        title="납품실적"
+        eyebrow="WORKS"
+        title="제작사례"
         lead="1992년 설립 이후 조립·검사 라인의 부품 공급을 자동화해 왔습니다."
       />
 
@@ -63,7 +68,15 @@ export default function ClientsPage() {
           ⚠️ `PhotoGrid` 는 스물넷을 넘으면 **격자 전체를 한 Reveal 로** 감싼다.
              칸마다 관찰자를 걸면 *"빨리 스크롤 내리면 늦게 나와 기달려야"* 가
              되살아난다 — ClientGrid 에서 이미 겪은 일이다. */}
-      <Section eyebrow="WORKS" title="납품 설비">
+      {/* ⚠️⚠️ **eyebrow 가 배너와 겹치면 안 된다.** 2026-10-19 에 배너를
+             CLIENTS → WORKS 로 바꾸자 이 섹션(그때도 WORKS)과 **한 쪽에
+             WORKS 가 둘**이 됐다. 하위 페이지의 규칙은 「배너와 다른 이름을
+             쓴다」 이고(보유 설비 = EQUIPMENT/보유 설비 + BY PROCESS/공정별
+             보유 설비), 그 짝을 여기도 맞춘다.
+             ⚠️ BY TYPE 이 빈말이 아니다 — 왼쪽에 **기종 거르개**(볼피더·
+                직진피더·진동기·호퍼피더·방음커버·컨트롤러)가 실제로 서 있다.
+                거르개를 걷으면 이 이름부터 다시 본다. */}
+      <Section eyebrow="BY TYPE" title="기종별 납품 설비">
         <PhotoLightbox items={works} kinds={workKinds} />
       </Section>
 
