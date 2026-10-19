@@ -4,6 +4,24 @@ import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { Work } from "@/data/works";
+import Reveal from "./Reveal";
+
+/**
+ * 격자 칸 하나.
+ *
+ * `delay` 를 주면 **스크롤 리빌**로 뜨고, 안 주면 그냥 `li` 다.
+ *
+ * ⚠️ 모듈 바깥에 둔다. 컴포넌트 안에서 만들면 렌더마다 **새 타입**이 되어
+ *    React 가 칸을 통째로 다시 붙인다 — 사진이 매번 깜빡인다.
+ */
+function Cell({ delay, children }: { delay?: number; children: React.ReactNode }) {
+  if (delay === undefined) return <li>{children}</li>;
+  return (
+    <Reveal as="li" delay={delay}>
+      {children}
+    </Reveal>
+  );
+}
 
 /**
  * 납품 설비 사진 — 격자 · 분류 버튼 · 크게보기.
@@ -23,11 +41,27 @@ import type { Work } from "@/data/works";
 export default function PhotoLightbox({
   items,
   kinds,
+  reveal = false,
   className = "",
 }: {
   items: Work[];
   /** 분류 버튼에 쓸 기종. 안 주면 버튼을 내지 않는다(홈). */
   kinds?: string[];
+  /**
+   * 칸을 **스크롤 리빌**로 띄운다(`delay={i * 70}`).
+   *
+   * ⚠️⚠️ 유신이 짚었다 — *"여기 애니메이션 적용이 되야 할 거 같고 메인
+   *    페이지 쪽이야"*. 홈에서 **리빌이 없는 유일한 콘텐츠 섹션**이었다.
+   *    2026-10-16 에 거래처 이름 격자(`ClientGrid`, 리빌 있음)를 이 사진
+   *    격자로 바꾸면서 딸려 나갔다.
+   * ⚠️ `i * 70` 은 **바로 위 VIDEO 섹션과 같은 값**이다(`page.tsx:2368`).
+   *    두 섹션이 잇달아 나오므로 다르면 같은 자리에서 리듬이 바뀐다.
+   * ⚠️⚠️ **`/clients` 에서는 켜지 않는다.** ① 분류를 누를 때마다 칸이 통째로
+   *    다시 페이드인하면 산만하다 ② 155칸이면 IntersectionObserver 가 155개다.
+   *    `clients/page.tsx` 주석의 「스물넷 넘으면 격자 전체를 한 번」이 바로
+   *    이 걱정이었다 — 그 분기는 코드로 옮겨진 적이 없다.
+   */
+  reveal?: boolean;
   className?: string;
 }) {
   const [filter, setFilter] = useState<string | null>(null);
@@ -276,7 +310,7 @@ export default function PhotoLightbox({
             className={`grid grid-cols-2 gap-2 [overflow-anchor:none] sm:grid-cols-3 sm:gap-2.5 lg:grid-cols-3 xl:grid-cols-4 ${className}`}
           >
             {shown.map((w, i) => (
-          <li key={w.src}>
+          <Cell key={w.src} delay={reveal ? i * 70 : undefined}>
             <button
               type="button"
               onClick={(e) => {
@@ -310,7 +344,7 @@ export default function PhotoLightbox({
                 </span>
               </span>
                 </button>
-              </li>
+              </Cell>
             ))}
           </ul>
         </div>

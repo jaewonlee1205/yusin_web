@@ -2417,7 +2417,7 @@ export default function Home() {
           </Link>
         }
       >
-        <PhotoLightbox items={featuredWorks} />
+        <PhotoLightbox items={featuredWorks} reveal />
       </Section>
 
       {/* 7. 문의 CTA */}
