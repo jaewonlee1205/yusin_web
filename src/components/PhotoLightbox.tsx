@@ -85,6 +85,10 @@ export default function PhotoLightbox({
    * md(768)에서 4열로 가도 칸이 모바일 칸보다 작아지지 않는 것이 고른 점이다.
    * sm(640)부터 4열로 하면 칸이 142px 이 되어 모바일보다 **작아진다** — 자막이
    * 사진을 덮으므로 거기까지 내리지 않는다.
+   *   ⚠️ 2026-10-19 에 자막이 **한 줄로 고정**됐다(truncate). 두 줄짜리가
+   *      사라졌으니 "덮는다" 는 근거가 그만큼 약해졌다. 그래도 **되돌리지
+   *      말 것** — 142px 칸은 자막 한 줄(띠 63px)만으로도 칸 높이(95px)를
+   *      넘는다. 이제 근거는 "자막" 이 아니라 **칸 크기 자체**다.
    *
    * ⚠️ `/clients` 는 155장이라 3열에서 끝줄이 두 칸 남는다(155 = 3x51 + 2).
    *    외톨이가 아니므로 기본값을 그대로 쓴다.
@@ -378,8 +382,33 @@ export default function PhotoLightbox({
                 sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
                 className="relative h-full w-full object-cover text-transparent transition-transform duration-500 group-hover:scale-[1.03]"
               />
+              {/* ⚠️⚠️ **2026-10-19 — 한 줄로 자르고 말줄임을 붙인다.** 유신이
+                  *"2줄 이상 넘어가는 제목은 ... 이렇게 뒤에 표시 하게 해서 1줄로
+                  나오게 하면 될거 같고"* 라고 했고 보기까지 들었다 —
+                  *"볼피더 · 직진피더 · 표면처리 이거 경우 2줄 인데
+                  볼피더 · 직진피더... 예를 들면 이런식으로"*.
+
+                  재 보니 기종 조합은 **열여덟 가지뿐**이고 그중 **여섯**이 두
+                  줄로 접혔다(1440 · 1280 · 640 · 390 에서. 1024 · 768 · 500
+                  에서는 안 접힌다). 칸은 aspect-[3/2] 고정인데 자막만 길어지니
+                  **두 줄짜리 칸에서 사진이 그만큼 더 가려졌다.**
+
+                  ⚠️ 잘린 글은 **크게보기에 그대로 다 뜬다.** 한 번 누르면
+                     보이므로 정보가 사라지지 않는다. alt 도 온전하다.
+                  ⚠️⚠️ **같은 클래스 문자열을 쓰는 곳이 둘 더 있다** —
+                     ProductVideo.tsx 와 VideoCard.tsx 의 영상 자막이다.
+                     그쪽은 **문장**이라(「구멍 뚫린 판금 브래킷이 트랙을 타고
+                     한 방향으로 올라갑니다」) 자르면 뜻이 끊긴다. **거기엔
+                     넣지 않았다.** 이 파일 머리 주석의 *"사진과 영상이 같은
+                     말투여야 한다"* 는 **크기 · 색 · 그라데이션**을 말하는
+                     것이고, 줄 수는 그 약속 밖이다 — 기종 이름은 목록이고
+                     영상 자막은 문장이라 성격이 다르다.
+                  ⚠️ 이 저장소에서 truncate 를 쓰는 **첫 자리**다. Tailwind v4
+                     코어라 플러그인이 필요 없다(= overflow-hidden +
+                     text-ellipsis + whitespace-nowrap). 바깥 띠가 inset-x-0
+                     으로 폭을 주므로 바로 듣는다. */}
               <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-dark/85 via-dark/40 to-transparent px-3 pb-2.5 pt-8 text-left sm:px-4 sm:pb-3 sm:pt-10">
-                <span className="block text-13 font-medium leading-relaxed text-white sm:text-sm">
+                <span className="block truncate text-13 font-medium leading-relaxed text-white sm:text-sm">
                   {w.kinds.join(" · ")}
                 </span>
               </span>

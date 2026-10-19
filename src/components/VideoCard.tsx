@@ -71,6 +71,12 @@ export default function VideoCard({
             pointer-events-none — 누를 것이 없는 장식 영상이라 마우스를
             가로채지 않는다. */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-dark/85 via-dark/40 to-transparent px-4 pb-4 pt-9 sm:px-5 sm:pb-5 sm:pt-10 lg:px-6 lg:pb-6 lg:pt-12">
+          {/* ⚠️⚠️ **여기는 자르지 않는다**(2026-10-19). 글자 클래스가
+              PhotoLightbox 의 사진 자막과 **한 글자까지 같은데**, 그쪽에는
+              같은 날 `truncate` 가 붙었고 여기는 안 붙였다. 까닭 —
+              그쪽은 기종 **이름을 나열한 라벨**(조합 열여덟 가지, 최장 18자)
+              이고 여기는 **문장**이다. 문장을 잘라 말줄임을 붙이면 뜻이
+              끊긴다. 같은 클래스라고 따라 넣지 말 것. */}
           <p className="text-13 font-medium leading-relaxed text-white sm:text-sm">
             {video.note}
           </p>
