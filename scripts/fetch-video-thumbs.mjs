@@ -19,9 +19,24 @@ const ROOT = path.resolve(fileURLToPath(import.meta.url), "../..");
 const VIDEOS_TS = path.join(ROOT, "src", "data", "videos.ts");
 const OUT_DIR = path.join(ROOT, "public", "images", "videos");
 
-/** 썸네일 저장 크기. 카드가 가장 커지는 곳이 640px 언저리라 그 두 배는 필요 없다. */
-const WIDTH = 640;
-const HEIGHT = 360;
+/**
+ * 썸네일 저장 크기.
+ *
+ * ⚠️⚠️ 2026-10-19 — **640x360 에서 1280x720 으로 올렸다.** 여기 적혀 있던
+ *    "카드가 가장 커지는 곳이 640px 언저리라 그 두 배는 필요 없다" 가
+ *    같은 날 깨졌다 — 유신이 영상 쪽 격자를 **1열**로 해 달라고 해서
+ *    카드가 1280 이상에서 **848px** 이 됐다(VideoBrowser 의 격자 주석).
+ *    640px 그림을 848px 칸에 얹으면 1.33배, 2배 화면에서는 **2.65배**로
+ *    늘어나 눈에 띄게 흐려진다.
+ * ⚠️ 원본(maxresdefault)이 1280x720 이라 **더 올릴 수는 없다.** 카드가
+ *    이보다 커지면 그때는 그림이 아니라 칸을 다시 본다.
+ * ⚠️ 로컬 포스터 열하나는 처음부터 1280x720 이었다(영상 해상도 그대로).
+ *    이 넷만 작아서 한 쪽만 흐렸다.
+ * ⚠️ 파일이 10~16KB 에서 30~60KB 쯤으로 는다. 넷 다 지연 로딩이라 첫
+ *    화면과는 무관하다.
+ */
+const WIDTH = 1280;
+const HEIGHT = 720;
 const QUALITY = 72;
 
 /**

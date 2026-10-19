@@ -211,7 +211,14 @@ export default function VideoEmbed({
             src={poster}
             alt=""
             fill
-            sizes="(min-width: 640px) 50vw, 100vw"
+            /* ⚠️ 2026-10-19(4) — 격자가 **1열**이 되면서 고쳤다. 전에는
+                  "(min-width: 640px) 50vw, 100vw" 였는데, 그대로 두면
+                  next/image 가 848px 칸에 **절반 폭짜리 srcset** 을 골라
+                  흐려진다. Container 가 1088px 에서 멈추므로 칸의 최대가
+                  848px 다(VideoBrowser 의 격자 주석에 폭별 표가 있다).
+               ⚠️ 이 값은 **파사드 쪽만**이다. 홈 미리보기(위 preview 갈래)는
+                  여전히 lg 에서 2열이라 50vw 가 맞다. */
+            sizes="(min-width: 1280px) 848px, (min-width: 1024px) 720px, 100vw"
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
           <span
