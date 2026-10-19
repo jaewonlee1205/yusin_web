@@ -51,7 +51,23 @@ export default function FacilityPage() {
 
           lead 는 두지 않는다 — 표가 곧 설명이라 앞에 문장을 세울 자리가 없다.
           /company/vision 의 조직도 섹션과 /company 의 회사 개요 섹션이 같은
-          이유로 lead 없이 eyebrow + title 만 둔다. */}
+          이유로 lead 없이 eyebrow + title 만 둔다.
+
+          ⚠️⚠️ **2026-10-19 — 그 원칙을 카드 안에도 적용했다.** 공정마다
+             한 줄씩 있던 설명("볼 본체와 정렬 지그를 도면대로 깎아
+             냅니다." 등 넷)을 걷었다. 유신이 *"이런 문구는 삭제하자"* 라고
+             했고, 칩을 선표로 바꾸고 나니 **제목 + 합계 + 표**만으로 카드가
+             다 읽혀서 그 한 줄은 제목과 표를 떼어 놓기만 했다.
+
+             ⚠️ **설명의 책임은 두 곳에 남는다** — 배너 lead("설비 21종
+                55대. 가공부터 조립까지 외주 없이 끝냅니다.")와
+                metadata.description(기계 이름을 검색 키워드로 남긴 자리).
+                쪽의 글이 네 문장 얇아졌으니 그 둘을 걷을 때 함께 본다.
+
+             ⚠️ 글은 **company.ts 의 EQUIPMENT_GROUPS[].body 에 그대로
+                남아 있다**(화면에 안 나올 뿐이다). 되살리려면 아래 합계 줄
+                바로 밑에 <p className="mt-2 text-sm leading-relaxed
+                text-muted"> 를 되돌리면 된다. */}
       <Section eyebrow="BY PROCESS" title="공정별 보유 설비">
         {/* 그룹마다 가로로 펼친 밴드를 쌓는다. 두 열 카드였을 때는 품목 수가
             9/3/5/4 로 달라 같은 행의 높이가 245px 까지 어긋났다(절삭·가공 505 대
@@ -80,18 +96,24 @@ export default function FacilityPage() {
               >
                 {/* 아래 품목 행과 같은 틀(이름 왼쪽 / 수 오른쪽)이라 그룹 합계가
                     품목 대수와 한 열로 선다. 합계를 품목보다 약하게 둔다 —
-                    text-xs muted 대 text-sm bold ink. 합계가 개별 항목보다
-                    세 보이면 위계가 뒤집힌다.
-                    단위는 종 → 대 순서다. 배너 lead("21종 55대")와 맞춘다. */}
+                    **text-xs(12px) muted 대 text-15 ink**. 합계가 개별
+                    항목보다 세 보이면 위계가 뒤집힌다.
+                    ⚠️ 한때 "text-xs muted 대 text-sm bold ink" 라고 적혀
+                       있었다. 품목 대수가 칩에서 선표로 가며 text-sm
+                       font-semibold → text-15 regular 이 됐다 — **위계는
+                       그대로지만 수치가 달라졌다.**
+                    단위는 종 → 대 순서다. 배너 lead("21종 55대")와 맞춘다.
+
+                    ⚠️ 이 줄 **바로 아래**가 공정 설명 <p> 자리였다. 2026-10-19
+                       에 걷었다(위 섹션 주석 참고). dl 의 mt-5 는 그대로 둔다 —
+                       제목이 자기 표에 바짝 붙어 **캡션처럼** 서는 것이
+                       맞는 모양이다(카드 p-6 의 24px 보다 좁은 것이 의도다). */}
                 <div className="flex items-baseline justify-between gap-3">
                   <h3 className="text-lg font-bold text-ink">{group.title}</h3>
                   <span className="shrink-0 text-xs tabular-nums text-muted">
                     {items.length}종 {units}대
                   </span>
                 </div>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
-                  {group.body}
-                </p>
                 {/* ⚠️⚠️⚠️ **2026-10-19 — 칩을 걷고 선표로 갔다.** 유신이
                        *"공정별 보유 설비 여기 표로 안되어 있다 보니깐 보기
                        불편해서"* · *"[회사 개요] 여기 표 디자인 스타일 동일하게
