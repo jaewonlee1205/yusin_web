@@ -956,7 +956,15 @@ export default async function ProductDetailPage({
                     (한 줄에 292px 필요)이 **펴진다** — 296px 가 된다.
                     ⚠️ 고치기 전에는 그 자리가 288px 라 **접혀 있었다.**
                  ⚠️ 여기는 전폭(wide) 행이 없다 — 열은 그냥 i % 3 이다. */}
-          <dl className="mt-8 grid border-t-2 border-ink sm:grid-cols-3 sm:border-b">
+          {/* ⚠️⚠️ **밑선도 2px 먹색이다**(2026-10-19). 한때 sm:border-b
+                 (1px 먹색, sm 부터만)였다. 유신이 *"위에만 선 굵은게 아니라
+                 밑에도 선 굵게"* 라고 해서 셋을 함께 고쳤다 — 까닭은
+                 company/page.tsx 의 같은 자리 주석에 있다.
+                 ⚠️ **모든 폭에서 그린다.** 전에는 sm 미만에서 밑선이 없었다 —
+                    한 열로 쌓이면 마지막 칸의 1px 회색이 끝이었다. 이제
+                    last-child 로 그것을 끄고 2px 먹선이 대신 선다.
+                 ⚠️ sm 부터는 칸이 이미 sm:border-b-0 이라 겹칠 선이 없다. */}
+          <dl className="mt-8 grid border-y-2 border-ink [&>*:last-child]:border-b-0 sm:grid-cols-3">
             {product.specs.slice(4).map((spec, i) => (
               <div
                 key={spec.label}

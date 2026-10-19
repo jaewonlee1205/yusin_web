@@ -406,8 +406,22 @@ export default function CompanyPage() {
                   (소재지·주 사업·제작 품목)이 뒤다. DOM 좌표로 재서 이
                   계산과 같은지 확인했다 — 빈칸도 없다.
                ⚠️ **행을 더하거나 wide 를 섞으면 다시 잰다.** */}
+        {/* ⚠️⚠️ **2026-10-19 — 밑선도 2px 먹색이다.** 유신이 *"여기 위에만
+               선 굵은게 아니라 밑에도 선 굵게 하는게 나은거 같고"* 라고 했다.
+               맞는 말이다 — 위만 굵으면 표가 **열려 있는** 꼴이라, 아래로
+               이어지는 내용과 표의 끝이 흐려진다. 위아래가 같이 굵어야 표가
+               한 덩이로 닫힌다. 선표 **셋 모두**에 같이 넣었다.
+
+               ⚠️ **이중선을 피하려고 last-child 의 border-b 를 함께 끈다.**
+                  행마다 border-b border-line 이 있어 그냥 더하면 마지막 행
+                  아래에 **1px 회색 + 2px 먹색**이 겹친다.
+               ⚠️⚠️ **마지막 행이 전폭(wide)이라야 last-child 하나로 족하다.**
+                  lg 2열에서 마지막 줄에 칸이 둘 서면 왼쪽 칸의 1px 회색이
+                  2px 먹선 위에 그대로 남는다. 지금 데이터는 끝 셋(소재지·
+                  주 사업·제작 품목)이 전부 전폭이라 마지막 줄에 칸이 하나다.
+                  **wide 를 걷거나 행을 더하면 여기를 다시 본다.** */}
         <Reveal>
-        <dl className="grid border-t-2 border-ink lg:grid-cols-2">
+        <dl className="grid border-y-2 border-ink [&>*:last-child]:border-b-0 lg:grid-cols-2">
           {overview.map((row, i) => (
             <div
               key={row.label}

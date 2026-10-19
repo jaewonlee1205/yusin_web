@@ -300,7 +300,9 @@ export default function LocationPage() {
                 선뿐이다. */}
             <Reveal
               delay={90}
-              className="overflow-hidden rounded-2xl border border-line bg-white"
+              /* ⚠️ border-b-0 — 아래 dl 이 2px 먹색 밑선을 가지므로 카드
+                 테두리가 같은 자리에 1px 를 한 겹 더 그리지 않게 한다. */
+              className="overflow-hidden rounded-2xl border border-b-0 border-line bg-white"
             >
               {/* lg 부터 3:1 이다(1088x363) — 홈 PERFORMANCE 영상과 같은
                   비율로 가로로 시원하게 눕는다. 한때 칸 높이를 받는 lg:flex +
@@ -456,7 +458,16 @@ export default function LocationPage() {
               {/* ⚠️ 둘째 열은 **데이터에서 센다** — gridColumns 머리 주석 참고.
                      지금 데이터는 비전폭 넷(전화·팩스·이메일·주차)이 앞이고
                      전폭 둘(주소·운영 시간)이 뒤다. DOM 좌표로 재서 확인했다. */}
-              <dl className="grid border-t-2 border-ink [&>*:last-child]:border-b-0 lg:grid-cols-2">
+              {/* ⚠️⚠️ **밑선도 2px 먹색이다**(2026-10-19). 까닭은
+                     company/page.tsx 의 같은 자리 주석에 있다 — 선표 셋을
+                     함께 고쳤다.
+                     ⚠️ **여기는 카드 안이다.** dl 의 2px 밑선 아래에 카드의
+                        1px 테두리가 또 서므로 **카드의 밑테두리를 껐다**
+                        (border-b-0, 위 Reveal). 표가 제 밑선을 갖는다.
+                     ⚠️ last-child 하나로 족한 까닭 — 끝 둘(주소·운영 시간)이
+                        전폭이라 마지막 줄에 칸이 하나다. 이 규칙은 이미 있었다
+                        (마지막 칸의 1px 회색을 끄려고 둔 것이다). */}
+              <dl className="grid border-y-2 border-ink [&>*:last-child]:border-b-0 lg:grid-cols-2">
                 {cells.map((cell, i) => (
                   <div
                     key={cell.label}
