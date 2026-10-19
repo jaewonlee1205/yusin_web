@@ -18,6 +18,8 @@ import { site, telHref } from "@/data/site";
  *
  * 주제별로 나누면서 회사소개 아래 중첩 목록(조직도·보유 설비)이 없어졌다.
  * 한 열에 10행을 세로로 쌓던 것을 여러 열로 나눌 수 없었던 이유가 그 중첩이었다.
+ * ⚠️ 2026-10-19 에 **보유 설비 쪽 자체가 없어졌다**(유신: "여기 페이지 그냥
+ *    삭제 해줘"). [회사] 열은 개요 · 조직도 · 제작사례 셋이다.
  */
 const FOOTER_GROUPS: {
   title: string;
@@ -37,7 +39,6 @@ const FOOTER_GROUPS: {
         // 열 제목이 이미 [회사]다. site.ts 의 드롭다운도 "개요" 라 표기가 맞는다.
         { href: "/company", label: "개요", prefix: "회사" },
         { href: "/company/vision", label: "조직도" },
-        { href: "/company/facility", label: "보유 설비" },
         { href: "/clients", label: "제작사례" },
       ],
     },

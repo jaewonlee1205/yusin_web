@@ -241,7 +241,11 @@ export const nav: NavItem[] = [
       //  페이지에 있다.)
       { href: "/company", label: "개요" },
       { href: "/company/vision", label: "조직도" },
-      { href: "/company/facility", label: "보유 설비" },
+      /* ⚠️ 2026-10-19 — 세 번째였던 { "/company/facility", "보유 설비" } 를
+         걷었다. 유신이 *"여기 페이지 그냥 삭제 해줘"* 라고 해 쪽을 통째로
+         지웠다. 설비 수치는 사라지지 않는다 — 홈 지표 띠가 company.ts 의
+         equipmentTotals 에서 21종 55대를 세어 온다. 되살리려면 git 의
+         f4be41a 에 마지막 모습이 있다. */
     ],
   },
   { href: "/products", label: "제품", childrenFrom: "products" },

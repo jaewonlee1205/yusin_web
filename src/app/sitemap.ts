@@ -11,7 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "",
     "/company",
     "/company/vision",
-    "/company/facility",
+    // 2026-10-19 — "/company/facility" 를 뺐다. 쪽을 지웠다.
     "/products",
     "/clients",
     "/videos",

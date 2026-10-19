@@ -285,10 +285,21 @@ export const philosophyMotto = "좋은 제품, 좋은 일터";
  * 보유 설비. PPT 11페이지 목록 그대로이고, 읽기 쉽도록 공정별로 묶었다.
  * "무엇을 직접 할 수 있는 회사인가"가 단순 나열보다 잘 드러난다.
  *
- * ⚠️⚠️ **body 는 2026-10-19 부터 화면에 나오지 않는다.** 유신이
- *    *"이런 문구는 삭제하자"* 라고 해서 /company/facility 의 카드에서
- *    <p> 를 걷었다. **이 글을 고쳐도 화면은 안 바뀐다** — 되살리려면
- *    facility/page.tsx 의 합계 줄 아래에 <p> 를 되돌려야 한다.
+ * ⚠️⚠️⚠️ **2026-10-19 — /company/facility 쪽이 통째로 없어졌다.** 유신이
+ *    *"여기 페이지 그냥 삭제 해줘"* 라고 했다. 그래서 아래 넷 가운데
+ *    **EQUIPMENT_GROUPS 와 equipmentByGroup 은 지금 쓰는 곳이 없다.**
+ *
+ *    ⚠️ **EQUIPMENT 와 equipmentTotals 는 살아 있다** — 홈 지표 띠가
+ *       "55대 가공 설비 / 21종을 사내에서" 를 여기서 세어 오고
+ *       (page.tsx:11 import), 아래 philosophy body 도 같은 수를 쓴다.
+ *       **지우면 홈이 깨진다.**
+ *    ⚠️ 되살리려면 git 의 f4be41a 에 쪽의 마지막 모습이 있다 —
+ *       git checkout f4be41a -- src/app/company/facility/page.tsx
+ *
+ * ⚠️⚠️ **body 는 2026-10-19 부터 화면에 나오지 않았다.** 쪽이 지워지기
+ *    앞서, 유신이 *"이런 문구는 삭제하자"* 라고 해서 /company/facility 의
+ *    카드에서 <p> 를 먼저 걷었다. 그 쪽이 아예 없어졌으니 이제는 **어디에도
+ *    나오지 않는다.**
  *
  *    그래도 **지우지 않는다.** 까닭이 둘이다 —
  *      · 되돌릴 자리다. 이 사이트의 관례다(page.tsx 의 VIBRATORS.cx 도
@@ -297,8 +308,9 @@ export const philosophyMotto = "좋은 제품, 좋은 일터";
  *        의 '부품이 지나는 면을 매끄럽게 다듬어 걸림과 흠집을 없앤다'".
  *        지우면 그 인용이 허공을 가리킨다
  *
- *    title 과 key 는 그대로 쓰인다 — 카드 제목이고, organization 의 가공부
- *    tasks 도 이 공정 분류에서 가져왔다(위 170행 주석).
+ *    title 과 key 는 한때 카드 제목이었다. 쪽이 없어진 지금은 organization
+ *    의 가공부 tasks 가 이 공정 분류에서 왔다는 근거로만 남는다(위 170행
+ *    주석). 그것만으로도 지우지 않을 까닭이 된다.
  */
 export const EQUIPMENT_GROUPS = [
   {
