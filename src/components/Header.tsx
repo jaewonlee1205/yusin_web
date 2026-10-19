@@ -243,7 +243,19 @@ export default function Header() {
             className="hidden items-center gap-0.5 lg:flex"
           >
             {desktopNav.map((item) => {
-              const active = isActive(item.href);
+              /* ⚠️⚠️ **자식까지 보고 켠다.** isActive 는 startsWith 라,
+                    자식이 부모 경로 아래 있을 때만 맞는다(/company/vision ·
+                    /products/bowl-feeder). 2026-10-19 에 「영상자료」가
+                    「제작사례」의 자식이 되면서 **videos 쪽이 clients 로
+                    시작하지 않는 첫 짝**이 됐다 — 그대로 두면 영상자료 쪽에
+                    서 있는데 헤더의 「제작사례」가 꺼져 보인다.
+                 ⚠️ 주석에 **별 둘 뒤에 빗금**을 쓰지 말 것. 그 세 글자가
+                    블록 주석을 거기서 닫는다(site.ts 에서 한 번 깨뜨렸다).
+                 ⚠️ 모바일 메뉴에는 활성 표시가 없다(아래 nav.map). 고칠 곳은
+                    여기 하나다. */
+              const active =
+                isActive(item.href) ||
+                childrenFor(item).some((c) => isActive(c.href));
               const hasPanel =
                 item.childrenFrom === "products" || !!item.children;
               const open = openMenu === item.href;
