@@ -13,10 +13,22 @@
  *
  * note 길이 — **두 자리가 서로 다른 칸에 넣는다.**
  *
- *   /videos  카드 아래 글 칸이다. 1440 에서 486px, 320 에서 223px 로 두 배
- *            넘게 차이 나 모든 폭에서 같은 줄 수로 맞출 수 없다. 1440 에서
- *            한 줄이 되게 쓰고(13px 로 486px 이내) 좁은 폭에서 두 줄이 되는
- *            것은 둔다 — 카드 높이는 VideoCard 의 flex 가 맞춘다.
+ *   /videos  카드 아래 글 칸이다. ⚠️⚠️ **2026-10-19 에 폭이 반으로 줄었다** —
+ *            격자가 2열에서 2~3열 + 옆 거르개(VideoBrowser)가 되면서다.
+ *            다시 재니 —
+ *
+ *              1440  221px   1280  221px   1024  304px
+ *               768  296px    640  232px    390  310px   320  240px
+ *
+ *            **어느 폭에서도 한 줄이 되지 않는다.** 한때 여기 *"1440 에서
+ *            한 줄이 되게 쓴다(13px 로 486px 이내)"* 고 적혀 있었는데, 그
+ *            486px 가 사라졌다. 지금은 **두 줄이 기본**이고 가장 긴 note
+ *            (호퍼피더)만 1440.1280.320 에서 세 줄이다.
+ *            ⚠️ 줄 수를 맞추려 하지 않는다 — 카드 높이는 VideoCard 의 flex 가
+ *               맞추므로 한 행 안에서 아랫변이 가지런하다. 재서 확인했다.
+ *            ⚠️ /videos 에 서는 note 는 **이 파일 것만이 아니다.** 제품 구동
+ *               영상 일곱은 products.ts 의 `video.note` 를 그대로 쓴다
+ *               (videoLibrary.ts). 그쪽 글을 늘릴 때도 이 칸을 본다.
  *
  *   홈       영상 위 자막이다. 더 좁다 — 1024 에서 408px, 640 에서 521px,
  *            320 에서 233px 다(VideoCard 가 2열을 lg 부터 켜는 이유).
@@ -30,9 +42,38 @@
  *    (아래 poster 주석).
  */
 export type Video = {
+  /**
+   * 유튜브 영상이면 **유튜브 id**, 아니면 리액트 키 겸 파일 이름이다.
+   * `src` 가 있는 항목은 유튜브에 없는 영상이라 이 값이 유튜브 id 가 아니다.
+   */
   id: string;
   title: string;
   note: string;
+  /**
+   * /videos 의 「기종」 거르개 축. 갤러리(/clients)의 `workKinds` 와 같은
+   * 일곱 글자를 쓴다 — 두 쪽 패널이 같아 보여야 한다.
+   *
+   * ⚠️⚠️ **지어 붙이지 않는다.** 위 TODO 가 적어 둔 대로 title 과 note 는
+   *    썸네일을 보고 붙인 추정이라, 그 글에서 기종을 역추론하면 추정 위에
+   *    추정을 쌓는 꼴이 된다.
+   *
+   *    아래 다섯 편을 「볼피더」로 두는 근거는 **유튜브 쪽 제목**이다 —
+   *    "자동공급기(볼피더) 제조 전문기업, 유신F.A시스템 01~04". 유신이 직접
+   *    볼피더라고 적은 것이고, 위 머리 주석이 그 제목을 이미 인용하고 있다.
+   *
+   *    제품 구동 영상 일곱(videoLibrary.ts)은 그 제품의 구동 영상이라
+   *    기종이 정의상 정해진다.
+   */
+  kinds: string[];
+  /**
+   * 유튜브에 없는 **로컬 mp4**(public/videos/). 있으면 /videos 격자에서
+   * 누를 때 유튜브 iframe 대신 이 파일이 그 자리에서 돈다(VideoEmbed).
+   *
+   * ⚠️ `preview` 와 다르다. preview 는 **홈에서 저절로 도는 장식 영상**이고
+   *    이것은 /videos 에서 **눌러야 도는 본 영상**이다. 한 편이 둘 다 가질
+   *    수 있다(홈 전용 영상이 그렇다).
+   */
+  src?: string;
   /**
    * 소리 없이 저절로 도는 미리보기 파일(public/videos/).
    *
@@ -73,6 +114,7 @@ export const videos: Video[] = [
     id: "DzUOtS_O2ko",
     title: "소형 부품 정렬 · 에어 선별",
     note: "트랙에 한 줄로 선 부품을 위쪽 노즐이 공기로 걸러 냅니다.",
+    kinds: ["볼피더"],
     // 원본 촬영본에 이 장면이 없다(검정.연두 볼 + 에어 노즐). 넷 중 이것만
     // 못 찾았다 — 그래서 홈에 올리지 않는다.
   },
@@ -80,6 +122,7 @@ export const videos: Video[] = [
     id: "_zG4dYTCWpc",
     title: "금속 부품 정렬",
     note: "구멍 뚫린 판금 브래킷이 트랙을 타고 한 방향으로 올라갑니다.",
+    kinds: ["볼피더"],
     preview: "/videos/preview-metal-parts.mp4",
     poster: "/images/videos/preview-metal-parts.webp",
   },
@@ -87,6 +130,7 @@ export const videos: Video[] = [
     id: "qbBMoY2g_WE",
     title: "커넥터 부품 정렬",
     note: "커넥터 하우징이 볼에서 트랙으로 올라서며 자세를 잡습니다.",
+    kinds: ["볼피더"],
     preview: "/videos/preview-connector.mp4",
     poster: "/images/videos/preview-connector.webp",
     // ⚠️ 한때 여기에 "원본(MAH07514)이 hero.mp4 와 같은 촬영본이라 홈에 올리면
@@ -99,6 +143,7 @@ export const videos: Video[] = [
     id: "KiiYXbIajog",
     title: "볼 내부 선별 지그",
     note: "볼 안쪽에 세운 지그가 지나가는 부품의 자세를 가려냅니다.",
+    kinds: ["볼피더"],
     preview: "/videos/preview-bowl-jig.mp4",
     poster: "/images/videos/preview-bowl-jig.webp",
   },
@@ -111,6 +156,12 @@ export const videos: Video[] = [
  *    이름이라, videos[] 에 들어가면 /videos 가 열리지 않는 유튜브 파사드를
  *    만든다(VideoEmbed 는 preview 가 없으면 id 로 유튜브를 건다).
  *
+ * ⚠️⚠️ **2026-10-19 — 그래도 /videos 에 선다.** 위 경고가 막던 것은 "유튜브
+ *    id 인 척하는 id" 였는데, VideoEmbed 에 `src` 갈래가 생겨 **로컬 mp4 를
+ *    그 자리에서 돌릴 수 있게** 됐다. 그래서 videoLibrary.ts 가 이것을 따로
+ *    집어 /videos 격자에 올린다 — videos[] 에 넣어서가 아니다.
+ *    경고는 그대로 유효하다. **여전히 videos[] 에 넣지 말 것.**
+ *
  * 왜 이것이 필요한가 — 유신이 홈 미리보기를 **넷**으로 늘려 달라 했는데
  * 유튜브 영상은 넷이지만 그중 "소형 부품 정렬 · 에어 선별"(DzUOtS_O2ko)은
  * 원본 촬영본을 못 찾아 미리보기를 못 만든다(위 주석). 그래서 넷째 칸을
@@ -119,11 +170,15 @@ export const videos: Video[] = [
  * ⚠️ 부품 이름은 **눈에 보이는 대로만** 적었다 — 반투명 흰 플라스틱 블록이
  *    강통 볼에서 나선 트랙을 타고 한 줄로 오른다. 품명을 모른다.
  */
-const HOME_ONLY: Video[] = [
+export const HOME_ONLY: Video[] = [
   {
     id: "white-blocks",
     title: "플라스틱 블록 정렬",
     note: "반투명 블록이 볼 벽을 따라 한 줄로 올라섭니다.",
+    kinds: ["볼피더"],
+    // 홈에서는 preview 로 저절로 돌고, /videos 에서는 src 로 눌러야 돈다.
+    // 같은 파일이다 — 자른 클립이 하나뿐이라 본 영상과 미리보기가 같다.
+    src: "/videos/preview-white-blocks.mp4",
     preview: "/videos/preview-white-blocks.mp4",
     poster: "/images/videos/preview-white-blocks.webp",
   },
