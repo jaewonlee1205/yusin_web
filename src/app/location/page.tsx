@@ -298,11 +298,25 @@ export default function LocationPage() {
                 테두리로 선다(2D). 그림자로 띄우면 자료를 읽는 자리에 맞지
                 않는다 — 사이트의 다른 표(제품 사양 · 회사 개요)도 전부
                 선뿐이다. */}
+            {/* ⚠️⚠️ **2026-10-19 — 모서리를 직각으로 했다.** 유신이
+                   *"위치 및 연락처 여기 지도하고 밑에 표 모서리가 둥근데
+                   둥근거 말고 네모로 하는게 나은거 같아"* 라고 했다.
+                   rounded-2xl 을 걷었다.
+
+                   ⚠️ **한 카드로 묶은 까닭은 그대로 유효하다**(위 주석).
+                      바뀐 것은 모서리뿐이다. 되돌릴 때 둘을 섞지 말 것.
+                   ⚠️ **overflow-hidden 은 남긴다.** 안쪽 지도(iframe)가 칸
+                      밖으로 나가지 않게 막는 것이라 모서리와 상관이 없다.
+                   ⚠️ 안쪽 「길찾기」 버튼의 rounded-lg 는 **그대로다.** 유신이
+                      짚은 것은 지도와 표를 감싼 카드 모서리다. 작은 버튼까지
+                      직각으로 깎으면 눌리는 것으로 안 읽힌다.
+                   ⚠️ 사이트의 다른 카드(제품 분류 · 기종 · 제품 카드)는
+                      **안 건드렸다.** 거기까지 번지면 다른 말이 된다. */}
             <Reveal
               delay={90}
               /* ⚠️ border-b-0 — 아래 dl 이 2px 먹색 밑선을 가지므로 카드
                  테두리가 같은 자리에 1px 를 한 겹 더 그리지 않게 한다. */
-              className="overflow-hidden rounded-2xl border border-b-0 border-line bg-white"
+              className="overflow-hidden border border-b-0 border-line bg-white"
             >
               {/* lg 부터 3:1 이다(1088x363) — 홈 PERFORMANCE 영상과 같은
                   비율로 가로로 시원하게 눕는다. 한때 칸 높이를 받는 lg:flex +
