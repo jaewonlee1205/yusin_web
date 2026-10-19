@@ -65,13 +65,18 @@ export default function VideosPage() {
           </a>
         }
       >
-        {/* 적용 분야·다른 제품 격자와 같은 등장 방식이다. 전에는 영상만
-            Reveal 이 없어 스크롤하면 혼자 먼저 떠 있었다. */}
+        {/* ⚠️⚠️ **영상에는 리빌이 없다**(2026-10-19). 유신이 *"동영상 생기는
+            것 보다 그냥 애니메이션 적용 안하는 편이 더 좋을거 같네"* 라고 해서
+            영상이 보이는 곳 전부에서 걷었다.
+            ⚠️ 한때는 **반대**였다 — *"전에는 영상만 Reveal 이 없어 스크롤하면
+               혼자 먼저 떠 있었다"* 며 적용 분야·다른 제품 격자와 같은
+               `delay={i * 70}` 을 넣었던 자리다. 이번에는 **격자 쪽이 아니라
+               영상 쪽에 맞췄다.** */}
         <ul className="grid gap-6 sm:grid-cols-2 sm:gap-8">
-          {videos.map((video, i) => (
-            <Reveal as="li" key={video.id} delay={i * 70}>
+          {videos.map((video) => (
+            <li key={video.id}>
               <VideoCard video={video} />
-            </Reveal>
+            </li>
           ))}
         </ul>
       </Section>

@@ -546,9 +546,13 @@ export default async function ProductDetailPage({
             ⚠️ 그 대가로 **1024~1279 구간에서는 카드가 세로로 넷 쌓인다.**
                "2행 2열" 은 1280 이상에서 보인다. 되돌리려면 사진을 걷거나
                56개 글을 줄여야 한다. */}
+        {/* ⚠️ 한때 칸마다 `Reveal delay={i * 70}` 이었다. 2026-10-19 에
+               **격자 하나당 리빌 하나**로 바꿨다 — 유신이 *"1개가 아니라
+               묶음으로 보이게"* 라고 해서 사이트 전체를 같은 규칙으로 뒀다. */}
+        <Reveal>
         <ul className="grid gap-6 xl:grid-cols-2">
-          {product.features.map((f, i) => (
-            <Reveal as="li" key={f.title} delay={i * 70} className="h-full">
+          {product.features.map((f) => (
+            <li key={f.title} className="h-full">
               {/* 체크 · 글 · 사진 **세 칸**이 한 줄로 선다. 사진은 오른쪽
                   끝의 64x64 정사각 썸네일이다.
 
@@ -654,9 +658,10 @@ export default async function ProductDetailPage({
                   />
                 </div>
               </div>
-            </Reveal>
+            </li>
           ))}
         </ul>
+        </Reveal>
 
         {/* KPI 넷. 값 - 라벨 두 줄이 가로로 선다.
 
@@ -701,12 +706,13 @@ export default async function ProductDetailPage({
 
             ⚠️ StatCounter 를 쓰지 않는다. value 가 "7,200" 처럼 쉼표가 있고
                "2~3" 처럼 범위여서 숫자로 셀 수 없다. */}
+        {/* ⚠️ 한때 칸마다 `Reveal delay={i * 80}` 이었다 — 2026-10-19 에
+               **격자 하나당 리빌 하나**로 바꿨다. */}
+        <Reveal>
         <ul className="mt-12 grid gap-8 border-t border-ink/10 pt-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-7 lg:text-center">
           {product.kpis.map((kpi, i) => (
-            <Reveal
-              as="li"
+            <li
               key={kpi.label}
-              delay={i * 80}
               className={i > 0 ? "lg:border-l lg:border-ink/10" : ""}
             >
               <p className="text-34 font-extrabold leading-none tracking-tight tabular-nums text-ink">
@@ -716,9 +722,10 @@ export default async function ProductDetailPage({
                 </span>
               </p>
               <p className="mt-2.5 text-sm font-bold text-ink">{kpi.label}</p>
-            </Reveal>
+            </li>
           ))}
         </ul>
+        </Reveal>
       </Section>
 
       {/* 구동 영상 — 제품 특징 바로 다음이다.
@@ -1083,13 +1090,18 @@ export default async function ProductDetailPage({
             (144px)이었는데, 카드 셋이 멀찍이 떨어져 한 묶음으로 안 읽혔다.
             사이트의 다른 카드 격자와 같은 값으로 맞춘다(FEATURES gap-6,
             적용 분야 gap-4). */}
+        {/* ⚠️ 한때 칸마다 `Reveal delay={i * 70}` 이었다. 2026-10-19 에
+               **격자 하나당 리빌 하나**로 바꿨다 — 유신이 *"1개가 아니라
+               묶음으로 보이게"* 라고 해서 사이트 전체를 같은 규칙으로 뒀다. */}
+        <Reveal>
         <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {related.map((p, i) => (
-            <Reveal as="li" key={p.slug} delay={i * 70}>
+          {related.map((p) => (
+            <li key={p.slug}>
               <ProductCard product={p} />
-            </Reveal>
+            </li>
           ))}
         </ul>
+        </Reveal>
       </Section>
 
       <ContactCTA />

@@ -61,10 +61,16 @@ export default function ApplicationCases({
 }: {
   cases: ApplicationCase[];
 }) {
+  /* ⚠️⚠️ **한때 칸마다 `Reveal delay={i * 70}` 이었다.** 2026-10-19 에 유신이
+       *"1개가 아니라 묶음으로 보이게"* 라고 해서 사이트의 모든 격자를
+       **격자 하나당 리빌 하나**로 바꿨다.
+     ⚠️ delay 를 0 으로 맞추는 것으로는 안 된다 — 칸마다 IntersectionObserver
+        가 따로라 아래 칸이 화면에 나중에 들어와 결국 차례로 뜬다. */
   return (
+    <Reveal>
     <ul className="mt-4 flex flex-wrap gap-4">
-      {cases.map((c, i) => (
-        <Reveal as="li" key={c.name} delay={i * 70} className={BASIS}>
+      {cases.map((c) => (
+        <li key={c.name} className={BASIS}>
           <div className="overflow-hidden rounded-2xl bg-white shadow-card">
             <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface">
               <Image
@@ -80,8 +86,9 @@ export default function ApplicationCases({
               {c.name}
             </p>
           </div>
-        </Reveal>
+        </li>
       ))}
     </ul>
+    </Reveal>
   );
 }

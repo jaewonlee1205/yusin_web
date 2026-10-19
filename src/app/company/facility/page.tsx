@@ -64,18 +64,18 @@ export default function FacilityPage() {
 
             그룹 순서는 바꾸지 않는다 — company.ts:174 주석대로 절삭→용접→연마
             →운반이 실제 공정 흐름이고 조직도 가공부 칩과도 짝이 맞는다. */}
+        {/* ⚠️ 한때 밴드마다 `Reveal delay={i * 80}` 이었다(80ms 는 이 사이트
+               카드 격자의 관례였다). 2026-10-19 에 **격자 하나당 리빌 하나**로
+               바꿨다 — 사이트 전체가 같은 규칙이다. */}
+        <Reveal>
         <div className="grid gap-4">
-          {EQUIPMENT_GROUPS.map((group, i) => {
+          {EQUIPMENT_GROUPS.map((group) => {
             const items = equipmentByGroup(group.key);
             const units = items.reduce((sum, item) => sum + item.count, 0);
 
             return (
-              // 80ms 는 이 사이트 카드 그리드의 관례다 — 홈 '강점' 과 제작
-              // 프로세스가 같은 값을 쓴다. Reveal 의 className 은 덮어쓰지 않고
-              // 덧붙으므로 밴드 자체를 Reveal 로 만들 수 있다(래퍼가 안 는다).
-              <Reveal
+              <div
                 key={group.key}
-                delay={i * 80}
                 className="rounded-2xl bg-white p-6 shadow-card sm:p-7"
               >
                 {/* 아래 품목 행과 같은 틀(이름 왼쪽 / 수 오른쪽)이라 그룹 합계가
@@ -122,10 +122,11 @@ export default function FacilityPage() {
                     </li>
                   ))}
                 </ul>
-              </Reveal>
+              </div>
             );
           })}
         </div>
+        </Reveal>
       </Section>
 
       <ContactCTA />

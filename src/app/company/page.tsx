@@ -349,15 +349,19 @@ export default function CompanyPage() {
           · "sm:w-28 을 쓰면 안 된다(dt 폭이 고정돼 격자 열 설정을 덮어쓴다)"
             는 **무효다.** 격자가 아니라 flex 이므로 w-* 가 바로 그 방식이다.
         */}
+        {/* ⚠️⚠️ **표 전체가 한 겹의 Reveal 이다**(2026-10-19). 유신이
+            *"1개가 아니라 묶음으로 보이게"* 라고 해서 사이트의 모든 격자를
+            묶음으로 바꿨다.
+            ⚠️ 한때는 **행마다** `Reveal as="div" delay={i * 45}` 였다 —
+               *"열한 행이라 한 줄씩 채워지는 편이 길이를 덜 느끼게 한다"* 가
+               그때의 근거였다. 래퍼가 끼면 dl > div > dt/dd 구조가 깨지므로
+               행 자체를 Reveal 로 만들었던 것이다. 이제 Reveal 은 **dl 바깥**
+               이라 그 걱정이 없다(연락처 표가 원래 그 꼴이다). */}
+        <Reveal>
         <dl className="grid border-t border-line lg:grid-cols-2 lg:gap-x-12">
-          {/* 행 자체를 Reveal 로 만든다(as="div") — 래퍼가 끼면 dl > div > dt/dd
-              구조가 깨진다. 45ms 씩 밀어 표가 한 줄씩 채워지게 한다.
-              (연락처 표는 dl 전체가 한 겹의 Reveal 이다. 거기는 여섯 칸이고
-              여기는 열한 행이라 한 줄씩 채워지는 편이 길이를 덜 느끼게 한다.) */}
-          {overview.map((row, i) => (
-            <Reveal
+          {overview.map((row) => (
+            <div
               key={row.label}
-              delay={i * 45}
               /* ⚠️ items-center 다. 대표번호처럼 값이 여러 줄인 행에서 라벨이
                  맨 위에 붙어 보였다(중심이 37px 위). 연락처 표도 같은 이유로
                  items-center 를 쓴다 — 거기는 2열 격자 행의 높이를 두 칸이
@@ -401,9 +405,10 @@ export default function CompanyPage() {
                   ),
                 )}
               </dd>
-            </Reveal>
+            </div>
           ))}
         </dl>
+        </Reveal>
       </Section>
 
       <ContactCTA />

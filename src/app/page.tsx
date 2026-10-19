@@ -1953,7 +1953,15 @@ export default function Home() {
             .sort((a, b) => Number(a.one) - Number(b.one))
             .map((p, i) => (
             <Fragment key={p.name}>
-            <Reveal delay={i * 80} className="overflow-hidden rounded-2xl border border-line bg-white shadow-card">
+            {/* ⚠️⚠️ **이 섹션에는 스크롤 리빌이 없다.** 2026-10-19 에 유신이
+                   *"동영상 생기는 것 보다 그냥 애니메이션 적용 안하는 편이 더
+                   좋을거 같네"* 라고 해서, **영상이 보이는 곳 전부**에서 걷었다.
+                   카드도 같이 걷는다 — 영상과 **한 행에 나란히** 서는데 카드만
+                   페이드하면 둘이 따로 논다.
+                ⚠️ 한때 `Reveal delay={i * 80}` 이었고, 옆 영상에도 **같은 값**을
+                   넘겨야 했다(안 넘기면 영상만 먼저 떴다 — 아래 주석 참고).
+                   양쪽 다 없어져 그 짝 맞추기가 사라졌다. */}
+            <div className="overflow-hidden rounded-2xl border border-line bg-white shadow-card">
               {/* ⚠️⚠️⚠️ **이 칸이 섹션의 세로 길이를 정한다.** 행 높이는 카드가
                      정하고(영상이 lg:h-full 로 따라간다), 카드 높이는 이 칸이
                      정한다 — `칸 높이 + 글 132px = 행 높이`.
@@ -2031,7 +2039,7 @@ export default function Home() {
                   </dl>
                 )}
               </div>
-            </Reveal>
+            </div>
             {/* ⚠️⚠️ **성능은 떨어지지 않았다.** 홈에 영상이 둘 늘어(696KB +
                   930KB) 걱정했는데, 두 판을 **동시에 서빙해 번갈아** 재니
                   새 75·75·75 / 옛 75·74·74 였다(LCP 5.45s : 5.52s).
@@ -2050,9 +2058,10 @@ export default function Home() {
                    두 겹이 되어 높이가 한 칸 더 끊긴다. wrap 으로 넘긴다. */}
             {/* ⚠️ filter 로 이미 걸렀지만 **타입은 그 사실을 모른다** —
                    여기 한 번 더 보지 않으면 video 가 undefined 일 수 있다고 막는다.
-                ⚠️⚠️ **delay 는 위 카드와 같은 값(i * 80)이어야 한다.** 안 넘기면
-                   ProductVideo 안쪽 Reveal 이 0 이 되어 **영상만 먼저 뜬다** —
-                   2026-10-16 에 그래서 둘째 행부터 어긋나 보였다.
+                ⚠️ 한때 **delay 를 위 카드와 같은 값(i * 80)으로** 넘겨야 했다.
+                   안 넘기면 ProductVideo 안쪽 Reveal 이 0 이 되어 영상만 먼저
+                   떴다 — 2026-10-16 에 그래서 둘째 행부터 어긋나 보였다.
+                   2026-10-19 에 **양쪽 다 리빌을 걷어** 그 걱정이 사라졌다.
                 ⚠️ JSX **여는 태그의 속성 사이에는 주석을 못 넣는다** — 중괄호
                    주석도 안 된다(TS1005). 그래서 여기 밖에 적어 둔다.
                 ⚠️ 그리고 **이 주석 안에 별·슬래시(닫는 기호)를 쓰면 거기서
@@ -2060,7 +2069,6 @@ export default function Home() {
             {p.video && (
               <ProductVideo
                 video={p.video}
-                delay={i * 80}
                 frame="aspect-video lg:aspect-auto lg:h-full"
                 wrap="lg:h-full"
                 pos="object-[center_62%]"
@@ -2119,12 +2127,13 @@ export default function Home() {
                둘인데 cols-4 를 두면 오른쪽 절반이 통째로 빈다. 한 번 그렇게
                두었다가 고친 자리다. */}
         {performanceKpis.length > 0 && (
+        /* ⚠️ 한때 칸마다 `Reveal delay={i * 80}` 이었다. 2026-10-19 에
+              **격자 하나당 리빌 하나**로 바꿨다 — 사이트 전체가 같은 규칙이다. */
+        <Reveal>
         <ul className="mt-10 grid gap-8 sm:grid-cols-2 lg:mx-auto lg:mt-12 lg:max-w-2xl lg:grid-cols-2 lg:gap-7 lg:text-center">
           {performanceKpis.map((kpi, i) => (
-            <Reveal
-              as="li"
+            <li
               key={kpi.label}
-              delay={i * 80}
               className={`${i > 0 ? "lg:border-l lg:border-line" : ""}${
                 kpi.wide ? " sm:col-span-2" : ""
               }`}
@@ -2217,9 +2226,10 @@ export default function Home() {
                 </>
               )}
 
-            </Reveal>
+            </li>
           ))}
         </ul>
+        </Reveal>
         )}
       </Section>
 
@@ -2306,13 +2316,21 @@ export default function Home() {
                균등 격자와 같은 방식이 됐다. 지우지 말 것.
 
             ⚠️ sm(2열)과 그 아래(1열)는 전부터 균등이었다 — 변화 없다. */}
+        {/* ⚠️⚠️ **일곱이 한 번에 뜬다.** 2026-10-19 에 유신이 *"제품 7개가
+               한번에 보여지는거지"* 라고 했다. 한때는 `Reveal delay={i * 70}` 로
+               칸마다 늦췄다.
+            ⚠️ 칸은 **평범한 div 로 남겨 둔다** — Reveal 이 격자 항목이라
+               stretch 로 늘어나던 자리다(ProductCard 의 h-full 주석 참고).
+               ProductCard 를 격자의 직접 자식으로 올리면 DOM 깊이가 바뀐다. */}
+        <Reveal>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product, i) => (
-            <Reveal key={product.slug} delay={i * 70}>
+          {products.map((product) => (
+            <div key={product.slug}>
               <ProductCard product={product} />
-            </Reveal>
+            </div>
           ))}
         </div>
+        </Reveal>
       </Section>
 
       {/* ⚠️⚠️⚠️ **2026-10-15 — 여기 있던 WHY YUSIN 섹션을 걷었다.**
@@ -2385,14 +2403,16 @@ export default function Home() {
 
                  값: 640~1023 에서 영상 두 장이 세로로 쌓여 섹션이 약 550px
                  길어진다. 그 구간에서 영상이 149 -> 315px 로 커지는 값이다. */}
+          {/* ⚠️ 영상이라 **리빌이 없다**(2026-10-19). 한때 `delay={i * 70}` 로
+                 칸마다 늦췄다 — 바로 아래 WORKS 사진 격자와 같은 값이었다. */}
           <ul className="grid gap-6 lg:grid-cols-2 lg:gap-8">
-            {featuredVideos.map((v, i) => (
-              <Reveal as="li" key={v.id} delay={i * 70}>
+            {featuredVideos.map((v) => (
+              <li key={v.id}>
                 {/* preview — 화면에 들어오면 소리 없이 자동으로 돈다.
                     /videos 쪽은 이 prop 을 주지 않아 지금처럼 버튼을 눌러야
                     재생된다. */}
                 <VideoCard video={v} preview />
-              </Reveal>
+              </li>
             ))}
           </ul>
         </Section>

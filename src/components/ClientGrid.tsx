@@ -63,21 +63,26 @@ export default function ClientGrid({
   names: (string | Client)[];
   className?: string;
   /**
-   * 칸이 몇 개든 **격자 전체를 한 번에** 띄운다.
+   * ⚠️⚠️ **이제 아무것도 하지 않는다 — 격자는 칸 수와 무관하게 늘 한 번에
+   *    뜬다.** 2026-10-19 에 유신이 *"1개가 아니라 묶음으로 보이게"* 라고
+   *    해서 사이트의 모든 격자를 묶음으로 바꿨다.
    *
-   * ⚠️⚠️ **분야별로 격자를 나눌 때 반드시 켜야 한다.** 아래 `many` 는 *이
-   *    격자*의 칸 수만 본다 — 125곳을 일곱 분야로 쪼개면 격자마다 24칸을
-   *    밑돌아 **칸마다 IntersectionObserver 가 다시 생긴다.** 관찰자 수는
-   *    쪼개기 전과 같으므로, 고쳐 놓은 *"빨리 스크롤 내리면 늦게 나와
-   *    기달려야"* 가 **그대로 되살아난다.**
+   *    한때는 `whole || names.length > 24` 로 갈랐다. 24칸을 밑돌면 칸마다
+   *    `delay={i * 25}` 로 차례로 띄웠는데, 125곳을 분야별로 쪼개면 격자마다
+   *    24칸을 밑돌아 **칸마다 IntersectionObserver 가 다시 생기고**, 고쳐 놓은
+   *    *"빨리 스크롤 내리면 늦게 나와 기달려야"* 가 되살아났다. 그래서 이
+   *    prop 으로 강제했던 것이다. 묶음이 기본이 된 지금은 그 걱정이 없다.
+   *
+   *    ⚠️ 부르는 곳이 지금은 **하나도 없다**(사진 격자 PhotoLightbox 로
+   *       바뀌었다). 되돌릴 자리로 남겨 둔 것이니 지우지 말 것.
    */
   whole?: boolean;
 }) {
-  const many = whole || names.length > 24;
+  void whole;
   const CELL =
     "flex h-20 items-center justify-center rounded-xl border border-line bg-white px-4 text-center transition-colors hover:bg-surface sm:h-24";
 
-  const cells = names.map((c, i) => {
+  const cells = names.map((c) => {
     const name = typeof c === "string" ? c : c.name;
     const logo = typeof c === "string" ? undefined : c.logo;
     const inner = logo ? (
@@ -94,14 +99,10 @@ export default function ClientGrid({
       </span>
     );
 
-    return many ? (
+    return (
       <li key={name} className={CELL}>
         {inner}
       </li>
-    ) : (
-      <Reveal as="li" key={name} delay={i * 25} className={CELL}>
-        {inner}
-      </Reveal>
     );
   });
 
@@ -113,5 +114,5 @@ export default function ClientGrid({
     </ul>
   );
 
-  return many ? <Reveal>{grid}</Reveal> : grid;
+  return <Reveal>{grid}</Reveal>;
 }

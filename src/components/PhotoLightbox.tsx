@@ -7,20 +7,20 @@ import type { Work } from "@/data/works";
 import Reveal from "./Reveal";
 
 /**
- * 격자 칸 하나.
+ * 격자를 **통째로 한 번에** 띄운다. 끄면 그냥 격자다.
  *
- * `delay` 를 주면 **스크롤 리빌**로 뜨고, 안 주면 그냥 `li` 다.
- *
+ * ⚠️⚠️ **한때 칸마다 `Reveal delay={i * 70}` 이었다.** 2026-10-19 에 유신이
+ *    짚었다 — *"1개가 아니라 묶음으로 보이게"*, *"제품 7개가 한번에
+ *    보여지는거지"*. 사이트의 모든 격자를 묶음으로 바꾼 그 판이다.
+ * ⚠️ **delay 를 0 으로 맞추는 것으로는 안 된다.** 칸마다
+ *    IntersectionObserver 가 따로라, 긴 격자에서는 아래 칸이 화면에
+ *    **나중에** 들어와 결국 차례로 뜬다. 관찰 대상이 격자 **하나**여야
+ *    한 번에 뜬다.
  * ⚠️ 모듈 바깥에 둔다. 컴포넌트 안에서 만들면 렌더마다 **새 타입**이 되어
- *    React 가 칸을 통째로 다시 붙인다 — 사진이 매번 깜빡인다.
+ *    React 가 격자를 통째로 다시 붙인다 — 사진이 매번 깜빡인다.
  */
-function Cell({ delay, children }: { delay?: number; children: React.ReactNode }) {
-  if (delay === undefined) return <li>{children}</li>;
-  return (
-    <Reveal as="li" delay={delay}>
-      {children}
-    </Reveal>
-  );
+function Group({ on, children }: { on: boolean; children: React.ReactNode }) {
+  return on ? <Reveal>{children}</Reveal> : <>{children}</>;
 }
 
 /**
@@ -48,18 +48,17 @@ export default function PhotoLightbox({
   /** 분류 버튼에 쓸 기종. 안 주면 버튼을 내지 않는다(홈). */
   kinds?: string[];
   /**
-   * 칸을 **스크롤 리빌**로 띄운다(`delay={i * 70}`).
+   * 격자를 **스크롤 리빌**로 띄운다 — 여덟 장이 **한 번에**.
    *
    * ⚠️⚠️ 유신이 짚었다 — *"여기 애니메이션 적용이 되야 할 거 같고 메인
    *    페이지 쪽이야"*. 홈에서 **리빌이 없는 유일한 콘텐츠 섹션**이었다.
    *    2026-10-16 에 거래처 이름 격자(`ClientGrid`, 리빌 있음)를 이 사진
    *    격자로 바꾸면서 딸려 나갔다.
-   * ⚠️ `i * 70` 은 **바로 위 VIDEO 섹션과 같은 값**이다(`page.tsx:2368`).
-   *    두 섹션이 잇달아 나오므로 다르면 같은 자리에서 리듬이 바뀐다.
-   * ⚠️⚠️ **`/clients` 에서는 켜지 않는다.** ① 분류를 누를 때마다 칸이 통째로
-   *    다시 페이드인하면 산만하다 ② 155칸이면 IntersectionObserver 가 155개다.
-   *    `clients/page.tsx` 주석의 「스물넷 넘으면 격자 전체를 한 번」이 바로
-   *    이 걱정이었다 — 그 분기는 코드로 옮겨진 적이 없다.
+   * ⚠️ 한때 `i * 70` 으로 칸마다 늦췄다(바로 위 VIDEO 섹션과 같은 값이었다).
+   *    2026-10-19 에 묶음으로 바꿨다 — 위 `Group` 주석 참고.
+   * ⚠️⚠️ **`/clients` 에서는 여전히 켜지 않는다.** 분류를 누를 때마다 155칸이
+   *    통째로 다시 페이드인하면 산만하다. 묶음이 되어 관찰자 수 걱정
+   *    (155개)은 사라졌지만 **다시 뜨는 산만함**은 그대로다.
    */
   reveal?: boolean;
   className?: string;
@@ -305,12 +304,16 @@ export default function PhotoLightbox({
             </div>
           )}
 
+          {/* ⚠️ 리빌 래퍼는 `ul` **바깥**, `resultRef` **안쪽**이다. 분류
+              스크롤이 재는 것은 resultRef 와 ul 이라 그 사이에 한 겹이
+              끼어도 값이 달라지지 않는다 — 그래도 bug4.mjs 로 다시 잰다. */}
+          <Group on={reveal}>
           <ul
             /* [overflow-anchor:none] — 바로 위 칸의 주석 참고. */
             className={`grid grid-cols-2 gap-2 [overflow-anchor:none] sm:grid-cols-3 sm:gap-2.5 lg:grid-cols-3 xl:grid-cols-4 ${className}`}
           >
             {shown.map((w, i) => (
-          <Cell key={w.src} delay={reveal ? i * 70 : undefined}>
+          <li key={w.src}>
             <button
               type="button"
               onClick={(e) => {
@@ -344,9 +347,10 @@ export default function PhotoLightbox({
                 </span>
               </span>
                 </button>
-              </Cell>
+              </li>
             ))}
           </ul>
+          </Group>
         </div>
       </div>
 

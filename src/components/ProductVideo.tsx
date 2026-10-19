@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import Reveal from "./Reveal";
 
 /**
  * 소리 없이 저절로 도는 장식 영상 한 편. **두 자리가 쓴다** —
@@ -29,7 +28,6 @@ export default function ProductVideo({
   frame,
   wrap = "",
   pos,
-  delay = 0,
 }: {
   video: { src: string; poster: string; note: string };
   /** 영상 틀의 비율·높이. 기본은 전폭용이다(제품 상세 「구동 영상」).
@@ -43,18 +41,11 @@ export default function ProductVideo({
    *    ⚠️ 바꾸면 **자막 띠의 대비를 다시 잰다** — 아래 주석에 15.0:1 로
    *       적힌 그 값이다. 틀이 바뀌면 영상에서 보이는 자리가 달라진다. */
   frame?: string;
-  /** 바깥 Reveal 에 얹을 클래스. 높이를 물려받게 할 때 쓴다(lg:h-full). */
-  wrap?: string;
-  /** 나타나는 시점을 늦춘다(ms).
+  /** 바깥 틀에 얹을 클래스. 높이를 물려받게 할 때 쓴다(lg:h-full).
    *
-   * ⚠️⚠️ **2026-10-16 — 이 prop 이 없어서 홈 PARTS 의 네 행이 어긋났다.**
-   *    카드 쪽은 Reveal 에 delay={i * 80} 을 주어 행마다 늦추는데 여기는
-   *    delay 가 없어 늘 0 이었다. 그래서 **첫 행만 카드와 영상이 동시**에
-   *    뜨고, 둘째 행부터는 영상이 80 · 160 · 240ms 씩 먼저 떴다 —
-   *    *"영상이 먼저 생기고 그다음 3D 렌더링이 생겨 … 둘이 같이 생겨야"*.
-   *    부르는 쪽에서 **카드와 같은 값**을 넘기면 나란히 뜬다.
-   * ⚠️ 기본 0 이라 다른 쪽(제품 상세 등)은 그대로다. */
-  delay?: number;
+   * ⚠️⚠️ **한때 이 자리가 Reveal 이었다.** 지금은 평범한 div 다 — 아래
+   *    return 의 주석 참고. 클래스는 **그대로 여기 얹어야 한다.** */
+  wrap?: string;
   /** 잘리는 자리. object-cover 는 **가운데로** 자르는데, 틀이 납작할수록
    *  위아래가 많이 깎인다.
    *
@@ -119,8 +110,22 @@ export default function ProductVideo({
     return () => io.disconnect();
   }, []);
 
+  /* ⚠️⚠️ **영상에는 스크롤 리빌을 걸지 않는다.** 2026-10-19 에 유신이
+       *"동영상 생기는 것 보다 그냥 애니메이션 적용 안하는 편이 더 좋을거
+       같네"* 라고 해서, 사이트에서 **영상이 보이는 곳 전부**에서 걷었다
+       (홈 부품 형상별 설비 · 홈 제품 영상 · 제품 상세 구동 영상 · 영상자료).
+
+     ⚠️ 한때 `delay` prop 이 있었다. 2026-10-16 에 홈 PARTS 에서 **카드는
+        i*80 으로 늦추는데 영상은 늘 0** 이라 둘째 행부터 영상이 먼저 뜨는
+        일이 났고(*"영상이 먼저 생기고 그다음 3D 렌더링이 생겨"*), 부르는
+        쪽에서 카드와 같은 값을 넘겨 맞췄다. 이제 **양쪽 다 리빌이 없어**
+        그 짝 맞추기 자체가 없어졌다.
+
+     ⚠️⚠️ **`wrap` 은 평범한 div 로 그대로 넘어가야 한다.** lg:h-full 사슬이
+        격자 칸 → 이 틀 → 영상 틀로 이어지는데, 한 겹이라도 끊기면 영상이
+        옆 카드와 높이가 어긋난다. */
   return (
-    <Reveal delay={delay} className={wrap}>
+    <div className={wrap}>
       <div
         ref={ref}
         className={`relative overflow-hidden rounded-2xl bg-surface ${frame ?? "aspect-video lg:aspect-[3/1]"}`}
@@ -187,6 +192,6 @@ export default function ProductVideo({
           </p>
         </div>
       </div>
-    </Reveal>
+    </div>
   );
 }
