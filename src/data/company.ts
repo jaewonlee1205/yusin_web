@@ -271,7 +271,7 @@ export const philosophy: {
   },
   {
     // 첫 문장을 "부품이 바뀌면 설계도 달라집니다"로 쓰지 않는다. 같은 형태가
-    // 제작사례·영상자료 lead 에 이미 두 번 있어 세 번째가 된다.
+    // 제작실적·영상자료 lead 에 이미 두 번 있어 세 번째가 된다.
     title: "연구개발",
     caption: "기술을 직접 연구합니다",
     photo: "/images/philosophy/rnd.webp",

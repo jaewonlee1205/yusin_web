@@ -86,7 +86,7 @@ export default function ProductBrowser() {
           className="overflow-hidden rounded-2xl bg-white shadow-card"
         >
           {/* ⚠️ **가운데 정렬이다**(2026-10-19). 유신이 *"이거 왼쪽 정렬로
-                 되어 있는데 가운데 정렬로 하면 좋겠고"* 라고 했다. 제작사례의
+                 되어 있는데 가운데 정렬로 하면 좋겠고"* 라고 했다. 제작실적의
                  「기종」 거르개(PhotoLightbox)와 **같은 마크업**이라 둘을 함께
                  바꿨다 — 한쪽만 바꾸면 같은 부품이 쪽마다 달라 보인다. */}
           <p className="bg-dark-soft px-5 py-3.5 text-center text-xs font-bold tracking-[0.08em] text-white">

@@ -6,7 +6,7 @@ import Section from "@/components/Section";
 import { workKinds, works } from "@/data/works";
 
 export const metadata: Metadata = {
-  title: "제작사례",
+  title: "제작실적",
   /* ⚠️⚠️⚠️ **2026-10-16 — 거래처 이름에서 설비 사진으로 갈았다.**
      전에는 *"대성, 크리온, 3제이, 아이비테크를 비롯한 거래처에…"* 였다.
      유신이 *"고객사 보여주는거 말고 우리가 납품한거 이미지로"* 라고 정했으므로
@@ -38,10 +38,14 @@ export default function ClientsPage() {
              거래처 이름을 한 줄도 안 쓰는 쪽에 CLIENTS 가 붙어 있었다.
              WORKS 는 **홈의 같은 격자 섹션이 이미 쓰는 eyebrow** 이고
              데이터도 works.ts·featuredWorks 라 셋이 한 말이 된다.
-             까닭은 site.ts 의 nav 주석에 적어 두었다. */}
+             까닭은 site.ts 의 nav 주석에 적어 두었다.
+             ⚠️⚠️ **같은 날 한 번 더 — 「제작사례」에서 「제작실적」으로.**
+                   유신이 넷 중에서 골랐다(제작실적 ▾ 갤러리 · 동영상).
+                   eyebrow 는 WORKS 그대로다 — 홈의 같은 격자 섹션과 짝이
+                   맞고, 데이터도 works.ts 다. 바뀐 것은 한글 간판뿐이다. */}
       <PageHero
         eyebrow="WORKS"
-        title="제작사례"
+        title="제작실적"
         lead="1992년 설립 이후 조립·검사 라인의 부품 공급을 자동화해 왔습니다."
       />
 
