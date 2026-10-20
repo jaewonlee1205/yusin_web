@@ -3257,11 +3257,18 @@ export default function Home() {
              한쪽만 바꾸면 우연처럼 보인다 — 바꿀 때는 PRODUCTS 와 함께.
           ⚠️ WHY YUSIN 을 되살린다면 **이것도 되돌려야 한다**(VIDEO 가 회색,
              CLIENTS 가 흰색). 그때는 흰 섹션이 하나 더 끼어든다. */}
+      {/* ⚠️ **2026-10-20(2) — 「납품 설비」에서 「제품 사진」이 됐다.**
+          유신이 /clients 쪽 섹션 이름을 바꾸라고 했고(거기 주석에 까닭이
+          있다), 홈만 옛 이름으로 남으면 **눌러 들어간 쪽이 다른 섹션처럼**
+          보인다. 위 VIDEO 섹션이 홈·/videos 둘 다 「제품 영상」인 것과
+          같은 짝을 맞춘다.
+          ⚠️ eyebrow WORKS 는 그대로다 — 「제작실적 전체 보기」 버튼이
+             가리키는 곳이 /clients(제작실적)이고, 그 말이 영문 쪽에 남는다. */}
       <Section
         className="-mt-8 rounded-t-[2rem] sm:-mt-12 sm:rounded-t-[2.5rem]"
         tone="surface"
         eyebrow="WORKS"
-        title="납품 설비"
+        title="제품 사진"
         footer={
           /* ⚠️⚠️ **2026-10-19 — 다시 격자 아래로 내려왔다.** 한때 여기에
              *"격자 아래에 있던 것을 제목 줄로 올린다"* 고 적혀 있었다.

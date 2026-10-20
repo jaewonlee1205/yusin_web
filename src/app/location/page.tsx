@@ -515,10 +515,18 @@ export default function LocationPage() {
                            표가 쪽마다 달라 보인다.
                         ⚠️ 폭도 같이 키웠다(w-16/sm:w-20 → w-20/sm:w-24) —
                            pr-4 가 선 앞 여백을 먹기 때문이다.
+                        ⚠️⚠️ **2026-10-20(2) — 라벨만 가운데로 돌렸다.** 유신이
+                           회사 개요 쪽을 보고 *"회사명 / 자본금 / 대표번호
+                           이쪽 같은 경우는 가운데 정렬 하는게 나은거 같아"*
+                           라고 했고, 여기도 **같은 한 줄**을 고쳤다. `dd`(값)는
+                           왼쪽 그대로다 — *"여기는 기존처럼 왼쪽 정렬이고"*.
+                           `pr-4` → `px-2` 로 바꿔야 가운데가 선 쪽으로
+                           치우치지 않는다. 재서 확인한 값은 company/page.tsx
+                           의 같은 자리에 있다(넘침 네 폭 모두 0개).
                         ⚠️ 선을 행 높이로 뻗게 하려면 self-stretch 와
                            -my-4 py-4 가 **둘 다** 있어야 한다. 까닭은
                            company/page.tsx 의 같은 자리에 적어 두었다. */}
-                    <dt className="flex w-20 shrink-0 items-center self-stretch -my-4 border-r border-line py-4 pr-4 text-13 font-bold text-muted sm:w-24">
+                    <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-line px-2 py-4 text-13 font-bold text-muted sm:w-24">
                       {cell.label}
                     </dt>
                     <dd className="text-15 leading-relaxed text-ink">

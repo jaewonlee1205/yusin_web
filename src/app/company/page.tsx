@@ -468,11 +468,29 @@ export default function CompanyPage() {
                         (행 div 에 걸려 56px)과 길이가 **딱 맞는다.**
                      재서 확인했다 — 행 57(= 56 + border-b 1) · 선 56.
                      ①만 넣고 「되었다」고 적을 뻔했다. **찍어 보고 알았다.**
+                  ⚠️⚠️ **2026-10-20(2) — 라벨만 가운데로 돌렸다.** 유신이
+                     *"회사명 / 자본금 / 대표번호 이쪽 같은 경우는 가운데 정렬
+                     하는게 나은거 같아 텍스트 / 유신 F.A 시스템… 여기는
+                     기존처럼 왼쪽 정렬이고"* 라고 했다. `justify-center` 한
+                     낱말이고, **`dd`(값)는 손대지 않았다.**
+                     ⚠️ **`pr-4` 를 `px-2` 로 바꿔야 했다.** pr-4 만 있으면
+                        가운데가 선 쪽으로 8px 치우친다. px-2 로 양쪽을 같게
+                        하고 재니 라벨 좌우 여백이 **29.5 / 30.6px**(「회사명」,
+                        1440)로 맞았다 — 1.1px 차는 글자 자체의 사이드베어링
+                        이고 눈에 안 보인다. 넘침은 **네 폭 모두 0개**다.
+                     ⚠️ 선과 글자 사이가 16 → 8px 로 좁아졌지만 라벨 칸이
+                        96px(sm:w-24)에 글자가 48~55px 라 여유가 20px 넘는다.
+                     ⚠️ 긴 라벨(「대표번호」 4자)과 짧은 라벨(「대표」 2자)의
+                        **왼끝이 어긋난다** — 왼쪽 정렬일 때는 맞아 있었다.
+                        찍어 보니 **세로선 기준으로는 오히려 고르게** 보인다.
+                        라벨이 2~4자뿐이라 어긋나는 폭이 최대 14px 다.
+                     ⚠️ 연락처 표(location/page.tsx)도 **같은 한 줄**을 함께
+                        고쳤다. 아래 식구 주석이 그 까닭이다.
                   ⚠️ **오시는 길 연락처 표도 같이 고쳤다**(location/page.tsx).
                      위 주석의 *"연락처 표·제품 규격표와 한 식구"* 가 그 까닭이다 —
                      한쪽만 고치면 같은 표가 쪽마다 달라 보인다. 제품 규격표는
                      라벨이 값 **위**에 서는 구조라 해당 없다. */}
-              <dt className="flex w-20 shrink-0 items-center self-stretch -my-4 border-r border-line py-4 pr-4 text-13 font-bold text-muted sm:w-24">
+              <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-line px-2 py-4 text-13 font-bold text-muted sm:w-24">
                 {row.label}
               </dt>
               {/* tabular-nums: 대표번호와 팩스가 위아래로 붙어 있어 자릿수를
