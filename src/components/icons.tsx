@@ -25,6 +25,42 @@ export function ChevronUpIcon({ className = "" }: { className?: string }) {
   );
 }
 
+/**
+ * 「더 보기」 버튼의 오른쪽 화살표.
+ *
+ * ⚠️⚠️ **이 화살표는 한 번 걷혔다가 2026-10-20(8) 에 돌아왔다.** 유신이
+ * 전에 *"화살표 걷어 달라"* 고 했을 때의 근거는 홈 page.tsx 주석에 있다 —
+ * *"테두리 상자가 이미 누를 곳임을 말하므로 화살표는 같은 말을 두 번 하는
+ * 꼴"*. 그 판단은 **「누를 곳인가」에 대한 것**이었다. 이번에 돌아온 까닭은
+ * 다르다 — 유신이 *"다른 구조로 더보기 같은 느낌을 못주나? 텍스트가 아니여도
+ * 되니깐"* 이라고 했고, 여기서 화살표가 맡는 것은 **「더 있다 · 다음으로
+ * 간다」**다. 되돌린 것이 아니라 다른 일을 시키는 것이다.
+ *
+ * 16px 다 — 버튼 글자가 15px 이라 한 단계 위다(README 의 11·14·16·20·24).
+ * 굵기 2.5 도 README 값 그대로다.
+ *
+ * aria-hidden 이다. 링크의 접근성 이름은 글자("제품 더 보기")가 혼자 진다.
+ */
+export function ArrowRightIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M5 12h14" />
+      <path d="m13 6 6 6-6 6" />
+    </svg>
+  );
+}
+
 /*
  * 아래 셋은 남의 브랜드 마크다. 나머지(화살표·수화기)는 범용 기호라 선으로
  * 그리고 굵기만 맞추면 되지만, 브랜드 마크는 그쪽 형태를 그대로 따라야

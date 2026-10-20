@@ -16,12 +16,18 @@ import PhotoLightbox from "@/components/PhotoLightbox";
 import Reveal from "@/components/Reveal";
 import ScrollCue from "@/components/ScrollCue";
 import StatCounter from "@/components/StatCounter";
-import { featuredWorks, works } from "@/data/works";
+import { featuredWorks } from "@/data/works";
 import { type Kpi, products } from "@/data/products";
 import { site } from "@/data/site";
 import VideoCard from "@/components/VideoCard";
+import { ArrowRightIcon } from "@/components/icons";
 import { featuredVideos } from "@/data/videos";
-import { videoLibrary } from "@/data/videoLibrary";
+/* ⚠️ 한때 여기에 `import { videoLibrary } from "@/data/videoLibrary";` 가
+   있었고 `works` 도 위 줄에서 함께 가져왔다. 2026-10-20(7) 에 「영상 12편」·
+   「사진 155장」을 세려고 들였다가, 같은 날 (8) 에 그 문구가 걷히면서 둘 다
+   필요 없어졌다. 숫자를 다시 쓰게 되면 되살린다 — `videoLibrary` 는
+   videos + HOME_ONLY + productVideos 의 합이라 그 길이가 /videos 카드 수와
+   언제나 같다. */
 
 /** count=false 인 값은 세어 올리지 않는다 — 연도가 굴러가면 어색하다. */
 /* 첫 화면에 서는 진동기 네 기종.
@@ -1494,9 +1500,56 @@ const STATS = [
       ⚠️⚠️ **숫자를 손으로 적지 말 것.** videoLibrary.length · works.length
          로 **세게** 해 두었다. 박아 쓰면 영상이나 사진이 늘 때 조용히 거짓이
          된다. videoLibrary 는 videos + HOME_ONLY + productVideos 의 합이므로
-         (videoLibrary.ts) 그 길이는 /videos 카드 수와 **언제나 같다.** */
+         (videoLibrary.ts) 그 길이는 /videos 카드 수와 **언제나 같다.**
+
+      ⚠️⚠️⚠️ **2026-10-20(8) — 글자를 「더 보기」로 되돌리고 화살표를 붙였다.
+         바로 위 (7) 의 결론이 유신에게 거절당했다.** *"기종별 상세 / 영상 12편
+         / 사진 155장 여기 문구 너무 이상한데 **다른 구조로 더보기 같은 느낌**을
+         못주나? 텍스트가 아니여도 되니깐 시각적으로 이쁘게 더보기 느낌으로
+         하고 싶은데"*
+
+         **까닭이 분명하다 — (7) 의 말들은 라벨이지 버튼이 아니었다.**
+         「영상 12편」은 *누르는 곳*이 아니라 *설명*으로 읽힌다. 반복을 없애려고
+         **동작을 지웠더니** 버튼이 버튼으로 안 읽혔다. 유신이 (6) 에서 짚은
+         것은 반복이었지만, 그렇다고 **동사를 버리라는 말은 아니었다.**
+
+         네 안을 홈의 세 자리에 실제로 얹어 1440 dpr2 로 찍고 **한 격자에
+         깔아** 봤다(scratchpad 의 btn-grid.png) —
+
+           0 지금      기종별 상세 / 영상 12편 / 사진 155장
+                       화살표가 없어 셋 다 **라벨로 읽힌다.** 유신 말대로다
+           a 고름      제품 더 보기 → / 영상 더 보기 → / 사진 더 보기 →
+                       동작이 분명하고, 앞말이 달라 b 처럼 똑같지 않다
+           b           더 보기 → 셋 다 + sr-only 로 구분
+                       가장 짧지만 **셋이 완전히 같다** — (6) 의 반복이 더 심해진다
+           c           제품 라인업 → / 영상자료 → / 제작실적 →
+                       셋이 다 다르고 깔끔한데 **「더 보기」 느낌이 약하다.**
+                       게다가 홈 섹션 제목(제품 영상 · 제품 사진)과 말이 어긋난다
+
+         ⚠️⚠️ **반복과 「더 보기 느낌」은 정면으로 부딪친다.** 둘 다 가질 수는
+            없다. 고른 쪽은 **화살표가 반복을 덜어 준다**는 쪽이다 — 눈이 글자
+            보다 기호를 먼저 읽으므로, 같은 「더 보기」가 세 번 나와도 문장이
+            반복되는 것이 아니라 **같은 꼴의 버튼**으로 읽힌다.
+
+         ⚠️⚠️ **화살표를 걷었던 그 주석은 그대로 유효하다.** 위에 적힌 근거는
+            *"테두리 상자가 이미 누를 곳임을 말하므로 화살표는 같은 말을 두 번
+            하는 꼴"* 이고, 그것은 **「누를 곳인가」**에 대한 말이다. 이번에
+            화살표가 맡는 일은 **「더 있다 · 다음으로 간다」**다. 일이 다르므로
+            되돌린 것이 아니다. 같은 이유로 **`gap-2` 와 `group` 도 함께
+            돌아왔다** — gap 은 자식이 둘이 되어서, group 은 hover 에 화살표를
+            밀어내려고.
+         ⚠️ hover 에 화살표가 `translate-x-1` 로 움직인다. 아이콘에 `transition`
+            을 따로 걸었다 — 부모의 transition 은 부모 속성에만 걸린다.
+            README 대로 `transition-colors` 가 아니라 `transition` 이다.
+         ⚠️⚠️ **모양은 이번에도 한 값도 안 건드렸다.** `max-w-xs` · `py-4` ·
+            `text-15` · `border-dark-soft/30` · 투명 바탕 · `hover:bg-ink` 는
+            유신이 2026-10-19 에 세 번에 걸쳐 고른 값이다. 바뀐 것은 **글자와
+            그 옆 기호**뿐이다.
+         ⚠️ (7) 이 적어 둔 *"숫자를 손으로 적지 말 것"* 은 **숫자를 쓸 때의**
+            규칙이다. 지금은 숫자를 안 쓰므로 `videoLibrary` · `works` import 를
+            걷었다(맨 위 import 주석에 보존). 다시 쓰게 되면 그 규칙부터 읽을 것. */
 const BTN =
-  "inline-flex w-full max-w-xs items-center justify-center rounded-xl border border-dark-soft/30 px-6 py-4 text-15 font-bold text-ink transition hover:border-ink hover:bg-ink hover:text-white active:scale-[0.98]";
+  "group inline-flex w-full max-w-xs items-center justify-center gap-2 rounded-xl border border-dark-soft/30 px-6 py-4 text-15 font-bold text-ink transition hover:border-ink hover:bg-ink hover:text-white active:scale-[0.98]";
 
 export default function Home() {
   return (
@@ -3212,7 +3265,8 @@ export default function Home() {
               없을 때를 이미 다룬다(/company OVERVIEW 등이 그렇다). */
         footer={
           <Link href="/products" className={BTN}>
-            기종별 상세
+            제품 더 보기
+            <ArrowRightIcon className="shrink-0 transition group-hover:translate-x-1" />
           </Link>
         }
       >
@@ -3363,7 +3417,8 @@ export default function Home() {
                   버튼은 /videos 로 가는 내부 링크다. 다만 그 구분으로 지킬
                   버튼이 저쪽에 남아 있지 않다. */
             <Link href="/videos" className={BTN}>
-              {`영상 ${videoLibrary.length}편`}
+              영상 더 보기
+              <ArrowRightIcon className="shrink-0 transition group-hover:translate-x-1" />
             </Link>
           }
         >
@@ -3458,7 +3513,8 @@ export default function Home() {
              와 **함께** 내렸으니 "두 섹션이 달라 보인다" 던 걱정도 그대로
              지켜진다. */
           <Link href="/clients" className={BTN}>
-            {`사진 ${works.length}장`}
+            사진 더 보기
+            <ArrowRightIcon className="shrink-0 transition group-hover:translate-x-1" />
           </Link>
         }
       >
