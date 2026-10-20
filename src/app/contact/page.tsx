@@ -39,7 +39,9 @@ export default function ContactPage() {
       <PageHero
         eyebrow="CONTACT"
         title="문의하기"
-        lead="샘플이나 도면 한 장이면 됩니다. 설계 방향과 납기를 회신드립니다."
+        /* 2026-10-20(3) — 배너 설명문을 일곱 쪽에서 모두 걷었다.
+           까닭과 되살리는 법은 PageHero.tsx 의 lead 주석에 있다. */
+        // lead="샘플이나 도면 한 장이면 됩니다. 설계 방향과 납기를 회신드립니다."
       />
 
       <div className="py-14 sm:py-20">

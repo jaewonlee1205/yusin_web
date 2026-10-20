@@ -20,7 +20,9 @@ export default function VisionPage() {
       <PageHero
         eyebrow="ORGANIZATION"
         title="조직도"
-        lead="영업·설계·가공·튜닝·조립, 다섯 부서가 한 공장 안에 모두 있습니다."
+        /* 2026-10-20(3) — 배너 설명문을 일곱 쪽에서 모두 걷었다.
+           까닭과 되살리는 법은 PageHero.tsx 의 lead 주석에 있다. */
+        // lead="영업·설계·가공·튜닝·조립, 다섯 부서가 한 공장 안에 모두 있습니다."
       />
 
       {/* 배너와 다른 이름을 쓴다. 하위 페이지는 전부 이 규칙이다 —

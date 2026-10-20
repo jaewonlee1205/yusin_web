@@ -150,6 +150,23 @@ export default function PageHero({
         >
           {title}
         </h1>
+        {/* ⚠️⚠️⚠️ **2026-10-20(3) — 일곱 쪽 모두 lead 를 안 넘긴다. 화면에
+               배너 설명문이 하나도 없다.** 유신이 *"PRODUCTS 제품 라인업 /
+               WORKS 제작실적 여기 들도 밑에 … 이런 문구 들은 다 지워주고"*
+               라고 했다.
+
+            ⚠️ **prop 과 이 블록은 그대로 둔다.** 호출부에서 한 줄을 되살리면
+               바로 돌아온다. 각 쪽의 옛 문장은 그 자리에 주석으로 남겼다.
+            ⚠️ **일곱을 모두 걷은 것은 높이 때문이다.** 아래 min-h 가 쪽마다
+               배너 높이를 같게 하려고 둔 값인데, 한둘만 남기면 **남긴 쪽만
+               키가 커서** 메뉴를 옮겨 다닐 때 배너가 들썩인다. 다 걷으면
+               똑같이 낮아진다.
+            ⚠️ **검색 설명(metadata description)은 건드리지 않았다.** 화면에서
+               걷는 것이지 검색에서 걷는 것이 아니다. company 의
+               `yearsInBusiness` 도 그 description 이 계속 쓴다 — 안 쓰는
+               변수가 되지 않는다.
+            ⚠️ 되살릴 때 아래 min-h 두 값을 함께 본다. 한 쪽만 되살리면
+               그 쪽만 52px(sm 30px) 높아진다. */}
         {lead && (
           <p
             className="rise-quick mt-5 min-h-[3.25rem] max-w-2xl text-base leading-relaxed text-white/70 sm:min-h-[1.875rem] sm:text-lg"

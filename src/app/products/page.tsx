@@ -30,7 +30,9 @@ export default function ProductsPage() {
       <PageHero
         eyebrow="PRODUCTS"
         title="제품 라인업"
-        lead="표준 기종을 고르는 것이 아니라, 부품에 맞춰 새로 설계합니다."
+        /* 2026-10-20(3) — 배너 설명문을 일곱 쪽에서 모두 걷었다.
+           까닭과 되살리는 법은 PageHero.tsx 의 lead 주석에 있다. */
+        // lead="표준 기종을 고르는 것이 아니라, 부품에 맞춰 새로 설계합니다."
       />
 
       {/* 흰 바탕이다.
