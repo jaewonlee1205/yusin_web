@@ -5,7 +5,7 @@ import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import { site, telHref } from "@/data/site";
-import { gridColumns } from "@/lib/gridColumn";
+import { gridColumns, gridRows } from "@/lib/gridColumn";
 
 export const metadata: Metadata = {
   title: "오시는 길",
@@ -200,6 +200,8 @@ export default function LocationPage() {
 
   /** 연락처 표에서 칸마다의 열 번호(0부터). 아래 dl 주석 참고. */
   const cellCols = gridColumns(cells.length, 2, (i) => !!cells[i].wide);
+  /** 같은 표에서 칸마다의 **행** 번호(0부터). 홀수 행 줄무늬에 쓴다. */
+  const cellRows = gridRows(cells.length, 2, (i) => !!cells[i].wide);
 
   return (
     <>
@@ -316,8 +318,14 @@ export default function LocationPage() {
                       **안 건드렸다.** 거기까지 번지면 다른 말이 된다. */}
             <Reveal
               delay={90}
-              /* ⚠️ border-b-0 — 아래 dl 이 2px 먹색 밑선을 가지므로 카드
-                 테두리가 같은 자리에 1px 를 한 겹 더 그리지 않게 한다. */
+              /* ⚠️ border-b-0 — 아래 dl 이 **제 밑선을 갖는다.** 카드
+                 테두리가 같은 자리에 한 겹 더 그리지 않게 한다.
+                 ⚠️ 판 (16) 에서 그 밑선이 **2px 먹색 → 1px #d1d5db** 로
+                    바뀌었다(유신이 *"밑에는 굵은선이 없고"* 라고 했다).
+                    **이 border-b-0 은 그대로 둔다** — 1px #d1d5db 는 카드
+                    테두리가 그릴 선과 **색도 굵기도 똑같아서**, 결과가
+                    카드가 제대로 닫힌 모습과 같다. 오히려 2px 먹색이던
+                    전보다 카드 좌우 1px 과 결이 맞는다. */
               className="overflow-hidden border border-b-0 border-[#d1d5db] bg-white"
             >
               {/* lg 부터 3:1 이다(1088x363) — 홈 PERFORMANCE 영상과 같은
@@ -343,7 +351,26 @@ export default function LocationPage() {
                   /* ⚠️ text-ink-soft 다. text-muted(#6b7280)를 이 바탕
                      (bg-surface #f6f7f9)에 올리면 실측 **4.03:1** 로 WCAG
                      AA(4.5:1)에 못 미친다 — 픽셀 히스토그램으로 쟀다.
-                     ink-soft(#414751)는 약 8.9:1 이다. */
+                     ink-soft(#414751)는 약 8.9:1 이다.
+
+                     ⚠️⚠️ **위 4.03 은 WCAG 값이 아니다 — 지정색으로 재면
+                        4.510 이고, 간신히지만 AA 를 넘는다**(2026-10-20 판
+                        (16) 에서 밝혔다). 이 자리의 측정 방식(그려진 글자
+                        픽셀의 어두운 쪽 평균)을 재현해 보니 **4.07** 이
+                        나와 위 숫자가 그 방식의 값임이 확인됐다. 그런데
+                        같은 두 색을 두고도 글자 수에 따라 **40% 넘게
+                        흔들린다** — 그 지표는 대비가 아니라 **글자 모양**을
+                        재고 있다. **가장 어두운 픽셀**은 지정색 계산과
+                        소수점까지 같으므로(muted 4.51 · ink-soft 8.73)
+                        글자는 지정색으로 제대로 찍힌다.
+                        ⚠️ **그래도 이 자리를 muted 로 되돌리지 말 것.**
+                           4.510 은 13px 기준 4.5 의 **한계선**이라 바탕이
+                           한 단만 어두워져도 무너진다. ink-soft 가 맞다.
+                           ⚠️ 여기도 아래 표 라벨도 **13px 에 같은 바탕
+                              (#f6f7f9)** 이라 수치가 그대로 통한다.
+                        **같은 까닭으로 판 (16) 부터 아래 연락처 표의 라벨도
+                        ink-soft 다** — 거기는 홀수 행 바탕이 #f1f3f6 으로 더
+                        어두워 muted 면 4.349 로 **정말 미달**이 된다. */
                   className="absolute inset-0 flex items-center justify-center text-13 text-ink-soft"
                 >
                   지도를 불러오는 중…
@@ -516,8 +543,37 @@ export default function LocationPage() {
                         ⚠️ **`--color-line` 토큰은 안 건드렸다** — 제품 규격표가
                            같은 값을 쓴다. 이 표 안에서만 임의값을 쓴다.
                         ⚠️ 카드 테두리(위 Reveal)도 같은 값으로 올렸다. 안 그러면
-                           표 안쪽 격자만 진해져 **지도 둘레와 어긋난다.** */}
-              <dl className="grid border-y-2 border-ink [&>*:last-child]:border-b-0 lg:grid-cols-2">
+                           표 안쪽 격자만 진해져 **지도 둘레와 어긋난다.**
+                     ⚠️⚠️⚠️ **2026-10-20 판 (16) — 아래 굵은 선을 걷고 홀수 행에
+                        줄무늬를 넣었다.** 유신이 회사 개요 쪽을 보고
+                        *"밑에는 굵은선이 없고 위에만 굵은선이 있고 홀수 행들은
+                        색깔이 달라서"* 라고 했다. **여기도 같이 고쳤다** —
+                        위 판 (15) 주석의 *"한쪽만 고치면 같은 표가 쪽마다
+                        달라 보인다"* 가 그 까닭이다.
+                        **레퍼런스 실측 · 네 면의 색 사다리 · 라벨 글자를
+                        ink-soft 로 올려야 했던 까닭(muted 는 #f6f7f9 위에서
+                        4.510 으로 한계선이라 바탕을 한 단도 못 내린다) ·
+                        `nth-child` 로는 세로 줄무늬가 되는 까닭은 모두
+                        company/page.tsx 의 같은 자리에 있다.**
+                        ⚠️ **밑선은 0 이 아니라 1px 이다** — 레퍼런스도 마지막
+                           칸의 1px #ccc 가 아래를 맡는다. `dl` 이
+                           `border-b border-b-[#d1d5db]` 로 갖는다
+                           (`border-t-2` 로만 바꾸면
+                           `[&>*:last-child]:border-b-0` 때문에 아래가
+                           **완전히 뚫린다**).
+                        ⚠️ 여기는 **6칸이 4행**으로 앉는다(전화|팩스 ·
+                           이메일|주차 · 주소 · 운영 시간). 줄무늬는 **위에서**
+                           세어 행 0·2 에 간다 — 전화|팩스 행과 주소 행이다.
+                           레퍼런스는 `nth-last-child(odd)` 로 **아래에서**
+                           세는데, 거기는 7행이라 위에서 세는 것과 결과가 같다.
+                           **우리는 위에서 센다** — 그러지 않으면 4행인 이
+                           표만 첫 행이 흰색이 되어 회사 개요(7행)와 **달라
+                           보인다.** 대신 이 표는 마지막 행(운영 시간)이
+                           흰색으로 끝난다. 그 자리의 밑선 대비가 네 면 중
+                           가장 센 1.474(선 ↔ 흰)라 표가 흐려지지 않는다.
+                        ⚠️ DOM 좌표를 y 로 묶어 재서 행 계산과 같은지
+                           확인했다(gridRows 머리 주석이 요구하는 검사다). */}
+              <dl className="grid border-t-2 border-b border-t-ink border-b-[#d1d5db] [&>*:last-child]:border-b-0 lg:grid-cols-2">
                 {cells.map((cell, i) => (
                   <div
                     key={cell.label}
@@ -535,7 +591,16 @@ export default function LocationPage() {
 
                        ⚠️ px-5 sm:px-7 이 **행에** 있다(위 dl 주석 참고).
                           dl 로 옮기면 선이 카드 전폭을 잃는다. */
+                    /* 홀수 행 줄무늬. 좁은 폭은 칸 순서(i), 넓은 폭은 격자
+                       행 번호가 기준이다 — company/page.tsx 의 같은 자리
+                       주석에 까닭이 있다. */
                     className={`flex items-center gap-4 border-b border-[#d1d5db] py-4 pr-5 sm:pr-7 ${
+                      i % 2 === 0 ? "bg-[#fafbfc]" : ""
+                    } ${
+                      cellRows[i] % 2 === 0
+                        ? "lg:bg-[#fafbfc]"
+                        : "lg:bg-transparent"
+                    } ${
                       cell.wide
                         ? "lg:col-span-2"
                         : cellCols[i] === 0
@@ -572,7 +637,19 @@ export default function LocationPage() {
                         ⚠️ 선을 행 높이로 뻗게 하려면 self-stretch 와
                            -my-4 py-4 가 **둘 다** 있어야 한다. 까닭은
                            company/page.tsx 의 같은 자리에 적어 두었다. */}
-                    <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-[#d1d5db] bg-surface px-2 py-4 text-13 font-bold text-muted sm:w-24">
+                    {/* ⚠️ bg 가 조건부다(홀수 행 #f1f3f6 · 짝수 행
+                           bg-surface). text-ink-soft 인 까닭은
+                           company/page.tsx 의 같은 자리에 있다 — muted 로는
+                           #f1f3f6 위에서 4.349 로 AA 미달이다. */}
+                    <dt
+                      className={`flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-[#d1d5db] px-2 py-4 text-13 font-bold text-ink-soft sm:w-24 ${
+                        i % 2 === 0 ? "bg-[#f1f3f6]" : "bg-surface"
+                      } ${
+                        cellRows[i] % 2 === 0
+                          ? "lg:bg-[#f1f3f6]"
+                          : "lg:bg-surface"
+                      }`}
+                    >
                       {cell.label}
                     </dt>
                     <dd className="text-15 leading-relaxed text-ink">

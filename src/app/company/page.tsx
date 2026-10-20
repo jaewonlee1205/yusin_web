@@ -12,10 +12,12 @@ import {
   philosophyMotto,
 } from "@/data/company";
 import { site, telHref, yearsInBusiness } from "@/data/site";
-import { gridColumns } from "@/lib/gridColumn";
+import { gridColumns, gridRows } from "@/lib/gridColumn";
 
 /** 개요 표에서 칸마다의 열 번호(0부터). 아래 dl 주석 참고. */
 const OVERVIEW_COLS = gridColumns(overview.length, 2, (i) => !!overview[i].wide);
+/** 같은 표에서 칸마다의 **행** 번호(0부터). 홀수 행 줄무늬에 쓴다 — 아래 참고. */
+const OVERVIEW_ROWS = gridRows(overview.length, 2, (i) => !!overview[i].wide);
 
 /**
  * 대표이사 서명 전용 붓글씨체. 이 페이지 서명 한 줄에서만 쓴다.
@@ -976,9 +978,13 @@ export default function CompanyPage() {
                  **면 + 표 전체 선 진하게**            **골랐다.** 격자가 고르고
                                                        참고와 같은 꼴이다
 
-               ⚠️ **라벨 글자는 `text-muted` 그대로 두었다.** `text-ink-soft`
-                  (#414751) 로 올린 안도 찍었는데 **눈에 띄는 차이가 없었다** —
-                  바꿀 이유가 없으면 안 바꾼다. 대비는 재서 확인했다 —
+               ⚠️⚠️ **라벨 글자는 `text-muted` 그대로 두었다 → 판 (16) 에서
+                  `text-ink-soft` 로 올렸다.** 그때는 ink-soft 안을 찍어 봐도
+                  **눈에 띄는 차이가 없어** 바꿀 이유가 없었다. 판 (16) 에서
+                  라벨 바탕에 줄무늬를 넣게 되자 **이유가 생겼다** — 아래 판
+                  (16) 주석 참고. 그때 적어 둔 *"차이가 없다"* 가 이번에
+                  **근거**가 됐다(바꿔도 보기에 손해가 없다는 뜻이므로).
+                  대비는 재서 확인했다 —
 
                     muted #6b7280 on #f6f7f9   **4.51**  ← 13px 이라 4.5 를 넘겨야 한다
                     muted on 참고 바탕 #f0f0f0   4.23   ← 참고 값을 그대로 썼으면 AA 미달
@@ -1005,8 +1011,124 @@ export default function CompanyPage() {
                   닫혀 있어 오히려 맞다.
                ⚠️ **사진 파일은 하나도 안 지웠다** — `office.webp`(판 (14) 에서
                   고른 것) · `building.webp` · `building-aerial.webp` ·
-                  `CompanyBuilding.tsx`. 되돌리려면 `<Image>` 한 덩이면 된다. */}
-        <dl className="grid border-y-2 border-ink [&>*:last-child]:border-b-0 lg:grid-cols-2">
+                  `CompanyBuilding.tsx`. 되돌리려면 `<Image>` 한 덩이면 된다.
+
+               ⚠️⚠️⚠️ **2026-10-20 판 (16) — 아래 굵은 선을 걷고 홀수 행에
+                  줄무늬를 넣었다.** 유신이 판 (15) 화면을 레퍼런스와 견주어
+                  *"여기 밑에 굵은 선은 지워주면 될거 같고 홀수 행들 경우는
+                  짝수 행하고 색상이 다르거든 … 밑에는 굵은선이 없고 위에만
+                  굵은선이 있고"* 라고 했다. **둘 다 맞았다** — 레퍼런스
+                  (honeyppl.kr/ko/sub1_2.html, `.tstyle01`)를 다시 재니 —
+
+                    표 위 선   2.4px #333
+                    표 아래 선 **0px**      ← 굵은 선이 없다. 마지막 칸의
+                                             1px #ccc 가 아래를 맡는다
+                                 라벨 바탕   값 바탕
+                    홀수 행      #f0f0f0    #f9f9f9
+                    짝수 행      #f5f5f5    흰색
+
+                  판 (15) 에서 **면과 선만 보고 줄무늬를 통째로 놓쳤다.**
+                  레퍼런스의 줄무늬는 값↔값 1.05 · 라벨↔라벨 1.05 로 **아주
+                  옅어** 숫자를 재면서도 눈에 안 들어왔다. 유신 눈에 들어온
+                  것은 **값 칸의 넓은 면**이다.
+
+               **① 아래 선 — `border-y-2` → `border-t-2` + `border-b`.**
+                  `border-y-2` 를 `border-t-2` 로만 바꾸면 아래가 **완전히
+                  뚫린다**(`[&>*:last-child]:border-b-0` 가 마지막 칸의 선도
+                  끄기 때문이다). 레퍼런스도 1px 은 남아 있으므로 `dl` 자신이
+                  `border-b border-b-[#d1d5db]` 로 **1px 을 갖는다.**
+                  ⚠️ `[&>*:last-child]:border-b-0` 는 **그대로 둔다** — 이제
+                     아래 선의 임자는 마지막 칸이 아니라 `dl` 이다. 둘 다
+                     켜면 1px 이 두 번 겹친다.
+                  ⚠️ 위 선의 `2px`·`border-ink` 는 **안 건드렸다.** 유신이
+                     *"위에만 굵은선이 있고"* 라고 했고 그게 지금 모습이다.
+
+               **② 줄무늬 — 네 면을 사다리로 맞췄다.** 실측(지정색 WCAG) —
+
+                                 라벨 바탕   값 바탕
+                    짝수 행      #f6f7f9    흰색(안 깐다)
+                    홀수 행      #f1f3f6    #fafbfc
+
+                    줄무늬   값홀↔값짝       1.036   참고 1.05
+                    라벨 단차 라벨홀↔라벨짝  1.037   참고 1.05
+                    라벨↔값 (짝수 행)       1.072   참고 1.09
+                    라벨↔값 (홀수 행)       1.073   참고 1.08
+
+                  **네 관계가 모두 참고와 같은 결이다.** 베낀 것은 색이 아니라
+                  **색들 사이의 관계**다 — 참고 바탕(#f0f0f0)을 그대로 쓰면
+                  라벨 글자가 AA 미달이 된다(위 판 (15) 주석의 4.23).
+                  ⚠️ 선(#d1d5db)이 네 면에서 다 보이는지도 재 두었다 —
+                     흰 1.474 · 값홀 1.422 · 라벨짝 1.375 · **라벨홀 1.326**.
+                     가장 여린 자리가 라벨 홀수 행이지만, 판 (15) 에서
+                     *"가로선이 사라진다"* 던 값이 **1.16** 이었으므로 아직
+                     그 위다.
+
+               ⚠️⚠️ **값 칸만 깔면 안 된다.** 라벨을 #f6f7f9 로 두고 값만
+                  #fafbfc 로 깔면 홀수 행에서 라벨↔값이 **1.072 → 1.035** 로
+                  반이 되어, 판 (15) 에서 만든 **라벨 열이 홀수 행마다
+                  끊긴다.** 참고가 라벨까지 같이 내린 까닭이 이것이다.
+
+               ⚠️⚠️ **그래서 라벨 글자를 `text-ink-soft` 로 올려야 했다.**
+                  `text-muted` 는 #f6f7f9 위에서 **4.510** 인데 13px 이라
+                  4.5 를 넘겨야 하니 **한 단도 못 내린다** —
+
+                    muted    on #f6f7f9  4.510  ✓ 간신히
+                    muted    on #f1f3f6  4.349  ✗ AA 미달
+                    ink-soft on #f6f7f9  8.727  ✓
+                    ink-soft on #f1f3f6  8.415  ✓
+
+                  `font-bold` 라 큰 글자 기준(18.66px 이상)으로 3:1 을 쓸 수
+                  있는지 봤으나 **13px 이라 안 된다.**
+                  ⚠️ **되살린 안이 아니라 이미 선 전례다** —
+                     `location/page.tsx` 의 지도 플레이스홀더 글자가 **같은
+                     까닭으로 이미 ink-soft** 다. 다만 거기 적힌 수치가
+                     **4.03** 이고 이 주석은 **4.510** 이다. **그 방식을
+                     그대로 재현해 정체를 밝혔다** — dpr 1 로 dt 를 찍어
+                     최빈색을 바탕, 어두운 하위 2% 평균을 글자로 삼으면 —
+
+                       라벨색     바탕       코어 평균   가장 어두운 픽셀
+                       muted     #f6f7f9    4.07~4.26   **4.51**
+                       muted     #f1f3f6    3.46~3.95   **4.35**
+                       ink-soft  #f6f7f9    7.23~7.84   **8.73**
+                       ink-soft  #f1f3f6    5.56~7.07   **8.42**
+
+                     location 의 4.03 은 **muted/#f6f7f9 의 코어 평균(4.07)**
+                     이다. 같은 방식이 맞았다.
+                     ⚠️⚠️ **그런데 그 지표는 대비가 아니라 글자 모양을 잰다.**
+                        같은 두 색인데 코어 평균이 **5.56~7.84 로 40% 넘게**
+                        흔들린다 — 라벨 글자 수에 따라 **테두리 픽셀의 비중**이
+                        달라지기 때문이다. 반면 **가장 어두운 픽셀은 지정색
+                        계산값과 소수점까지 같다**(8.73 · 8.42 · 4.51 · 4.35).
+                        **글자는 지정색으로 제대로 찍히고 있다**는 뜻이고,
+                        코어 평균은 그것을 안티에일리어싱 가장자리로 희석해
+                        **낮게 말한다.**
+                     ⚠️ **그러므로 기준값은 지정색 계산인 4.510 이다.**
+                        판 (15) 의 라벨은 미달이 아니라 **한계선**이었다.
+                        그래도 결론은 그대로다 — 한계선이라 **바탕을 한 단도
+                        못 내리므로**, 줄무늬를 넣으려면 ink-soft 로 올려야
+                        한다. 올린 뒤 그려진 픽셀로 다시 재도 네 자리 모두
+                        4.5 를 넘는다(위 표의 ink-soft 줄).
+
+               ⚠️⚠️⚠️ **`nth-child` 로는 못 한다 — 세로 줄무늬가 된다.**
+                  이 `dl` 은 `lg:grid-cols-2` 라 한 행에 칸이 **둘**이다.
+                  `nth-child(odd)` 는 그중 **왼쪽 칸만** 집으므로 가로가
+                  아니라 **세로**로 칠해진다. 전폭 행이 끼면 더 어긋난다.
+                  그래서 **행 번호를 데이터에서 센다** — 위 `OVERVIEW_ROWS`
+                  (`gridRows`, 머리 주석에 거동과 경고가 있다).
+               ⚠️⚠️ **좁은 폭과 넓은 폭의 기준이 다르다.** 1열로 접히면 행
+                  번호가 곧 칸 순서(i)다. 그래서 클래스를 **둘 다** 건다 —
+                  `bg-…`(i 기준)와 `lg:bg-…`(행 번호 기준). ⚠️ `lg:` 쪽은
+                  **켜는 것과 끄는 것을 모두** 적어야 한다. i 로는 칠해졌지만
+                  행 번호로는 짝수인 칸(자본금·이메일·주 사업)이 있어
+                  `lg:bg-transparent`·`lg:bg-surface` 로 **꺼야** 한다.
+               ⚠️ 「홀수 행」은 **`% 2 === 0`** 이다(0부터 세므로). 11칸이
+                  7행으로 앉고 줄무늬가 행 0·2·4·6 에 간다 — 첫 행과 마지막
+                  행이 모두 칠해져 표가 위아래로 닫힌다. DOM 좌표를 y 로 묶어
+                  재서 이 계산과 같은지 확인했다.
+               ⚠️ **제품 규격표는 건드리지 않았다** — 라벨이 값 **위**에 서는
+                  구조라 줄무늬가 성립하지 않는다. 그 표만 아래 2px 이 남는데
+                  구조가 다른 표라 어긋나 보이지 않는다(찍어서 확인했다). */}
+        <dl className="grid border-t-2 border-b border-t-ink border-b-[#d1d5db] [&>*:last-child]:border-b-0 lg:grid-cols-2">
           {overview.map((row, i) => (
             <div
               key={row.label}
@@ -1014,7 +1136,15 @@ export default function CompanyPage() {
                  맨 위에 붙어 보였다(중심이 37px 위). 연락처 표도 같은 이유로
                  items-center 를 쓴다 — 거기는 2열 격자 행의 높이를 두 칸이
                  나눠 갖기 때문이고, 여기는 값 자체가 여러 줄이기 때문이다. */
+              /* 홀수 행 줄무늬. 좁은 폭은 칸 순서(i), 넓은 폭은 격자 행
+                 번호가 기준이다 — 위 dl 주석의 "기준이 다르다" 참고. */
               className={`flex items-center gap-4 border-b border-[#d1d5db] py-4 pr-5 sm:pr-7 ${
+                i % 2 === 0 ? "bg-[#fafbfc]" : ""
+              } ${
+                OVERVIEW_ROWS[i] % 2 === 0
+                  ? "lg:bg-[#fafbfc]"
+                  : "lg:bg-transparent"
+              } ${
                 row.wide
                   ? "lg:col-span-2"
                   : OVERVIEW_COLS[i] === 0
@@ -1102,7 +1232,18 @@ export default function CompanyPage() {
                      위 주석의 *"연락처 표·제품 규격표와 한 식구"* 가 그 까닭이다 —
                      한쪽만 고치면 같은 표가 쪽마다 달라 보인다. 제품 규격표는
                      라벨이 값 **위**에 서는 구조라 해당 없다. */}
-              <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-[#d1d5db] bg-surface px-2 py-4 text-13 font-bold text-muted sm:w-24">
+              {/* ⚠️ bg 가 조건부다(홀수 행 #f1f3f6 · 짝수 행 bg-surface)
+                     — 위 dl 주석의 사다리 표 참고. text-ink-soft 인 까닭도
+                     거기 있다(muted 로는 #f1f3f6 위에서 4.349 로 AA 미달). */}
+              <dt
+                className={`flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-[#d1d5db] px-2 py-4 text-13 font-bold text-ink-soft sm:w-24 ${
+                  i % 2 === 0 ? "bg-[#f1f3f6]" : "bg-surface"
+                } ${
+                  OVERVIEW_ROWS[i] % 2 === 0
+                    ? "lg:bg-[#f1f3f6]"
+                    : "lg:bg-surface"
+                }`}
+              >
                 {row.label}
               </dt>
               {/* tabular-nums: 대표번호와 팩스가 위아래로 붙어 있어 자릿수를
