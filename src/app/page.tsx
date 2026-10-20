@@ -2291,29 +2291,51 @@ export default function Home() {
         <div className="relative border-t border-white/10 bg-black/25 backdrop-blur-[2px]">
           <ScrollCue />
           <Container>
-            <dl className="grid grid-cols-2 divide-white/10 sm:grid-cols-4 sm:divide-x">
+            {/* ⚠️⚠️⚠️ **2026-10-20(3) — 설명 줄 넷을 걷었다. 숫자와 단위만
+                   남는다.** 유신이 *"부품마다 맞춰서 / 1호부터 4호까지 /
+                   다시 찾는 거래처 / 1992년부터 이거 문구는 지우자"* 라고
+                   했다. 2026-10-14 에 한 번 줄였던(*"더 코어만 요약해 짧게"*)
+                   그 줄들이다 — 줄이다 못해 없앴다.
+
+                ⚠️⚠️ **dl 을 div 로, dd 를 그냥 자식으로 바꿨다.** dt 만 빼면
+                   dl 안에 dd 가 홀로 남아 **짝이 깨진다**(HTML 명세상 dl 의
+                   div 는 dt + dd 를 담아야 한다). 설명 줄이 없으면 이것은
+                   더 이상 「이름 : 값」 목록이 아니라 **숫자 넷의 나열**이다.
+                   그래서 의미 요소를 쓰지 않는다.
+                   ⚠️ PARTS 에서는 같은 문제를 sr-only 로 풀었는데, 거기는
+                      라벨만 눈에서 걷는 것이었고 여기는 **구조 자체가
+                      바뀌었다.** 같은 수를 쓰지 않는 까닭이다.
+                   ⚠️ `order-first` 도 함께 걷었다 — dt 를 dd 뒤에 두고도
+                      위에 보이게 하던 장치인데 dt 가 없으니 할 일이 없다.
+                ⚠️ **STATS 의 note 값은 그대로 둔다.** 거기 주석에 줄여 온
+                   내력과 *"비교가 빠졌다. 되살리지 말 것"* 경고가 달려
+                   있다 — 값을 지우면 그 기록이 떠돈다.
+                ⚠️ **띠가 낮아져 히어로 영상 자리가 늘어난다**(히어로가
+                   100dvh 계열이다). 재서 아래에 적는다. */}
+            <div className="grid grid-cols-2 divide-white/10 sm:grid-cols-4 sm:divide-x">
               {STATS.map((s, i) => (
                 <div
                   key={s.unit}
                   className="rise px-1 py-[clamp(0.75rem,2.2vh,1.75rem)] sm:px-6 sm:text-center"
                   style={{ animationDelay: `${460 + i * 70}ms` }}
                 >
-                  <dd className="order-first">
-                    <StatCounter
-                      value={s.value}
-                      count={s.count}
-                      className="text-[clamp(1.375rem,3.2vh,2.25rem)] font-bold tabular-nums text-white"
-                    />
-                    <span className="ml-1 text-sm font-medium text-white/60">
-                      {s.unit}
-                    </span>
-                  </dd>
-                  <dt className="mt-1 text-[clamp(0.625rem,1.3vh,0.75rem)] text-white/45">
-                    {s.note}
-                  </dt>
+                  <StatCounter
+                    value={s.value}
+                    count={s.count}
+                    className="text-[clamp(1.375rem,3.2vh,2.25rem)] font-bold tabular-nums text-white"
+                  />
+                  <span className="ml-1 text-sm font-medium text-white/60">
+                    {s.unit}
+                  </span>
+                  {/* 2026-10-20(3) 에 걷은 설명 줄. 되살리려면 위 div 를 dl 로,
+                      숫자 둘을 <dd className="order-first"> 로 감싸고 아래를
+                      되살린다 —
+                      <dt className="mt-1 text-[clamp(0.625rem,1.3vh,0.75rem)] text-white/45">
+                        {s.note}
+                      </dt> */}
                 </div>
               ))}
-            </dl>
+            </div>
           </Container>
         </div>
       </section>
@@ -2701,6 +2723,16 @@ export default function Home() {
                               건드리지 않은 셈이라는 뜻은 더 이상 안 맞는다.
                            ⚠️ 그림 칸(216 정사각)은 안 건드렸다. 줄어든 것은
                               글 칸뿐이다.
+                        ⚠️⚠️⚠️ **2026-10-20(3) — 세 번째로 줄었다. 치수 값까지
+                           걷었다**(아래 주석). 글 칸이 86 → **49px**, 행
+                           높이가 302 → **265px** 다. 1024·1280·1440 에서
+                           **카드와 영상이 둘 다 265** 인 것을 재서 확인했다.
+                           ⚠️ 글 칸에 이제 **이름 한 줄만** 있다. 더 걷을 것이
+                              없으니 이 계단은 여기서 끝이다 —
+                              121 → 103 → 86 → **49px**.
+                           ⚠️ 3:2 시절(333)보다 **68px 낮다.** 아래 *"거의
+                              같다"* 는 337 때의 말이고 지금은 전혀 안 맞는다.
+                              지우지 않고 그때의 기록으로 둔다.
                         3:2 시절(333)과 거의 같다 — 세로는 건드리지 않은 셈이다.
 
                      ⚠️ 두 번 낮췄다 — "세로 비율이 너무 길게 느껴지는데"(1:1 →
@@ -2783,7 +2815,32 @@ export default function Home() {
                          **카드가 행 높이를 정하고 영상이 따라오므로** 영상도
                          같이 낮아진다 — 재서 위 그림 칸 주석의 숫자를 고쳤다.
                       ⚠️ justify-center 는 위 이름과 **짝**이다. 하나만 가운데로
-                         가면 글 칸이 기울어 보인다. */}
+                         가면 글 칸이 기울어 보인다.
+
+                   ⚠️⚠️⚠️⚠️ **2026-10-20(3) — 치수를 통째로 걷었다. 네 번째
+                      깎음이다.** 유신이 *"Ø11 × 8.5mm / 4.7g / 25 × 24 ×
+                      24mm / 16g 이거 그냥 지우자"* 라고 했다. 이 글 칸이
+                      줄어 온 계단은 이렇다 —
+
+                        특징 줄을 걷고        121 -> 103px
+                        「크기」·「무게」 라벨   103 ->  86px
+                        치수 값까지(지금)      86 ->  재서 적는다
+
+                      **이름 한 줄만 남는다.** 라벨을 sr-only 로 살려 둔
+                      바로 위 판단도 함께 끝난다 — dl 을 통째로 걷으므로
+                      dt/dd 짝 문제가 없고, 대신 **치수가 스크린리더에서도
+                      사라진다.** 데이터는 그대로이니 되살리면 돌아온다.
+                   ⚠️ **spec 데이터는 지우지 않는다**(PARTS 배열에 네 개가
+                      있다). 화면에서만 걷는 것이고, 값이 사라지면 어디서
+                      온 수치인지도 함께 사라진다.
+                   ⚠️⚠️ **카드가 행 높이를 정하고 영상이 따라온다.** 글 칸이
+                      줄면 옆 영상도 같이 낮아진다 — 1024·1280·1440 에서
+                      재서 위 그림 칸 주석의 숫자를 고쳤다.
+                   ⚠️ 이름의 text-center 는 그대로 둔다. 이제 가운데 정렬할
+                      것이 하나뿐이라 「짝」이라는 위 경고는 효력을 잃었다.
+
+                      되살리려면 아래를 꺼내 이 주석 뒤에 둔다 —
+
                 {p.spec && (
                   <dl className="mt-2.5 flex items-baseline justify-center gap-5 border-t border-line pt-2.5">
                     <div>
@@ -2795,7 +2852,7 @@ export default function Home() {
                       <dd className="text-13 font-bold leading-tight text-ink-soft">{p.spec.weight}</dd>
                     </div>
                   </dl>
-                )}
+                )}  */}
               </div>
             </div>
             {/* ⚠️⚠️ **성능은 떨어지지 않았다.** 홈에 영상이 둘 늘어(696KB +
