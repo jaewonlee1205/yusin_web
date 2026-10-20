@@ -211,14 +211,28 @@ export default function VideoEmbed({
             src={poster}
             alt=""
             fill
-            /* ⚠️ 2026-10-19(4) — 격자가 **1열**이 되면서 고쳤다. 전에는
+            /* ⚠️⚠️⚠️ **2026-10-20(2) — 이 sizes 는 아무 일도 하지 않는다.**
+                  바로 아래 겹이 *"그대로 두면 next/image 가 848px 칸에 절반
+                  폭짜리 srcset 을 골라 흐려진다"* 고 적고 있는데, **그것은
+                  추론이었고 틀렸다.** next.config 가 `images: { unoptimized:
+                  true }` 라 next/image 는 srcset 을 **아예 만들지 않는다** —
+                  빌드 결과를 뒤져 확인했다(`out/videos/index.html` 에
+                  `srcset=` 이 **0개**). 원본 한 장이 그대로 간다.
+               ⚠️ 그래도 **값은 칸 크기에 맞춰 둔다.** unoptimized 를 끄는 날
+                  이 줄이 되살아나고, 그때 어긋난 값이 남아 있으면 흐려진다.
+                  2026-10-20(2) 격자 실측: 1280~ 528px · 1024 464px.
+               ⚠️ 화질을 걱정할 자리는 sizes 가 아니라 **포스터 원본 크기**다
+                  (유튜브가 주는 최대가 1280×720 — fetch-video-thumbs.mjs).
+
+               아래는 틀린 설명이다. 지우지 않는다 — 같은 추론을 또 하지 않기 위해 둔다 —
+               ⚠️ 2026-10-19(4) — 격자가 **1열**이 되면서 고쳤다. 전에는
                   "(min-width: 640px) 50vw, 100vw" 였는데, 그대로 두면
                   next/image 가 848px 칸에 **절반 폭짜리 srcset** 을 골라
                   흐려진다. Container 가 1088px 에서 멈추므로 칸의 최대가
                   848px 다(VideoBrowser 의 격자 주석에 폭별 표가 있다).
                ⚠️ 이 값은 **파사드 쪽만**이다. 홈 미리보기(위 preview 갈래)는
                   여전히 lg 에서 2열이라 50vw 가 맞다. */
-            sizes="(min-width: 1280px) 848px, (min-width: 1024px) 720px, 100vw"
+            sizes="(min-width: 1280px) 528px, (min-width: 1024px) 464px, 100vw"
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
           <span
