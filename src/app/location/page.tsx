@@ -223,7 +223,9 @@ export default function LocationPage() {
       <PageHero
         eyebrow="LOCATION"
         title="오시는 길"
-        lead="샘플을 들고 오시면 현장에서 함께 검토합니다. 방문 전 연락 바랍니다."
+        /* 2026-10-20(3) — 배너 설명문을 일곱 쪽에서 모두 걷었다.
+           까닭과 되살리는 법은 PageHero.tsx 의 lead 주석에 있다. */
+        // lead="샘플을 들고 오시면 현장에서 함께 검토합니다. 방문 전 연락 바랍니다."
       />
 
       <div className="py-14 sm:py-20">
@@ -499,7 +501,7 @@ export default function LocationPage() {
 
                        ⚠️ px-5 sm:px-7 이 **행에** 있다(위 dl 주석 참고).
                           dl 로 옮기면 선이 카드 전폭을 잃는다. */
-                    className={`flex items-center gap-4 border-b border-line px-5 py-4 sm:px-7 ${
+                    className={`flex items-center gap-4 border-b border-line py-4 pr-5 sm:pr-7 ${
                       cell.wide
                         ? "lg:col-span-2"
                         : cellCols[i] === 0
@@ -523,6 +525,16 @@ export default function LocationPage() {
                            `pr-4` → `px-2` 로 바꿔야 가운데가 선 쪽으로
                            치우치지 않는다. 재서 확인한 값은 company/page.tsx
                            의 같은 자리에 있다(넘침 네 폭 모두 0개).
+                        ⚠️⚠️ **2026-10-20(3) — 라벨 칸을 카드 왼쪽 가장자리에
+                           붙였다.** 유신이 *"전화 / 이메일 / 팩스 / 주차
+                           가운데 정렬 안된거 같은데"* 라고 했다. 가운데는
+                           맞았고 **왼쪽에 기준선이 없는 것**이 문제였다 —
+                           진단과 비교 내력은 company/page.tsx 에 적었다.
+                           행의 `px-5 sm:px-7` 을 **`pr-5 sm:pr-7`** 로 바꿔
+                           왼쪽 여백만 걷었다. 라벨이 카드 가장자리(그리고
+                           2열에서는 열 hairline)에 붙어 두 선 사이에 선다.
+                           ⚠️ **오른쪽 여백은 지킨다** — 값이 카드 끝에 닿으면
+                              안 된다. 그래서 px 가 아니라 pr 이다.
                         ⚠️ 선을 행 높이로 뻗게 하려면 self-stretch 와
                            -my-4 py-4 가 **둘 다** 있어야 한다. 까닭은
                            company/page.tsx 의 같은 자리에 적어 두었다. */}
