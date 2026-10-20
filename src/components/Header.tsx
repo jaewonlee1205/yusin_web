@@ -156,8 +156,37 @@ export default function Header() {
       }`}
     >
       <Container width="wide">
-        {/*
-          lg 이상에서는 3칸 그리드를 쓴다. justify-between 으로 두면 로고(89px)와
+        {/* ⚠️⚠️⚠️⚠️ **2026-10-20 — 3칸 그리드를 걷었다. 아래 문단을 뒤집는다.**
+            유신이 *"회사소개 / 제품 / 제작실적 / 오시는 길 … 왼쪽 여백이 훨씬
+            더 커보이는데 … 오른쪽 왼쪽 여백 동일하게"* 라고 했다. **맞다.**
+            그리드가 메뉴를 화면 정중앙에 고정하는데, 로고와 우측 묶음의 폭이
+            세 배 가까이 달라 그 차이가 그대로 좌우 여백 차가 됐다 —
+
+              폭      로고   메뉴   우측   왼 여백   오른 여백
+              1024     81    332    239     233        75    ← 3.1배
+              1280     89    391    238     324       174    ← 1.9배
+              1440     89    391    238     324       174
+              1920     89    391    238     324       174
+
+            **아래 문단이 자랑하는 「1px 도 안 어긋난다」가 바로 원인이다.**
+            바에서 눈이 읽는 것은 화면 중심이 아니라 **덩이 사이의 틈**이다.
+            틈이 3:1 로 벌어지면 메뉴가 정중앙에 있어도 왼쪽으로 쏠려 보인다.
+
+            이제 lg 에서도 아래 폭과 같은 flex + justify-between 이다. 세
+            덩이의 두 틈이 **정확히 같아진다** — 1024 에서 양쪽 **157**,
+            1280 이상에서 양쪽 **249** 다(고친 뒤 다시 재서 확인했다).
+            ⚠️ **내준 것** — 메뉴 중심이 화면 중심에서 **왼쪽으로** 1024 에서
+               79px, 1280 이상에서 75px 옮겨 간다. 그 값을 내주고 틈을
+               얻는 맞바꿈이다. **되돌리려면** 아래 문단의 클래스를 다시
+               쓰고 로고·우측 묶음에 justify-self 를 되살린다.
+               ⚠️ **부호를 한 번 거꾸로 적었다**(「오른쪽으로」). 과하던
+                  쪽이 왼 여백이었으니 당겨지는 쪽도 **왼쪽**이다 —
+                  고치기 전후를 둘 다 재서 바로잡았다.
+            ⚠️ lg 미만은 **바뀐 것이 없다** — 원래 이 flex 를 쓰고 있었다.
+
+            아래는 그리드를 세울 때의 기록이다. 지우지 않는다 —
+
+          lg 이상에서는 3칸 그리드를 썼다. justify-between 으로 두면 로고(89px)와
           우측 그룹(225px)의 폭 차이만큼 메뉴가 한쪽으로 밀린다.
           minmax(0,1fr) 이라야 양옆 칸이 정확히 같은 폭이 되어 메뉴가 화면 정중앙에 온다.
           (그냥 1fr 은 칸의 최소 폭이 내용 크기라 다시 치우친다)
@@ -168,12 +197,13 @@ export default function Header() {
              중심이 화면 중심과 **1px 도 어긋나지 않는 것**을 확인했다. 같은 날
              lg 구간의 폭 압박도 풀렸다 — 로고 오른끝과 메뉴 왼끝 사이가
              1024 에서 49 → **209px** 다.
+             ⚠️ 그 209px 가 2026-10-20 에 **154px** 가 됐다(위).
         */}
-        <div className="flex h-16 items-center justify-between gap-4 sm:h-20 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
+        <div className="flex h-16 items-center justify-between gap-4 sm:h-20">
           <Link
             href="/"
             onClick={(e) => handleSameRouteClick(e, pathname, "/", true)}
-            className="shrink-0 transition-opacity hover:opacity-70 active:opacity-55 lg:justify-self-start"
+            className="shrink-0 transition-opacity hover:opacity-70 active:opacity-55"
             aria-label={`${site.name} 홈으로`}
           >
             {/* ⚠️⚠️ **2026-10-14 에 logo.webp 에서 logo-mark.webp 로 바꿨다.**
@@ -349,7 +379,7 @@ export default function Header() {
             })}
           </nav>
 
-          <div className="hidden items-center gap-6 lg:flex lg:justify-self-end">
+          <div className="hidden items-center gap-6 lg:flex">
             {/* 번호는 ink-soft, 아이콘만 brand 다.
 
                 한때 둘 다 navy 였는데(2026-10-14 에 사이트에서 걷은 그 파랑),
