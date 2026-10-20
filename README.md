@@ -287,14 +287,19 @@ ffmpeg -ss 0 -i public/videos/performance.mp4 -frames:v 1   -c:v libwebp -compre
 > 루프 이음매, 화질 전환)이 남아 "유튜브 미리보기"로 보였습니다.
 
 ```bash
-# 금속 부품 정렬 (유튜브 _zG4dYTCWpc)
-ffmpeg -ss 14 -t 7 -i 더블유비.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 31 -preset slow -g 48 -movflags +faststart   -vf scale=1280:720 public/videos/preview-metal-parts.mp4
+# 금속 부품 정렬 (유튜브 _zG4dYTCWpc) — 2026-10-20 에 14초 → 38.4초
+# ⚠️ 네 장 가운데 이 한 장만 볼 테두리 접사입니다. 76~88초가 볼 전체 구도라
+#    82초부터 6초를 잘라 봤지만 ① 줌인 중이라 끝이 첫 프레임보다 크고
+#    ② 빨간 의자가 들고 ③ 안쪽 나선이 비어 버렸습니다. 이 원본에는 없습니다.
+ffmpeg -ss 38.4 -t 8 -i 더블유비.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 31 -preset slow -g 48 -movflags +faststart   -vf scale=1280:720 public/videos/preview-metal-parts.mp4
 
-# 볼 내부 선별 지그 (유튜브 KiiYXbIajog)
-ffmpeg -ss 53 -t 7 -i MAH05268.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 31 -preset slow -g 48 -movflags +faststart   -vf scale=1280:720 public/videos/preview-bowl-jig.mp4
+# 볼 내부 선별 지그 (유튜브 KiiYXbIajog) — 2026-10-20 에 53초 → 110.9초
+# ⚠️ 53초는 선별 날개 접사라 지그는 잘 보였지만 부품이 한둘씩만 지나갔습니다.
+#    110.9초는 볼 전체 구도입니다 — 지그는 안 보이고 대신 한 줄 정렬이 보입니다.
+ffmpeg -ss 110.9 -t 6 -i MAH05268.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 31 -preset slow -g 48 -movflags +faststart   -vf scale=1280:720 public/videos/preview-bowl-jig.mp4
 
-# 커넥터 부품 정렬 (유튜브 qbBMoY2g_WE) — 2026-10-19 추가
-ffmpeg -ss 82.2 -t 7.2 -i MAH07514.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 31 -preset slow -g 48 -movflags +faststart   -vf scale=1280:720 public/videos/preview-connector.mp4
+# 커넥터 부품 정렬 (유튜브 qbBMoY2g_WE) — 2026-10-19 추가, 2026-10-20 에 82.2초 → 116.8초
+ffmpeg -ss 116.8 -t 6 -i MAH07514.MP4   -an -c:v libx264 -profile:v main -pix_fmt yuv420p   -crf 31 -preset slow -g 48 -movflags +faststart   -vf scale=1280:720 public/videos/preview-connector.mp4
 
 # 플라스틱 블록 정렬 (유튜브에 없는 홈 전용) — 2026-10-19 추가
 # 원본이 1440x1080 4:3 이라 crop 으로 16:9 를 먼저 뽑고, 60fps 를 30 으로 줄입니다.
@@ -326,6 +331,21 @@ done
   움직임 크기로 걸러 냅니다(빈 볼이 이음새 점수만 좋게 나옵니다). 네 장의
   이음새 — 커넥터 **28.7** · 흰 블록 **38.6** · 볼 지그 72.6 · 금속 부품
   **88.7**. 뒤의 둘은 눈대중으로 자른 옛 것이라 거칩니다
+- ⚠️⚠️ **2026-10-20 — 셋을 다시 잘랐습니다.** 커넥터 **24.5** · 볼 지그
+  **30.2** · 흰 블록 38.7(그대로) · 금속 부품 **40.2**
+- ⚠️⚠️ **RMSE 만 보면 틀립니다.** 더블유비 39.8초가 36.9 로 가장 좋게 나와
+  그것으로 구웠는데, 끝 프레임과 첫 프레임을 나란히 놓고 보니 볼이 눈에
+  띄게 어긋나 있었습니다. 핸드헬드 촬영이라 7초 동안 카메라가 패닝한
+  것입니다 — RMSE 는 **부품이 움직인 양과 카메라가 움직인 양을 가르지
+  못합니다.**
+  그래서 첫·끝 프레임을 80×45 에서 ±6px 로 밀어 보아 가장 잘 겹치는 이동량
+  (dx, dy) 을 함께 재고, **이동이 1.5px 이내인 창** — 카메라가 제자리로
+  돌아온 창 — 만 받았습니다. 그렇게 고른 38.4초는 RMSE 가 40.2 로 오히려
+  나쁘지만 눈에는 훨씬 매끄럽습니다
+- ⚠️ **움직임 문턱도 고쳤습니다.** 중앙값의 0.7배였는데, 볼 전체를 멀리서
+  잡은 구도는 화면 변화가 작아(커넥터 7.4 · 볼 지그 5.3 · 중앙값 20)
+  통째로 걸러졌습니다. 0.15배로 낮추고 움직임 값을 눈으로 봤습니다 —
+  **멀다고 멈춘 것이 아닙니다**
 
 **유튜브 영상 ↔ 원본 촬영본 대조표** (썸네일을 프레임과 맞춰 확인했습니다)
 
@@ -453,10 +473,13 @@ USB 촬영본으로 갈았는데(볼피더 대성본사 230204 · 진동기와 �
 
 - ⚠️ 홈 영상 두 편이 쓰는 구간과 겹치지 마세요 — `MAH02496`(테콘 230702) 64초는
   `hero.mp4`, `MAH03965`(아하테크 200402) **43.57초**는 `performance.mp4` 입니다(8초 → 49초 → 43.57초로 옮겼습니다 — 위 ffmpeg 주석 참조).
-  `MAH05268` 53초(`preview-bowl-jig`)와 `더블유비` 14초(`preview-metal-parts`)도
-  마찬가지입니다
+  `MAH05268` **110.9초**(`preview-bowl-jig`)와 `더블유비` **38.4초**
+  (`preview-metal-parts`)도 마찬가지입니다(2026-10-20 에 53초·14초에서 옮겼습니다)
 - ⚠️ 컨트롤러는 111초가 가장 조용하지만 **117초쯤 오른쪽 아래로 검은 물체가
   들어옵니다.** 104초로 당겨 그 앞에서 끝냅니다
+  - ⚠️ 2026-10-20 — `preview-bowl-jig` 가 **110.9~116.9초**로 옮겨 왔습니다.
+    컨트롤러(104초)와는 안 겹치지만 **그 검은 물체가 드는 117초 바로 앞에서
+    끝납니다.** 이 구간을 늘릴 때 물체를 먼저 보세요
 - 한 편 **1MB 안쪽**을 목표로 합니다
 
 ### 로고 마지막 M 복원
