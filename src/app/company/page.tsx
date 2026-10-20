@@ -566,7 +566,7 @@ export default function CompanyPage() {
                  1440 405  1280 405  1024 405  768 634  **640 659**  390 707
 
                   640 이 634 로 남아 있으면 패딩이 안 들어간 것이다. */}
-        <Reveal className="overflow-hidden border-x border-t border-line">
+        <Reveal className="border-x border-[#d1d5db]">
         {/* ⚠️⚠️ **2026-10-20(8) — 표 위에 건물 사진이 들어왔다.** 유신이
                *"위치 및 연락처 여기 경우는 표하고 위에 지도가 같이 있다보니깐
                시각적으로 봤을 때 이쁘게 보이거든 … 회사 개요 여기 경우는 표만
@@ -912,15 +912,100 @@ export default function CompanyPage() {
                   안 쓰지만 되돌릴 자리로 남긴다. 거기 주석에 적힌 색 사다리와
                   고른 과정은 그대로 쓸모가 있다. 유신 건물 사진 둘
                   (`building.webp` · `building-aerial.webp`)도 그대로다. */}
-        <div className="relative aspect-[3/1] bg-surface">
-          <Image
-            src="/images/company/office.webp"
-            alt=""
-            fill
-            sizes="(min-width: 1152px) 1088px, 100vw"
-            className="object-cover"
-          />
-        </div>
+        {/* ⚠️⚠️⚠️ **2026-10-20(15) — 사진을 걷고, 라벨 열에 면을 깔았다.**
+               유신이 레퍼런스를 들고 왔다 — *"이거 이미지 지우고 표 디자인
+               `honeyppl.kr/ko/sub1_2.html` 이거 참고 해서 만들면 좋을 거 같아 …
+               여기서 기본 개요 표 디자인 우리 회사개요 디자인 스타일 구조로
+               현재 위에 이미지는 지우고"*
+
+               **사진 자리를 표가 대신 메우는 판이다.** 판 (8) 에서 유신이
+               *"회사 개요 여기 경우는 표만 있다 보니깐 시각적으로 이상해서"*
+               라며 사진을 넣자고 했던 그 자리로 돌아가므로, 이번에는 **표가
+               혼자 서야** 한다.
+
+               **① 레퍼런스를 재 보니 격자는 우리가 이미 다 갖고 있었다.**
+
+                 위 선      참고 2.4px #333     우리 2px ink        같다
+                 좌우       참고 1px #ccc       우리 border-x       있다
+                 행 사이    참고 1px #ccc       우리 border-b       있다
+                 라벨↔값    참고 1px #ccc       우리 border-r       있다
+                 라벨 바탕  참고 **#f0f0f0**    우리 **없음**   ← 갈리는 곳은 여기뿐
+
+               그래서 **라벨 열의 면 하나만** 가져왔다. 사진이 빠지면 이 섹션에
+               면이 하나도 안 남는데, 그 면이 사진이 하던 「눈이 쉬는 자리」를
+               대신한다.
+
+               ⚠️⚠️ **이 음영은 내가 세 번 물리쳤던 안이다.** 아래 판 (1)·(3)
+                  주석에 그대로 있다 — *"선뿐인 목록이라는 성격이 사라진다"* ·
+                  *"음영 : 라벨이 알약 버튼처럼 보인다"* · 판 (3) 의 ⓒ 옅은 바탕.
+                  **되살린 근거 셋** —
+                    · **고른 사람이 다르다.** 그때는 내가 골랐고 이번은 유신이
+                      레퍼런스로 지정했다
+                    · **「알약」이 안 된다.** 그 뒤 판에서 dt 에
+                      `self-stretch -my-4 py-4` 가 들어가 라벨 칸이 행 높이를
+                      꽉 채운다(재서 확인: 행 57 · 칸 56). 면을 깔면 알약이
+                      아니라 **열**이 된다
+                    · **사진이 사라져 섹션에 면이 없다.** 첫 판단은 사진이
+                      면을 맡고 있을 때의 것이다
+
+               **② 면만 베끼면 참고의 성격이 안 난다 — 선도 같이 올려야 했다.**
+               아래 판 (1) 주석이 미리 경고해 둔 자리다(*"회색 바탕 위에서는
+               border-line 이 대비 1.15:1 로 거의 사라진다"*). 재 보니 그대로였다 —
+
+                 참고 사이트   면 #f0f0f0 ↔ 선 #cccccc   **1.41**  ← 격자가 보인다
+                 우리 토큰     면 #f6f7f9 ↔ 선 #e5e7eb   **1.16**  ← 라벨 열에서 선이 사라진다
+                 고른 값       면 #f6f7f9 ↔ 선 #d1d5db   **1.37**
+
+               참고 표가 또렷한 까닭은 면이 아니라 **면과 선의 차이**였다.
+               그래서 **이 표의 선만** 한 단 올렸다(`border-[#d1d5db]`).
+
+               ⚠️⚠️ **`--color-line` 토큰은 안 건드렸다.** 그 값은 회사개요 ·
+                  연락처 · **제품 규격표** 셋이 함께 쓴다(products 쪽 dl).
+                  토큰을 바꾸면 세 표가 한꺼번에 움직인다. 임의값이 지저분해
+                  보여도 **범위를 가두는 쪽**이 맞다.
+
+               **③ 네 안을 찍어 골랐다 — 숫자로는 안 갈렸다.** 인라인 style 로
+               실제 DOM 에 넣어 1440 에서 표 전체를 한 판에 담아 찍었다 —
+
+                 면 없음(그때까지)                     목록으로 읽힌다
+                 면 + 선 그대로                        **라벨 열의 가로선이 사라져
+                                                       라벨만 통짜 띠**가 된다
+                 면 + 라벨 칸 선만 진하게              라벨 구간만 진해 **값 칸과
+                                                       단차**가 보인다
+                 면 없이 선만 진하게                   격자는 또렷한데 라벨 열이 안 선다
+                 **면 + 표 전체 선 진하게**            **골랐다.** 격자가 고르고
+                                                       참고와 같은 꼴이다
+
+               ⚠️ **라벨 글자는 `text-muted` 그대로 두었다.** `text-ink-soft`
+                  (#414751) 로 올린 안도 찍었는데 **눈에 띄는 차이가 없었다** —
+                  바꿀 이유가 없으면 안 바꾼다. 대비는 재서 확인했다 —
+
+                    muted #6b7280 on #f6f7f9   **4.51**  ← 13px 이라 4.5 를 넘겨야 한다
+                    muted on 참고 바탕 #f0f0f0   4.23   ← 참고 값을 그대로 썼으면 AA 미달
+                    ink-soft on #f6f7f9          8.73
+                    값(ink) on 흰                16.88
+
+                  **참고의 바탕색을 그대로 베끼지 않은 까닭이 이것이다.**
+               ⚠️ 값 칸(흰 바탕)의 가로선도 함께 진해졌다 — 흰 대비
+                  **1.24 → 1.47**. 참고(#ccc)는 1.61 이라 우리 쪽이 한 단 여리다.
+               ⚠️ **오시는 길 연락처 표도 같은 값으로 고쳤다**(location 쪽).
+                  아래 판 (2)·(3) 주석의 *"한쪽만 고치면 같은 표가 쪽마다
+                  달라 보인다"* 가 그 까닭이다. **제품 규격표는 라벨이 값 위에
+                  서는 구조라 해당 없다.**
+               ⚠️ **덤 — 지도와 톤이 이어졌다.** /location 에서 지도 바로 아래
+                  연락처 표의 라벨 열이 회색 면이 되면서, 유신이 판 (11)~(14)
+                  내내 말한 *"지도하고 통일감"* 이 **사진 없이** 생겼다.
+
+               ⚠️⚠️ **사진을 걷으며 함께 걷은 것 둘.** `Reveal` 의
+                  `overflow-hidden`(사진이 좌우 1px 선 위로 삐져나오는 것을
+                  막던 것)과 `border-t`(사진 위에 세우던 1px). 사진이 없으면
+                  `border-t` 가 dl 의 `border-t-2 border-ink` 위에 1px 을 겹쳐
+                  **이중선**이 된다. **`border-x` 는 지켰다** — 유신이 하루에
+                  네 번 왕복해 고른 답이고(아래 판 (5) 주석), 참고 표도 좌우가
+                  닫혀 있어 오히려 맞다.
+               ⚠️ **사진 파일은 하나도 안 지웠다** — `office.webp`(판 (14) 에서
+                  고른 것) · `building.webp` · `building-aerial.webp` ·
+                  `CompanyBuilding.tsx`. 되돌리려면 `<Image>` 한 덩이면 된다. */}
         <dl className="grid border-y-2 border-ink [&>*:last-child]:border-b-0 lg:grid-cols-2">
           {overview.map((row, i) => (
             <div
@@ -929,7 +1014,7 @@ export default function CompanyPage() {
                  맨 위에 붙어 보였다(중심이 37px 위). 연락처 표도 같은 이유로
                  items-center 를 쓴다 — 거기는 2열 격자 행의 높이를 두 칸이
                  나눠 갖기 때문이고, 여기는 값 자체가 여러 줄이기 때문이다. */
-              className={`flex items-center gap-4 border-b border-line py-4 pr-5 sm:pr-7 ${
+              className={`flex items-center gap-4 border-b border-[#d1d5db] py-4 pr-5 sm:pr-7 ${
                 row.wide
                   ? "lg:col-span-2"
                   : OVERVIEW_COLS[i] === 0
@@ -1017,7 +1102,7 @@ export default function CompanyPage() {
                      위 주석의 *"연락처 표·제품 규격표와 한 식구"* 가 그 까닭이다 —
                      한쪽만 고치면 같은 표가 쪽마다 달라 보인다. 제품 규격표는
                      라벨이 값 **위**에 서는 구조라 해당 없다. */}
-              <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-line px-2 py-4 text-13 font-bold text-muted sm:w-24">
+              <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-[#d1d5db] bg-surface px-2 py-4 text-13 font-bold text-muted sm:w-24">
                 {row.label}
               </dt>
               {/* tabular-nums: 대표번호와 팩스가 위아래로 붙어 있어 자릿수를

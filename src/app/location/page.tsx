@@ -318,7 +318,7 @@ export default function LocationPage() {
               delay={90}
               /* ⚠️ border-b-0 — 아래 dl 이 2px 먹색 밑선을 가지므로 카드
                  테두리가 같은 자리에 1px 를 한 겹 더 그리지 않게 한다. */
-              className="overflow-hidden border border-b-0 border-line bg-white"
+              className="overflow-hidden border border-b-0 border-[#d1d5db] bg-white"
             >
               {/* lg 부터 3:1 이다(1088x363) — 홈 PERFORMANCE 영상과 같은
                   비율로 가로로 시원하게 눕는다. 한때 칸 높이를 받는 lg:flex +
@@ -504,7 +504,19 @@ export default function LocationPage() {
                         (border-b-0, 위 Reveal). 표가 제 밑선을 갖는다.
                      ⚠️ last-child 하나로 족한 까닭 — 끝 둘(주소·운영 시간)이
                         전폭이라 마지막 줄에 칸이 하나다. 이 규칙은 이미 있었다
-                        (마지막 칸의 1px 회색을 끄려고 둔 것이다). */}
+                        (마지막 칸의 1px 회색을 끄려고 둔 것이다).
+                     ⚠️⚠️ **2026-10-20(15) — 라벨 열에 `bg-surface` 면을 깔고
+                        이 표의 선을 `#d1d5db` 로 한 단 올렸다.** 유신이
+                        `honeyppl.kr/ko/sub1_2.html` 을 참고로 주며 회사개요
+                        쪽 사진을 걷자고 했다. **까닭·측정·탈락한 세 안은
+                        company/page.tsx 의 같은 자리에 있다** — 요점만 적으면
+                        면과 선의 대비가 참고 1.41 · 우리 토큰 그대로면 1.16
+                        이라, 면만 깔면 라벨 열에서 가로선이 사라진다.
+                        고른 값이 1.37 이다.
+                        ⚠️ **`--color-line` 토큰은 안 건드렸다** — 제품 규격표가
+                           같은 값을 쓴다. 이 표 안에서만 임의값을 쓴다.
+                        ⚠️ 카드 테두리(위 Reveal)도 같은 값으로 올렸다. 안 그러면
+                           표 안쪽 격자만 진해져 **지도 둘레와 어긋난다.** */}
               <dl className="grid border-y-2 border-ink [&>*:last-child]:border-b-0 lg:grid-cols-2">
                 {cells.map((cell, i) => (
                   <div
@@ -523,7 +535,7 @@ export default function LocationPage() {
 
                        ⚠️ px-5 sm:px-7 이 **행에** 있다(위 dl 주석 참고).
                           dl 로 옮기면 선이 카드 전폭을 잃는다. */
-                    className={`flex items-center gap-4 border-b border-line py-4 pr-5 sm:pr-7 ${
+                    className={`flex items-center gap-4 border-b border-[#d1d5db] py-4 pr-5 sm:pr-7 ${
                       cell.wide
                         ? "lg:col-span-2"
                         : cellCols[i] === 0
@@ -560,7 +572,7 @@ export default function LocationPage() {
                         ⚠️ 선을 행 높이로 뻗게 하려면 self-stretch 와
                            -my-4 py-4 가 **둘 다** 있어야 한다. 까닭은
                            company/page.tsx 의 같은 자리에 적어 두었다. */}
-                    <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-line px-2 py-4 text-13 font-bold text-muted sm:w-24">
+                    <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-[#d1d5db] bg-surface px-2 py-4 text-13 font-bold text-muted sm:w-24">
                       {cell.label}
                     </dt>
                     <dd className="text-15 leading-relaxed text-ink">
