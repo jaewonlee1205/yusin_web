@@ -16,11 +16,12 @@ import PhotoLightbox from "@/components/PhotoLightbox";
 import Reveal from "@/components/Reveal";
 import ScrollCue from "@/components/ScrollCue";
 import StatCounter from "@/components/StatCounter";
-import { featuredWorks } from "@/data/works";
+import { featuredWorks, works } from "@/data/works";
 import { type Kpi, products } from "@/data/products";
 import { site } from "@/data/site";
 import VideoCard from "@/components/VideoCard";
 import { featuredVideos } from "@/data/videos";
+import { videoLibrary } from "@/data/videoLibrary";
 
 /** count=false 인 값은 세어 올리지 않는다 — 연도가 굴러가면 어색하다. */
 /* 첫 화면에 서는 진동기 네 기종.
@@ -1344,9 +1345,11 @@ const STATS = [
   { value: "30+", count: false, unit: "년", note: "1992년부터" },
 ];
 
-/* 홈 세 섹션 아래에 서는 "전체 보기" 버튼. 쓰는 곳은 **셋뿐**이다 —
-   PRODUCTS 의 "제품 전체 보기", VIDEO 의 "영상 전체 보기",
-   WORKS 의 "제작실적 전체 보기".
+/* 홈 세 섹션 아래에 서는 버튼. 쓰는 곳은 **셋뿐**이다 —
+   PRODUCTS 의 「기종별 상세」, VIDEO 의 「영상 N편」, WORKS 의 「사진 N장」.
+   ⚠️ 셋 다 2026-10-20(7) 까지는 **"전체 보기"** 로 끝났다("제품 전체 보기"
+      · "영상 전체 보기" · "제작실적 전체 보기"). 그 꼬리말을 걷은 까닭은
+      아래 **2026-10-20(7)** 블록에 있다.
    (2026-10-19 에 둘에서 셋이 됐다 — PRODUCTS 격자가 여섯만 걸게 되면서
     「제품 전체 보기」가 돌아왔다. 그 섹션의 footer 주석 참고.)
 
@@ -1450,7 +1453,48 @@ const STATS = [
       하나뿐이면 할 일이 없다.
 
    ⚠️ 홈 PROCESS 카드 안의 화살표는 **다른 것이다.** 거기는 "다음 단계가
-      있다" 는 표식이라 그대로 둔다. */
+      있다" 는 표식이라 그대로 둔다.
+
+   ⚠️⚠️ **2026-10-20(7) — 글자만 바꿨다. 꼬리말 "전체 보기" 를 걷었다.**
+      유신이 *"텍스트가 자꾸 반복 되어서 … 계속 스크롤 내릴때마다 전체 보기
+      반복되고 그러다 보니깐 시각적으로 봤을 때 불편하게 느껴지는게"* 라고
+      짚었고, 다음 판에 *"문구 어떻게 수정하는게 이쁠지 해주고 문구 말고
+      그냥 문구 다 지우고 아이콘으로 대처 해도 되고 … 너가 판단해줘봐"* 라며
+      결정을 맡겼다. 그래서 묻지 않고 정했다 —
+
+        제품 전체 보기      →  기종별 상세
+        영상 전체 보기      →  영상 12편   (videoLibrary.length)
+        제작실적 전체 보기   →  사진 155장  (works.length)
+
+      겹치는 낱말이 **하나도 없다.** 스크롤을 내려도 같은 말이 세 번
+      나오지 않는다. "전체 보기" 가 사라져도 **테두리 상자가 이미 누를 곳임을
+      말한다** — 바로 위에서 화살표를 걷을 때 쓴 것과 같은 판단이다.
+
+      ⚠️⚠️ **모양은 한 값도 안 건드렸다.** 폭(max-w-xs) · 테두리
+         (border-dark-soft/30) · 높이(py-4) · 글자 크기(text-15) · 바탕
+         (투명)은 유신이 2026-10-19 에 **세 번에 걸쳐** 고른 값이고 그 내력이
+         이 주석 위쪽에 다 있다. 이번에 짚은 것은 *"텍스트"* 뿐이다.
+      ⚠️ 글자가 짧아졌지만 **폭은 안 변한다** — max-w-xs 고정이다. 셋의 폭이
+         어긋나던 문제를 2026-10-19 에 그렇게 고쳤다.
+
+      ⚠️⚠️ **아이콘만 남기는 안은 버렸다.** 유신이 떠올린 안이지만, 셋은
+         폭·테두리·높이·바탕이 **전부 같은 버튼**이다(바로 위가 그 까닭이다).
+         글자를 지우고 아이콘만 두면 **같은 모양 상자 세 개가 각각 어디로
+         가는지 알 길이 없다.** 반복을 없애려다 **구별 자체를 없애는** 쪽이다.
+
+      ⚠️⚠️ **제품만 개수를 쓰지 않은 까닭.** 홈 PRODUCTS 격자가 이미
+         products.slice(0, 6) 으로 **여섯**을 걸고 전체가 **일곱**이다.
+         「제품 7종」이라고 적으면 *하나만 더 있다*는 말이 되어 **누를 이유를
+         없앤다.** 그 쪽의 값은 개수가 아니라 기종마다 딸린 사양·납기라서
+         「기종별 상세」로 잡았다. 영상은 4 → 12, 사진은 16 → 155 라 개수가
+         일을 한다.
+      ⚠️ 「제작실적」을 **「사진」**으로 바꿨다. 섹션 제목이 「제품 사진」이라
+         결이 맞고, **155 를 건수로 오해할 일**이 없어진다.
+
+      ⚠️⚠️ **숫자를 손으로 적지 말 것.** videoLibrary.length · works.length
+         로 **세게** 해 두었다. 박아 쓰면 영상이나 사진이 늘 때 조용히 거짓이
+         된다. videoLibrary 는 videos + HOME_ONLY + productVideos 의 합이므로
+         (videoLibrary.ts) 그 길이는 /videos 카드 수와 **언제나 같다.** */
 const BTN =
   "inline-flex w-full max-w-xs items-center justify-center rounded-xl border border-dark-soft/30 px-6 py-4 text-15 font-bold text-ink transition hover:border-ink hover:bg-ink hover:text-white active:scale-[0.98]";
 
@@ -3168,7 +3212,7 @@ export default function Home() {
               없을 때를 이미 다룬다(/company OVERVIEW 등이 그렇다). */
         footer={
           <Link href="/products" className={BTN}>
-            제품 전체 보기
+            기종별 상세
           </Link>
         }
       >
@@ -3302,11 +3346,24 @@ export default function Home() {
                아래 WORKS 와 **함께** 내렸다 — 한쪽만 옮기면 같은 성격의 두
                섹션이 달라 보인다(그 걱정이 위로 올렸던 때의 근거였다).
 
-               글자는 "전체 보기" 그대로다 — 여기는 /videos 로 가는 내부
-               링크이고, /videos 쪽 "영상 더 보기" 는 유튜브로 **나가는**
-               링크라 역할이 다르다. 그래서 그쪽은 제목 줄에 그대로 둔다. */
+               글자는 2026-10-20(7) 에 「영상 N편」으로 바뀌었다(BTN 주석의
+               그 블록에 까닭이 다 있다).
+
+               ⚠️⚠️ 여기 적혀 있던 *"글자는 「전체 보기」 그대로다 — /videos 쪽
+                  「영상 더 보기」 는 유튜브로 나가는 링크라 역할이 다르다.
+                  그래서 그쪽은 제목 줄에 그대로 둔다"* 는 **틀린 말이었다.**
+                  2026-10-20(7) 에 세어 보니 /videos 에 그런 버튼이 **없다** —
+                  걷혀서 VideoBrowser 의 aside 주석 안에 보존돼 있고, 그 글자도
+                  「영상 더 보기」가 아니라 **「채널 보기」**였다. 유튜브로
+                  나가는 링크는 지금 **푸터의 아이콘 하나**(aria-label
+                  "유튜브 채널")뿐이다. 옛 주석을 그대로 믿고 옮겨 적다가
+                  같은 거짓을 한 판 더 끌고 갔다.
+
+                  **내부 링크와 바깥 링크를 가르는 생각 자체는 맞다** — 이
+                  버튼은 /videos 로 가는 내부 링크다. 다만 그 구분으로 지킬
+                  버튼이 저쪽에 남아 있지 않다. */
             <Link href="/videos" className={BTN}>
-              영상 전체 보기
+              {`영상 ${videoLibrary.length}편`}
             </Link>
           }
         >
@@ -3401,7 +3458,7 @@ export default function Home() {
              와 **함께** 내렸으니 "두 섹션이 달라 보인다" 던 걱정도 그대로
              지켜진다. */
           <Link href="/clients" className={BTN}>
-            제작실적 전체 보기
+            {`사진 ${works.length}장`}
           </Link>
         }
       >
