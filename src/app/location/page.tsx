@@ -391,7 +391,15 @@ export default function LocationPage() {
                      사이트의 회색 톤과 겉돈다. 절반으로 낮추면 배경이 가라앉으면서
                      위치 핀의 빨강은 알아볼 만큼 남는다.
                      ⚠️ contrast.brightness 를 더하지 말 것 — 도로명과 상호 글자가
-                        흐려져 길을 못 읽는다. */
+                        흐려져 길을 못 읽는다.
+                     ⚠️⚠️ **회사 개요 쪽 건물 사진과 한 쌍이다** (company 페이지의
+                        Image 에 `saturate-[0.25]`). 유신이 *"지도 처럼 회색 느낌
+                        으로 줘서 컬러감 통일감"* 이라고 해서 맞춘 것이니 **한쪽만
+                        바꾸면 통일감이 깨진다.**
+                        ⚠️ **수가 다른 것은 실수가 아니다.** 지도는 원본부터
+                           저채도라 50 으로 평균 채도 0.035 가 되는데, 사진은 같은
+                           50 에서 0.142 로 **4배 쨍하다.** 재서 고른 값이고 그
+                           표는 company 페이지 사진 주석에 있다. */
                   className="relative block h-[320px] w-full border-0 bg-white saturate-50 sm:h-[400px] lg:aspect-[3/1] lg:h-auto"
                 />
               </div>
