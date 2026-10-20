@@ -566,7 +566,51 @@ export default function CompanyPage() {
                  1440 405  1280 405  1024 405  768 634  **640 659**  390 707
 
                   640 이 634 로 남아 있으면 패딩이 안 들어간 것이다. */}
-        <Reveal className="border-x border-line">
+        <Reveal className="overflow-hidden border-x border-t border-line">
+        {/* ⚠️⚠️ **2026-10-20(8) — 표 위에 건물 사진이 들어왔다.** 유신이
+               *"위치 및 연락처 여기 경우는 표하고 위에 지도가 같이 있다보니깐
+               시각적으로 봤을 때 이쁘게 보이거든 … 회사 개요 여기 경우는 표만
+               있다 보니깐 시각적으로 이상해서 … 동우디지털 파크 회사 건물
+               외형을 사진으로 넣어서 표에 같이 배치"* 라고 했다.
+
+            진단이 정확했다. 두 쪽의 차이는 **카드 안에 무엇이 같이 들어 있는지**
+            였다 — /location 은 `Reveal` 하나가 지도와 표를 함께 감싸고(그 쪽
+            :321), 여기는 표만 감싸고 있었다. 그래서 그 구조를 그대로 베꼈다.
+
+            ⚠️⚠️ **좌우 1px 회색은 그대로 둔다.** 그 선은 유신이 하루에 네 번
+               왕복해 고른 답이다(바로 위 판 (5) 주석). /location 처럼
+               `border` 로 통째로 바꾸면 그 결론을 흔든다 — `border-x` 를
+               지키고 **`border-t` 한 낱말만** 더했다. 사진 위에 같은 1px
+               회색이 서고, 사진과 표 사이는 `dl` 의 `border-y-2 border-ink`
+               가 그대로 맡는다(/location 도 같은 꼴이다).
+            ⚠️ `overflow-hidden` 이 필요하다 — 없으면 `object-cover` 한 사진이
+               좌우 1px 선 위로 삐져나온다.
+
+            ⚠️⚠️ **사진 규격 — 받은 것이 951x712 다.** 유신이 보낸 원본
+               (동우디지털파크.png, 1.05MB)을 **2:1 로 잘라**(위 100px ·
+               아래 136px 을 덜어 951x476) webp quality 72 로 냈다. 54KB 다.
+               자른 비율을 16:9 · 2:1 · 2.4:1 셋으로 뽑아 보고 골랐다 —
+               2.4:1 은 하늘이 사라져 답답하고 왼쪽 건물 윗부분이 잘린다.
+               **2:1 은 「동우디지털파크」 간판 셋**(A동 가로 · B동 위 둘)
+               **이 다 살아 있다.**
+            ⚠️ **lg 에서 1088px 칸에 951px 사진이라 1.14배 늘어난다.** 고해상도
+               화면에서 아주 선명하지는 않다. 유신에게 더 큰 원본을 청해 두었고,
+               오면 **이 파일만 갈아 끼우면 된다**(비율과 이름이 같으면 코드는
+               안 건드린다).
+            ⚠️ **alt 에 동·호수를 적지 않는다.** 사진에서 읽히는 것은 「동우
+               디지털파크」와 A동·B동 표시까지다. 323~324호는 사진에 없다 —
+               보이지 않는 것을 alt 에 적으면 거짓이 된다.
+            ⚠️ `bg-surface` 는 사진이 뜨기 전의 바탕이다. /location 지도 칸이
+               같은 까닭으로 같은 값을 쓴다 — 흰 구멍이 뜨지 않게. */}
+        <div className="relative aspect-[2/1] bg-surface">
+          <Image
+            src="/images/company/building.webp"
+            alt="동우디지털파크 건물 외관"
+            fill
+            sizes="(min-width: 1152px) 1088px, 100vw"
+            className="object-cover"
+          />
+        </div>
         <dl className="grid border-y-2 border-ink [&>*:last-child]:border-b-0 lg:grid-cols-2">
           {overview.map((row, i) => (
             <div
