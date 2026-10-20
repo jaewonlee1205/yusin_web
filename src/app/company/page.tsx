@@ -12,12 +12,16 @@ import {
   philosophyMotto,
 } from "@/data/company";
 import { site, telHref, yearsInBusiness } from "@/data/site";
-import { gridColumns, gridRows } from "@/lib/gridColumn";
+import { gridColumns } from "@/lib/gridColumn";
 
 /** 개요 표에서 칸마다의 열 번호(0부터). 아래 dl 주석 참고. */
 const OVERVIEW_COLS = gridColumns(overview.length, 2, (i) => !!overview[i].wide);
-/** 같은 표에서 칸마다의 **행** 번호(0부터). 홀수 행 줄무늬에 쓴다 — 아래 참고. */
-const OVERVIEW_ROWS = gridRows(overview.length, 2, (i) => !!overview[i].wide);
+/* ⚠️ 한때 여기 OVERVIEW_ROWS(gridRows) 가 있었다 — 판 (16) 의 홀수 행
+   줄무늬에 쓰던 것이다. 판 (17) 에서 줄무늬를 걷으며 함께 걷었다.
+   되살리려면 이 두 줄이면 된다 —
+     import { gridColumns, gridRows } from "@/lib/gridColumn";
+     const OVERVIEW_ROWS = gridRows(overview.length, 2, (i) => !!overview[i].wide);
+   gridRows 는 lib 에 그대로 **남겨 두었다**(머리 주석에 거동과 경고가 있다). */
 
 /**
  * 대표이사 서명 전용 붓글씨체. 이 페이지 서명 한 줄에서만 쓴다.
@@ -984,6 +988,12 @@ export default function CompanyPage() {
                   라벨 바탕에 줄무늬를 넣게 되자 **이유가 생겼다** — 아래 판
                   (16) 주석 참고. 그때 적어 둔 *"차이가 없다"* 가 이번에
                   **근거**가 됐다(바꿔도 보기에 손해가 없다는 뜻이므로).
+                  ⚠️⚠️ **판 (17) 에서 줄무늬를 걷었지만 글자색은 ink-soft 로
+                     지켰다.** 바탕이 #f6f7f9 하나로 돌아가도 muted 는
+                     **4.510** 으로 13px 기준(4.5)의 **한계선**이다. 되돌리면
+                     바탕을 한 톨도 못 건드리는 상태로 되돌아간다 — 판 (16)
+                     에서 실제로 그 벽에 부딪혔다. **보기에는 차이가 없으므로**
+                     (위) 지킬 때의 손해가 없다.
                   대비는 재서 확인했다 —
 
                     muted #6b7280 on #f6f7f9   **4.51**  ← 13px 이라 4.5 를 넘겨야 한다
@@ -1012,6 +1022,29 @@ export default function CompanyPage() {
                ⚠️ **사진 파일은 하나도 안 지웠다** — `office.webp`(판 (14) 에서
                   고른 것) · `building.webp` · `building-aerial.webp` ·
                   `CompanyBuilding.tsx`. 되돌리려면 `<Image>` 한 덩이면 된다.
+
+               ⚠️⚠️⚠️⚠️ **2026-10-20 판 (17) — 줄무늬를 전부 걷었다. 아래
+                  굵은 선이 없는 것만 남는다.** 유신이 판 (16) 화면을 보고
+                  *"홀수 행 짝수 행 색깔이 다르잖아 그냥 짝수 행 컬러인 흰색으로
+                  하는게 나은거 같네 … 회사명 경우쪽도 짝수행보다 더 진하게
+                  느껴져서 **색상 모든 기준을 짝수행으로** 하는게 나은거 같아"*
+                  라고 했고, 남길 범위를 못박았다 — *"굵은선 아래쪽만 없는 형태
+                  디자인 거기는 짝수 홀수 행 디자인이 **모두 동일**했으니깐"*.
+
+                  **레퍼런스에 줄무늬가 있다는 것은 사실이었고 아래 측정도
+                  맞았다. 틀린 것은 우리 화면에서의 결과다.** 레퍼런스는 값 칸이
+                  **맨 흰색**이라 거기에 1.05 배 면을 깔면 그게 유일한 면이다.
+                  우리는 **라벨 열에 이미 연회색 면이 있어**(판 15) 면이 둘
+                  겹쳤고, 그래서 옅은 줄무늬가 **얼룩**으로 읽혔다. 유신이
+                  *"회사명 경우쪽도 더 진하게 느껴져서"* 라고 짚은 자리가 바로
+                  그 겹친 자리(홀수 행 라벨 칸 #f1f3f6)다.
+                  ⚠️ **아래 판 (16) 기록을 지우지 않는다.** 색 사다리와 네
+                     비율은 되살릴 때 그대로 쓸 값이고, 무엇보다 **왜 뺐는지**가
+                     남아야 다음에 또 같은 자리에서 멈추지 않는다.
+                     되살리려면 — 위 import 주석의 두 줄 + 행 div 와 dt 에
+                     조건부 bg 를 되돌리면 된다.
+                  ⚠️ **아래 굵은 선은 유신이 남기라고 한 것이다**(①). 그것만
+                     판 (16) 그대로 살아 있다.
 
                ⚠️⚠️⚠️ **2026-10-20 판 (16) — 아래 굵은 선을 걷고 홀수 행에
                   줄무늬를 넣었다.** 유신이 판 (15) 화면을 레퍼런스와 견주어
@@ -1043,7 +1076,8 @@ export default function CompanyPage() {
                   ⚠️ 위 선의 `2px`·`border-ink` 는 **안 건드렸다.** 유신이
                      *"위에만 굵은선이 있고"* 라고 했고 그게 지금 모습이다.
 
-               **② 줄무늬 — 네 면을 사다리로 맞췄다.** 실측(지정색 WCAG) —
+               **② 줄무늬 — 네 면을 사다리로 맞췄다.** ⚠️ 판 (17) 에서
+                  **전부 걷었다.** 아래는 그때의 실측이고 되살릴 때 쓴다 —
 
                                  라벨 바탕   값 바탕
                     짝수 행      #f6f7f9    흰색(안 깐다)
@@ -1109,7 +1143,8 @@ export default function CompanyPage() {
                         한다. 올린 뒤 그려진 픽셀로 다시 재도 네 자리 모두
                         4.5 를 넘는다(위 표의 ink-soft 줄).
 
-               ⚠️⚠️⚠️ **`nth-child` 로는 못 한다 — 세로 줄무늬가 된다.**
+               ⚠️⚠️⚠️ **줄무늬를 되살린다면 — `nth-child` 로는 못 한다.
+                  세로 줄무늬가 된다.**
                   이 `dl` 은 `lg:grid-cols-2` 라 한 행에 칸이 **둘**이다.
                   `nth-child(odd)` 는 그중 **왼쪽 칸만** 집으므로 가로가
                   아니라 **세로**로 칠해진다. 전폭 행이 끼면 더 어긋난다.
@@ -1120,11 +1155,17 @@ export default function CompanyPage() {
                   `bg-…`(i 기준)와 `lg:bg-…`(행 번호 기준). ⚠️ `lg:` 쪽은
                   **켜는 것과 끄는 것을 모두** 적어야 한다. i 로는 칠해졌지만
                   행 번호로는 짝수인 칸(자본금·이메일·주 사업)이 있어
-                  `lg:bg-transparent`·`lg:bg-surface` 로 **꺼야** 한다.
-               ⚠️ 「홀수 행」은 **`% 2 === 0`** 이다(0부터 세므로). 11칸이
-                  7행으로 앉고 줄무늬가 행 0·2·4·6 에 간다 — 첫 행과 마지막
-                  행이 모두 칠해져 표가 위아래로 닫힌다. DOM 좌표를 y 로 묶어
-                  재서 이 계산과 같은지 확인했다.
+                  lg: 쪽에서 투명 · surface 로 **꺼야** 한다.
+                  ⚠️⚠️ **여기서 그 두 클래스 이름을 그대로 적지 않는 까닭** —
+                     Tailwind 는 **주석 속 문자열도 긁는다.** 판 (17) 에서
+                     줄무늬를 걷고 빌드하니 **쓰지도 않는 규칙 셋이 CSS 에
+                     남아 있었고**, 범인이 이 주석과 아래 행 div 주석이었다.
+                     그래서 클래스 꼴을 깨서 적는다.
+               ⚠️ 「홀수 행」은 **`% 2 === 0`** 이었다(0부터 세므로). 11칸이
+                  7행으로 앉아 줄무늬가 행 0·2·4·6 에 갔다. DOM 좌표를 y 로
+                  묶어 재서 이 계산과 같은지 확인했고 **여덟 조합 모두
+                  맞았다**(1440·1024·768·390 × 두 쪽). 계산이 틀려서 걷은 것이
+                  아니다 — **보기에 얼룩이라서** 걷었다.
                ⚠️ **제품 규격표는 건드리지 않았다** — 라벨이 값 **위**에 서는
                   구조라 줄무늬가 성립하지 않는다. 그 표만 아래 2px 이 남는데
                   구조가 다른 표라 어긋나 보이지 않는다(찍어서 확인했다). */}
@@ -1136,15 +1177,11 @@ export default function CompanyPage() {
                  맨 위에 붙어 보였다(중심이 37px 위). 연락처 표도 같은 이유로
                  items-center 를 쓴다 — 거기는 2열 격자 행의 높이를 두 칸이
                  나눠 갖기 때문이고, 여기는 값 자체가 여러 줄이기 때문이다. */
-              /* 홀수 행 줄무늬. 좁은 폭은 칸 순서(i), 넓은 폭은 격자 행
-                 번호가 기준이다 — 위 dl 주석의 "기준이 다르다" 참고. */
+              /* ⚠️ 바탕을 깔지 않는다 — 값 칸은 **흰색 하나**다. 판 (16) 에
+                 홀수 행에 #fafbfc 바탕을 깔았다가 판 (17) 에서 걷었다
+                 (위 dl 주석). ⚠️ 클래스 이름을 그대로 적으면 Tailwind 가
+                 긁어 가 죽은 규칙이 생긴다 — 위 dl 주석 참고. */
               className={`flex items-center gap-4 border-b border-[#d1d5db] py-4 pr-5 sm:pr-7 ${
-                i % 2 === 0 ? "bg-[#fafbfc]" : ""
-              } ${
-                OVERVIEW_ROWS[i] % 2 === 0
-                  ? "lg:bg-[#fafbfc]"
-                  : "lg:bg-transparent"
-              } ${
                 row.wide
                   ? "lg:col-span-2"
                   : OVERVIEW_COLS[i] === 0
@@ -1232,18 +1269,13 @@ export default function CompanyPage() {
                      위 주석의 *"연락처 표·제품 규격표와 한 식구"* 가 그 까닭이다 —
                      한쪽만 고치면 같은 표가 쪽마다 달라 보인다. 제품 규격표는
                      라벨이 값 **위**에 서는 구조라 해당 없다. */}
-              {/* ⚠️ bg 가 조건부다(홀수 행 #f1f3f6 · 짝수 행 bg-surface)
-                     — 위 dl 주석의 사다리 표 참고. text-ink-soft 인 까닭도
-                     거기 있다(muted 로는 #f1f3f6 위에서 4.349 로 AA 미달). */}
-              <dt
-                className={`flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-[#d1d5db] px-2 py-4 text-13 font-bold text-ink-soft sm:w-24 ${
-                  i % 2 === 0 ? "bg-[#f1f3f6]" : "bg-surface"
-                } ${
-                  OVERVIEW_ROWS[i] % 2 === 0
-                    ? "lg:bg-[#f1f3f6]"
-                    : "lg:bg-surface"
-                }`}
-              >
+              {/* ⚠️ bg-surface 하나다. 판 (16) 에 홀수 행만 #f1f3f6 으로
+                     내렸다가 판 (17) 에서 걷었다 — 유신이 *"회사명 경우쪽도
+                     짝수행보다 더 진하게 느껴져서"* 라고 짚은 자리다.
+                  ⚠️ **text-ink-soft 는 지킨다.** 바탕이 #f6f7f9 하나로
+                     돌아가도 text-muted 는 4.510 으로 13px 기준(4.5)의
+                     한계선이다. 위 판 (15)·(16) 주석에 측정이 있다. */}
+              <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-[#d1d5db] bg-surface px-2 py-4 text-13 font-bold text-ink-soft sm:w-24">
                 {row.label}
               </dt>
               {/* tabular-nums: 대표번호와 팩스가 위아래로 붙어 있어 자릿수를

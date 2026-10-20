@@ -5,7 +5,7 @@ import Container from "@/components/Container";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import { site, telHref } from "@/data/site";
-import { gridColumns, gridRows } from "@/lib/gridColumn";
+import { gridColumns } from "@/lib/gridColumn";
 
 export const metadata: Metadata = {
   title: "오시는 길",
@@ -200,8 +200,11 @@ export default function LocationPage() {
 
   /** 연락처 표에서 칸마다의 열 번호(0부터). 아래 dl 주석 참고. */
   const cellCols = gridColumns(cells.length, 2, (i) => !!cells[i].wide);
-  /** 같은 표에서 칸마다의 **행** 번호(0부터). 홀수 행 줄무늬에 쓴다. */
-  const cellRows = gridRows(cells.length, 2, (i) => !!cells[i].wide);
+  /* ⚠️ 한때 여기 cellRows(gridRows) 가 있었다 — 판 (16) 의 홀수 행 줄무늬에
+     쓰던 것이고 판 (17) 에서 함께 걷었다. 되살리려면 import 에 gridRows 를
+     더하고 아래 한 줄이면 된다 —
+       const cellRows = gridRows(cells.length, 2, (i) => !!cells[i].wide);
+     gridRows 는 lib 에 그대로 남겨 두었다. */
 
   return (
     <>
@@ -369,8 +372,13 @@ export default function LocationPage() {
                            ⚠️ 여기도 아래 표 라벨도 **13px 에 같은 바탕
                               (#f6f7f9)** 이라 수치가 그대로 통한다.
                         **같은 까닭으로 판 (16) 부터 아래 연락처 표의 라벨도
-                        ink-soft 다** — 거기는 홀수 행 바탕이 #f1f3f6 으로 더
-                        어두워 muted 면 4.349 로 **정말 미달**이 된다. */
+                        ink-soft 다.**
+                        ⚠️ 한때 여기에 *"거기는 홀수 행 바탕이 #f1f3f6 이라
+                           muted 면 4.349 로 정말 미달"* 이라고 적혀 있었다.
+                           **판 (17) 에서 그 홀수 행 바탕을 걷었으므로 지금은
+                           없는 바탕이다** — 표 라벨도 #f6f7f9 하나다. 그래도
+                           ink-soft 를 지키는 까닭은 **4.510 이 한계선**이라
+                           바탕을 한 톨도 못 건드리게 되기 때문이다. */
                   className="absolute inset-0 flex items-center justify-center text-13 text-ink-soft"
                 >
                   지도를 불러오는 중…
@@ -544,6 +552,17 @@ export default function LocationPage() {
                            같은 값을 쓴다. 이 표 안에서만 임의값을 쓴다.
                         ⚠️ 카드 테두리(위 Reveal)도 같은 값으로 올렸다. 안 그러면
                            표 안쪽 격자만 진해져 **지도 둘레와 어긋난다.**
+                     ⚠️⚠️⚠️⚠️ **2026-10-20 판 (17) — 줄무늬를 전부 걷었다.
+                        아래 굵은 선이 없는 것만 남는다.** 유신이 회사 개요
+                        쪽을 보고 *"짝수 행 컬러인 흰색으로 하는게 나은거
+                        같네 … 색상 모든 기준을 짝수행으로"* 라고 했다.
+                        **여기도 같이 걷었다** — 두 표는 한 식구다.
+                        까닭(레퍼런스는 값 칸이 맨 흰색이라 면이 하나인데
+                        우리는 라벨 열 면과 겹쳐 얼룩으로 읽혔다)과 되살리는
+                        법은 company/page.tsx 의 같은 자리에 있다.
+                        ⚠️ **아래 1px 밑선은 유신이 남기라고 한 것이다** —
+                           *"굵은선 아래쪽만 없는 형태"*.
+
                      ⚠️⚠️⚠️ **2026-10-20 판 (16) — 아래 굵은 선을 걷고 홀수 행에
                         줄무늬를 넣었다.** 유신이 회사 개요 쪽을 보고
                         *"밑에는 굵은선이 없고 위에만 굵은선이 있고 홀수 행들은
@@ -591,16 +610,9 @@ export default function LocationPage() {
 
                        ⚠️ px-5 sm:px-7 이 **행에** 있다(위 dl 주석 참고).
                           dl 로 옮기면 선이 카드 전폭을 잃는다. */
-                    /* 홀수 행 줄무늬. 좁은 폭은 칸 순서(i), 넓은 폭은 격자
-                       행 번호가 기준이다 — company/page.tsx 의 같은 자리
-                       주석에 까닭이 있다. */
+                    /* ⚠️ 바탕을 깔지 않는다 — 값 칸은 흰색 하나다. 판 (16) 에
+                       홀수 행에 깔았다가 판 (17) 에서 걷었다(위 dl 주석). */
                     className={`flex items-center gap-4 border-b border-[#d1d5db] py-4 pr-5 sm:pr-7 ${
-                      i % 2 === 0 ? "bg-[#fafbfc]" : ""
-                    } ${
-                      cellRows[i] % 2 === 0
-                        ? "lg:bg-[#fafbfc]"
-                        : "lg:bg-transparent"
-                    } ${
                       cell.wide
                         ? "lg:col-span-2"
                         : cellCols[i] === 0
@@ -637,19 +649,12 @@ export default function LocationPage() {
                         ⚠️ 선을 행 높이로 뻗게 하려면 self-stretch 와
                            -my-4 py-4 가 **둘 다** 있어야 한다. 까닭은
                            company/page.tsx 의 같은 자리에 적어 두었다. */}
-                    {/* ⚠️ bg 가 조건부다(홀수 행 #f1f3f6 · 짝수 행
-                           bg-surface). text-ink-soft 인 까닭은
-                           company/page.tsx 의 같은 자리에 있다 — muted 로는
-                           #f1f3f6 위에서 4.349 로 AA 미달이다. */}
-                    <dt
-                      className={`flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-[#d1d5db] px-2 py-4 text-13 font-bold text-ink-soft sm:w-24 ${
-                        i % 2 === 0 ? "bg-[#f1f3f6]" : "bg-surface"
-                      } ${
-                        cellRows[i] % 2 === 0
-                          ? "lg:bg-[#f1f3f6]"
-                          : "lg:bg-surface"
-                      }`}
-                    >
+                    {/* ⚠️ bg-surface 하나다. 판 (16) 에 홀수 행만 #f1f3f6 으로
+                           내렸다가 판 (17) 에서 걷었다.
+                        ⚠️ **text-ink-soft 는 지킨다** — 바탕이 #f6f7f9 하나로
+                           돌아가도 text-muted 는 4.510 으로 한계선이다.
+                           측정은 company/page.tsx 의 같은 자리에 있다. */}
+                    <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-[#d1d5db] bg-surface px-2 py-4 text-13 font-bold text-ink-soft sm:w-24">
                       {cell.label}
                     </dt>
                     <dd className="text-15 leading-relaxed text-ink">
