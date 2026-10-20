@@ -3,7 +3,11 @@ import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import PhotoLightbox from "@/components/PhotoLightbox";
 import Section from "@/components/Section";
-import { workKinds, works } from "@/data/works";
+/* ⚠️ 2026-10-20 — `workKinds` 를 더 이상 안 쓴다. 기종 거르개를 걷었다
+      (아래 Section 주석). **데이터는 works.ts 에 그대로 있고** 크게보기
+      배지가 `w.kinds` 를 쓴다. 되살리려면 이 import 부터 되돌린다 —
+      import { workKinds, works } from "@/data/works"; */
+import { works } from "@/data/works";
 
 export const metadata: Metadata = {
   title: "제작실적",
@@ -83,8 +87,24 @@ export default function ClientsPage() {
              ⚠️ BY TYPE 이 빈말이 아니다 — 왼쪽에 **기종 거르개**(볼피더·
                 직진피더·진동기·호퍼피더·방음커버·컨트롤러)가 실제로 서 있다.
                 거르개를 걷으면 이 이름부터 다시 본다. */}
-      <Section eyebrow="BY TYPE" title="기종별 납품 설비">
-        <PhotoLightbox items={works} kinds={workKinds} />
+      {/* ⚠️⚠️⚠️ **2026-10-20 — 거르개를 걷었고, 그래서 이름도 바꿨다.**
+             유신이 *"전체 / 볼피더 / … / 표면처리 이거 삭제 해도 될거 같고"*
+             라고 했다. 위 주석이 *"거르개를 걷으면 이 이름부터 다시 본다"*
+             고 미리 적어 둔 그 자리다 — 고를 데가 없는데 「기종별」이라
+             쓰면 거짓말이 된다. 그래서 **BY TYPE / 기종별 납품 설비** 를
+             **GALLERY / 납품 설비** 로 바꿨다.
+
+          ⚠️ 배너가 WORKS 라 eyebrow 가 그것과 겹치면 안 된다(위 규칙).
+             GALLERY 는 겹치지 않는다.
+          ⚠️ **PhotoLightbox 는 손대지 않았다.** 거르개는
+             `{kinds && kinds.length > 1 && …}` 로 조건부라 **kinds 를 안
+             넘기는 것만으로** 사라진다 — 홈이 이미 그렇게 쓰고 있었다.
+             되살리려면 `kinds={workKinds}` 를 되돌리고 위 import 도 함께
+             되돌린다.
+          ⚠️ 기종을 아는 길이 **크게보기 배지 하나**로 줄었다. 그 배지는
+             남겨 두었다(PhotoLightbox 의 figcaption). */}
+      <Section eyebrow="GALLERY" title="납품 설비">
+        <PhotoLightbox items={works} />
       </Section>
 
       <ContactCTA />

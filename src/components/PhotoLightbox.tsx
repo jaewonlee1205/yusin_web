@@ -474,11 +474,30 @@ export default function PhotoLightbox({
                      코어라 플러그인이 필요 없다(= overflow-hidden +
                      text-ellipsis + whitespace-nowrap). 바깥 띠가 inset-x-0
                      으로 폭을 주므로 바로 듣는다. */}
+              {/* ⚠️⚠️⚠️ **2026-10-20 — 격자 자막을 걷었다.** 유신이
+                     *"볼피더 · 표면처리 / 볼피더 · 직진피더 · 표면처리 이런
+                     문구들 그냥 삭제 해도 될 거 같아"* 라고 했다. 같은 날
+                     제작실적의 **기종 거르개**도 걷혔다(clients/page.tsx) —
+                     기종으로 가르는 축이 통째로 물러난 것이다.
+
+                  ⚠️ 위 두 주석(truncate 내력 · 2026-10-19 의 한 줄 자르기)은
+                     **지우지 않는다.** 되살리면 그 값이 그대로 다시 쓰인다.
+                  ⚠️ **alt 는 그대로다.** 「유신 F.A 시스템이 제작·납품한
+                     볼피더와 표면처리」는 화면에 없는 글이다 — 사진이 오기
+                     전 스켈레톤 자리와 스크린리더가 읽는 글이라, 걷으면
+                     그림이 안 뜰 때 칸이 빈칸이 된다.
+                  ⚠️ **크게보기 배지는 남겼다**(아래 figcaption). 거르개와
+                     이 자막이 둘 다 사라져, 기종을 아는 길이 그것뿐이다.
+                  ⚠️ **칸 높이는 안 바뀐다** — 자막이 absolute 라 높이는
+                     aspect-[3/2] 가 혼자 정한다. 재서 확인했다.
+
+                  되살리려면 아래를 되살린다 —
+
               <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-dark/85 via-dark/40 to-transparent px-3 pb-2.5 pt-8 text-left sm:px-4 sm:pb-3 sm:pt-10">
                 <span className="block truncate text-13 font-medium leading-relaxed text-white sm:text-sm">
                   {w.kinds.join(" · ")}
                 </span>
-              </span>
+              </span>                                                        */}
                 </button>
               </li>
             ))}
