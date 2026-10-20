@@ -280,7 +280,25 @@ export default function VideoEmbed({
              자리에 뜬다.
           ⚠️ `pointer-events-none` — 바로 아래 재생 버튼이 inset-0 이라
              배지가 그 모서리를 덮는다. 없으면 오른쪽 아래가 안 눌린다.
-          ⚠️ 빨강을 쓰지 않는다. 11px 은 README 의 다섯 단계 안이다. */}
+          ⚠️ 빨강을 쓰지 않는다. 11px 은 README 의 다섯 단계 안이다.
+
+       ⚠️⚠️⚠️ **2026-10-20(2) — 다시 접었다. 이 자리의 세 번째 판이다.**
+          유신이 *"여기 0:26 / 1:29 이런 동영상 길이 이거는 지워도 될 거
+          같고"* 라고 했다. **접었다(0:07 이 여덟 번) → 폈다(공간이 생겨서)
+          → 다시 접는다.** 위 두 겹이 그 앞 두 판의 기록이고 지우지 않는다.
+          ⚠️ **뜨던 곳은 `/videos` 뿐이었다.** 걷기 전에 빌드 결과를 세어
+             확인했다 — `out/videos/index.html` 에 12개, 홈·제품 상세는
+             **0개**다. 홈은 preview 갈래라 이 분기를 타지 않고 제품 상세는
+             ProductVideo 가 따로 그린다. 그래서 유신이 본 것과 사라지는
+             것이 정확히 같다.
+          ⚠️ `videoLibrary.ts` 의 `seconds` 필드와 SECONDS 주석은 **그대로
+             둔다** — 값과 출처가 거기 있고, 되살리는 비용이 아래 블록
+             하나가 되게 둔다.
+          ⚠️ `isLocal` 은 아래 유튜브 갈래가 계속 쓴다. 안 쓰는 변수가
+             되지 않는다.
+
+          되살리려면 아래를 꺼내 이 주석 뒤에 둔다 —
+
       {!playing && video.seconds !== undefined && (
         <span
           aria-hidden="true"
@@ -289,7 +307,7 @@ export default function VideoEmbed({
           {`${Math.floor(video.seconds / 60)}:${String(video.seconds % 60).padStart(2, "0")}`}
           {isLocal && " 반복"}
         </span>
-      )}
+      )}  */}
 
       {/* 스크립트가 꺼져 있으면 유튜브로 보낸다. 로컬 영상은 갈 유튜브
           쪽이 없으므로 내지 않는다 — 제품 상세에 같은 영상이 있다. */}
