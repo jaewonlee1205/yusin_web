@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Nanum_Brush_Script } from "next/font/google";
 import Image from "next/image";
+import CompanyBuilding from "@/components/CompanyBuilding";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
@@ -787,15 +788,36 @@ export default function CompanyPage() {
 
                ⚠️ **유신 건물 사진 둘은 지우지 않았다** — `building.webp`
                   (유신이 준 정면 사진, 판 (10) 에서 2176px 로 구운 것)와
-                  `building-aerial.webp`(항공). 되돌릴 자리다. */}
+                  `building-aerial.webp`(항공). 되돌릴 자리다.
+
+            ⚠️⚠️⚠️ **2026-10-20(13) — 사진을 걷고 코드로 그렸다.** 유신이
+               판 (12) 화면을 보고 *"이거 이미지 보다 너가 코드로 회사 만드는게
+               디자인 적으로 더 이쁠거 같기도 하고 지도 형태의 색감 형태로 회사
+               건물 외관 형태로 디자인해서 … 현재 이미지도 디테일 하게 보면
+               **지도에 회색하고 현재 이미지에 회색하고는 차이가 커서**"* 라고
+               했다.
+
+               **유신이 맞았고, 내가 잘못된 축을 맞추고 있었다.** 판 (12) 에서
+               나는 **채도**를 재고 통과시켰는데(사진 0.1% vs 지도 0.5%),
+               **밝기**를 재니 지도 226 · 사진 159 로 **70 이나 벌어져 있었다.**
+               지도는 거의 흰 종이에 연회색 도형이고 사진은 중간 회색 덩어리다.
+               한 축만 재고 「맞췄다」고 한 것이 실수였다.
+
+               **그리고 이 축은 사진으로 못 맞춘다** — 평균 밝기 226 짜리 건물
+               사진은 사실상 없다. **그림·색 사다리·고른 과정은 모두
+               `CompanyBuilding.tsx` 주석에 적어 두었다.** 여기서는 걸리는
+               자리만 적는다.
+
+               ⚠️ **바깥 칸은 한 자도 안 건드렸다** — `aspect-[3/1]` ·
+                  `bg-surface` · `Reveal` · `border-x border-t`. SVG 의
+                  viewBox 가 정확히 3:1 이라 그대로 맞아떨어진다.
+               ⚠️ **`alt` 가 사라진 것이 아니라 `aria-hidden` 으로 옮겼다.**
+                  `<Image>` 가 아니라 `<svg>` 라 `alt` 가 없다. 장식이라는
+                  뜻은 같다.
+               ⚠️ **`office.webp` 도 지우지 않았다.** 판 (12) 에서 고른 흑백
+                  사진이다. 이제 어디서도 안 쓰지만 되돌릴 자리로 남긴다. */}
         <div className="relative aspect-[3/1] bg-surface">
-          <Image
-            src="/images/company/office.webp"
-            alt=""
-            fill
-            sizes="(min-width: 1152px) 1088px, 100vw"
-            className="object-cover"
-          />
+          <CompanyBuilding />
         </div>
         <dl className="grid border-y-2 border-ink [&>*:last-child]:border-b-0 lg:grid-cols-2">
           {overview.map((row, i) => (
