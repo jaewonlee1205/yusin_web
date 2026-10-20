@@ -507,7 +507,18 @@ export default function LocationPage() {
                           : "lg:border-l"
                     }`}
                   >
-                    <dt className="w-16 shrink-0 text-13 font-bold text-muted sm:w-20">
+                    {/* ⚠️⚠️ **2026-10-20 — 라벨과 값 사이에 세로 hairline.**
+                           회사 개요 표와 **같이** 고쳤다 — 유신이 그쪽을 보고
+                           *"서로 구분이 잘 안가서"* 라고 했고, 두 표는 글자
+                           크기·색이 같은 한 식구다(company/page.tsx 에 고른
+                           내력과 물리친 안 셋이 있다). 한쪽만 고치면 같은
+                           표가 쪽마다 달라 보인다.
+                        ⚠️ 폭도 같이 키웠다(w-16/sm:w-20 → w-20/sm:w-24) —
+                           pr-4 가 선 앞 여백을 먹기 때문이다.
+                        ⚠️ 선을 행 높이로 뻗게 하려면 self-stretch 와
+                           -my-4 py-4 가 **둘 다** 있어야 한다. 까닭은
+                           company/page.tsx 의 같은 자리에 적어 두었다. */}
+                    <dt className="flex w-20 shrink-0 items-center self-stretch -my-4 border-r border-line py-4 pr-4 text-13 font-bold text-muted sm:w-24">
                       {cell.label}
                     </dt>
                     <dd className="text-15 leading-relaxed text-ink">
