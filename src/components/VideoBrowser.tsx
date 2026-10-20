@@ -35,6 +35,30 @@ import { videoKinds, videoLibrary } from "@/data/videoLibrary";
  * ⚠️ 거르기는 클라이언트 상태다. 기종별 URL(북마크·뒤로가기)로 만들려면
  *    정적 내보내기(output: "export") 특성상 라우트를 기종 수만큼 늘려야
  *    한다 — ProductBrowser 와 같은 판단이다.
+ *
+ * ⚠️⚠️⚠️⚠️ **2026-10-20 — 거르개를 껐다. 위 문단들을 뒤집는다.**
+ *    유신이 *"전체 / 볼피더 / … / 표면처리 이거 삭제 해도 될거 같고"* 라고
+ *    했다. 같은 날 제작실적(/clients)의 기종 거르개와 격자 자막도 걷혔다 —
+ *    **기종으로 가르는 축이 사이트에서 통째로 물러난 것**이다.
+ *
+ *    ⚠️ **지우지 않고 「hidden」 으로 껐다.** 두 거르개 안에 JSX 주석
+ *       (유튜브 카드 · 머리말)이 이미 들어 있어 **통째로 주석으로 감쌀 수가
+ *       없다** — 안쪽 주석의 종결이 바깥 주석을 먼저 닫는다. 그래서 —
+ *         · aside   hidden lg:sticky lg:top-24 lg:block lg:w-52 lg:shrink-0
+ *                   ->  hidden
+ *         · 칩 줄   mb-5 flex flex-wrap gap-2 lg:hidden
+ *                   ->  hidden
+ *       **되살리기는 이 두 문자열을 되돌리는 것이 전부**다.
+ *    ⚠️ 그래서 `filter` · `pick` · `shown` · `resultRef` · `STICK_TOP` ·
+ *       `[overflow-anchor:none]` 이 **살아는 있으나 아무 일도 하지 않는다.**
+ *       거르기가 없으면 칸이 사라지지 않아 스크롤 보정이 필요 없다.
+ *       완전히 걷으려면 **안쪽 JSX 주석 둘을 먼저 컴포넌트 밖으로 옮기고**
+ *       그 다음에 마크업을 감싼다. 이번 판에서는 하지 않았다 — 되돌릴 일이
+ *       잦은 자리이고(이 쪽은 하루에 세 번 뒤집힌 적이 있다) 꺼 두는 쪽이
+ *       되돌리기가 싸다.
+ *    ⚠️ **격자가 전폭이 된다.** aside 가 display:none 이면 flex 아이템이
+ *       아니라 208px + gap 32px 가 격자로 간다. 폭별 칸 크기를 다시 쟀다
+ *       (아래 격자 주석).
  */
 
 /** 사이드바가 붙는 높이(lg:top-24)와 같은 값. 헤더(81px)를 15px 띄운다. */
@@ -89,7 +113,7 @@ export default function VideoBrowser() {
     /* lg:items-start 가 없으면 안 된다. 플렉스 기본값(stretch)이면 aside 가
        행 높이를 꽉 채워 sticky 가 아무 일도 하지 않는다. */
     <div className="lg:flex lg:items-start lg:gap-8">
-      <aside className="hidden lg:sticky lg:top-24 lg:block lg:w-52 lg:shrink-0">
+      <aside className="hidden">
         {/* 머리말은 「기종」 — 배너가 이미 VIDEO 라 영문을 또 쓰지 않는다.
             제작실적 쪽 거르개와 **같은 글자**여야 한다(videoKinds 주석). */}
         <nav
@@ -177,7 +201,7 @@ export default function VideoBrowser() {
             내려야 한다(ProductBrowser · PhotoLightbox 도 같다).
             ⚠️ **숫자는 넣지 않는다** — 일곱 기종 중 여섯이 한 편짜리라
                숫자가 거의 다 1 이 된다(videoKinds 주석). */}
-        <div className="mb-5 flex flex-wrap gap-2 lg:hidden">
+        <div className="hidden">
           {[null, ...videoKinds].map((k) => {
             const active = filter === k;
             return (
@@ -222,6 +246,26 @@ export default function VideoBrowser() {
                1280×720 이었다. VideoEmbed 의 `sizes` 도 함께 고쳤다.
             ⚠️ 열둘이 **12행**이 되어 쪽이 길어진다. 거르개가 sticky 라
                따라오지만, 격자가 끝나면 거기서 멈춘다 — 재서 확인했다.
+
+            ⚠️⚠️⚠️ **2026-10-20 — 거르개를 끄면서 lg 이상이 또 커졌다.**
+               aside 가 display:none 이 되어 **208px + gap 32px** 가 격자로
+               온다(머리 주석 참고). 다시 쟀다 —
+
+                 폭          1열(바로 전)   1열(지금)
+                 1280~      848×477       **1088×612**
+                 1024       720×405       **960×540**
+                 768        704×396        704×396  (그대로 — aside 가 lg 부터였다)
+                 640        576×324        576×324  (그대로)
+                 390        350×197        350×197  (그대로)
+
+               ⚠️ 1280 이상이 **1.28배**다. 2026-10-19(4) 의 1.56배에 이어
+                  두 판 만에 **2배**가 됐다 — 유신이 두 번 다 "더 크게" 쪽을
+                  골랐다(*"1개씩 보이게 하는게 나은거 같고"*, 그리고 영상
+                  자체를 *"전체 풀 샷"* 으로).
+               ⚠️ **썸네일은 그대로 1280×720 이면 된다.** 1088px 칸이면 2배
+                  화면에서 2176px 가 필요해 보이지만, 유튜브가 주는 최대가
+                  1280 이다(fetch-video-thumbs.mjs). 로컬 포스터 열하나도
+                  1280×720 이다. 더 키울 길이 없다.
 
             아래는 2열이던 때의 기록이다. 지우지 않는다 —
 

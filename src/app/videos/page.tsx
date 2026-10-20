@@ -45,6 +45,15 @@ export default function VideosPage() {
           ⚠️ 거르개를 걷으면 이 제목부터 다시 본다(clients/page.tsx 에 같은
              경고가 있다).
 
+          ⚠️⚠️⚠️ **2026-10-20 — 그 날이 왔다. 「기종별」을 뗐다.**
+             유신이 거르개를 걷으라고 했다(VideoBrowser 머리 주석). 고를 데가
+             없는데 「기종별」이라 쓰면 거짓말이 된다. 제작실적도 같은 날
+             **BY TYPE / 기종별 납품 설비** 에서 **GALLERY / 납품 설비** 로
+             갔다 — 두 쪽이 짝이라는 위 문장은 그대로 유효하다.
+             ⚠️ eyebrow 는 **그대로 IN OPERATION** 이다. 거르개와 무관한
+                말이고, 배너(VIDEO)와도 겹치지 않는다. 제작실적 쪽은 eyebrow
+                자체가 BY TYPE 이라 바꿔야 했지만 여기는 title 만이다.
+
           아래는 "부품별" 이던 때의 기록이다. 지우지 않는다 —
 
           제목이 "부품별" 을 안고 간다. 전에는 "구동 영상 4편" 아래에
@@ -66,7 +75,7 @@ export default function VideosPage() {
              ⚠️ 이로써 `Section` 의 `action` 을 쓰는 곳이 **사이트에 없다.**
                 prop 은 지우지 않았다 — Section.tsx 의 그 자리 주석에
                 적어 두었다. */}
-      <Section eyebrow="IN OPERATION" title="기종별 구동 영상">
+      <Section eyebrow="IN OPERATION" title="구동 영상">
         {/* ⚠️⚠️ **영상에는 리빌이 없다**(2026-10-19). 유신이 *"동영상 생기는
             것 보다 그냥 애니메이션 적용 안하는 편이 더 좋을거 같네"* 라고 해서
             영상이 보이는 곳 전부에서 걷었다. 그 경고는 VideoBrowser 안에도
