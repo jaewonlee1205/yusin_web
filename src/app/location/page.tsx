@@ -369,14 +369,20 @@ export default function LocationPage() {
                         ⚠️ **그래도 이 자리를 muted 로 되돌리지 말 것.**
                            4.510 은 13px 기준 4.5 의 **한계선**이라 바탕이
                            한 단만 어두워져도 무너진다. ink-soft 가 맞다.
-                           ⚠️ 여기도 아래 표 라벨도 **13px 에 같은 바탕
-                              (#f6f7f9)** 이라 수치가 그대로 통한다.
-                        **같은 까닭으로 판 (16) 부터 아래 연락처 표의 라벨도
-                        ink-soft 다.**
+                           ⚠️⚠️ **2026-10-21 판 (18) — 아래 표 라벨은 이제
+                              네이비 바탕에 흰 글자다**(17.19). 한때 여기
+                              *"여기도 아래 표 라벨도 13px 에 같은 바탕
+                              (#f6f7f9) 이라 수치가 그대로 통한다"* 고 적혀
+                              있었다. **그 수치는 이제 이 지도 플레이스홀더
+                              하나에만 남는다** — 여기는 여전히 #f6f7f9 위
+                              13px 이므로 **되돌리지 말 것.**
+                        **판 (16)~(17) 동안은 아래 연락처 표의 라벨도 같은
+                        까닭으로 한 톤 진한 회색이었다.**
                         ⚠️ 한때 여기에 *"거기는 홀수 행 바탕이 #f1f3f6 이라
                            muted 면 4.349 로 정말 미달"* 이라고 적혀 있었다.
                            **판 (17) 에서 그 홀수 행 바탕을 걷었으므로 지금은
-                           없는 바탕이다** — 표 라벨도 #f6f7f9 하나다. 그래도
+                           없는 바탕이다**(그 뒤 판 (18) 에서 표 라벨은 아예
+                           네이비가 됐다). 그래도
                            ink-soft 를 지키는 까닭은 **4.510 이 한계선**이라
                            바탕을 한 톨도 못 건드리게 되기 때문이다. */
                   className="absolute inset-0 flex items-center justify-center text-13 text-ink-soft"
@@ -552,6 +558,32 @@ export default function LocationPage() {
                            같은 값을 쓴다. 이 표 안에서만 임의값을 쓴다.
                         ⚠️ 카드 테두리(위 Reveal)도 같은 값으로 올렸다. 안 그러면
                            표 안쪽 격자만 진해져 **지도 둘레와 어긋난다.**
+                     ⚠️⚠️⚠️⚠️⚠️ **2026-10-21 판 (18) — 라벨 열을 배너와 같은
+                        네이비로 깔고 글자를 흰색으로 올렸다.** 유신이 회사
+                        개요 쪽을 보고 *"여기 표 색깔 … 연한 회색 같은
+                        느낌이잖아 … COMPANY 회사소개 여기 배경 색상이 네이비
+                        색상으로 하는게 더 이쁠거 같은데 … 텍스트 색상은
+                        흰색으로"* 라고 했다. **여기도 같이 바꿨다** — 두 표는
+                        한 식구다(위 판 (2)·(3) 주석).
+                        **까닭 · 실측 · 고른 내력은 company/page.tsx 의 같은
+                        자리에 있다.** 요점만 —
+                          · 라벨 바탕 #f6f7f9 → #0d1b33(dark 토큰, 배너와 같은
+                            색) · 글자 흰색 **17.19**
+                          · 행 사이 선(#d1d5db)이 네이비 위에서는 **11.66**
+                            (연회색 위에서는 1.375)이라, 그대로 두면 네이비
+                            열이 칸칸이 잘린다. `dt` 에 **아래로 1px 네이비
+                            그림자**를 깔아 덮었다
+                          · **마지막 칸만 꺼야 한다** — dl 의
+                            `[&>*:last-child>dt]:shadow-none`. 거기서 덮이는
+                            1px 은 **표 밑선**이다. 여기는 끝 둘(주소·운영
+                            시간)이 전폭이라 `:last-child` 하나로 족하다
+                            (바로 위 ⚠️ 가 이미 그 전제를 적어 두었다)
+                          · 라벨 오른쪽 세로 hairline 은 걷었다. 네이비 면이
+                            경계를 맡는다
+                        ⚠️ **카드 테두리와 밑선은 안 건드렸다.** 네이비 라벨
+                           칸이 카드 왼쪽 테두리에 닿는데, 그 선(#d1d5db)은
+                           표 바깥이라 네이비를 가르지 않는다 — 찍어서
+                           확인했다.
                      ⚠️⚠️⚠️⚠️ **2026-10-20 판 (17) — 줄무늬를 전부 걷었다.
                         아래 굵은 선이 없는 것만 남는다.** 유신이 회사 개요
                         쪽을 보고 *"짝수 행 컬러인 흰색으로 하는게 나은거
@@ -592,7 +624,7 @@ export default function LocationPage() {
                            가장 센 1.474(선 ↔ 흰)라 표가 흐려지지 않는다.
                         ⚠️ DOM 좌표를 y 로 묶어 재서 행 계산과 같은지
                            확인했다(gridRows 머리 주석이 요구하는 검사다). */}
-              <dl className="grid border-t-2 border-b border-t-ink border-b-[#d1d5db] [&>*:last-child]:border-b-0 lg:grid-cols-2">
+              <dl className="grid border-t-2 border-b border-t-ink border-b-[#d1d5db] [&>*:last-child]:border-b-0 [&>*:last-child>dt]:shadow-none lg:grid-cols-2">
                 {cells.map((cell, i) => (
                   <div
                     key={cell.label}
@@ -649,12 +681,20 @@ export default function LocationPage() {
                         ⚠️ 선을 행 높이로 뻗게 하려면 self-stretch 와
                            -my-4 py-4 가 **둘 다** 있어야 한다. 까닭은
                            company/page.tsx 의 같은 자리에 적어 두었다. */}
-                    {/* ⚠️ bg-surface 하나다. 판 (16) 에 홀수 행만 #f1f3f6 으로
-                           내렸다가 판 (17) 에서 걷었다.
-                        ⚠️ **text-ink-soft 는 지킨다** — 바탕이 #f6f7f9 하나로
-                           돌아가도 text-muted 는 4.510 으로 한계선이다.
-                           측정은 company/page.tsx 의 같은 자리에 있다. */}
-                    <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-[#d1d5db] bg-surface px-2 py-4 text-13 font-bold text-ink-soft sm:w-24">
+                    {/* ⚠️ **판 (18) — 네이비 한 면이다**(dark 토큰 #0d1b33,
+                           배너와 같은 색). 글자는 흰색 17.19. 한때 연회색
+                           면이었고 판 (16) 에 홀수 행만 한 단 내렸다가
+                           판 (17) 에서 걷었다.
+                        ⚠️⚠️ **아래로 1px 그림자가 행 사이 선을 덮는다** —
+                           네이비 열이 칸칸이 잘리지 않게 하는 것이고,
+                           **마지막 칸만 dl 쪽에서 끈다**(표 밑선을 먹는다).
+                        ⚠️ **오른쪽 세로 hairline 을 걷은 자리다.** 네이비
+                           면이 경계를 맡는다.
+                        ⚠️ 옛 기록 — 바탕이 #f6f7f9 이던 때는 글자를 한 톤
+                           올려야 했다(muted 4.510 은 13px 한계선). 측정은
+                           company/page.tsx 의 같은 자리에 있고 **되돌릴 때
+                           쓴다.** */}
+                    <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-4 bg-dark px-2 py-4 text-13 font-bold text-white shadow-[0_1px_0_#0d1b33] sm:w-24">
                       {cell.label}
                     </dt>
                     <dd className="text-15 leading-relaxed text-ink">
