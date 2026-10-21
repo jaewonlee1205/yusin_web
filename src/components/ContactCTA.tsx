@@ -271,8 +271,33 @@ export default function ContactCTA() {
           311px 다. wide(1280)면 왼 칸이 731px 가 되어 제목 703·본문 627 이
           각각 한 줄에 들어가고 250px 로 낮아진다. */}
       <Container width="wide" className="py-14 sm:py-20">
-        <div className="flex flex-col items-start gap-8 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-16">
-          <Reveal>
+        {/* ⚠️⚠️⚠️ **2026-10-21 판 (25) — Reveal 이 둘에서 하나가 됐다.**
+               유신이 *"부품을 보내 주시면 … 이거 먼저 생성되고 그 다음 온라인
+               문의하기 이게 생성이 되는데 **같이 생성 되는게 나은거 같아** …
+               따로 따로 생성 말고 **한번에 같이 생성** 하는게 더 깔끔한거
+               같은데"* 라고 했다.
+               한때 글 덩이와 버튼 덩이가 **각각 Reveal** 이었고 버튼 쪽에
+               delay={120} 이 걸려 있었다. **지연만 지워서는 모자라다** —
+               Reveal 마다 IntersectionObserver 가 따로 있어서, 세로로 쌓이는
+               폭(lg 미만)에서는 버튼 덩이가 **늦게 화면에 들어온다.**
+               그래서 **격자 자체를 Reveal 로 올리고 안쪽 둘을 평범한 div 로**
+               내렸다.
+            ⚠️ **레이아웃은 안 바뀐다.** globals.css 의 .reveal 은 **opacity 와
+               그 전환뿐**이다(세로 이동은 전에 걷었다). transform 이 없으니
+               grid 컨테이너에 걸려도 배치에 손대지 않는다. 아홉 폭
+               (1440·1280·1152·1120·1024·900·768·640·390)에서 **제목 줄 수와
+               줄폭 · 왼 칸 폭 · 섹션 높이를 전후로 재서** 확인했다.
+            ⚠️ **이 집에서 이미 쓰는 방식이다** — 서명(.sign-ink)과
+               조직도(.org-node)가 **부모 Reveal 하나로 자식 여럿을 끌어준다.**
+               조직도 주석이 까닭을 적어 두었다: *"두 칸이 서로 다른 지연으로
+               움직이면 선이 끊겨 보인다."*
+            ⚠️⚠️ **내가 한때 이 자리를 「문제없다」고 판정했다.** 리빌 검사에
+               *"성격이 다른 덩이 둘·셋이 한 격자에 서는 자리(문의 CTA 글·
+               버튼)는 차례로 뜨는 문제가 애초에 없다"* 는 면제를 적어
+               두었는데, 유신이 **바로 그 자리**를 짚었다. 기각해 둔 판단은
+               조건부다 — 다시 꺼내 잴 것. */}
+        <Reveal className="flex flex-col items-start gap-8 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-16">
+          <div>
           {/* ⚠️⚠️⚠️ **2026-10-20(3) — 제목을 세 자 줄이고 `<br>` 을 통째로
                  걷었다.** 유신이 *"한 3글자 정도 줄이면 좋을 거 같아"* 라고
                  해서 「공급할」을 뗐다(23자 → 20자).
@@ -347,14 +372,11 @@ export default function ContactCTA() {
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/70 sm:text-base md:max-w-none">
               어떻게 만들지, 얼마나 걸리는지 정리해 회신드립니다.
             </p>
-          </Reveal>
+          </div>
 
           {/* 통화 시간 줄은 첫 버튼의 왼쪽 모서리에 세운다(items-start).
               오른쪽 끝에 맞추면 두 버튼 사이 어디에도 안 붙어 보인다. */}
-          <Reveal
-            delay={120}
-            className="flex w-full flex-col items-start gap-3.5 sm:w-auto"
-          >
+          <div className="flex w-full flex-col items-start gap-3.5 sm:w-auto">
             <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
               {/* ⚠️ transition(전체)이다. transition-colors 로 두면 색만
                      전환되어 active:scale 이 딱딱 끊긴다 — 이 파일이 한동안
@@ -391,18 +413,20 @@ export default function ContactCTA() {
                       `/location` 표에도 「운영 시간」 행이 있다.
                    ⚠️ `site.hours` 는 **지우지 않는다** — 푸터와 오시는 길이
                       계속 쓴다.
-                   ⚠️ 위 Reveal 의 `items-start`·`gap-3.5` 는 **이 줄을 첫
+                   ⚠️ 위 div 의 `items-start`·`gap-3.5` 는 **이 줄을 첫
                       버튼 왼쪽 모서리에 세우려고** 둔 것이다. 줄이 사라져
                       할 일이 없어졌지만 **그대로 둔다** — 되살릴 자리이고,
                       버튼이 둘뿐인 지금도 왼쪽 정렬이 맞다.
+                      ⚠️ 판 (25) 까지 그 div 는 **Reveal 이었다.** 클래스는
+                         그대로 옮겨 왔으니 이 줄을 되살릴 때 바뀐 것은 없다.
 
                    되살리려면 아래를 꺼내 이 주석 뒤에 둔다 —
 
             <p className="text-xs leading-relaxed text-white/70">
               {site.hours.weekday} · {site.hours.holiday}
             </p>  */}
-          </Reveal>
-        </div>
+          </div>
+        </Reveal>
       </Container>
     </section>
   );
