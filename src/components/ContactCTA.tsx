@@ -386,11 +386,27 @@ export default function ContactCTA() {
                      상자 모양이 이미 "누를 곳" 이라고 말한다.
                  ⚠️ group 과 gap-2 도 함께 걷었다 — group 은 화살표의
                     group-hover:translate-x-1 하나만 쓰던 것이다. */}
+              {/* ⚠️⚠️⚠️ **2026-10-21 판 (29) — 「온라인 문의하기」를 「견적
+                     문의」로 바꿨다. 한 쪽에 같은 뜻의 버튼이 둘이었다.**
+                     쪽을 열면 **맨 위 헤더에 「견적 문의」**, 맨 아래 이 띠에
+                     「온라인 문의하기」가 같이 섰다. 제품 상세는 가운데
+                     「○○ 견적 문의」까지 **셋**이었다. 셋 다 가는 곳이
+                     /contact 로 같다.
+                     ⚠️ 유신이 판 (26) 대에 *"텍스트가 자꾸 반복 되어서 …
+                        시각적으로 봤을 때 불편하게 느껴지는게"* 라고 짚은 것과
+                        **같은 종류의 문제**다. 그때는 「전체 보기」 셋이었다.
+                     ⚠️⚠️ **이름을 하나로 모으는 것이 반복을 더하는 것처럼
+                        보이지만 반대다.** 같은 일에 이름이 셋이면 **다른
+                        일인 줄 알고 셋을 다 읽는다.** 하나면 한 번 읽고 만다.
+                     ⚠️ **모양은 한 값도 안 건드렸다** — bg-brand · px-6 py-4 ·
+                        text-15 · MagneticLink 는 그대로다. 바뀐 것은 글자뿐.
+                     ⚠️ 빨강 채움은 여전히 「견적 문의 전용」이다(VideoCard
+                        주석). 이름이 같아졌으니 규칙과 더 맞는다. */}
               <MagneticLink
                 href="/contact"
                 className="inline-flex items-center justify-center rounded-xl bg-brand px-6 py-4 text-15 font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:px-8"
               >
-                온라인 문의하기
+                견적 문의
               </MagneticLink>
               {/* 아이콘과 자릿수 정렬은 헤더 전화 링크와 같은 모양으로 맞춘다 */}
               <a

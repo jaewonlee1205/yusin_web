@@ -301,12 +301,18 @@ export default function VideoEmbed({
           ⚠️ `isLocal` 은 아래 유튜브 갈래가 계속 쓴다. 안 쓰는 변수가
              되지 않는다.
 
+          ⚠️⚠️ **2026-10-21 판 (29) — 아래 className 의 둥근 모서리 값에
+             제로폭 문자(U+200B)를 끼워 꼴을 깼다.** 주석 안이라도 클래스
+             꼴이면 Tailwind 가 긁어 **죽은 규칙**을 CSS 에 남긴다. 실제로
+             남아 있었다. **되살릴 때 그 글자를 지운다** — 눈에는 안 보이니
+             에디터의 「보이지 않는 문자 표시」를 켜거나 통째로 다시 친다.
+
           되살리려면 아래를 꺼내 이 주석 뒤에 둔다 —
 
       {!playing && video.seconds !== undefined && (
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute bottom-3 right-3 rounded-md bg-dark/80 px-2 py-1 text-11 font-semibold leading-none text-white"
+          className="pointer-events-none absolute bottom-3 right-3 rounded-m​d bg-dark/80 px-2 py-1 text-11 font-semibold leading-none text-white"
         >
           {`${Math.floor(video.seconds / 60)}:${String(video.seconds % 60).padStart(2, "0")}`}
           {isLocal && " 반복"}

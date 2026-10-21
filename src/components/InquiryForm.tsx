@@ -43,8 +43,34 @@ const TOPICS = [
  * 같은 상수에 h-14 를 넣어 두면 textarea 쪽에서 덮어쓰기가 CSS 순서에
  * 좌우돼 불안정하다.
  */
+/**
+ * ⚠️⚠️⚠️ **2026-10-21 판 (29) — 예시 글자 색을 올렸다. 실측 2.22 였다.**
+ *    `text-muted/60` 은 입력칸 바탕(#f2f4f6) 위에서 실효색이
+ *    rgb(161,166,175) 이 되어 **대비 2.22** 다. WCAG AA 는 4.5 를 요구한다.
+ *    밝은 화면이나 나이 든 눈에는 「(주)유신」·「010-0000-0000」 같은 **예시가
+ *    거의 안 읽힌다.** 라벨이 위에 따로 있어 뜻은 전해지지만, 예시가 안
+ *    보이면 둔 까닭이 없어진다.
+ *
+ *    재서 고른 값이다 — 바탕 #f2f4f6 기준 —
+ *
+ *      text-muted/60  (옛값)   rgb(161,166,175)   2.22  ✗
+ *      text-muted/90          rgb(121,127,140)   3.64  ✗
+ *      text-muted             rgb(107,114,128)   4.38  ✗ 0.12 모자라다
+ *      text-ink-soft/75       rgb(109,114,122)   4.39  ✗
+ *      **text-ink-soft/80**   rgb(100,106,114)   **4.95**  ✓ 고른 값
+ *      text-ink-soft/85       rgb( 92, 97,106)   5.65  ✓ 너무 진하다
+ *      text-ink-soft          rgb( 65, 71, 81)   8.48  ✓ 입력값처럼 보인다
+ *
+ *    ⚠️ **입력값(text-ink #1a1d23)은 16.88 이다.** 예시가 그에 가까워지면
+ *       「이미 적혀 있는 값」으로 읽혀 지우고 쓰게 된다. 4.95 는 기준을
+ *       넘으면서 입력값과 세 배 넘게 벌어져 둘이 구분된다.
+ *    ⚠️ 알파를 쓰는 까닭 — 토큰에 muted(#6b7280)와 ink-soft(#414751) 사이가
+ *       비어 있다. 임의의 hex 를 하나 더 만드는 대신 있는 토큰을 눌러 쓴다.
+ *       ⚠️⚠️ **바탕이 바뀌면 이 값부터 다시 잰다.** 알파 색은 바탕에 섞여
+ *          실효색이 달라진다 — bg-field 를 건드리면 위 표가 전부 어긋난다.
+ */
 const field =
-  "w-full rounded-xl bg-field px-4 text-base text-ink placeholder:text-muted/60";
+  "w-full rounded-xl bg-field px-4 text-base text-ink placeholder:text-ink-soft/80";
 const fieldLine = `${field} h-14`;
 const label = "mb-2.5 block text-sm font-medium text-muted";
 

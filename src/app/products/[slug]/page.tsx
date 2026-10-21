@@ -431,11 +431,24 @@ export default async function ProductDetailPage({
                      적혀 있었다). 셈은 그대로이고 **맞추는 상대만 카드로**
                      바뀌었다. */}
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                {/* ⚠️⚠️⚠️ **2026-10-21 판 (29) — 제품 이름을 글자에서 뺐다.**
+                       한 쪽에 /contact 로 가는 버튼이 **셋**이었다 — 헤더
+                       「견적 문의」· 여기 「볼피더 견적 문의」· 맨 아래
+                       「온라인 문의하기」. 같은 일에 이름이 셋이면 다른 일인 줄
+                       알고 셋을 다 읽게 된다. 셋을 **「견적 문의」 하나**로
+                       모았다(ContactCTA 주석에 사정).
+                    ⚠️ **제품 이름은 sr-only 로 남긴다.** 화면낭독기 쓰는 사람은
+                       버튼만 훑어 건너뛰므로, 그쪽에는 어느 제품인지가 남아야
+                       한다. 눈으로 읽는 사람은 바로 위에 제품 이름이 크게 있다.
+                    ⚠️ **모양은 그대로다** — bg-brand · px-8 py-4 · sm:flex-1.
+                       글자가 짧아져도 옆 「제품 목록」과 폭이 반반이다
+                       (flex-1 이 둘 다 걸려 있다). */}
                 <Link
                   href="/contact/"
                   className="rounded-xl bg-brand px-8 py-4 text-center text-15 font-semibold text-white active:scale-[0.98] transition-colors hover:bg-brand-dark sm:flex-1"
                 >
-                  {product.name} 견적 문의
+                  견적 문의
+                  <span className="sr-only"> — {product.name}</span>
                 </Link>
                 <Link
                   href="/products/"
