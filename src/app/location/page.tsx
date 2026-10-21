@@ -344,8 +344,10 @@ export default function LocationPage() {
                         그 바탕이 surface 였다). 한때 둘이
                         Reveal(카드)에 있었는데, 카드가 표까지 감싸게 되면서
                         아래 플레이스홀더의 absolute inset-0 과 길찾기 링크의
-                        absolute right-3 top-3 가 **표까지 포함한 카드 전체**를
-                        기준으로 잡히게 됐다. 지도 칸이 기준이어야 한다.
+                        absolute 자리가 **표까지 포함한 카드 전체**를 기준으로
+                        잡히게 됐다. 지도 칸이 기준이어야 한다.
+                        ⚠️ 그 링크는 한때 우상단(right-3 top-3)이었다. 판 (24)
+                           에서 **우하단으로 내려** 구글 전체화면 버튼을 덮는다.
 
                   ⚠️ 바탕색은 플레이스홀더의 바탕이다. iframe 이
                      loading="lazy" 라 화면에 가까워져야 받기 시작하는데,
@@ -391,8 +393,10 @@ export default function LocationPage() {
                         ⚠️ **그래도 이 자리를 muted 로 되돌리지 말 것.**
                            4.510 은 13px 기준 4.5 의 **한계선**이라 바탕이
                            한 단만 어두워져도 무너진다. ink-soft 가 맞다.
-                           ⚠️⚠️ **2026-10-21 판 (22) — 아래 표 라벨은 이제
-                              **네이비 #3a4a6b 에 흰 글자**다(8.85). 판 (18) 은
+                           ⚠️⚠️ **2026-10-21 판 (24) — 아래 표 라벨은 이제
+                              **네이비 #2d3953 에 흰 글자**다(11.53). 판 (22) 의
+                              #3a4a6b(L32) 는 *"차이가 없다"* 는 말을 들어
+                              **L25 까지 내렸다.** 판 (18) 은
                               아주 짙은 네이비(L13) · 판 (19) 는 아주 연한
                               파랑(L94) · 판 (20) 은 가운데(L37)였고, 유신이
                               *"조금만 더 찐한 네이비"* 라고 해서 **한 칸 내려
@@ -421,14 +425,59 @@ export default function LocationPage() {
                        390px 에서 **Tab 네 번째**에 지도 iframe 이 걸리고,
                        그 안에서 여섯 번을 더 눌러야 아래 연락처로 내려간다
                        — 재서 확인했다. 이 링크가 그 우회로다.
+                       ⚠️ **그 우회로는 자리가 아니라 DOM 순서로 성립한다.**
+                          판 (24) 에서 화면상 자리를 우상단에서 우하단으로
+                          옮겼지만 **이 줄의 위치는 그대로 두었다**(플레이스홀더
+                          다음, iframe 앞). 옮기면 Tab 차례가 바뀐다.
 
                     ⚠️ z-10 이 필요하다. 위 플레이스홀더와 아래 iframe 사이에
-                       끼어 있어 그냥 두면 iframe 이 덮는다. */}
+                       끼어 있어 그냥 두면 iframe 이 덮는다. **MapGuard 보다도
+                       위다** — 막이 깔려도 이 버튼은 눌린다.
+
+                    ⚠️⚠️⚠️ **2026-10-21 판 (24) — 우상단에서 우하단으로 내렸다.
+                       구글의 「전체화면」 버튼을 덮는 것이 목적이다.**
+                       유신이 *"오른쪽 옆에 버튼 누르면 크기 확대하고 줄이고
+                       이동하게 하는거 **이거 버튼 지워버리자**. **왼쪽 위성
+                       사진으로 변경하는 것만 남기고** 오른쪽 지도 크기 키우는
+                       그거는 삭제"* 라고 했다.
+                       ⚠️ **그 버튼은 구글이 iframe 안에 그린다 — 숨길 수
+                          없다.** MAP_SRC 의 output=embed 에 컨트롤을 끄는
+                          파라미터가 없고, 교차 출처라 DOM 도 CSS 도 못
+                          건드린다. **덮는 길뿐**이다.
+                       ⚠️ **가림용 흰 네모를 따로 놓지 않았다.** 덩그러니 놓인
+                          네모가 더 어색하다. **이미 있는 버튼을 그 자리로
+                          옮기면** 가림막이 아니라 「버튼이 거기 있는 것」이 된다.
+                       ⚠️ **iframe 을 넓혀 오른쪽을 잘라내는 길은 버렸다** —
+                          같은 x 범위에 구글의 저작권 줄(*"지도 데이터 ©2026
+                          TMap Mobility · 약관"*)이 들어 있어 **표시 의무를
+                          가리게 된다.** 그 줄은 바닥 0~18px 에 있고, 이
+                          버튼은 바닥 20px 부터라 **건드리지 않는다.**
+                       ⚠️ **좌하단 「지도/위성 전환」은 그대로 둔다** — 유신이
+                          남기라고 했다. MapGuard 가 그 구석만 비워 둔다.
+                       ⚠️ **대가** — 전체화면 버튼이 **휴대폰에서 지도를 크게
+                          보는 유일한 길**이었다. 이제 같은 자리의 이 버튼이
+                          네이버 지도를 새 창으로 연다. 유신에게 알렸다. */}
                 <a
                   href={site.naverPlace}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="absolute right-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-lg bg-white/95 px-3 py-2 text-13 font-semibold text-ink shadow-card backdrop-blur transition hover:text-brand active:scale-95"
+                  /* ⚠️ **bottom-5 · right-2.5 · min-h-12 는 재서 맞춘 값이다.**
+                        구글 전체화면 버튼(흰 원)을 지도 칸 우하단 100x100 을
+                        5배로 확대해 눈금을 그려 읽었다 —
+
+                          1440  오른쪽에서 12~57px · 바닥에서 22~65px
+                           390  오른쪽에서 12~57px · 바닥에서 22~65px
+
+                        **구글 UI 는 고정 크기라 폭이 달라져도 같다.**
+                        이 버튼은 80 x 48px 이고 right-2.5(10px) · bottom-5(20px)
+                        라 **오른쪽 10~90px · 바닥 20~68px** 를 차지한다 —
+                        원을 사방 2~3px 여유로 품는다.
+                        ⚠️ **min-h-12(48px) 를 걷지 말 것.** py-2 만으로는 36px 라
+                           원의 위쪽 **17px 가 삐져나온다.** 덤으로 이 높이는
+                           WCAG 2.5.5 의 44px 권장도 넘긴다.
+                        ⚠️ **bottom 을 더 내리지 말 것** — 바닥 0~18px 이 구글
+                           저작권 줄이다. 20px 가 그 바로 위다. */
+                  className="absolute bottom-5 right-2.5 z-10 inline-flex min-h-12 items-center gap-1.5 rounded-lg bg-white/95 px-3 py-2 text-13 font-semibold text-ink shadow-card backdrop-blur transition hover:text-brand active:scale-95"
                 >
                   길찾기
                   <svg
@@ -638,11 +687,14 @@ export default function LocationPage() {
                        안 읽힌다.** 안 물들었는지 **재서 확인했다** — 버튼 평균
                        #eeeff0(1440) · #eeeff1(390) 으로 R≈G≈B, 중립이다.
                        파랗게 기울면 겹이 버튼 위로 올라온 것이다.
-                    ⚠️ 색은 아래 표 라벨 열과 **같은 #3a4a6b** 다. 한쪽을
-                       바꾸면 다른 쪽도 볼 것 — **통일감이 이번 판의 목적**이다. */}
+                    ⚠️ 색은 아래 표 라벨 열과 **같은 #2d3953** 다. 한쪽을
+                       바꾸면 다른 쪽도 볼 것 — **통일감이 판 (21) 이래의
+                       목적**이다. 판 (22) 는 #3a4a6b, 판 (21) 은 #44567a 였다.
+                       ⚠️ 겹이 15% 라 색을 내려도 지도는 거의 그대로다 —
+                          판 (24) 에서 평균색을 다시 재서 확인했다. */}
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 bg-[#3a4a6b] opacity-15 mix-blend-color"
+                  className="pointer-events-none absolute inset-0 bg-[#2d3953] opacity-15 mix-blend-color"
                 />
 
                 {/* ⚠️⚠️⚠️ **차단막**(판 23). 보이지 않는다 — 색은 위 겹이 맡고
@@ -924,21 +976,24 @@ export default function LocationPage() {
                         ⚠️ 선을 행 높이로 뻗게 하려면 self-stretch 와
                            -my-4 py-4 가 **둘 다** 있어야 한다. 까닭은
                            company/page.tsx 의 같은 자리에 적어 두었다. */}
-                    {/* ⚠️ **판 (22) — 네이비 한 면이다**(#3a4a6b, H220 S30
-                           **L32**). 글자는 흰색 **8.85**. 유신이 판 (20)(L37)
-                           을 보고 *"조금만 더 찐한 네이비 … 너무 찐한건 이상
-                           하니깐 여기서 좀만 더"* 라고 해서 **한 칸 내렸다.**
-                           판 (18) 은 L13 으로 *"너무 찐하다"* 였으니 **거기까지
-                           가는 길의 첫 칸**이다.
+                    {/* ⚠️ **판 (24) — 네이비 한 면이다**(#2d3953, H220 S30
+                           **L25**). 글자는 흰색 **11.53**. 판 (22) 에서 L37 →
+                           L32 로 한 칸 내렸는데 유신이 *"내가 조금 더 찐하게
+                           해달라고 요청했는데 **네이비 색깔 차이가 없는데**"*
+                           라고 했다 — **세 번째 같은 요청**이었고, 한 칸이
+                           너무 작았다. L37·L32·L28·L25·L22 를 한 장에 쌓아
+                           보니 **L32 는 L37 과 구분이 안 되고 L28 부터
+                           보인다.** L25 를 골랐다.
+                           판 (18) 은 L13 으로 *"너무 찐하다"* 였다.
                         ⚠️⚠️ **행 사이 선이 이 칸 위로 지나간다 — 그게 맞다.**
                            판 (18) 에서 1px 그림자로 덮었다가 판 (19) 에서
                            걷었다(*"지금 구분선은 마음에 드니깐"*). 선 ↔ 이
-                           바탕은 **6.01** 이라 또렷하다(판 (20) 은 4.99).
+                           바탕은 **7.82** 라 또렷하다(판 (22) 6.01 · 판 (20) 4.99).
                         ⚠️⚠️ **밝기를 L 52% 언저리로 올리지 말 것** — 흰
                            글자(4.20)도 네이비 글자(4.09)도 **둘 다** 13px
                            기준에 못 미친다. 사다리는 company/page.tsx 의
                            같은 자리에 있다. */}
-                    <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-[#d1d5db] bg-[#3a4a6b] px-2 py-4 text-13 font-bold text-white sm:w-24">
+                    <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-[#d1d5db] bg-[#2d3953] px-2 py-4 text-13 font-bold text-white sm:w-24">
                       {cell.label}
                     </dt>
                     <dd className="text-15 leading-relaxed text-ink">
