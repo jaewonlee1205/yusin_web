@@ -121,13 +121,20 @@ export default function OrgChart() {
 }
 
 /** 모바일 들여쓰기 트리의 공통 뼈대 — 왼쪽 세로선과 안쪽 여백. */
-const INDENT = "mt-3 space-y-3 border-l border-line pl-5";
+/* ⚠️⚠️ **2026-10-21 판 (31) — 아래 선 넷을 진한 값으로 올렸다.**
+      조직도는 **선이 내용**인데(대표에서 공장장, 다시 부서로) 그 선이 흰
+      바탕에서 대비 **1.24:1** 이라 화면에서 가장 약했다. 캡처로 보면 노드
+      상자만 떠 있고 상자들이 어떻게 이어지는지가 안 읽혔다.
+      ⚠️ **노드 카드 테두리는 그대로 둔다** — 아래 ITEM 의 테두리는 손대지
+         않았다. 선과 상자를 같이 올리면 무엇이 선인지 흐려진다.
+      ⚠️ **굵기는 그대로다.** 색만 바꿨다. */
+const INDENT = "mt-3 space-y-3 border-l border-line-strong pl-5";
 /** 왼쪽 세로선에서 박스로 뻗는 짧은 가로선. 박스 첫 줄 높이에 맞춘다. */
 const TICK =
-  "relative before:absolute before:left-[-20px] before:top-7 before:h-px before:w-5 before:bg-line";
+  "relative before:absolute before:left-[-20px] before:top-7 before:h-px before:w-5 before:bg-line-strong";
 /** lg 에서 부모 아래로 내려오는 세로선. 목록 위쪽 빈 자리(pt)를 지난다. */
 const DROP =
-  "org-drop lg:relative lg:before:absolute lg:before:left-1/2 lg:before:top-0 lg:before:h-8 lg:before:w-px lg:before:bg-line";
+  "org-drop lg:relative lg:before:absolute lg:before:left-1/2 lg:before:top-0 lg:before:h-8 lg:before:w-px lg:before:bg-line-strong";
 
 /**
  * 자식 목록. lg 에서 가로로 펼치고 칸을 균등하게 나눈다.
@@ -147,7 +154,7 @@ const BRANCH = `${INDENT} ${DROP} lg:mt-0 lg:flex lg:w-full lg:space-y-0 lg:bord
 const ITEM =
   `${TICK} org-drop lg:min-w-0 lg:flex-1 lg:px-1.5 ` +
   "lg:before:left-1/2 lg:before:top-[-32px] lg:before:h-8 lg:before:w-px " +
-  "lg:after:absolute lg:after:top-[-32px] lg:after:h-px lg:after:bg-line " +
+  "lg:after:absolute lg:after:top-[-32px] lg:after:h-px lg:after:bg-line-strong " +
   "lg:first:after:left-1/2 lg:first:after:right-0 " +
   "lg:last:after:left-0 lg:last:after:right-1/2 " +
   "lg:[&:not(:first-child):not(:last-child)]:after:left-0 " +

@@ -402,9 +402,25 @@ export default function ContactCTA() {
                         text-15 · MagneticLink 는 그대로다. 바뀐 것은 글자뿐.
                      ⚠️ 빨강 채움은 여전히 「견적 문의 전용」이다(VideoCard
                         주석). 이름이 같아졌으니 규칙과 더 맞는다. */}
+              {/* ⚠️⚠️ **2026-10-21 판 (31) — 글자와 좌우 여백을 키웠다.
+                     무게가 뒤집혀 있었다.**
+                  재 보니 이 띠에서 빨강 「견적 문의」가 **폭 123px**, 옆
+                  전화 버튼이 **220px** 였다. 더 중요한 쪽이 더 좁았다.
+                  색은 빨강이 세지만 **면적이 절반**이라 둘이 비등하게
+                  보인다 — 면적이 시선을 잡는 시간을 정한다.
+                  ⚠️ **전화 버튼은 한 값도 안 건드렸다.** 그쪽이 넓은 것은
+                     번호를 담기 때문이고, 번호가 그대로 보이는 것이 이 띠의
+                     값어치다. 좁히면 증상이 아니라 **기능을 지우는 것**이
+                     된다.
+                  ⚠️ 바꾼 것은 **무게뿐**이다 — 이름·자리·가는 곳은 판 (29)
+                     그대로다.
+                  ⚠️ 높이는 저절로 맞는다. 부모 겹에 교차축 정렬을 안 줬으니
+                     stretch 라서, 글자가 커져도 두 버튼 높이가 같이 간다.
+                  ⚠️ **좁은 화면에서는 폭이 안 바뀐다** — sm 아래에서는 둘 다
+                     가로를 꽉 채운다. 이 판이 듣는 것은 sm 이상이다. */}
               <MagneticLink
                 href="/contact"
-                className="inline-flex items-center justify-center rounded-xl bg-brand px-6 py-4 text-15 font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:px-8"
+                className="inline-flex items-center justify-center rounded-xl bg-brand px-6 py-4 text-17 font-bold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:px-12"
               >
                 견적 문의
               </MagneticLink>

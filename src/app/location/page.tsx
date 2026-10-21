@@ -1002,7 +1002,7 @@ export default function LocationPage() {
                           dl 로 옮기면 선이 카드 전폭을 잃는다. */
                     /* ⚠️ 바탕을 깔지 않는다 — 값 칸은 흰색 하나다. 판 (16) 에
                        홀수 행에 깔았다가 판 (17) 에서 걷었다(위 dl 주석). */
-                    className={`flex items-center gap-4 border-b border-[#d1d5db] py-4 pr-5 sm:pr-7 ${
+                    className={`flex min-w-0 items-center gap-4 border-b border-[#d1d5db] py-4 pr-5 sm:pr-7 ${
                       cell.wide
                         ? "lg:col-span-2"
                         : cellCols[i] === 0
@@ -1059,7 +1059,29 @@ export default function LocationPage() {
                     <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-[#d1d5db] bg-[#2d3953] px-2 py-4 text-13 font-bold text-white sm:w-24">
                       {cell.label}
                     </dt>
-                    <dd className="text-15 leading-relaxed text-ink">
+                    {/* ⚠️ **min-w-0 은 여기와 바로 위 행, 두 곳에 다 있어야 한다.**
+                  브라우저 글자를 200% 로 키우면 「유신 F.A 시스템」 같은 긴
+                  토막이 안 접히고 칸을 밀어 쪽 전체가 가로로 흘렀다 —
+                  2026-10-21 실측 회사소개 **590px/390**, 오시는 길 431px/390.
+
+                  ⚠️⚠️ **처음에 이 칸에만 넣고 고쳤다고 할 뻔했다.** 넣어도
+                     수치가 그대로여서 다시 재 보니, 막고 있던 것은 이 칸이
+                     아니라 **감싼 목록의 격자 칸**이었다. 목록이 격자인데
+                     칸 하나가 내용 길이(**548.9px**)로 잡혀 있었고, 이 칸은
+                     그 안에서 이미 줄어 있었다. 막힌 자리는 **가장 바깥에서
+                     안 줄어드는 겹**이지 글자가 든 칸이 아니다.
+                  ⚠️ 그래서 겹이 둘이다 — 바깥 **행 겹**(격자의 칸이면서 동시에
+                     가로 겹의 컨테이너)과 **이 칸**(그 가로 겹의 자식).
+                     둘 다 기본값이 auto 라 한쪽만 풀면 다른 쪽이 버틴다.
+                  ⚠️ **다음에 이런 것을 잴 때** — 넘친 요소를 훑으면 배너
+                     장식이 먼저 걸리는데 그것은 가려지는 겹 안이라 거짓이다.
+                     요소를 하나씩 숨겨 **전체 폭이 줄어드는지**로 가를 것.
+
+                  ⚠️⚠️ **이 주석을 중괄호 없이 적지 말 것.** 판 (31) 에서 한 번
+                     그렇게 넣었다가 **주석이 화면에 글자로 찍혀** 표가 더
+                     밀렸다(590 → 785). JSX 안에서 슬래시-별 꼴은 주석이
+                     아니라 그냥 텍스트다. tsc 도 빌드도 통과한다. */}
+                    <dd className="min-w-0 text-15 leading-relaxed text-ink">
                       {cell.body}
                     </dd>
                   </div>

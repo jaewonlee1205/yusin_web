@@ -443,9 +443,21 @@ export default async function ProductDetailPage({
                     ⚠️ **모양은 그대로다** — bg-brand · px-8 py-4 · sm:flex-1.
                        글자가 짧아져도 옆 「제품 목록」과 폭이 반반이다
                        (flex-1 이 둘 다 걸려 있다). */}
+                {/* ⚠️⚠️ **2026-10-21 판 (31) — 글자를 키우고 굵게 했다.
+                       둘이 같은 무게였다.**
+                    재 보니 「견적 문의」 249px, 「제품 목록」 251px 로 **폭이
+                    사실상 같고** 글자 크기·굵기까지 같았다. 1순위와 2순위가
+                    한 무게로 서 있었다.
+                    ⚠️ **폭은 건드리지 않았다.** 반반인 것은 위에 적힌 대로
+                       일부러 그렇게 둔 것이고, 둘이 나란히 가로를 채우는
+                       모양이 깔끔하다. 위계는 **글자**로 만든다.
+                    ⚠️ 「제품 목록」은 한 값도 안 건드렸다. 2순위를 깎는 대신
+                       1순위를 올렸다 — 깎으면 목록으로 돌아갈 길이 약해진다.
+                    ⚠️ 맨 아래 띠의 같은 버튼과 **같은 값**으로 맞췄다. 한쪽만
+                       올리면 쪽을 넘길 때 버튼이 커졌다 작아졌다 한다. */}
                 <Link
                   href="/contact/"
-                  className="rounded-xl bg-brand px-8 py-4 text-center text-15 font-semibold text-white active:scale-[0.98] transition-colors hover:bg-brand-dark sm:flex-1"
+                  className="rounded-xl bg-brand px-8 py-4 text-center text-17 font-bold text-white active:scale-[0.98] transition-colors hover:bg-brand-dark sm:flex-1"
                 >
                   견적 문의
                   <span className="sr-only"> — {product.name}</span>
