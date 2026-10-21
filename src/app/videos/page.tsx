@@ -101,10 +101,18 @@ export default function VideosPage() {
         {/* ⚠️⚠️ **2026-10-19 — 격자가 통째로 VideoBrowser 로 갔다.**
             여기 있던 것은 `videos` 넷을 그대로 거는 2열 `ul` 이었다. 이제
             거르개가 함께 서야 해서 클라이언트 부품이 됐고, 거는 목록도
-            `videos`(넷)가 아니라 `videoLibrary`(**열둘** — 유튜브 넷 + 홈
-            전용 하나 + 제품 구동 영상 일곱)다.
-            ⚠️ 홈은 **그대로 넷**이다(featuredVideos). 두 쪽이 다른 묶음을
-               본다 — videoLibrary.ts 머리 주석 참고. */}
+            `videos`(넷)가 아니라 `videoLibrary` 다.
+            ⚠️⚠️⚠️ **2026-10-21 판 (28) — 그 `videoLibrary` 가 다시 넷이 됐다.**
+               한 판 동안은 **열둘**이었다(유튜브 넷 + 홈 전용 하나 + 제품
+               구동 영상 일곱). 유신이 *"유튜브에 올린 영상 4개만 보이도록"*
+               이라고 해서 **사이트에 올린 mp4 여덟을 뺐다.** 사정은
+               videoLibrary.ts 머리 주석에 있다.
+               ⚠️ 그래서 지금은 `videos` 와 `videoLibrary` 가 **같은 넷**이다.
+                  그래도 `videoLibrary` 를 계속 건다 — 길이(초) 배지가 거기서
+                  붙고, 제품 영상을 다시 걸 자리도 거기다.
+            ⚠️ 홈도 **넷**이다(featuredVideos). 수만 같고 **묶음이 다르다** —
+               홈에는 블록 영상이 있고 여기에는 「소형 부품 정렬 · 에어 선별」이
+               있다. 겹치는 것은 셋이다(videoLibrary.ts 머리 주석). */}
         <VideoBrowser />
       </Section>
 

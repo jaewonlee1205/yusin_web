@@ -1,8 +1,33 @@
-import { products } from "./products";
-import { HOME_ONLY, videos, type Video } from "./videos";
+/* ⚠️ 판 (28) — products 와 HOME_ONLY 를 더 이상 더하지 않는다(머리 주석).
+   import { products } from "./products";
+   되살릴 때 위 한 줄과 아래 HOME_ONLY 를 함께 되돌린다. */
+import { videos, type Video } from "./videos";
 
 /**
- * `/videos` 가 거는 **열두 편 전부.** 홈(featuredVideos)과는 다른 묶음이다.
+ * `/videos` 가 거는 **유튜브 넷.** 홈(featuredVideos)과는 다른 묶음이다.
+ *
+ * ⚠️⚠️⚠️ **2026-10-21 판 (28) — 열둘에서 넷으로 줄였다. 유신이 그렇게 말했다.**
+ *    *"여기서 유튜브에 올린 영상 4개만 보이도록 해줄래? 현재 12개 있는데
+ *    유튜브에 올린건 4개 인가 할텐데"*
+ *
+ *    유신의 셈이 맞았다. 열둘의 출처가 셋이었고 **유튜브는 넷뿐**이다 —
+ *
+ *      videos      넷   유튜브 (누르면 유튜브로 간다)
+ *      HOME_ONLY   하나 「플라스틱 블록 정렬」 — 사이트에 올린 mp4
+ *      productVideos 일곱 제품 구동 영상 — 사이트에 올린 mp4
+ *
+ *    그래서 **아래 두 묶음을 더하지 않는다.** 만드는 코드는 지우지 않고
+ *    주석으로 내려 두었다 — 되살리려면 그 주석을 풀고 videoLibrary 의
+ *    spread 를 되돌리면 된다.
+ *    ⚠️ **제품 구동 영상 일곱은 제품 상세에 그대로 남는다.** 그쪽은
+ *       ProductVideo 가 products.ts 를 직접 보므로 여기와 무관하다.
+ *    ⚠️ **홈은 여전히 넷이다**(featuredVideos = 유튜브 셋 + 블록 하나).
+ *       그래서 **홈에만 있는 영상 하나**(블록)와 **여기만 있는 영상
+ *       하나**(소형 부품 정렬·에어 선별, 미리보기가 없어 홈에 못 올렸다)가
+ *       생긴다. 겹치는 것은 셋이다. 유신에게 알렸다.
+ *
+ * ⚠️⚠️ **아래는 열둘이던 때의 기록이다. 지우지 않는다** — 유신이 제품
+ *    영상을 다시 걸라고 하면 그대로 살아난다.
  *
  * ⚠️⚠️ **2026-10-19 — 제품 구동 영상 일곱이 여기로 함께 올라왔다.**
  *    유신이 /videos 를 갤러리(/clients)처럼 **옆에 기종 거르개를 둔 꼴**로
@@ -42,6 +67,9 @@ import { HOME_ONLY, videos, type Video } from "./videos";
  * ⚠️ 「우레탄 코팅」만 제품 이름과 기종 이름이 다르다 — works.ts 도
  *    표면처리로 센다.
  */
+/* ⚠️ 판 (28) 에서 쓰지 않는다 — 제품 구동 영상을 안 걸기 때문이다.
+   지우지 않는다. 되살릴 때 이 블록과 아래 productVideos 를 풀고
+   videoLibrary 의 spread 를 되돌린다(머리 주석).
 const KIND_OF_PRODUCT: Record<string, string> = {
   "bowl-feeder": "볼피더",
   "linear-feeder": "직진피더",
@@ -51,12 +79,14 @@ const KIND_OF_PRODUCT: Record<string, string> = {
   controller: "컨트롤러",
   "urethane-coating": "표면처리",
 };
+*/
 
 /**
  * 제품 구동 영상 일곱. 제목은 **제품 이름 + "구동"** 으로 짓는다 —
  * 유튜브 넷처럼 사이트용 제목이 따로 없고, 격자에서 일곱 줄이 서로
  * 구별되어야 한다.
  */
+/* ⚠️ 판 (28) — 위 KIND_OF_PRODUCT 와 함께 내렸다.
 const productVideos: Video[] = products.map((p) => ({
   id: p.slug,
   title: `${p.name} 구동`,
@@ -65,6 +95,7 @@ const productVideos: Video[] = products.map((p) => ({
   src: p.video.src,
   poster: p.video.poster,
 }));
+*/
 
 /**
  * 영상 길이(초). **한 자리에 모은다** — 열두 편이 세 군데(videos ·
@@ -92,7 +123,10 @@ const productVideos: Video[] = products.map((p) => ({
  * ⚠️ 「반복」 여부는 여기 적지 않는다. `src` 가 있으면 로컬이고 로컬이면
  *    반복이다(VideoEmbed 의 `isLocal` 과 같은 조건). 두 번 적으면 어긋난다.
  * ⚠️ 영상을 더하면 **여기도 더한다.** 빠뜨리면 배지만 안 붙고 조용히
- *    지나간다 — 눈으로 열두 칸을 센다.
+ *    지나간다 — 눈으로 칸을 센다.
+ * ⚠️⚠️ **판 (28) 부터 로컬 여덟 칸은 아무도 안 읽는다**(유튜브 넷만 건다).
+ *    **그래도 지우지 않는다** — Record 라 안 쓰는 키가 있어도 무해하고,
+ *    제품 영상을 다시 걸면 그대로 필요하다. 「반복」 배지도 그때 살아난다.
  */
 const SECONDS: Record<string, number> = {
   // 유튜브 넷 (받아 온 값)
@@ -111,19 +145,31 @@ const SECONDS: Record<string, number> = {
   "urethane-coating": 7,
 };
 
+/* 판 (28) — 전에는 이랬다. 되살릴 때 이 꼴로 돌린다.
 export const videoLibrary: Video[] = [
   ...videos,
   ...HOME_ONLY,
   ...productVideos,
 ].map((v) => ({ ...v, seconds: SECONDS[v.id] }));
+*/
+export const videoLibrary: Video[] = videos.map((v) => ({
+  ...v,
+  seconds: SECONDS[v.id],
+}));
 
 /**
  * 거르개에 쓸 기종. **영상이 있는 것만** 낸다.
  *
  * ⚠️ 순서를 고정한다 — works.ts 의 `workKinds` 와 **같은 순서 · 같은 일곱
  *    글자**다. /clients 와 /videos 의 패널이 같아 보여야 한다.
- * ⚠️ 지금 세어 보면 볼피더 여섯, 나머지 여섯 기종이 각 하나다. 한 편짜리
- *    칸이 많지만 **개수는 적지 않는다** — ProductBrowser 가 같은 이유로
+ * ⚠️⚠️⚠️ **판 (28) 부터 「볼피더」 하나만 남는다** — 유튜브 넷이 전부
+ *    볼피더다. 그래도 **화면은 달라지지 않는다**: 거르개(VideoBrowser 의
+ *    aside 와 칩 줄)가 둘 다 숨어 있어서 이 목록을 읽는 눈이 없다.
+ *    ⚠️ **거르개를 되살리려면 이 목록부터 본다.** 「전체」와 「볼피더」
+ *       둘뿐이면 고를 것이 없는 거르개가 된다 — 판 (20) 대에 유신이 걷으라고
+ *       한 까닭과 같다. 제품 영상을 다시 걸면 일곱이 돌아온다.
+ * ⚠️ 열둘이던 때 — 볼피더 여섯, 나머지 여섯 기종이 각 하나였다. 한 편짜리
+ *    칸이 많아 **개수는 적지 않았다** — ProductBrowser 가 같은 이유로
  *    개수를 걷었다(분류 수와 항목 수가 비슷하면 숫자가 전부 1 이 되어
  *    아무것도 알려 주지 않는다).
  */

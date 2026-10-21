@@ -1499,8 +1499,11 @@ const STATS = [
 
       ⚠️⚠️ **숫자를 손으로 적지 말 것.** videoLibrary.length · works.length
          로 **세게** 해 두었다. 박아 쓰면 영상이나 사진이 늘 때 조용히 거짓이
-         된다. videoLibrary 는 videos + HOME_ONLY + productVideos 의 합이므로
-         (videoLibrary.ts) 그 길이는 /videos 카드 수와 **언제나 같다.**
+         된다. videoLibrary 의 길이는 /videos 카드 수와 **언제나 같다.**
+         ⚠️ 한때 여기 *"videoLibrary 는 videos + HOME_ONLY + productVideos 의
+            합"* 이라고 적혀 있었다. **판 (28) 부터 videos 넷뿐이다** — 유신이
+            유튜브 영상만 걸라고 했다(videoLibrary.ts 머리 주석). 숫자를
+            되살릴 일이 있으면 **「영상 12편」이 아니라 「영상 4편」**이다.
 
       ⚠️⚠️⚠️ **2026-10-20(8) — 글자를 「더 보기」로 되돌리고 화살표를 붙였다.
          바로 위 (7) 의 결론이 유신에게 거절당했다.** *"기종별 상세 / 영상 12편
