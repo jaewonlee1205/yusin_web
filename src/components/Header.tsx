@@ -174,7 +174,7 @@ export default function Header() {
 
             이제 lg 에서도 아래 폭과 같은 flex + justify-between 이다. 세
             덩이의 두 틈이 **정확히 같아진다** — 1024 에서 양쪽 **157**,
-            1280 이상에서 양쪽 **249** 다(고친 뒤 다시 재서 확인했다).
+            1280 이상에서 양쪽 **249** 다(고친 뒤 다시 재��� 확인했다).
             ⚠️ **내준 것** — 메뉴 중심이 화면 중심에서 **왼쪽으로** 1024 에서
                79px, 1280 이상에서 75px 옮겨 간다. 그 값을 내주고 틈을
                얻는 맞바꿈이다. **되돌리려면** 아래 문단의 클래스를 다시
@@ -283,7 +283,7 @@ export default function Header() {
                  ⚠️ 주석에 **별 둘 뒤에 빗금**을 쓰지 말 것. 그 세 글자가
                     블록 주석을 거기서 닫는다(site.ts 에서 한 번 깨뜨렸다).
                  ⚠️ 모바일 메뉴에는 활성 표시가 없다(아래 nav.map). 고칠 곳은
-                    여기 하나다. */
+                    여기 ��나다. */
               const active =
                 isActive(item.href) ||
                 childrenFor(item).some((c) => isActive(c.href));
@@ -299,7 +299,7 @@ export default function Header() {
                     href={item.href}
                     onClick={(e) => onSameRouteClick(e, item.href)}
                     aria-current={active ? "page" : undefined}
-                    className={`rounded-lg px-2 py-2 text-15 font-medium transition-colors xl:px-4 ${
+                    className={`group relative rounded-lg px-2 py-2 text-15 font-medium transition-colors xl:px-4 after:absolute after:inset-x-2 after:-bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-brand-light after:transition-transform after:duration-300 hover:after:scale-x-100 ${
                       active
                         ? "text-brand-light"
                         : "text-white/80 hover:text-white"
@@ -330,7 +330,7 @@ export default function Header() {
                   }}
                 >
                   {/* 버튼이 아니라 링크다. 전에는 여닫기 버튼이라 눌러도
-                      아무 데도 가지 않았다 — 하위 메뉴를 펼쳐 첫 줄을 다시
+                      아무 데도 가지 않았다 — 하위 ���뉴를 펼쳐 첫 줄을 다시
                       눌러야 /company·/products 로 갈 수 있었다. 드롭다운은
                       그대로 감싸는 div 의 호버·포커스로 연다.
 
@@ -347,7 +347,7 @@ export default function Header() {
                       setOpenMenu(null);
                       onSameRouteClick(e, item.href);
                     }}
-                    className={`flex items-center gap-1.5 rounded-lg px-2 py-2 text-15 font-medium transition-colors xl:px-4 ${
+                    className={`group relative flex items-center gap-1.5 rounded-lg px-2 py-2 text-15 font-medium transition-colors xl:px-4 after:absolute after:inset-x-2 after:-bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-brand-light after:transition-transform after:duration-300 hover:after:scale-x-100 ${
                       active
                         ? "text-brand-light"
                         : "text-white/80 hover:text-white"
@@ -437,7 +437,7 @@ export default function Header() {
                         줄마다 **다른** 아이콘          지금
 
                       같은 글리프가 두 번 반복되면 전화 표시가 아니라 목록
-                      불릿처럼 읽히고, 두 번호가 **무엇이 다른지**는 여전히
+                      불릿처럼 읽히고, 두 ���호가 **무엇이 다른지**는 여전히
                       말하지 않는다. 031 은 유선, 010 은 휴대폰이다 — 아이콘이
                       그 차이를 맡으면 반복이 사라지면서 정보가 는다.
 
@@ -502,7 +502,7 @@ export default function Header() {
               ⚠️ **합이 40px 여야 한다**(8 + 20 + 12). 옆 전화번호 묶음이 두 줄
                  40px 이고 그 줄에 맞춰 잡은 높이다 — 위 전화번호 주석에 근거가
                  있다. 패딩을 만질 때 합을 먼저 볼 것. */
-              className="rounded-xl bg-brand px-5 pb-3 pt-2 text-sm font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98]"
+              className="rounded-xl bg-brand px-5 pb-3 pt-2 text-sm font-semibold text-white shadow-[0_8px_24px_-12px_rgba(213,38,30,0.9)] transition duration-300 hover:-translate-y-0.5 hover:bg-brand-dark hover:shadow-[0_12px_28px_-12px_rgba(213,38,30,1)] active:translate-y-0 active:scale-[0.98]"
             >
               {headerCta.label}
             </Link>

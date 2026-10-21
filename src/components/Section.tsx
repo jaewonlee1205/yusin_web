@@ -173,7 +173,7 @@ export default function Section({
               ))}
             {title && (
               <h2
-                className={`text-2xl font-bold leading-snug tracking-tight sm:text-4xl ${
+                className={`text-2xl font-bold leading-[1.18] tracking-[-0.025em] sm:text-4xl ${
                   dark ? "text-white" : "text-ink"
                 }`}
               >
