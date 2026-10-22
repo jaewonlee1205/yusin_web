@@ -13,6 +13,7 @@
     "process-photos": "node scripts/fetch-process-photos.mjs",
     "feature-photos": "node scripts/fetch-feature-photos.mjs",
     "philosophy-photos": "node scripts/fetch-philosophy-photos.mjs",
+    "philosophy-portraits": "node scripts/fetch-philosophy-portraits.mjs",
     "video-frames": "node scripts/capture-video-frames.mjs"
   },
   "dependencies": {
