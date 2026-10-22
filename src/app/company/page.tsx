@@ -2248,14 +2248,69 @@ export default function CompanyPage() {
                스톡 사진이라 그랬던 것이고, 이것은 유신이 입주한 단지의
                **실제 사진**이다(유신이 직접 보낸 것). 다만 어느 동인지는
                쓰지 않는다 — 사진만 보고는 단정할 수 없다. */}
-        <div className="mt-8 xl:mt-0 xl:flex-1 xl:self-stretch xl:overflow-hidden">
-          <Image
-            src="/images/company/dongwoo-park.webp"
-            alt="유신 F.A 시스템이 입주한 동우디지털파크 전경"
-            width={951}
-            height={712}
-            className="h-auto w-full xl:block xl:h-full xl:w-[160%] xl:max-w-none xl:object-fill"
-          />
+        {/* ⚠️⚠️⚠️ **2026-10-22 판 (44) — 사진이 네이비 액자 안으로 들어갔다.**
+               유신: *"바로 이미지 전체다 보니깐 좀 아쉽네 **네모 박스 안에
+               사진이 있다거나** 이런식으로 해야 이쁠거 같은데"*
+
+               스무 안 넘게 구워 보이고 **네이비 바탕 + 사방 여백 20 + 사진
+               아래 두 줄(한글·영문), 가운데 맞춤**으로 정해졌다.
+
+            ⚠️⚠️ **여백은 칸이 아니라 여기 안쪽 겹이 만든다. 바꾸지 말 것.**
+               처음에 여백을 **칸(p-5)에 주고 자르기도 칸(overflow)에** 맡겼더니
+               사진이 `w-[160%]` 로 **안쪽 폭의 1.6배**로 그려져 오른쪽 여백을
+               덮어 버렸다. 재어 보니 —
+
+                   자르기가 칸에 있을 때   상 20 · **우 -128.8** · 하 20 · 좌 20
+                   자르기를 안쪽 겹으로    상 20 ·   우  20   · 하 20 · 좌 20
+
+               유신이 바로 찾았다: *"왼쪽 경우는 … 여백이 있어서 이미지가 안에
+               들어간거 같은데 **오른쪽은 여백이 없어서** 이미지하고 박스하고
+               겹처서 이상하고"*. 흰 바탕 안에서는 안 보이던 것이 **네이비라서
+               드러났다.**
+               → **자르는 겹(아래 `overflow-hidden`)과 여백 주는 겹(이 칸)은
+                 반드시 따로여야 한다.** 칸의 `xl:overflow-hidden` 은 혹시
+                 모를 넘침을 막는 안전망으로 남긴다.
+
+            ⚠️ **정렬은 가운데다.** 여섯을 2배로 키워 나란히 놓고 고르셨다 —
+               왼쪽(표의 값들과 결이 맞는다) · **가운데(사진의 가운데 축과
+               맞는다)** · 오른쪽(화면 바깥 가장자리와 맞는다) · 한글 왼쪽 +
+               영문 오른쪽 · 한글 오른쪽 + 영문 왼쪽(읽는 순서가 뒤집혀 ✗) ·
+               한 줄에 양끝(칸이 248px 뿐이라 둘이 붙어 ✗).
+
+            ⚠️ **실측 (1280/1440)** — 칸 288x402.6 · 사진 창 248x319.5 ·
+               dpr2 0.83배. 여백이 생겨 창이 288 -> 248 로 좁아졌는데, 그만큼
+               **더 축소되어 오히려 또렷해졌다**(0.97 -> 0.83배).
+
+            ⚠️ 함께 보인 안 가운데 **흰 1px 액자선은 기각**했다 — 선이 사진
+               가장자리와 겹쳐 거의 안 보이고, 보이게 굵히면 사진보다 선이
+               먼저 눈에 든다. 모서리 ㄱ자 마크 · 로고 마크 · 배지 · 위치
+               핀도 함께 보였다(로고는 이 쪽 제목과 푸터에 이미 있어 셋이 된다). */}
+        <div className="mt-8 flex flex-col bg-dark p-5 xl:mt-0 xl:flex-1 xl:self-stretch xl:overflow-hidden">
+          {/* ⚠️ 자르는 겹. 위 ⚠️⚠️ 의 여백 버그가 여기 있고 없고로 갈린다.
+                 min-h-0 이 없으면 flex 자식이 줄지 않아 글이 칸 밖으로 밀린다. */}
+          <div className="relative min-h-0 flex-1 overflow-hidden rounded-lg">
+            <Image
+              src="/images/company/dongwoo-park.webp"
+              alt="유신 F.A 시스템이 입주한 동우디지털파크 전경"
+              width={951}
+              height={712}
+              className="h-auto w-full xl:block xl:h-full xl:w-[160%] xl:max-w-none xl:object-fill"
+            />
+          </div>
+          {/* ⚠️⚠️ **문구는 유신 몫이다.** 아래 둘은 내가 임시로 넣은 것이고
+                 아직 고르지 않으셨다. 후보 — 동우디지털파크 A동 · 시흥 정왕동
+                 본사 · 본사 · 공장 · 1992년부터 이곳에서.
+              ⚠️ **표의 소재지와 같은 주소를 쓰지 말 것.** 바로 왼쪽 표에
+                 「소재지」 행이 있어 한 화면에 같은 글이 두 번 난다 — 처음에
+                 소재지를 그대로 넣었다가 그래서 바꿨다. */}
+          <div className="mt-[11px] shrink-0">
+            <p className="text-center text-xs font-medium leading-[1.4] tracking-[-0.02em] text-white/[0.86]">
+              동우디지털파크 A동
+            </p>
+            <p className="mt-[3px] text-center text-[9.5px] font-semibold leading-[1.3] tracking-[0.08em] text-white/[0.42]">
+              DONGWOO DIGITAL PARK
+            </p>
+          </div>
         </div>
         </Reveal>
       </Section>
