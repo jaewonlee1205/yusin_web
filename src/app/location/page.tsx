@@ -1142,7 +1142,50 @@ export default function LocationPage() {
                            지우지 않는다(주석은 뒤집어 쓴다) — 그 두 규칙은
                            CSS 에 남는다. 검사에서 봐야 할 것은 **새 값이 살아
                            있는가** 쪽이다 */}
-              <dl className="grid border-t border-b border-t-[#b8bfca] border-b-[#d1d5db] [&>*:last-child]:border-b-0 lg:grid-cols-2">
+              {/* ⚠️⚠️⚠️ **2026-10-23 판 (63) — 표 바탕을 왼쪽 흰색에서
+                     오른쪽으로 아주 옅게 번지게 했다.** 유신 *"여기 같은
+                     경우도 왼 → 오른쪽으로 회사개요 처럼 그라데이션 적용
+                     되면 좋을거 같은데"* → 시안 (74) 에서 **"c로 하자"**
+                     (넷 중 **절반 세기** — 끝 색 #fbfbfc).
+
+                 ⚠️⚠️ **회사 개요와 같은 코드가 아니다. 일부러 다르다.**
+                     회사 개요(company/page.tsx)는 끝 색이 `to-surface`
+                     (#f6f7f9) 다. 거기는 **섹션이 회색**이라 표의 오른쪽
+                     끝이 뒤의 배경과 **완전히 같아져 녹는다**(실측 대비
+                     1.000). 여기는 **둘레가 흰색**이다 — 실측으로 확인했다
+                     (표 왼쪽 바깥 #ffffff, 색을 쥔 겹은 바로 위 카드의
+                     `bg-white`, 그 바깥은 전부 투명 → body 흰색).
+                     그래서 같은 #f6f7f9 을 걸면 뒤가 비치는 게 아니라
+                     **표만 어두워져 거꾸로 떠오른다**(둘레 대비 1.072).
+                     유신에게 네 세기를 한 장에 놓고 보였고, **그 중 가장
+                     옅은 쪽**을 골랐다 [[user-repeats-means-stop-arguing]]
+
+                 ⚠️ **그래서 끝 색이 토큰이 아니라 임의 값 #fbfbfc 다.**
+                    회사 개요의 `to-surface` 는 섹션 배경과 묶여 있어야
+                    뜻이 사는 값이지만, 여기 끝 색은 **무엇과도 묶이지
+                    않는다** — 뒤가 비치는 것이 아니라 표에 옅은 색을 깐
+                    것이기 때문이다. 토큰으로 바꾸면 안 된다
+                    [[dont-promote-inference-to-fact]]
+
+                 ⚠️ **거는 자리는 이 dl 이지 바깥 카드가 아니다.** 카드
+                    (위 :412)에는 **지도 iframe 이 함께** 들어 있어, 거기
+                    걸면 지도 칸까지 번진다(시안 (73) ⓓ 로 보였다).
+                    회사 개요에서 건 자리(dl 의 부모)와 여기 dl 은 **구조가
+                    달라 대응이 어긋난다** — 옮겨 적을 때 조심할 것.
+
+                 ⚠️ **실측 (1440 · 390):** 왼쪽 끝 #ffffff → 오른쪽 끝
+                    #fbfbfc · 번짐 **1.034** · 둘레 #ffffff ↔ 오른쪽 끝
+                    **1.034** · 행 선 #d1d5db 대비 왼 1.461 / 오른 1.436
+                    (흰 위 1.474 에서 거의 안 떨어진다 — #f6f7f9 이었다면
+                    오른쪽이 1.387 이 된다). 표 1086x183 그대로.
+                    ⚠️ 1.034 는 **아주 작다.** 작다는 이유로 되돌리지 말 것 —
+                       유신이 1.000 / 1.034 / 1.072 / 1.122 넷을 한 장에
+                       놓고 눈으로 이것을 골랐다 [[pixel-count-isnt-legibility]]
+
+                 ⚠️ 선 색(#d1d5db · 윗선 #b8bfca)과 라벨 네이비(#2d3953),
+                    카드의 border-b-0, 모서리(직각)는 한 군데도 안 건드렸다
+                    [[dont-trade-away-what-wasnt-offered]] */}
+              <dl className="grid border-t border-b border-t-[#b8bfca] border-b-[#d1d5db] bg-gradient-to-r from-white to-[#fbfbfc] [&>*:last-child]:border-b-0 lg:grid-cols-2">
                 {cells.map((cell, i) => (
                   <div
                     key={cell.label}
