@@ -1122,7 +1122,7 @@ export default function LocationPage() {
                           dl 로 옮기면 선이 카드 전폭을 잃는다. */
                     /* ⚠️ 바탕을 깔지 않는다 — 값 칸은 흰색 하나다. 판 (16) 에
                        홀수 행에 깔았다가 판 (17) 에서 걷었다(위 dl 주석). */
-                    className={`flex min-w-0 items-center gap-4 border-b border-[#d1d5db] py-4 pr-5 sm:pr-7 ${
+                    className={`flex min-w-0 items-center gap-4 border-b border-[#d1d5db] py-2.5 pr-5 sm:pr-7 ${
                       cell.wide
                         ? "lg:col-span-2"
                         : cellCols[i] === 0
@@ -1176,7 +1176,21 @@ export default function LocationPage() {
                            글자(4.20)도 네이비 글자(4.09)도 **둘 다** 13px
                            기준에 못 미친다. 사다리는 company/page.tsx 의
                            같은 자리에 있다. */}
-                    <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-4 border-r border-[#d1d5db] bg-[#2d3953] px-2 py-4 text-13 font-bold text-white sm:w-24">
+                    {/* ⚠️⚠️⚠️ **2026-10-23 판 (55) — 행의 세로 여백을 16px 에서
+                           10px 로 내렸다.** 유신이 이 표와 회사 개요 표를
+                           **함께** 짚으며 *"단어 위아래로 있는 여백이 너무 큰거
+                           같아서 실제 엑셀 같은 표 보면 … 작은편인데"* 라고 했다.
+                           **까닭 · 실측 · 다섯 안은 company/page.tsx 의 같은
+                           자리**에 있다. 요점만 —
+                             · 행 57.3px 중 32px(56%)이 여백이었다. 10px 로
+                               내리니 행 45.3px
+                             · 라벨 칸의 **음수 마진과 패딩을 같은 값으로 같이**
+                               내렸다. 안 그러면 세로선이 행보다 길어진다
+                             · 이 표는 390 에서 394 → 322px 가 된다
+                           ⚠️ 여기는 지도가 **폭으로** 크기가 정해져서 지도는 그대로
+                              이고 표만 낮아진다. 구역 702 → 654px. 회사 개요 쪽은
+                              옆 사진이 표를 안 따라오는 문제가 따로 있다 */}
+                    <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-2.5 border-r border-[#d1d5db] bg-[#2d3953] px-2 py-2.5 text-13 font-bold text-white sm:w-24">
                       {cell.label}
                     </dt>
                     {/* ⚠️ **min-w-0 은 여기와 바로 위 행, 두 곳에 다 있어야 한다.**
