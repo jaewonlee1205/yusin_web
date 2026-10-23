@@ -1185,7 +1185,29 @@ export default function LocationPage() {
                  ⚠️ 선 색(#d1d5db · 윗선 #b8bfca)과 라벨 네이비(#2d3953),
                     카드의 border-b-0, 모서리(직각)는 한 군데도 안 건드렸다
                     [[dont-trade-away-what-wasnt-offered]] */}
-              <dl className="grid border-t border-b border-t-[#b8bfca] border-b-[#d1d5db] bg-gradient-to-r from-white to-[#fbfbfc] [&>*:last-child]:border-b-0 lg:grid-cols-2">
+              {/* ⚠️⚠️⚠️ **2026-10-23 판 (66) — 여기도 멈춤이 셋이 되었다.**
+                     회사 개요와 **같은 글자**를 고르셨다(시안 (83) 여덟 중
+                     **"c로 하자"**). 가장 진한 색은 #fbfbfc 가 아니라
+                     **#fdfdfe**, 자리는 88% 다 — 회사 개요가 한 단계 옅은
+                     색을 고른 것과 같은 자리의 값이다.
+                 ⚠️ **번짐이 절반이 되었다 — 1.034 → 1.017.** 위 ⚠️ 가
+                    「1.034 는 아주 작다, 되돌리지 말 것」이라고 적어 둔 바로
+                    그 수의 절반이다. 유신이 판 (63) 에서 네 세기를 보고 고른
+                    것이 1.034 였으므로, 이 쪽만은 **의도와 다를 수 있다** —
+                    그렇다면 가장 진한 색을 #fbfbfc 로 되돌리면 된다(그것이
+                    시안 (83) 의 ⓐ 다) [[one-metric-two-motions]]
+                 ⚠️ **여기는 원래 띠가 설 일이 없었다.** 시안 (83) 에서 여덟을
+                    모두 재니 「가장 진한 자리 ↔ 좌우 40px」이 **전부 바닥값
+                    1.009** 였다. 회사 개요에서 문제가 된 안이 1.018 이었던
+                    것과 견줘야 뜻이 생긴다 — 이 표는 애초에 띠가 설 만큼
+                    진하지 않다 [[pair-the-metric-with-a-known-positive]]
+                 ⚠️ **둘레와는 오히려 맞아떨어진다.** 이 쪽 둘레는 흰색이라,
+                    끝이 흰색으로 돌아오면서 「둘레 ↔ 오른쪽 끝」이 1.034
+                    에서 **1.000** 이 된다. 회사 개요는 정반대로 1.000 에서
+                    1.072 로 갈린다 — 같은 손질이 두 쪽에서 반대로 움직인다
+                 ⚠️ 거는 자리는 여전히 **이 dl** 이다. 위 ⚠️ 의 「카드에는
+                    지도가 함께 들어 있다」가 그대로 유효하다 */}
+              <dl className="grid border-t border-b border-t-[#b8bfca] border-b-[#d1d5db] bg-gradient-to-r from-white via-[#fdfdfe] via-88% to-white [&>*:last-child]:border-b-0 lg:grid-cols-2">
                 {cells.map((cell, i) => (
                   <div
                     key={cell.label}
