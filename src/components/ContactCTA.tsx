@@ -418,16 +418,67 @@ export default function ContactCTA() {
                      stretch 라서, 글자가 커져도 두 버튼 높이가 같이 간다.
                   ⚠️ **좁은 화면에서는 폭이 안 바뀐다** — sm 아래에서는 둘 다
                      가로를 꽉 채운다. 이 판이 듣는 것은 sm 이상이다. */}
+              {/* ⚠️⚠️⚠️ **2026-10-23 판 (64) — 두 버튼의 모서리를 4px 로
+                     내리고, 전화 버튼에 아주 옅은 면을 깔았다.** 유신
+                     *"모서리 부분을 위에 헤더 견적 문의 처럼 4px로 한다던가
+                     전화 쪽 버튼 디자인을 좀 변경 한다거나"* → 시안 (77) 에서
+                     **"c로 하자"**(모서리 4px 고정 · 전화 테두리 white/45 →
+                     **white/30** · 면 **white/6%**).
+
+                 ⚠️ **빨강은 모서리 하나만 바뀌었다.** bg-brand · px-6 py-4 ·
+                    text-17 font-bold · MagneticLink 는 판 (31) 그대로다.
+
+                 ⚠️ **모서리는 크기를 하나도 안 바꾼다.** 0·4·6·8·12 다섯
+                    단계를 다 재 봤는데 빨강 163x58 · 전화 220x58 · 폭 비
+                    0.743 · 띠 1440x243 이 **전부 같았다**. 헤더에서도 열
+                    단계가 같았다(Header.tsx 판 59-3 주석). 그러니 이 값을
+                    만져도 아래 패딩·무게 주석들은 안 깨진다.
+
+                 ⚠️⚠️ **전화 버튼의 폭은 한 픽셀도 안 줄였다**(220px 그대로).
+                    테두리를 옅게 하고 면을 깐 것뿐이다. 위 판 (31) 주석이
+                    적어 둔 대로, 그쪽이 넓은 것은 번호를 담기 때문이고 번호가
+                    그대로 보이는 것이 이 띠의 값어치다
+                    [[dont-cure-symptom-by-removing-function]]
+
+                 ⚠️ **무게가 왜 이 값인가** — 「면 밝기 × 면적」으로 재면
+                    지금 빨강 895 · 전화 **570** 이다(전에는 396). 전화 쪽에
+                    면을 깔면 이 수가 올라가고, 빨강을 넘어서면 **어느 버튼을
+                    먼저 누를지가 흐려진다.** 시안에서 여섯을 쟀을 때
+                    ⓓ(면 white/10) 691 · **ⓔ(흰 면) 3224 로 뒤집혔다.**
+                    유신은 그 표를 보고 **안 뒤집히는 쪽**을 골랐다.
+                    면을 더 올리자는 말이 나오면 이 수부터 다시 잴 것
+                    [[main-color-means-dominant-not-all]]
+
+                 ⚠️ **빨강 채움 안은 아예 굽지 않았다** — 빨강 면은 「견적
+                    문의 전용」이다(바로 위 판 29 주석 · VideoCard:159 ·
+                    VideoBrowser:164 가 같은 규칙을 적고 있다)
+
+                 ⚠️ **hover 는 안 건드렸다**(border-white/70 · bg-white/10).
+                    시안에서 hover 를 안 보였으므로 내 판단으로 바꾸지 않았다.
+                    기본이 30/6% 로 옅어져 hover 와의 폭이 커졌으니, 눌러 보고
+                    튄다 싶으면 그때 함께 고를 것 [[rejected-options-are-conditional]]
+
+                 ⚠️⚠️ **사이트의 빨강 버튼은 넷인데 지금 모서리가 섞여 있다** —
+                    헤더(4px) · **여기(4px, 이번)** · 제품 상세
+                    (products/[slug]/page.tsx:460, 12px) · 404
+                    (not-found.tsx:39, 12px). 뒤 둘은 유신에게 물어 둔 상태다.
+                    ⚠️ 한때 「홈 히어로에도 빨강 버튼이 있다」고 적어 두었는데
+                       **그 코드는 page.tsx 의 「되살릴 코드」 주석 안**이라
+                       화면에 안 나온다. grep 이 주석까지 센 것이었다
+                       [[grep-counts-invisible-text]]
+                    ⚠️ 뒤 둘을 바꾸게 되면 **옆에 선 둥근 테두리 버튼**
+                       (「제품 목록」 같은 것)도 같이 봐야 한다 — 빨간 것만
+                       각지면 짝이 안 맞는다. */}
               <MagneticLink
                 href="/contact"
-                className="inline-flex items-center justify-center rounded-xl bg-brand px-6 py-4 text-17 font-bold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:px-12"
+                className="inline-flex items-center justify-center rounded-sm bg-brand px-6 py-4 text-17 font-bold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:px-12"
               >
                 견적 문의
               </MagneticLink>
               {/* 아이콘과 자릿수 정렬은 헤더 전화 링크와 같은 모양으로 맞춘다 */}
               <a
                 href={telHref(site.tel)}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/45 px-6 py-4 text-15 font-semibold tabular-nums text-white transition hover:border-white/70 hover:bg-white/10 active:scale-[0.98] sm:px-8"
+                className="inline-flex items-center justify-center gap-2 rounded-sm border border-white/30 bg-white/[0.06] px-6 py-4 text-15 font-semibold tabular-nums text-white transition hover:border-white/70 hover:bg-white/10 active:scale-[0.98] sm:px-8"
               >
                 <PhoneIcon />
                 전화 {site.tel}
