@@ -1207,7 +1207,25 @@ export default function LocationPage() {
                     1.072 로 갈린다 — 같은 손질이 두 쪽에서 반대로 움직인다
                  ⚠️ 거는 자리는 여전히 **이 dl** 이다. 위 ⚠️ 의 「카드에는
                     지도가 함께 들어 있다」가 그대로 유효하다 */}
-              <dl className="grid border-t border-b border-t-[#b8bfca] border-b-[#d1d5db] bg-gradient-to-r from-white via-[#fdfdfe] via-88% to-white [&>*:last-child]:border-b-0 lg:grid-cols-2">
+              {/* ⚠️⚠️ **2026-10-23 판 (67) — 여기도 끝이 순백이 아니다.**
+                     회사 개요와 **같은 글자**를 고르셨다(시안 (86) 여덟 중
+                     **"b로 하자"**). 끝 `#fefefe`(흰색 90%) — 두 쪽이 **끝
+                     색만은 같은 값**이 되었다. 정점(#fdfdfe)과 자리(88%)는
+                     그대로다.
+                 ⚠️ **여기는 정점과 끝이 딱 한 단계 차이다.** 이 쪽 정점이
+                    흰색 80%(#fdfdfe)라 그보다 연한 끝은 90% 하나뿐이었다 —
+                    시안 (86) 의 〔1부〕에 안이 **둘밖에 없던 까닭**이 그것이다.
+                    되돌림이 **1.017 → 1.008** 로 얕아져, 끝에서 흰색이
+                    되살아나는 느낌은 거의 남지 않는다. 더 내리면 정점이
+                    사라진다(멈춤 둘로 돌아간다)
+                 ⚠️ **둘레와는 회사 개요와 정반대로 움직인다.** 이 쪽 둘레는
+                    흰색이라 끝이 순백에서 내려오면서 「둘레 ↔ 오른쪽 끝」이
+                    **1.000 → 1.009** 로 갈린다 — 표가 흰 바탕 위로 아주 조금
+                    떠오른다. 회사 개요는 같은 손질로 1.072 → 1.063 으로
+                    **가까워진다** [[one-metric-two-motions]]
+                 ⚠️ 거는 자리는 여전히 **이 dl** 이다 — 위 ⚠️ 의 「카드에는
+                    지도가 함께 들어 있다」가 그대로 유효하다 */}
+              <dl className="grid border-t border-b border-t-[#b8bfca] border-b-[#d1d5db] bg-gradient-to-r from-white via-[#fdfdfe] via-88% to-[#fefefe] [&>*:last-child]:border-b-0 lg:grid-cols-2">
                 {cells.map((cell, i) => (
                   <div
                     key={cell.label}
