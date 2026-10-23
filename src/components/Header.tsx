@@ -380,7 +380,31 @@ export default function Header() {
           </nav>
 
           <div className="hidden items-center gap-6 lg:flex">
-            {/* 번호는 ink-soft, 아이콘만 brand 다.
+            {/* ⚠️⚠️⚠️⚠️ **2026-10-23 — 아래 두 문단을 뒤집는다. 번호는 흰색
+                100%, 아이콘은 흰색 55% 다. 아이콘은 더 이상 레드가 아니다.**
+
+                유신이 *"전화번호 하고 견적문의 버튼 좀 더 이쁘게 … 디자인
+                적으로 부족한 부분 확인해보고"* 라고 해서 시안 열 장(㊽~(57))을
+                찍었다. 재 보니 이 묶음 안에 **레드가 셋**이었다 — 아이콘
+                둘(brand-light #ff6b5e)과 버튼(brand #d5261e). 같은 계열 두
+                색이 한 묶음에서 겨루고 있었고, 그것을 금하던 아래 주석이
+                정작 아이콘은 그냥 두고 있었다. 아이콘을 흰색으로 내리니
+                레드가 버튼 하나만 남는다. 묶음 안 레드 면적 37.48 → 36.85%.
+
+                ⚠️ **번호를 다시 흰색 80%로 내리지 말 것.** 바로 옆 버튼
+                   글자가 흰색 100% 라, 80%면 전화가 버튼에 밀린다 — ㊽ 의
+                   ②가 그 지적이었다. 지금은 대표번호가 흰색 100%/700,
+                   휴대폰이 흰색 70%/500 으로 **한 단 낮다**((54)ⓑ).
+                   크기는 둘 다 14px 그대로다 — 15px 로 키운 안((52)Ⓑ)은
+                   두 줄이 41.4px 이 되어 옆 버튼(40px)과 어긋났다.
+
+                아래는 **흰 헤더 시절에 쓴 글**이다. 바탕이 네이비로 바뀌고
+                아이콘이 흰색이 된 지금은 전제가 다르다 — 남겨 두는 것은
+                번호 색을 다시 만질 때 지나온 자리를 알아보라고다.
+
+                ─────────────────────────────────────────────────────────
+
+                번호는 ink-soft, 아이콘만 brand 다.
 
                 한때 둘 다 navy 였는데(2026-10-14 에 사이트에서 걷은 그 파랑),
                 흰 헤더 위에서 그 파랑이 로고 레드.
@@ -405,8 +429,11 @@ export default function Header() {
 
                       가로로 이으면 **중앙 메뉴를 깎는다.** 이 헤더는
                       lg:grid-cols-[1fr_auto_1fr] 라 양옆 칸이 같은 폭이 되는데,
-                      1024 에서 메뉴 끝과 이 묶음 시작 사이가 **49px 뿐**이다
-                      (실측). 한 줄로 이으면 +125px 라 메뉴가 찌그러진다 —
+                      1024 에서 메뉴 끝과 이 묶음 시작 사이가 **145px 뿐**이다
+                      (2026-10-23 실측. 한동안 「49px」이라 적혀 있었는데 그
+                      뒤로 메뉴가 바뀌어 157px 이 됐고, 아래 구분선이 25px 를
+                      먹어 지금은 145.3px 이다). 한 줄로 이으면 +125px 라
+                      메뉴가 찌그러진다 —
                       바로 위 로고 주석이 "lg 구간은 메뉴 폭이 가장 빠듯하다"
                       고 적어 둔 그 구간이다.
 
@@ -449,26 +476,52 @@ export default function Header() {
                 ⚠️ MobileIcon 의 strokeWidth 가 2.2 인 까닭은 icons.tsx 주석에
                    있다 — 사각형이 수화기보다 무거워 보이는 것을 맞춘 값이다. */}
             <div className="flex flex-col">
+              {/* ⚠️ `primary` 가 **대표번호(031)** 다. 두 줄의 무게를 가르는
+                     값이고, 크기는 둘 다 14px 로 같다 — 키우면 두 줄이
+                     40px 를 넘어 옆 버튼과 어긋난다(위 머리 주석). */}
               {[
-                { tel: site.tel, Icon: PhoneIcon },
-                { tel: site.telMobile, Icon: MobileIcon },
-              ].map(({ tel, Icon }) => (
+                { tel: site.tel, Icon: PhoneIcon, primary: true },
+                { tel: site.telMobile, Icon: MobileIcon, primary: false },
+              ].map(({ tel, Icon, primary }) => (
                 <a
                   key={tel}
                   href={telHref(tel)}
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold tabular-nums text-white/80 transition-colors hover:text-white"
+                  className={`inline-flex items-center gap-1.5 text-sm tabular-nums transition-colors hover:text-white ${
+                    primary ? "font-bold text-white" : "font-medium text-white/70"
+                  }`}
                 >
                   {/* ⚠️ 13px 다. 번호가 14px 인데 아이콘을 16px(기본)로
                          두었더니 "텍스트보다 아이콘이 더 커 보인다" 는 말을
                          들었다 — 아이콘은 **꽉 찬 도형**이라 같은 크기여도
                          글자보다 커 보인다. 한 단계 아래가 맞다. */}
-                  {/* ⚠️ brand-light 다. 네이비 위에서 brand(#d5261e)는
-                         3.38:1 로 어둡다. */}
-                  <Icon className="h-[13px] w-[13px] shrink-0 text-brand-light" />
+                  {/* ⚠️⚠️ **흰색 55% 다. brand-light 가 아니다**(2026-10-23).
+                         레드를 버튼 하나로 몰아 두려고 내렸다 — 머리 주석에
+                         근거가 있다. 되돌리면 이 묶음에 레드가 셋이 된다.
+                         옛 주석은 그대로 맞다 — "네이비 위에서 brand(#d5261e)는
+                         3.38:1 로 어둡다". 아이콘에 레드를 쓸 일이 다시
+                         생기면 brand 가 아니라 brand-light 다. */}
+                  <Icon className="h-[13px] w-[13px] shrink-0 text-white/55" />
                   {tel}
                 </a>
               ))}
             </div>
+            {/* ⚠️ **전화와 버튼 사이 세로 구분선**(2026-10-23). 유신이
+                   (57)Ⓓ 를 골랐다 — *"Ⓓ Ⓒ + 전화와 버튼 사이 1px 구분선
+                   이걸로 해줘"*.
+
+                   둘이 하는 일이 다르다는 표시다. 전화는 바로 거는 것이고
+                   버튼은 쪽을 여는 것인데, 간격 24px 만으로는 한 덩어리로
+                   읽혔다.
+
+                ⚠️ 높이 24px 다. 두 줄(40px)에 꽉 채우면 선이 줄처럼 읽혀
+                   번호가 세 줄로 보인다 — 가운데만 긋는다.
+                ⚠️ 흰색 20% 다. 더 올리면 선이 번호보다 세지고, 내리면
+                   네이비에 묻혀 안 보인다(헤더 border-b 와 같은 계열).
+                ⚠️ **가로를 25px 먹는다**(1px + 양옆 gap 24px 중 하나치).
+                   묶음 236.3 → 261.3px, 1024 에서 메뉴와의 여유
+                   157.8 → 145.3px. 여기서 더 넓히면 메뉴가 찌그러진다.
+                ⚠️ `aria-hidden` 이다 — 읽기 프로그램에는 선이 없다. */}
+            <span aria-hidden="true" className="h-6 w-px shrink-0 bg-white/20" />
             <Link
               href={headerCta.href}
               /* ⚠️⚠️ **패딩이 위 8 / 아래 12 로 일부러 비대칭이다. py-2.5 로 되돌리지
@@ -502,7 +555,25 @@ export default function Header() {
               ⚠️ **합이 40px 여야 한다**(8 + 20 + 12). 옆 전화번호 묶음이 두 줄
                  40px 이고 그 줄에 맞춰 잡은 높이다 — 위 전화번호 주석에 근거가
                  있다. 패딩을 만질 때 합을 먼저 볼 것. */
-              className="rounded-xl bg-brand px-5 pb-3 pt-2 text-sm font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98]"
+              /* ⚠️⚠️ **모서리가 0 이다**(2026-10-23). 유신이 *"예를 들면
+                 견적 문의 버튼을 완전히 네모로 만든다거나"* 라고 했고,
+                 시안((57)Ⓒ)을 보고 *"네모가 괜찮네"* 로 골랐다.
+
+                 ⚠️ **이 사이트에서 각진 모서리는 여기 하나뿐이다.** 세어
+                    보면 둥근 것이 84곳이고(rounded-xl 25 · rounded-full 24 ·
+                    rounded-2xl 21 · rounded-lg 14) 각진 것은 0곳이었다.
+                    게다가 **같은 레드 버튼이 사이트에 다섯**이다 —
+                    not-found.tsx:39 · 홈 page.tsx:2196·2215 ·
+                    products/[slug]/page.tsx:460 · ContactCTA.tsx:423 ·
+                    그리고 여기. **나머지 넷은 아직 12px 다.** 범위를 어디까지
+                    할지는 유신에게 물어 둔 상태다((56) 이 그 장이다).
+                    넷을 바꾸게 되면 **옆에 선 둥근 테두리 버튼**(「전화
+                    031-…」 · 「제품 목록」)도 같이 바꿔야 한다 — 빨간 것만
+                    각지면 짝이 안 맞는다.
+
+                 ⚠️ `rounded-none` 을 **명시**한다. 클래스를 그냥 빼면 「빼먹은
+                    것」과 구별이 안 된다. */
+              className="rounded-none bg-brand px-5 pb-3 pt-2 text-sm font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98]"
             >
               {headerCta.label}
             </Link>
