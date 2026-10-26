@@ -93,24 +93,21 @@ export default function OrgChart() {
 
               {/* 공장장 -> 다섯 부서 */}
               <ul className={BRANCH}>
-                {plant.teams.map((team, i) => (
+                {plant.teams.map((team) => (
                   <li key={team.name} className={ITEM}>
                     {/* 부서는 이름만 담는다. 밑선은 칸 전폭이다 — border 는
                         padding 바깥이라 좌우 10px 을 넘어 세로 칸선까지 닿는다.
                         아래 업무의 행 구분선(안쪽)과 폭이 다른 것이 맞다:
                         여는 선은 칸을 가로지르고, 가르는 선은 글자만 나눈다. */}
-                    <div className={nameClass(i)}>{team.name}</div>
+                    <div className={nameClass}>{team.name}</div>
 
                     {/* 부서 -> 담당 업무.
                         ⚠️ flex-1 을 주지 않는다. 주면 목록이 칸 바닥까지
                            늘어나 세로선이 마지막 업무 아래로 계속 내려간다 —
                            업무가 둘뿐인 튜닝부에서 선만 남는 그 문제다. */}
-                    <ul className={tasksClass(i)}>
-                      {team.tasks.map((task, j) => (
-                        <li
-                          key={task}
-                          className={taskClass(j, j === team.tasks.length - 1)}
-                        >
+                    <ul className={tasksClass}>
+                      {team.tasks.map((task) => (
+                        <li key={task} className={taskClass}>
                           {task}
                         </li>
                       ))}
@@ -202,7 +199,34 @@ export default function OrgChart() {
       **되살아났다.** 판 (87) 에서 그 경고를 「전제가 바뀌었다」며 뒤집었는데,
       색면으로 돌아오면서 **전제가 원래대로 돌아온 것**이다.
       ⚠️ 기각한 판단은 **조건부**다. 되살릴 때는 그 조건이 아직 유효한지
-         한 줄씩 다시 재고 간다 — 이번에 두 판 만에 되돌아왔다. */
+         한 줄씩 다시 재고 간다 — 이번에 두 판 만에 되돌아왔다.
+
+   ⚠️⚠️ **2026-10-26 판 (92) — 선 넷이 1px ink(#1a1d23) 가 됐다. 색만.**
+      유신: *"선 색깔은 **회색 같아 보이는데 검정색으로 좀 더 진하게**"*
+      — 판 (91) 에서 굵기 넷(1·2·3·4px)을 드렸는데 고르신 것은 **굵기가
+      아니라 색**이었다. 보내 주신 레퍼런스(brunch 조직도)를 재 보니 그쪽
+      연결선도 **순검정 1px** 이었다. 굵은 게 아니라 진한 것이다.
+
+          안        값        surface(#f6f7f9) 위 대비   화면(dpr1)
+          지금      #8a9099   2.99                       1열, 밝기 144
+          Ⓐ 순검정  #000000   19.59                      1열, 밝기 0
+          Ⓑ ink     #1a1d23   15.75                      1열, 밝기 29   ← 고름
+          Ⓒ dark    #0d1b33   16.04                      1열, 밝기 27
+
+      Ⓐ 와 Ⓑ 는 **화면에서 거의 구별되지 않는다**(0 과 29). ink 를 고른
+      까닭은 그것이 **본문 글자의 색**이라, 새 값을 들이지 않고도 말씀하신
+      검정이 되기 때문이다.
+      ⚠️ Ⓒ(대표 상자와 같은 네이비)는 시안에서 **권하지 않는다고 적었다.**
+         판 (88) 이 그 값을 썼다가 판 (89) 에서 선이 면과 싸워 되돌린 자리다.
+         ink 는 조직도의 어느 면과도 다른 값이라 그 문제가 없다.
+      ⚠️ **굵기는 1px 그대로다.** 색이 진해지면 1px 로도 또렷하다 — 위
+         판 (88) 의 측정표대로 2px 은 화면에서 2열이 되어 격자로 읽히기
+         시작한다.
+      ⚠️ 그래서 조직도 연결선 전용이던 그 회색 토큰은 **또 쓰는 곳이 0 이
+         됐다.** globals.css 에 남겨 둔다 — 판 (87) 에서 0 이 됐다가 판 (89)
+         에서 되살아난 전례가 있다. 토큰 이름을 여기 클래스 꼴로 적지
+         않는 것은 Tailwind 가 **주석까지 긁어** 죽은 규칙을 남기기
+         때문이다(판 (90) 에서 겪었다). */
 
 /**
  * 대표 -> 공장장을 잇는 한 칸.
@@ -226,7 +250,7 @@ export default function OrgChart() {
 const LINK =
   "contents " +
   /* 모바일은 가로 tick 이라 **height 가 굵기**다 — 축이 반대다(판 87) */
-  "before:block before:h-px before:w-4 before:shrink-0 before:bg-line-strong " +
+  "before:block before:h-px before:w-4 before:shrink-0 before:bg-ink " +
   "lg:flex lg:w-full lg:flex-col lg:items-center " +
   "lg:before:h-8 lg:before:w-px";
 
@@ -242,7 +266,7 @@ const BRANCH =
   "mt-3.5 w-full " +
   "lg:relative lg:mt-0 lg:flex lg:pt-12 " +
   "lg:before:absolute lg:before:left-1/2 lg:before:top-0 lg:before:h-6 " +
-  "lg:before:ml-[-0.5px] lg:before:w-px lg:before:bg-line-strong";
+  "lg:before:ml-[-0.5px] lg:before:w-px lg:before:bg-ink";
 
 /**
  * 부서 한 칸.
@@ -297,8 +321,8 @@ const ITEM =
   "mt-2.5 first:mt-0 " +
   "lg:relative lg:mt-0 lg:flex lg:min-w-0 lg:flex-1 lg:flex-col lg:pt-[19px] " +
   "lg:before:absolute lg:before:left-1/2 lg:before:top-[-24px] lg:before:h-6 " +
-  "lg:before:ml-[-0.5px] lg:before:w-px lg:before:bg-line-strong " +
-  "lg:after:absolute lg:after:top-[-24px] lg:after:h-px lg:after:bg-line-strong " +
+  "lg:before:ml-[-0.5px] lg:before:w-px lg:before:bg-ink " +
+  "lg:after:absolute lg:after:top-[-24px] lg:after:h-px lg:after:bg-ink " +
   "lg:first:after:left-1/2 lg:first:after:right-0 " +
   "lg:last:after:left-0 lg:last:after:right-1/2 " +
   "lg:[&:not(:first-child):not(:last-child)]:after:left-0 " +
@@ -361,14 +385,25 @@ const ITEM =
  *      본문 기준(4.5)을 겨우 넘는다. **더 옅게 가면 거기서 걸린다.**
  *   ⚠️ 높이 40.4px 이 **대표·공장장 상자의 기준 치수**가 됐다(판 90).
  *      이 패딩을 건드리면 Node 의 `lg:pt/pb` 도 같이 바꿔야 한다.
+ *
+ * ⚠️⚠️ **2026-10-26 판 (92) — 칸이 떨어졌다. 흰 세로선은 걷혔다.**
+ *   **바로 위의 「칸 사이 2px 흰 세로선」 결정은 여기서 무효가 된다**(판 81
+ *   의 ㉯ 선택과 그 십자 교차 넷도 함께 끝난다).
+ *   유신이 brunch 조직도를 주시며 *"문의 접수 / 견적 / 수주 경우도 밑에
+ *   영업마케팅부 하고 **크기 동일한 네모 박스** 형태로 … 전부다 네모박스
+ *   동일한 크기로 된거 처럼"* 이라고 하셨다. 그 레퍼런스에서 칸들은
+ *   **떨어져** 있다 — 붙은 띠를 가르던 세로선은 틈이 대신하므로 뜻을
+ *   잃는다. 시안 (152) 의 Ⓓ 가 **붙인 채** 업무만 칸으로 만든 안이었는데,
+ *   칸들이 가로로 붙어 네모 박스로 읽히지 않아 기각됐다.
+ *   ⚠️ **틈은 li 가 아니라 안쪽 내용에 준다**(좌우 6px 씩, 합 12px).
+ *      li 에 gap 을 주면 ITEM 의 가로 분배선(::after)이 li 폭 기준이라
+ *      **틈에서 선이 끊긴다**. li 폭은 그대로 두는 것이 이 구조의 전제다.
+ *   ⚠️ 모바일에는 틈을 주지 않는다 — 부서가 세로로 쌓여 칸 사이가 없고,
+ *      전폭을 쓰는 쪽이 좁은 화면에서 글자 자리를 번다.
  */
-const nameClass = (i: number) =>
-  "relative bg-muted px-2.5 pb-2 pt-[9px] text-[15px] font-bold leading-snug " +
-  "tracking-[-0.01em] text-white lg:text-center lg:text-[17px] " +
-  (i
-    ? "lg:before:absolute lg:before:inset-y-0 lg:before:left-0 lg:before:w-0.5 " +
-      "lg:before:bg-white lg:before:content-['']"
-    : "");
+const nameClass =
+  "bg-muted px-2.5 pb-2 pt-[9px] text-[15px] font-bold leading-snug " +
+  "tracking-[-0.01em] text-white lg:mx-1.5 lg:text-center lg:text-[17px]";
 
 /**
  * 업무 목록.
@@ -378,25 +413,54 @@ const nameClass = (i: number) =>
  *           한쪽에만 그어진다.
  *   lg      세로로 쌓이고, 첫 칸을 뺀 넷에 왼쪽 세로 구분선이 붙는다.
  *           닫는 선은 마지막 li 의 border-b 라 행 구분선과 폭이 같다.
+ *
+ * ⚠️⚠️ **2026-10-26 판 (92) — 괘선이 전부 걷히고 업무가 칸이 됐다.**
+ *   **위 두 줄(격자 전체를 닫는 border-b, 첫 칸을 뺀 넷의 왼쪽 세로선)은
+ *   여기서 무효가 된다.** 칸마다 면이 있으니 가르는 선이 필요 없다.
+ *   모바일 2열 격자는 그대로 두고 **세로 틈 8px** 만 더한다.
  */
-const tasksClass = (i: number) =>
-  "mt-2.5 grid grid-cols-2 gap-x-3.5 border-b border-line " +
-  "lg:mt-0 lg:block lg:border-b-0 lg:px-2.5 " +
-  (i ? "lg:border-l lg:border-line" : "");
+const tasksClass =
+  "mt-2.5 grid grid-cols-2 gap-x-3.5 gap-y-2 lg:mx-1.5 lg:mt-2 lg:block";
 
 /**
- * 업무 한 줄. li 에 바로 준다 — 래퍼 div 가 필요 없다.
- * 부서 이름과의 위계는 배경색이 아니라 크기(17 -> 14px)와 색으로 낸다.
+ * 업무 한 줄 — **부서 이름과 같은 크기의 칸**.
  *
- * 행 구분선이 모바일과 lg 에서 다른 까닭 — 모바일은 2열이라 **세 번째
- * 칸부터** 새 행이고, lg 는 1열이라 **두 번째부터** 새 행이다.
+ * ⚠️⚠️ **2026-10-26 판 (92) — 판 (74) 가 걷어낸 네모가 돌아왔다.**
+ *   판 (74) ⓐ 는 *"업무 네모 열다섯과 부서 카드 다섯을 걷었다"* 였다. 그
+ *   기각은 **조건부**였고, 조건이 두 번 바뀌었다
+ *   [[rejected-options-are-conditional]] —
+ *     ⓐ 판 (89) 에서 **부서 이름이 채운 면**이 됐다. 그래서 부서는 면,
+ *        업무는 선이라 **언어가 둘로 갈려** 있었다.
+ *     ⓑ 유신이 brunch 조직도를 주시며 *"**크기 동일한 네모 박스** 형태로"*
+ *        라고 하셨다. 그 레퍼런스는 부서 · 팀 · 사람 **셋 다 폭도 높이도
+ *        같다**(실측 62px, 간격 가로 50 · 세로 19px).
+ *
+ *   ⚠️ **판 (74) 가 걷어낸 진짜 이유는 「칸 높이 ÷ 글자」였다.** 그때 그
+ *      비가 **2.9**, 판 (69) 는 5.0 까지 가서 *"크고 비었다"* 는 말씀을
+ *      들었다. 레퍼런스대로 높이를 부서와 같은 40.4px 로 올리면 그 비가
+ *      **2.88** — 고쳤던 자리로 그대로 돌아간다.
+ *      그래서 시안 (152) 에서 Ⓐ(높이 35 유지 · 2.50) · Ⓑ(40.4 · 2.88) ·
+ *      **Ⓒ(40.4 + 글자 15px · 2.69)** 를 나란히 드렸고 Ⓒ 를 고르셨다.
+ *      곧 **크기는 레퍼런스대로 셋 다 같게 두고, 글자를 키워 비를
+ *      되돌린** 것이다. 레퍼런스 자신의 비가 2.6 이다.
+ *      ⚠️ 그러니 **패딩만 건드리면 안 된다.** 높이를 바꾸면 글자도 같이
+ *         봐야 이 비가 유지된다.
+ *
+ *   ⚠️ 칸 색 `line`(#e5e7eb)은 **레퍼런스의 흰 바탕 : #eee 관계를 옮긴
+ *      값**이다. 레퍼런스는 흰 바탕이라 연회색이 보이는데, 우리 패널은
+ *      이미 회색(#f6f7f9)이라 같은 밝기 차(18)를 내려면 이 값이어야 한다.
+ *      흰 칸으로 한 안(시안 Ⓔ)은 차가 8뿐이라 기각됐다.
+ *      ⚠️ 선 토큰을 **면으로 쓰는 첫 자리**다. 글자(#414751)와 대비 8.6:1.
+ *   ⚠️ 위계는 면 색(진회색 : 연회색)과 글자(17 : 15px)가 함께 낸다.
+ *      글자만 보면 2px 차이뿐이라 **색을 옅게 가면 위계가 무너진다.**
+ *   ⚠️ 세로 패딩 **8.95px** 은 40.4 − (15 × 1.5) 를 반으로 나눈 값이다.
+ *      40.4 는 부서 이름 · 대표 · 공장장이 모두 쓰는 기준 치수다(판 90).
+ *   ⚠️ 모바일은 2열이라 칸이 좁다. 글자는 13.5px 그대로 두고 패딩만
+ *      칸에 맞게 8px 로 올렸다 — lg 15 : 모바일 13.5 의 비는 전과 같다.
  */
-const taskClass = (j: number, last: boolean) =>
-  "py-1.5 text-[13.5px] leading-normal text-ink-soft " +
-  "lg:py-[7px] lg:text-center lg:text-sm " +
-  (j >= 2 ? "border-t border-line " : "") +
-  (j >= 1 ? "lg:border-t lg:border-line " : "") +
-  (last ? "lg:border-b lg:border-line" : "");
+const taskClass =
+  "bg-line px-2 py-2 text-[13.5px] leading-normal text-ink-soft " +
+  "lg:mt-2 lg:py-[8.95px] lg:text-center lg:text-[15px] lg:first:mt-0";
 
 /**
  * 대표 · 공장장 상자.
