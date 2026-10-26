@@ -27,6 +27,9 @@ import { organization } from "@/data/company";
  *        간 것이었다.
  *     ⓒ **세로 칸 구분선은 업무 쪽에만** 둔다. 부서 이름 옆에 선이 있으면
  *        이름이 칸에 갇히고, 2px 네이비 밑선과 만나 **십자 교차가 넷** 난다.
+ *        ⚠️ **2026-10-26 판 (81) 에서 뒤집혔다.** 유신이 보낸 조직도.png 가
+ *           부서 이름 줄을 **위아래 굵은 선 사이의 띠**로 만들고 그 안에
+ *           세로선을 넣은 꼴이었다. 아래 nameClass 주석에 전말이 있다.
  *     ⓓ **마지막 업무 아래를 닫는다.** 닫지 않으면 업무가 둘뿐인 튜닝부는
  *        빈 자리에 세로선만 덩그러니 남는다. 세로선도 그 끝선에서 끝난다
  *        (목록에 flex 를 주지 않는 이유다 — 주면 선이 바닥까지 내려간다).
@@ -96,7 +99,7 @@ export default function OrgChart() {
                         padding 바깥이라 좌우 10px 을 넘어 세로 칸선까지 닿는다.
                         아래 업무의 행 구분선(안쪽)과 폭이 다른 것이 맞다:
                         여는 선은 칸을 가로지르고, 가르는 선은 글자만 나눈다. */}
-                    <div className={NAME}>{team.name}</div>
+                    <div className={nameClass(i)}>{team.name}</div>
 
                     {/* 부서 -> 담당 업무.
                         ⚠️ flex-1 을 주지 않는다. 주면 목록이 칸 바닥까지
@@ -209,14 +212,21 @@ const BRANCH =
  *   보내 주신 조직도.png 는 32.5px 이었다(배수 1.09~1.13 추정). 방향은
  *   같고 4px 차이이며, 차트는 그만큼 덜 길어진다 — 411 -> **435px**.
  *
- *   ⚠️ 이 값을 키우려면 **아래 틈(NAME 의 pb)과 밑선 아래(업무 첫 li 의
+ *   ⚠️ 이 값을 키우려면 **아래 틈(nameClass 의 pb)과 밑선 아래(업무 첫 li 의
  *      pt)도 같이** 봐야 한다. 위만 벌리면 이름이 2px 밑선에 눌린다
  *      (판 (76) 의 ㉣ 가 셋을 같이 올린 안이었다).
  *   ⚠️ 390 에는 걸리지 않는다 — 거기엔 분배선도 내림선도 없다.
+ *
+ *   ⚠️⚠️ **2026-10-26 판 (81) — 24px 이 19px 이 됐다. 뜻도 바뀌었다.**
+ *      이름 위에 굵은 선이 생기면서 이 패딩은 「내림선 끝 ~ 이름」이 아니라
+ *      **「내림선 끝 ~ 위 굵은 선」**이 됐다. 보낸 조직도.png 에서 그 자리를
+ *      재니 원본 23px, 배수 1.237 로 **18.6px** 이라 19px 로 넣었다.
+ *      위 ㉠~㉣ 의 셈(28.5px 의 근거)은 **선이 없던 때의 것**이다 — 이제
+ *      이름의 소속은 여백이 아니라 띠가 정한다. 되살릴 땐 다시 잴 것.
  */
 const ITEM =
   "mt-2.5 first:mt-0 " +
-  "lg:relative lg:mt-0 lg:flex lg:min-w-0 lg:flex-1 lg:flex-col lg:pt-6 " +
+  "lg:relative lg:mt-0 lg:flex lg:min-w-0 lg:flex-1 lg:flex-col lg:pt-[19px] " +
   "lg:before:absolute lg:before:left-1/2 lg:before:top-[-24px] lg:before:h-6 " +
   "lg:before:w-px lg:before:bg-line-strong " +
   "lg:after:absolute lg:after:top-[-24px] lg:after:h-px lg:after:bg-line-strong " +
@@ -227,14 +237,54 @@ const ITEM =
   "lg:only:after:hidden";
 
 /**
- * 부서 이름 + 2px 네이비 밑선.
+ * 부서 이름 — **위아래 2px 네이비 사이의 띠**. lg 에서는 칸 사이에 세로선이
+ * 선다.
  * 상자(카드)를 걷은 자리를 이 선이 대신한다 — 「이름에 무게를 준다」가
  * 유신이 준 레퍼런스에서 가져온 두 생각 중 하나다(다른 하나는 「업무를
  * 선으로 묶는다」, 곧 아래 목록의 괘선).
+ *
+ * ⚠️⚠️ **2026-10-26 판 (81) — 밑선 하나에서 띠가 됐다.**
+ *   유신: *"조직도.png 처럼 **위에 굵은선 한개 더** 있고 **영업마케팅부 옆에
+ *   굵은선으로 구분** 이렇게 되게 하고 싶은데"*
+ *
+ *   보낸 조직도.png(1381×557 — 판 (75) 때 보던 1235×451 과 **다른 파일**이라
+ *   배수를 다시 구했다: 액자 폭 1.219 · 대표 상자 1.237 · 상자 높이 1.250,
+ *   중앙값 **1.237**)를 픽셀로 읽어 옮긴 값이다. 세로선이 지나는 열의
+ *   밝기를 세로로 뽑으면 —
+ *       y284(86) y285(6)            위 굵은 선
+ *       y286~291 비었다             6px  (실물 4.9px)
+ *       y292~325 세로선             34px (실물 27.5px) · 2px 굵기
+ *       y326~329 비었다             4px  (실물 3.2px)
+ *       y330(161) y331(2) y332(110) 아래 굵은 선
+ *   곧 **원본은 세로선을 띠 안쪽에 띄워** 두었다. 위 블록 ⓒ 가 기각 사유로
+ *   든 「십자 교차 넷」을 그렇게 피한 것이다 [[rejected-options-are-conditional]].
+ *
+ *   ⚠️ **그런데 쓰는 것은 띄우지 않은 쪽이다.** 시안 (122) 에서 ㉮(원본대로
+ *      띄움 · 굵은 선과 닿은 픽셀 0) 를 권했는데 유신이 **㉯(띠를 가득 채워
+ *      굵은 선에 닿음 · 닿은 픽셀 32)** 를 고르셨다. 그러니 이 코드에는
+ *      **십자 교차가 넷 있고, 그것이 고른 값이다.** 되돌리려면 아래
+ *      before 의 inset-y-0 을 `lg:before:top-[5px] lg:before:bottom-[3px]`
+ *      로 바꾸면 원본 그대로가 된다 [[yusin-decisions-live-in-comments]].
+ *
+ *   ⚠️ **띠 안 여백은 글자 잉크 기준으로 옮겼다.** 원본은 선~글자 9.7px ·
+ *      글자~선 12.1px 인데 그 「글자」는 **잉크 높이**(원본 18px)다. 실물
+ *      이름은 17px/줄높이 23.4px 이라 잉크 위아래로 half-leading 이 5.5px 씩
+ *      이미 있다. 그래서 패딩은 9.7-5.5 ≈ **4px**, 12.1-5.5 ≈ **7px** 이다.
+ *      판 (76) 에서 4.5px 을 「여백이 아니라 half-leading」으로 읽은 그 셈이다.
+ *   ⚠️ 세로선 굵기 **2px 은 업무 칸 선(1px)의 두 배**다. 원본이 그랬다.
+ *      x 는 업무 칸 세로선과 실물 0.8~2px 밖에 안 어긋나 한 줄로 이어 보인다.
+ *   ⚠️ **첫 칸에는 세로선이 없다**(i 로 가른다). tasksClass 와 같은 방식이고,
+ *      양끝에 선을 넣지 않는 것은 판 (78) 에서 고른 것이다.
+ *   ⚠️ 모바일에는 세로선이 없다 — 부서가 세로로 쌓여 칸 사이가 없다.
+ *      위 굵은 선은 모바일에도 선다(`border-y-2`).
  */
-const NAME =
-  "border-b-2 border-dark pb-2 text-[15px] font-bold leading-snug " +
-  "tracking-[-0.01em] text-dark lg:px-2.5 lg:pb-[9px] lg:text-center lg:text-[17px]";
+const nameClass = (i: number) =>
+  "relative border-y-2 border-dark py-2 text-[15px] font-bold leading-snug " +
+  "tracking-[-0.01em] text-dark lg:px-2.5 lg:pb-[7px] lg:pt-[4px] lg:text-center lg:text-[17px] " +
+  (i
+    ? "lg:before:absolute lg:before:inset-y-0 lg:before:left-0 lg:before:w-0.5 " +
+      "lg:before:bg-dark lg:before:content-['']"
+    : "");
 
 /**
  * 업무 목록.
