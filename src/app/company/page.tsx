@@ -105,16 +105,26 @@ export default function CompanyPage() {
         거기 타이포가 바뀌면 이 페이지도 같이 고쳐야 한다.
       */}
       <Section>
-        <Reveal className="mb-3">
+        {/* ⚠️⚠️ **2026-10-26 판 (80) — 이 섹션에서 리빌을 걷었다.**
+               유신: *"여기도 애니메이션 없애봐"* 라며 ABOUT · 제목 · 소개
+               문단 둘을 짚으셨다. 판 (79) 에서 경영이념 패널을 걷고 나서
+               *"네이비 패널이 완성돼 있는 동안 왼쪽 글이 흐려 읽는 순서가
+               잠깐 뒤집혀 보인다"* 고 보고드린 것에 대한 답이다.
+               이 라벨과 아래 제목·소개글이 `Reveal` 이었다.
+            ⚠️ **서명만 리빌로 남는다.** 붙여넣으신 글에 「대표이사 이준희」가
+               없었고, 붓글씨(.sign-ink)는 *"사인은 그냥 지금 그대로 사용할게"*
+               로 고르신 연출이라 부모 리빌이 있어야 들어온다. */}
+        <div className="mb-3">
           <p className="text-xs font-bold tracking-[0.08em] text-brand">ABOUT</p>
-        </Reveal>
+        </div>
         {/* items-start 를 쓰지 않는다. 그리드 기본값(stretch)이라야 패널이 칸
             높이를 채워 아랫변까지 본문 끝과 맞는다. 윗변은 행이 제목에서
             시작하므로 stretch 로도 그대로 맞는다. */}
         <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:gap-x-16">
-          {/* 그리드 칸이 곧 Reveal 이다 — 래퍼를 덧대면 칸이 하나 더 생겨
-              패널 아랫변 정렬이 깨진다. */}
-          <Reveal>
+          {/* ⚠️ **그리드 칸이 곧 이 div 다 — 래퍼를 덧대면 칸이 하나 더 생겨
+                 패널 아랫변 정렬(1280 에서 차 0.3px)이 깨진다.** 판 (80) 에서
+                 리빌을 걷을 때도 겉을 두르지 않고 **태그만** 바꿨다. */}
+          <div>
             {/* 마지막 낱말을 로고의 YUSIN 마크로 대신한다.
 
                 사이트에서 글 안에 이미지를 넣는 유일한 자리다 — 다른 Image 는
@@ -155,7 +165,7 @@ export default function CompanyPage() {
                 </p>
               ))}
             </div>
-          </Reveal>
+          </div>
 
           {/*
             대표이사 서명. 그리드의 둘째 행에 두고 첫 칸에만 놓는다.
@@ -195,10 +205,13 @@ export default function CompanyPage() {
                   **대표님 실제 서명을 찍어 따 넣는** 쪽이다. 둘 다 이번에는
                   고르지 않으셨다 [[rejected-options-are-conditional]]
           */}
-          <Reveal
-            delay={140}
-            className="flex items-baseline gap-4 border-t border-line pt-6 lg:col-start-1 lg:row-start-2"
-          >
+          {/* ⚠️ **이 섹션에서 리빌이 남은 유일한 자리다**(판 80). 아래 붓글씨가
+                 부모의 is-visible 을 받아 들어오는 연출이라 걷을 수 없다 —
+                 걷으면 서명이 영영 안 뜬다(globals.css 의 .sign-ink).
+              ⚠️ **한때 `delay={140}` 이 걸려 있었다.** 「본문이 뜨고 한 박자
+                 뒤」라는 뜻이었는데, 판 (80) 에서 본문이 정적이 되어 기준이
+                 사라졌다. 되살리려면 기준으로 삼을 리빌부터 되살릴 것. */}
+          <Reveal className="flex items-baseline gap-4 border-t border-line pt-6 lg:col-start-1 lg:row-start-2">
             <span className="text-sm font-bold text-ink">
               대표이사
               {/* ⚠️ **화면에 안 보이는 이름.** 위 ⚠️ 가 말하듯 오른쪽 붓글씨는
