@@ -154,6 +154,8 @@ export default function OrgChart() {
          기각했다(시안 Ⓜ Ⓝ).
       ⚠️ `line-strong` 은 이제 **쓰는 곳이 없다.** 토큰은 globals.css 에
          남겨 뒀다 — 되돌릴 때 거기 주석을 읽을 것.
+         (판 (89) 에서 **되살아났다.** 연결선 넷이 다시 1px line-strong 이다.
+          남겨 두길 잘했다.)
       ⚠️ **굵히면 세로선이 오른쪽으로 치우친다.** `left-1/2` 만 있고
          translate 가 없어 1px 일 땐 안 보이던 어긋남이 드러난다. 그래서
          BRANCH · ITEM 의 ::before 에 **굵기의 절반**만큼 음수 margin 을
@@ -187,7 +189,20 @@ export default function OrgChart() {
          가 정수 좌표에 떨어지는데, 3px 을 1.5 씩 나누면 반픽셀이 남는다
          (실측 0.5px · 1.5px 일 때는 -0.2px 였다). `ml` 을 -2px 로 바꿔도
          부호만 뒤집힐 뿐 크기는 같다 — 구조상 피할 수 없고, 화면에서는
-         3열이 고르게 찍히므로 그냥 둔다. */
+         3열이 고르게 찍히므로 그냥 둔다.
+
+   ⚠️⚠️ **2026-10-26 판 (89) — 선이 다시 1px `line-strong` 으로 내려왔다.**
+      **위 판 (87)(88) 의 굵기·색 결정은 여기서 무효가 된다.** 유신이
+      레퍼런스를 주시면서 *"조직도 약간 이런 느낌으로 … **지금 조직도는
+      너무 안이쁘네**"* 라고 하셨고, 그 레퍼런스의 문법이 **면으로 위계를
+      만드는 것**이었다. 노드가 채운 색면이 되자 3px 네이비 선은 **면과
+      싸웠다** — 선이 대표 상자와 같은 색·굵기라 **상자에서 자란 것처럼**
+      보였다(판 89 시안 Ⓖ 가 그 그림이다).
+      그래서 판 (31) 주석의 「노드가 색면이면 굵은 선이 이긴다」가
+      **되살아났다.** 판 (87) 에서 그 경고를 「전제가 바뀌었다」며 뒤집었는데,
+      색면으로 돌아오면서 **전제가 원래대로 돌아온 것**이다.
+      ⚠️ 기각한 판단은 **조건부**다. 되살릴 때는 그 조건이 아직 유효한지
+         한 줄씩 다시 재고 간다 — 이번에 두 판 만에 되돌아왔다. */
 
 /**
  * 대표 -> 공장장을 잇는 한 칸.
@@ -211,9 +226,9 @@ export default function OrgChart() {
 const LINK =
   "contents " +
   /* 모바일은 가로 tick 이라 **height 가 굵기**다 — 축이 반대다(판 87) */
-  "before:block before:h-[3px] before:w-4 before:shrink-0 before:bg-dark " +
+  "before:block before:h-px before:w-4 before:shrink-0 before:bg-line-strong " +
   "lg:flex lg:w-full lg:flex-col lg:items-center " +
-  "lg:before:h-8 lg:before:w-[3px]";
+  "lg:before:h-8 lg:before:w-px";
 
 /**
  * 다섯 부서가 놓이는 단. lg 에서 가로로 펼치고 칸을 균등하게 나눈다.
@@ -227,7 +242,7 @@ const BRANCH =
   "mt-3.5 w-full " +
   "lg:relative lg:mt-0 lg:flex lg:pt-12 " +
   "lg:before:absolute lg:before:left-1/2 lg:before:top-0 lg:before:h-6 " +
-  "lg:before:ml-[-1.5px] lg:before:w-[3px] lg:before:bg-dark";
+  "lg:before:ml-[-0.5px] lg:before:w-px lg:before:bg-line-strong";
 
 /**
  * 부서 한 칸.
@@ -282,8 +297,8 @@ const ITEM =
   "mt-2.5 first:mt-0 " +
   "lg:relative lg:mt-0 lg:flex lg:min-w-0 lg:flex-1 lg:flex-col lg:pt-[19px] " +
   "lg:before:absolute lg:before:left-1/2 lg:before:top-[-24px] lg:before:h-6 " +
-  "lg:before:ml-[-1.5px] lg:before:w-[3px] lg:before:bg-dark " +
-  "lg:after:absolute lg:after:top-[-24px] lg:after:h-[3px] lg:after:bg-dark " +
+  "lg:before:ml-[-0.5px] lg:before:w-px lg:before:bg-line-strong " +
+  "lg:after:absolute lg:after:top-[-24px] lg:after:h-px lg:after:bg-line-strong " +
   "lg:first:after:left-1/2 lg:first:after:right-0 " +
   "lg:last:after:left-0 lg:last:after:right-1/2 " +
   "lg:[&:not(:first-child):not(:last-child)]:after:left-0 " +
@@ -331,13 +346,28 @@ const ITEM =
  *      양끝에 선을 넣지 않는 것은 판 (78) 에서 고른 것이다.
  *   ⚠️ 모바일에는 세로선이 없다 — 부서가 세로로 쌓여 칸 사이가 없다.
  *      위 굵은 선은 모바일에도 선다(`border-y-2`).
+ *
+ * ⚠️⚠️ **2026-10-26 판 (89) — 위아래 띠가 **채운 면**이 됐다.**
+ *   **위의 띠 치수(4 / 7px 패딩, 위아래 2px 선)는 여기서 무효가 된다.**
+ *   레퍼런스가 단마다 면의 농도로 위계를 만드는 꼴이었고, 그 사다리의
+ *   셋째 단이 이 부서 이름이다 — `muted`(#6b7280) 채움에 흰 글자.
+ *   패딩은 레퍼런스 비례로 **위 9 · 아래 8px**(좌우 10px)이고, 모바일에도
+ *   같이 선다. 선이 없어졌으니 「글자 잉크 기준」 셈도 다시 할 필요가 없다
+ *   — 면 안에서는 위아래가 대칭에 가까운 쪽이 안정적이다.
+ *   ⚠️ **칸 사이 2px 세로선은 남았지만 색이 뒤집혔다** — 네이비에서
+ *      **흰색**이 됐다. 회색 면 위에서는 어두운 선이 안 보이고, 흰 틈이
+ *      다섯 칸을 가른다. 굵기 2px 과 「첫 칸에는 없다」는 그대로다.
+ *   ⚠️ `muted` 를 배경으로 쓴 첫 자리다. 흰 글자와 대비 **4.83:1** —
+ *      본문 기준(4.5)을 겨우 넘는다. **더 옅게 가면 거기서 걸린다.**
+ *   ⚠️ 높이 40.4px 이 **대표·공장장 상자의 기준 치수**가 됐다(판 90).
+ *      이 패딩을 건드리면 Node 의 `lg:pt/pb` 도 같이 바꿔야 한다.
  */
 const nameClass = (i: number) =>
-  "relative border-y-2 border-dark py-2 text-[15px] font-bold leading-snug " +
-  "tracking-[-0.01em] text-dark lg:px-2.5 lg:pb-[7px] lg:pt-[4px] lg:text-center lg:text-[17px] " +
+  "relative bg-muted px-2.5 pb-2 pt-[9px] text-[15px] font-bold leading-snug " +
+  "tracking-[-0.01em] text-white lg:text-center lg:text-[17px] " +
   (i
     ? "lg:before:absolute lg:before:inset-y-0 lg:before:left-0 lg:before:w-0.5 " +
-      "lg:before:bg-dark lg:before:content-['']"
+      "lg:before:bg-white lg:before:content-['']"
     : "");
 
 /**
@@ -447,18 +477,77 @@ const taskClass = (j: number, last: boolean) =>
  *      네 변, 공장장은 위아래만)였는데 **둘을 같은 꼴로** 가시는 쪽을
  *      고르셨다. 나머지 열둘은 시안\86\cmp-139.png 에 있다.
  *   ⚠️ 시안을 또 구울 때 — 이 노드는 이제 배경 클래스로 못 잡는다.
- *      대표는 `.border-2.text-xl`, 공장장은 `.border-2.text-lg` 로 잡는다.
+ *      대표는 「테두리 2px + 글자 xl」, 공장장은 「테두리 2px + 글자 lg」
+ *      조합으로 잡았다 — ⚠️ **클래스 이름을 꼴 그대로 적지 않는다.**
+ *      코드에서 걷힌 뒤에도 Tailwind 가 주석을 긁어 죽은 규칙을 남긴다.
+ *      (판 (89) 에서 테두리가 없어졌다. 지금은 `.bg-dark.text-xl` /
+ *       `.bg-dark-soft.text-lg` 로 잡는다.)
+ *
+ * ⚠️⚠️ **2026-10-26 판 (89) — 테두리를 걷고 다시 채운 면이 됐다.**
+ *   **위 판 (86) 의 「2px 테두리 네 변」은 여기서 무효가 된다.** 유신이
+ *   레퍼런스 한 장을 주시며 *"조직도 약간 이런 느낌으로 … **지금 조직도는
+ *   너무 안이쁘네**"* 라고 하셨다. 그 안에 조직도가 다섯 들어 있었는데
+ *   문법은 둘이었다 —
+ *     ㈎ **농도 사다리** : 기업색 → #383838 → #888888 → 흰+테두리.
+ *        단이 내려갈수록 면이 옅어진다
+ *     ㈏ **카드형** : 머리만 기업색, 부서는 흰 카드 + 위 굵은 선
+ *   **둘 다 위계를 「면」이 만든다.** 판 (82)~(88) 일곱 판 동안 선과 테두리만
+ *   다듬었는데, 그때 조직도에는 **채운 면이 하나도 없었다** — 위계가 글자
+ *   크기(20 / 18 / 17 / 14px)로만 나뉘었고 그 차이는 한 화면에서 단으로
+ *   읽히지 않는다. 「안 이쁘다」의 까닭이 거기 있었다.
+ *
+ *   유신이 고른 것은 시안 (147) 의 **Ⓑ** — ㈎ 를 유신 색으로 옮기되 업무는
+ *   지금 목록 그대로 둔 안이다. 대표 `dark` · 공장장 `dark-soft` ·
+ *   부서 `muted`, 글자는 셋 다 흰색.
+ *   ⚠️ 레퍼런스의 큰 면은 **파랑**(그 회사 기업색)인데 유신 빨강을 같은
+ *      자리에 깔지 않았다 — 큰 면에 유채색을 쓰면 로고가 아니라 배경이
+ *      된다. 빨강을 쓰는 안도 함께 드렸다(대표 채움 Ⓕ · 부서 위선 Ⓔ).
+ *      **「빨강 채움은 견적 문의 전용」 규칙은 그대로 살아 있다.**
+ *   ⚠️ `muted`(#6b7280)를 **배경으로** 쓴 첫 자리다. 그동안 글자색
+ *      토큰이었다. 흰 글자와의 대비는 **4.83:1** 로 본문 기준(4.5)을
+ *      넘는다 — 더 옅게 가면 거기서 걸린다.
+ *   ⚠️ **테두리를 지운 것은 높이 때문이기도 하다.** 2px 테두리를 남기면
+ *      box-sizing 이 border-box 라 높이가 **4px 더 나와**(위아래 2px씩)
+ *      부서 칸과 맞출 수가 없다.
+ *
+ * ⚠️⚠️ **2026-10-26 판 (90) — 크기를 부서 한 칸과 똑같이 맞췄다.**
+ *   유신: *"대표 / 공장장 네모 크기 영업마케팅부 여기 네모 크기하고
+ *   **동일하게** … 이쪽 네모보다 **작게 느껴져서 안이쁜데**"*
+ *   재 보니 대표 **68.4** · 공장장 **81.1** · 부서 칸 **201.6**px 으로
+ *   폭이 2.9배 · 2.5배 차이였다. 면으로 채우고 나니 그 차이가 드러난 것이다.
+ *
+ *   ⚠️ **폭은 201.6px 이 아니라 `lg:w-1/5` 다.** 부서 칸은 「안쪽 폭 ÷ 5」라
+ *      1024 에서는 **176px** 이 된다. 숫자를 박으면 거기서 어긋난다.
+ *      이 노드를 담은 `ul`(LINK)이 패널 안쪽 폭을 그대로 쓰므로 20% 가
+ *      모든 폭에서 부서 한 칸과 같아진다. **부서가 다섯이 아니게 되면
+ *      이 분모도 같이 바꾼다.**
+ *   ⚠️ **lg 에서만 준다.** 390 은 대표와 공장장이 **가로로 나란히 서는
+ *      줄**이라 폭을 박으면 줄이 쪼개진다(판 83 에서 `min-width` 를 전
+ *      폭에 줘 그렇게 깨뜨린 적이 있다).
+ *   ⚠️ 높이 40.4px 은 **padding 으로** 맞췄다. `height` + flex 가운데로
+ *      하면 한글 잉크가 줄 상자 가운데보다 위에 앉는 보정이 깨진다.
+ *      지금 `pt : pb = 7 : 9` 비를 지킨 채 총 패딩만 바꾼 값이라
+ *      **글자 크기나 leading 을 바꾸면 이 둘도 다시 계산해야 한다**
+ *      (대표 40.4 - 26 = 14.4 → 6.3 / 8.1,
+ *       공장장 40.4 - 23.4 = 17 → 7.4 / 9.6).
+ *   ⚠️ 함께 드린 안 — Ⓐ 폭만, Ⓒ 머리 둘을 서로만 같게(46px),
+ *      Ⓓ 글자도 17px 로, Ⓔ 대표만 두 칸(40%), Ⓕ 둘 다 두 칸.
+ *      시안\90\cmp-149.png 에 있다. **Ⓓ 는 위계가 색 하나로만 남아
+ *      대표가 부서 중 하나처럼 읽히기 시작한다.**
  */
 function Node({ label, rank }: { label: string; rank: "head" | "plant" }) {
-  /* 색이 아니라 **단**이다. 둘 다 같은 테두리를 쓰고 크기로만 갈린다. */
-  const size = {
-    head: "text-xl",
-    plant: "text-lg",
+  /* 단은 **채움의 농도**가 가른다(판 89). 글자 크기 20 / 18px 은 그대로
+   * 남아 농도를 거든다. 크기는 둘 다 부서 한 칸과 **똑같다**(판 90). */
+  const rankClass = {
+    /* 대표 — 가장 진한 면. 줄높이 26px 이라 패딩 6.3 + 8.1 = 40.4 */
+    head: "bg-dark text-xl lg:pb-[8.1px] lg:pt-[6.3px]",
+    /* 공장장 — 한 단 옅은 면. 줄높이 23.4px 이라 패딩 7.4 + 9.6 = 40.4 */
+    plant: "bg-dark-soft text-lg lg:pb-[9.6px] lg:pt-[7.4px]",
   } as const;
 
   return (
     <div
-      className={`inline-block whitespace-nowrap border-2 border-dark px-4 pb-[9px] pt-[7px] text-center font-bold leading-[1.3] tracking-[-0.01em] text-dark ${size[rank]}`}
+      className={`inline-block whitespace-nowrap px-4 pb-[9px] pt-[7px] text-center font-bold leading-[1.3] tracking-[-0.01em] text-white lg:w-1/5 ${rankClass[rank]}`}
     >
       {label}
     </div>
