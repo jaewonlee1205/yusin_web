@@ -281,6 +281,34 @@ const taskClass = (j: number, last: boolean) =>
   (j >= 1 ? "lg:border-t lg:border-line " : "") +
   (last ? "lg:border-b lg:border-line" : "");
 
+/**
+ * 대표 · 공장장 상자.
+ *
+ * ⚠️⚠️ **2026-10-26 판 (78) — 알약에서 「라운딩된 네모 박스」로 돌아왔다.**
+ *   유신: *"대표 / 공장장 **너무 동그란데** 네모로 하거나 네모에서 작게만
+ *   라운딩 하거나"* → 시안 넷(12 / 8 / 6 / 4px)을 **쓸 크기 그대로** 보고
+ *   **8px** 을 고르셨다.
+ *
+ *   ⚠️ 이 값은 제가 고른 것이 아니다. **globals.css 의 모서리 표가
+ *      「조직도 노드」에 이미 지정해 둔 값**이다(판 (29) 에 전수로 세어
+ *      적은 것). 판 (74) 에서 상자를 걷고 알약으로 바꾸면서 그 표를 안
+ *      보고 지나갔던 것을 되돌린 셈이다 — 그러니 **표는 손대지 않는다.**
+ *      같은 표를 어겼다가 되돌린 선례가 하나 더 있다(company/page.tsx 의
+ *      경영이념 사진 칸 — *"썸네일이 커도 조직도 노드와 같은 단이다.
+ *      크기가 아니라 역할로 고른다"*).
+ *
+ *   ⚠️ **좌우 20px 은 그대로 둔다.** 둥근 끝이 글자를 먹지 않게 둔
+ *      값이라 각지면 줄여도 되지만(시안에서 16px 도 함께 떴다), 고르신
+ *      것은 지금 폭이다.
+ *   ⚠️ **두 상자의 폭은 65.5 / 78.2px 로 다르다**(대표 두 글자 · 공장장
+ *      세 글자). 각지면 그 12.7px 이 전보다 또렷하다 — 같은 폭으로 맞추는
+ *      안도 같이 드렸지만 고르지 않으셨다. 가운데 정렬이라 **중심 어긋남은
+ *      0** 이다.
+ *   ⚠️ 함께 드렸던 **업무 칸 양끝 세로선은 뺐다** — 유신: *"문의접수 왼쪽
+ *      옆에 선, 본체조립 오른쪽 선 **이거 없이**"*. 업무 칸 세로선은
+ *      지금도 **안쪽 넷**이다(tasksClass 참고). 다시 꺼내자는 말이 오면
+ *      판 (77) 의 Ⓑ ~ Ⓔ 가 시안\77\cmp-116.png 에 있다.
+ */
 function Node({
   label,
   tone,
@@ -298,7 +326,7 @@ function Node({
   return (
     <div
       style={style}
-      className={`org-node inline-block whitespace-nowrap rounded-full px-5 py-2 text-center text-sm font-bold tracking-[-0.01em] ${styles[tone]}`}
+      className={`org-node inline-block whitespace-nowrap rounded-lg px-5 py-2 text-center text-sm font-bold tracking-[-0.01em] ${styles[tone]}`}
     >
       {label}
     </div>
