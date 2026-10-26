@@ -226,7 +226,32 @@ export default function OrgChart() {
          됐다.** globals.css 에 남겨 둔다 — 판 (87) 에서 0 이 됐다가 판 (89)
          에서 되살아난 전례가 있다. 토큰 이름을 여기 클래스 꼴로 적지
          않는 것은 Tailwind 가 **주석까지 긁어** 죽은 규칙을 남기기
-         때문이다(판 (90) 에서 겪었다). */
+         때문이다(판 (90) 에서 겪었다).
+
+   ⚠️⚠️ **2026-10-26 판 (93) — 선 넷이 1px 에서 2px 이 됐다. 색은 그대로.**
+      유신: *"여기서 **선 좀 만 더 굵어도** 이쁠거 같은데"* — 판 (92) 로
+      색이 맞으니 이제 굵기라는 뜻이다.
+      ⚠️ **위 판 (89) 의 「3px 은 면과 싸운다」는 여기서 무효가 된다.**
+         그때 싸운 까닭은 선이 대표 상자와 **같은 네이비**라 상자에서 자란
+         것처럼 보인 것이었다. 판 (92) 로 색이 ink 가 되면서 선은 조직도의
+         어느 면과도 다른 값이 됐고, 그 함정이 사라졌다. 전제가 바뀌었으니
+         결론도 바뀐다 [[rejected-options-are-conditional]] — 다만 **같은
+         뒤집기를 판 (87) 에서 한 번 했다가 판 (89) 에서 되돌린 적이 있다.**
+         이번에 다른 것은 **색이 함께 바뀌었다**는 점이다.
+      ⚠️ 2px 을 고른 까닭 — 화면에서 1px 의 **바로 다음 단**이다. 1.5 와
+         2.5 는 dpr1 에서 2px 과 같은 2 물리픽셀이라(위 판 (88) 표) 「조금
+         더」에 해당하는 값이 2px 밖에 없다. 시안 (154) 에서 1/2/3/4px 을
+         확대 조각과 함께 보고 고르셨다.
+      ⚠️ **ml 보정을 -0.5px 에서 -1px 로 같이 바꿨다**(BRANCH · ITEM 두
+         곳). 굵기의 절반이 짝이다 — 안 바꾸면 세로선이 오른쪽으로
+         치우친다.
+      ⚠️ LINK 의 모바일 가로 tick 은 **height 가 굵기**다(축이 반대다).
+         거기에는 ml 보정이 없다 — flex 항목이라 items-center 가 잡는다.
+      ⚠️ 자가 없어졌다. 판 (92) 로 칸 테두리와 괘선이 전부 걷혀 조직도
+         안에 굵기를 아는 선이 하나도 없다. 그래서 시안 (154) 에는 네
+         굵기의 같은 자리를 잘라 **pixelated 로 확대**한 줄을 같이 냈다
+         [[tiny-icon-zoom-the-pixels]]. 다음에 굵기를 보여 드릴 때도
+         그 줄이 있어야 한다. */
 
 /**
  * 대표 -> 공장장을 잇는 한 칸.
@@ -250,9 +275,9 @@ export default function OrgChart() {
 const LINK =
   "contents " +
   /* 모바일은 가로 tick 이라 **height 가 굵기**다 — 축이 반대다(판 87) */
-  "before:block before:h-px before:w-4 before:shrink-0 before:bg-ink " +
+  "before:block before:h-0.5 before:w-4 before:shrink-0 before:bg-ink " +
   "lg:flex lg:w-full lg:flex-col lg:items-center " +
-  "lg:before:h-8 lg:before:w-px";
+  "lg:before:h-8 lg:before:w-0.5";
 
 /**
  * 다섯 부서가 놓이는 단. lg 에서 가로로 펼치고 칸을 균등하게 나눈다.
@@ -266,7 +291,7 @@ const BRANCH =
   "mt-3.5 w-full " +
   "lg:relative lg:mt-0 lg:flex lg:pt-12 " +
   "lg:before:absolute lg:before:left-1/2 lg:before:top-0 lg:before:h-6 " +
-  "lg:before:ml-[-0.5px] lg:before:w-px lg:before:bg-ink";
+  "lg:before:ml-[-1px] lg:before:w-0.5 lg:before:bg-ink";
 
 /**
  * 부서 한 칸.
@@ -321,8 +346,8 @@ const ITEM =
   "mt-2.5 first:mt-0 " +
   "lg:relative lg:mt-0 lg:flex lg:min-w-0 lg:flex-1 lg:flex-col lg:pt-[19px] " +
   "lg:before:absolute lg:before:left-1/2 lg:before:top-[-24px] lg:before:h-6 " +
-  "lg:before:ml-[-0.5px] lg:before:w-px lg:before:bg-ink " +
-  "lg:after:absolute lg:after:top-[-24px] lg:after:h-px lg:after:bg-ink " +
+  "lg:before:ml-[-1px] lg:before:w-0.5 lg:before:bg-ink " +
+  "lg:after:absolute lg:after:top-[-24px] lg:after:h-0.5 lg:after:bg-ink " +
   "lg:first:after:left-1/2 lg:first:after:right-0 " +
   "lg:last:after:left-0 lg:last:after:right-1/2 " +
   "lg:[&:not(:first-child):not(:last-child)]:after:left-0 " +
