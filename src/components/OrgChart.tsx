@@ -156,10 +156,38 @@ export default function OrgChart() {
          남겨 뒀다 — 되돌릴 때 거기 주석을 읽을 것.
       ⚠️ **굵히면 세로선이 오른쪽으로 치우친다.** `left-1/2` 만 있고
          translate 가 없어 1px 일 땐 안 보이던 어긋남이 드러난다. 그래서
-         BRANCH · ITEM 의 ::before 에 `ml-[-0.75px]`(굵기의 절반)을 짝으로
-         붙였다. **굵기를 바꾸면 이 값도 같이 바꾼다.**
+         BRANCH · ITEM 의 ::before 에 **굵기의 절반**만큼 음수 margin 을
+         짝으로 붙였다. **굵기를 바꾸면 이 값도 같이 바꾼다**
+         (판 87 은 1.5px 에 `-0.75px`, 판 88 은 3px 에 `-1.5px`).
       ⚠️ LINK 의 ::before 는 flex 항목이라 `items-center` 가 가운데를 잡는다
-         — 보정이 필요 없고, 붙이면 오히려 틀어진다. */
+         — 보정이 필요 없고, 붙이면 오히려 틀어진다.
+
+   ⚠️⚠️ **2026-10-26 판 (88) — 1.5px 은 3px 이 됐다. 시안이 거짓말을 했다.**
+      유신: *"이미지로 보면 Ⓙ가 굵어 보이는데 **실제 웹에서는 엄청 얇아**
+      보이거든"* — 로컬(4321)을 보고 하신 말씀이다. 곧 1.5px 이 이미 걸린
+      화면이었다.
+      까닭은 **판 (87) 시안을 dpr2 로 구운 것**이다. 그 PNG 안에서 1.5px 은
+      3픽셀, 2px 은 4픽셀, 2.5px 은 5픽셀이라 **또렷하게 달라 보였다**.
+      실제 화면(dpr1)을 재니 —
+
+          지정   1px   1.5px   2px   2.5px   3px   4px   (surface 위, 색은 dark)
+          화면   1열    2열     2열    2열     3열   4열
+          짙기   27    27 27   27 27  27 27  27×3  27×4
+
+      **1.5 · 2 · 2.5 는 화면에서 같은 선이다.** 번짐이 아니라 반올림이라
+      가운데가 연해지지도 않는다. 그러니 1.5 → 2 는 화면에서 **아무것도 안
+      바뀐다**. 화면에서 구별되는 값은 **1 · 3 · 4px 뿐**이고, 3px 이 실제로
+      굵어지는 첫 값이다. 노드 테두리 2px 이 2열이라 자가 되어 준다.
+      ⚠️ **시안을 dpr2 로 구우면 선 굵기는 거짓말이 된다.** 선·테두리처럼
+         한두 픽셀이 전부인 것을 보여 드릴 때는 **dpr1** 로 구울 것
+         (판 (88) 의 cmp-145 · cmp-146 이 그렇게 구운 것이다).
+      ⚠️ 그래서 판 (87) 의 Ⓙ 선택도 **왜곡된 자료 위에서** 이뤄진 것이다.
+         기각된 값을 되살릴 때는 그 그림이 dpr 몇이었는지부터 볼 것.
+      ⚠️ **홀수 굵기는 중심이 0.5px 어긋난다.** 패널 폭이 짝수라 `left-1/2`
+         가 정수 좌표에 떨어지는데, 3px 을 1.5 씩 나누면 반픽셀이 남는다
+         (실측 0.5px · 1.5px 일 때는 -0.2px 였다). `ml` 을 -2px 로 바꿔도
+         부호만 뒤집힐 뿐 크기는 같다 — 구조상 피할 수 없고, 화면에서는
+         3열이 고르게 찍히므로 그냥 둔다. */
 
 /**
  * 대표 -> 공장장을 잇는 한 칸.
@@ -183,9 +211,9 @@ export default function OrgChart() {
 const LINK =
   "contents " +
   /* 모바일은 가로 tick 이라 **height 가 굵기**다 — 축이 반대다(판 87) */
-  "before:block before:h-[1.5px] before:w-4 before:shrink-0 before:bg-dark " +
+  "before:block before:h-[3px] before:w-4 before:shrink-0 before:bg-dark " +
   "lg:flex lg:w-full lg:flex-col lg:items-center " +
-  "lg:before:h-8 lg:before:w-[1.5px]";
+  "lg:before:h-8 lg:before:w-[3px]";
 
 /**
  * 다섯 부서가 놓이는 단. lg 에서 가로로 펼치고 칸을 균등하게 나눈다.
@@ -199,7 +227,7 @@ const BRANCH =
   "mt-3.5 w-full " +
   "lg:relative lg:mt-0 lg:flex lg:pt-12 " +
   "lg:before:absolute lg:before:left-1/2 lg:before:top-0 lg:before:h-6 " +
-  "lg:before:ml-[-0.75px] lg:before:w-[1.5px] lg:before:bg-dark";
+  "lg:before:ml-[-1.5px] lg:before:w-[3px] lg:before:bg-dark";
 
 /**
  * 부서 한 칸.
@@ -254,8 +282,8 @@ const ITEM =
   "mt-2.5 first:mt-0 " +
   "lg:relative lg:mt-0 lg:flex lg:min-w-0 lg:flex-1 lg:flex-col lg:pt-[19px] " +
   "lg:before:absolute lg:before:left-1/2 lg:before:top-[-24px] lg:before:h-6 " +
-  "lg:before:ml-[-0.75px] lg:before:w-[1.5px] lg:before:bg-dark " +
-  "lg:after:absolute lg:after:top-[-24px] lg:after:h-[1.5px] lg:after:bg-dark " +
+  "lg:before:ml-[-1.5px] lg:before:w-[3px] lg:before:bg-dark " +
+  "lg:after:absolute lg:after:top-[-24px] lg:after:h-[3px] lg:after:bg-dark " +
   "lg:first:after:left-1/2 lg:first:after:right-0 " +
   "lg:last:after:left-0 lg:last:after:right-1/2 " +
   "lg:[&:not(:first-child):not(:last-child)]:after:left-0 " +
