@@ -134,7 +134,32 @@ export default function OrgChart() {
       ⚠️ 판 (74) 메모 — line-strong 은 **연결선 전용**이다. 아래 부서 칸의
          세로 구분선과 업무 행 구분선은 연결선이 아니라 **표의 괘선**이라
          연한 line 을 쓴다. 두 가지가 같은 값이 되면 무엇이 계층이고 무엇이
-         구획인지 흐려진다. */
+         구획인지 흐려진다.
+
+   ⚠️⚠️ **2026-10-26 판 (87) — 선 넷이 1.5px `dark`(#0d1b33) 가 됐다.**
+      바로 위 「굵기는 그대로다 — 올리지 않는다」는 **노드가 채운 색면이던
+      때**의 결정이다(판 31). 판 (86) 에서 노드가 2px 네이비 **테두리**가
+      되면서 머리도 부서도 2px 인데 그 사이를 잇는 선만 1px `#8a9099` 로
+      혼자 한 단 아래에 남았다. 유신: *"여기 현재 얇은 검정색 같은데 이거
+      좀 굵은 버전에 선 이나 다른 선 느낌으로"* — 실은 검정이 아니라 회색
+      이었고, 그래서 더 약했다.
+      판 (87) 에서 굵기 넷(1 / 1.5 / 2 / 2.5) × 색 넷(line-strong / muted /
+      ink-soft / dark) 과 파선 · 점선까지 열다섯을 구워 드렸고 **Ⓙ**(1.5px ·
+      dark)를 고르셨다.
+        · 색은 노드와 **같은 네이비** — 머리 · 부서 · 선이 한 재료가 된다
+        · 굵기는 노드의 **3/4**(1.5 / 2 = 0.75) — 선이 구조를 보이면서도
+          노드보다 한 단 아래에 선다. 1.00(2px)부터 격자로 읽히기 시작한다
+        · surface 위 대비 **16.04:1**(전 2.99:1)
+      ⚠️ 파선 · 점선은 조직도 관례에서 **비공식 보고선**을 뜻하기도 해서
+         기각했다(시안 Ⓜ Ⓝ).
+      ⚠️ `line-strong` 은 이제 **쓰는 곳이 없다.** 토큰은 globals.css 에
+         남겨 뒀다 — 되돌릴 때 거기 주석을 읽을 것.
+      ⚠️ **굵히면 세로선이 오른쪽으로 치우친다.** `left-1/2` 만 있고
+         translate 가 없어 1px 일 땐 안 보이던 어긋남이 드러난다. 그래서
+         BRANCH · ITEM 의 ::before 에 `ml-[-0.75px]`(굵기의 절반)을 짝으로
+         붙였다. **굵기를 바꾸면 이 값도 같이 바꾼다.**
+      ⚠️ LINK 의 ::before 는 flex 항목이라 `items-center` 가 가운데를 잡는다
+         — 보정이 필요 없고, 붙이면 오히려 틀어진다. */
 
 /**
  * 대표 -> 공장장을 잇는 한 칸.
@@ -157,9 +182,10 @@ export default function OrgChart() {
  */
 const LINK =
   "contents " +
-  "before:block before:h-px before:w-4 before:shrink-0 before:bg-line-strong " +
+  /* 모바일은 가로 tick 이라 **height 가 굵기**다 — 축이 반대다(판 87) */
+  "before:block before:h-[1.5px] before:w-4 before:shrink-0 before:bg-dark " +
   "lg:flex lg:w-full lg:flex-col lg:items-center " +
-  "lg:before:h-8 lg:before:w-px";
+  "lg:before:h-8 lg:before:w-[1.5px]";
 
 /**
  * 다섯 부서가 놓이는 단. lg 에서 가로로 펼치고 칸을 균등하게 나눈다.
@@ -173,7 +199,7 @@ const BRANCH =
   "mt-3.5 w-full " +
   "lg:relative lg:mt-0 lg:flex lg:pt-12 " +
   "lg:before:absolute lg:before:left-1/2 lg:before:top-0 lg:before:h-6 " +
-  "lg:before:w-px lg:before:bg-line-strong";
+  "lg:before:ml-[-0.75px] lg:before:w-[1.5px] lg:before:bg-dark";
 
 /**
  * 부서 한 칸.
@@ -228,8 +254,8 @@ const ITEM =
   "mt-2.5 first:mt-0 " +
   "lg:relative lg:mt-0 lg:flex lg:min-w-0 lg:flex-1 lg:flex-col lg:pt-[19px] " +
   "lg:before:absolute lg:before:left-1/2 lg:before:top-[-24px] lg:before:h-6 " +
-  "lg:before:w-px lg:before:bg-line-strong " +
-  "lg:after:absolute lg:after:top-[-24px] lg:after:h-px lg:after:bg-line-strong " +
+  "lg:before:ml-[-0.75px] lg:before:w-[1.5px] lg:before:bg-dark " +
+  "lg:after:absolute lg:after:top-[-24px] lg:after:h-[1.5px] lg:after:bg-dark " +
   "lg:first:after:left-1/2 lg:first:after:right-0 " +
   "lg:last:after:left-0 lg:last:after:right-1/2 " +
   "lg:[&:not(:first-child):not(:last-child)]:after:left-0 " +
