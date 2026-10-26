@@ -251,7 +251,37 @@ export default function OrgChart() {
          안에 굵기를 아는 선이 하나도 없다. 그래서 시안 (154) 에는 네
          굵기의 같은 자리를 잘라 **pixelated 로 확대**한 줄을 같이 냈다
          [[tiny-icon-zoom-the-pixels]]. 다음에 굵기를 보여 드릴 때도
-         그 줄이 있어야 한다. */
+         그 줄이 있어야 한다.
+
+   ⚠️⚠️ **2026-10-26 판 (94) — 굵기는 2px 그대로, 색이 ink-soft 가 됐다.**
+      유신: *"2px 너무 굵다 **1.5px 로** 해줘봐"* — 그런데 **1.5px 은
+      화면에서 2px 과 한 픽셀도 다르지 않다.** 지금 쪽에 걸고 재니
+
+          지정      1px    1.25px   1.5px   1.75px    2px
+          dpr1      1열     2열      2열     2열      2열
+          dpr2      2열     4열      4열     4열      4열
+          밝기      29     29 29    29 29   29 29    29 29   (번짐 없음)
+
+      브라우저가 **올림**한다. 고해상도 화면에서도 마찬가지라 1.5px 은
+      어디서도 중간이 되지 않는다. 위 판 (88) 의 표가 dpr1 만 본 것이라
+      이번에 dpr2 까지 넣어 다시 쟀다.
+      ⚠️ 그래서 굵기로 2px 아래는 **1px 뿐**인데, 그것은 판 (93) 에서
+         *"조금 더 굵게"* 라고 하신 그 상태다. 굵기 축이 막혔다.
+      ⚠️ **막힌 축 대신 무게를 줄였다.** 선이 연해지면 같은 굵기도
+         가늘어 보인다 — 시안 (155) 에서 2px 에 색 셋(ink-soft 8.73 ·
+         #4a5160 7.43 · dark-soft 11.66)을 걸어 보고 **ink-soft** 를
+         고르셨다. 판 (92) 에서 *"회색 같아 보인다"* 고 하신 값이
+         **2.99** 였으니 8.73 은 아직 검정 쪽이다.
+      ⚠️ dark-soft(Ⓒ)는 시안에서 권하지 않는다고 적었다 — 공장장 상자와
+         **같은 색**이라 판 (89) 에서 선이 면과 싸운 자리다.
+      ⚠️ 바로 위 판 (93) 이 적어 둔 「ink 는 어느 면과도 다른 값이라
+         안전하다」는 ink-soft 에도 그대로 간다 — 조직도의 면은
+         #0d1b33 · #2a3447 · #6b7280 · #e5e7eb 넷이고 #414751 은
+         그 사이 어디에도 없다.
+      ⚠️ 다만 **업무 글자와는 같은 값이 됐다**(둘 다 ink-soft). 면이
+         아니라 글자라 판 (89) 의 싸움과는 다른 얘기이고, 선과 말단
+         글자가 한 무게로 묶이는 쪽이 오히려 체계적이다. 적어 두는 것은
+         **업무 글자색을 건드리면 선도 같이 움직인다**는 뜻이기 때문이다. */
 
 /**
  * 대표 -> 공장장을 잇는 한 칸.
@@ -275,7 +305,7 @@ export default function OrgChart() {
 const LINK =
   "contents " +
   /* 모바일은 가로 tick 이라 **height 가 굵기**다 — 축이 반대다(판 87) */
-  "before:block before:h-0.5 before:w-4 before:shrink-0 before:bg-ink " +
+  "before:block before:h-0.5 before:w-4 before:shrink-0 before:bg-ink-soft " +
   "lg:flex lg:w-full lg:flex-col lg:items-center " +
   "lg:before:h-8 lg:before:w-0.5";
 
@@ -291,7 +321,7 @@ const BRANCH =
   "mt-3.5 w-full " +
   "lg:relative lg:mt-0 lg:flex lg:pt-12 " +
   "lg:before:absolute lg:before:left-1/2 lg:before:top-0 lg:before:h-6 " +
-  "lg:before:ml-[-1px] lg:before:w-0.5 lg:before:bg-ink";
+  "lg:before:ml-[-1px] lg:before:w-0.5 lg:before:bg-ink-soft";
 
 /**
  * 부서 한 칸.
@@ -346,8 +376,8 @@ const ITEM =
   "mt-2.5 first:mt-0 " +
   "lg:relative lg:mt-0 lg:flex lg:min-w-0 lg:flex-1 lg:flex-col lg:pt-[19px] " +
   "lg:before:absolute lg:before:left-1/2 lg:before:top-[-24px] lg:before:h-6 " +
-  "lg:before:ml-[-1px] lg:before:w-0.5 lg:before:bg-ink " +
-  "lg:after:absolute lg:after:top-[-24px] lg:after:h-0.5 lg:after:bg-ink " +
+  "lg:before:ml-[-1px] lg:before:w-0.5 lg:before:bg-ink-soft " +
+  "lg:after:absolute lg:after:top-[-24px] lg:after:h-0.5 lg:after:bg-ink-soft " +
   "lg:first:after:left-1/2 lg:first:after:right-0 " +
   "lg:last:after:left-0 lg:last:after:right-1/2 " +
   "lg:[&:not(:first-child):not(:last-child)]:after:left-0 " +
