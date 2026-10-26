@@ -83,13 +83,13 @@ export default function OrgChart() {
     <div className="rounded-2xl bg-surface p-6 sm:p-10">
       <ul>
         <li className="flex flex-wrap items-center gap-x-2.5 lg:flex-col lg:flex-nowrap lg:items-center lg:gap-0">
-          <Node label={head} tone="brand" />
+          <Node label={head} rank="head" />
 
           {/* 대표 -> 공장장. 칸이 하나뿐이라 가로선이 없다 — ::before 를
               flex 항목으로 두면 모바일에선 가로선, lg 에선 세로선이 된다. */}
           <ul className={LINK}>
             <li className="contents lg:flex lg:w-full lg:flex-col lg:items-center">
-              <Node label={plant.title} tone="dark" />
+              <Node label={plant.title} rank="plant" />
 
               {/* 공장장 -> 다섯 부서 */}
               <ul className={BRANCH}>
@@ -341,16 +341,70 @@ const taskClass = (j: number, last: boolean) =>
  *      옆에 선, 본체조립 오른쪽 선 **이거 없이**"*. 업무 칸 세로선은
  *      지금도 **안쪽 넷**이다(tasksClass 참고). 다시 꺼내자는 말이 오면
  *      판 (77) 의 Ⓑ ~ Ⓔ 가 시안\77\cmp-116.png 에 있다.
+ *
+ * ⚠️⚠️ **2026-10-26 판 (86) — 채움을 걷고 2px 네이비 테두리 네 변이 됐다.**
+ *   **위 판 (78) 의 모서리 8px 도, 채움 두 가지도 여기서 무효가 된다.**
+ *   (뒤집힌 메모를 지우지 않는 것은 다음 판에서 「8px 은 모서리 표에서 온
+ *    값」이라는 사실을 다시 찾아 헤매지 않기 위해서다. **globals.css 의
+ *    모서리 표 자체는 손대지 않았다** — 조직도 노드가 그 표의 어느 줄도
+ *    쓰지 않게 됐을 뿐이다.)
+ *
+ *   유신: *"밑에 영업마케팅부 설계부 같은 **딱딱한 느낌**으로 대표 / 공장장도
+ *   디자인 하고 싶은데 **너무 똑같으면** 시각적으로 보기가 불편해져서 …
+ *   어느정도 **통일감은 있어야지**"*
+ *
+ *   그 앞에 세 판이 다 빗나갔다 — 판 (83) 은 부서 띠를 **그대로** 옮겨
+ *   *"이상하네 … 별로네"*, 판 (84) 는 작고 조용한 장식 열을 내어
+ *   *"디자인적으로 마음에 안들어"*, 판 (85) 는 면·도형·타이포·배치로 축을
+ *   스물까지 넓혔지만 이번엔 **부서와 남남**이 됐다.
+ *
+ *   ⚠️ **부서 이름이 쓰는 재료는 여섯이다** — ① 선 굵기 2px ② 선 색 네이비
+ *      ③ 각진 모서리 ④ 볼드 ⑤ 가로 선 ⑥ 칸 전폭. 판 (83) 이 불편했던 것은
+ *      **여섯을 다 가져왔기** 때문이다. 그러면 부서 줄이 위로 두 칸 더 생긴
+ *      것처럼 보인다. 그래서 판 (86) 은 **앞 넷으로 통일감을 내고 ⑤⑥ 을
+ *      버린다** — 네 변으로 **닫는다.** 부서는 좌우가 트인 띠, 머리 둘은
+ *      닫힌 테두리다.
+ *
+ *   ⚠️ 함께 풀린 것 — 판 (83) 의 **사다리**다. 대표 띠와 공장장 띠가 32px
+ *      사이로 세로로 겹쳐 **전폭 가로선 넷**을 만들고 그 사이를 연결선이
+ *      지나 표의 행처럼 보였다(부서 다섯은 가로로 나란해 그 일이 없다).
+ *      네 변은 글자 폭만큼이라 가장 긴 가로 덩이가 **86px** 이다 — 판 (83)
+ *      은 **202px 짜리 넷**이었다.
+ *
+ *   ⚠️ **빨강 채움이 사라져 「빨강 채움은 견적 문의 전용」 규칙의 예외가
+ *      없어졌다.** 조직도 대표가 사이트에서 그 유일한 예외였다
+ *      (page.tsx 의 견적 버튼 · ContactCTA · VideoBrowser 참고).
+ *      빨강 **글자**는 허용 선례가 있다(VideoCard 의 분류 라벨) — 되살릴
+ *      일이 생기면 채움이 아니라 그쪽으로 간다.
+ *
+ *   ⚠️ **글자 크기는 14px 에서 20 / 18px 로 올렸다.** 전에는 부서 이름
+ *      (17px)보다 **작았고**, 채운 상자가 그 역전을 덮고 있었을 뿐이다.
+ *      채움을 걷으면 위계가 그대로 뒤집히므로 함께 올린 값이다.
+ *      20 / 18 / 17 로 세 단이 2px · 1px 씩 벌어진다.
+ *   ⚠️ 자간 `-0.01em` 과 선 색 · 굵기는 **부서 이름과 같은 값**이다.
+ *      통일감이 거기서 나온다 — 바꾸려면 nameClass 와 같이 봐야 한다.
+ *   ⚠️ 좌우 16px · 위 7 · 아래 9px. 위아래가 다른 것은 부서 이름과 같은
+ *      까닭이다(한글 잉크가 줄 상자 가운데보다 위에 앉는다. nameClass 의
+ *      `lg:pb-[7px] lg:pt-[4px]` 주석 참고).
+ *   ⚠️ **두 테두리의 폭은 72.4 / 85.1px 로 다르다**(두 글자 · 세 글자).
+ *      판 (78) 에서 같은 폭으로 맞추는 안을 드렸지만 고르지 않으셨다.
+ *      가운데 정렬이라 중심 어긋남은 0 이다.
+ *   ⚠️ 유신이 고른 것은 시안 (139) 의 **Ⓐ** 다. 제가 권한 것은 Ⓙ(대표는
+ *      네 변, 공장장은 위아래만)였는데 **둘을 같은 꼴로** 가시는 쪽을
+ *      고르셨다. 나머지 열둘은 시안\86\cmp-139.png 에 있다.
+ *   ⚠️ 시안을 또 구울 때 — 이 노드는 이제 배경 클래스로 못 잡는다.
+ *      대표는 `.border-2.text-xl`, 공장장은 `.border-2.text-lg` 로 잡는다.
  */
-function Node({ label, tone }: { label: string; tone: "brand" | "dark" }) {
-  const styles = {
-    brand: "bg-brand text-white",
-    dark: "bg-dark-soft text-white",
+function Node({ label, rank }: { label: string; rank: "head" | "plant" }) {
+  /* 색이 아니라 **단**이다. 둘 다 같은 테두리를 쓰고 크기로만 갈린다. */
+  const size = {
+    head: "text-xl",
+    plant: "text-lg",
   } as const;
 
   return (
     <div
-      className={`inline-block whitespace-nowrap rounded-lg px-5 py-2 text-center text-sm font-bold tracking-[-0.01em] ${styles[tone]}`}
+      className={`inline-block whitespace-nowrap border-2 border-dark px-4 pb-[9px] pt-[7px] text-center font-bold leading-[1.3] tracking-[-0.01em] text-dark ${size[rank]}`}
     >
       {label}
     </div>
