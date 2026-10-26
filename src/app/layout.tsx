@@ -88,9 +88,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="ko" className={`${notoSansKr.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
         {/* 스크롤 리빌은 opacity:0 에서 시작한다. JS가 막히면 내용이 영영
-            안 보이므로 되돌려 준다. */}
+            안 보이므로 되돌려 준다.
+            ⚠️ 조직도 몫(노드 · 세로선 · 가로 분배선)이 여기 함께 있었다.
+               2026-10-26 판 (79) 에서 조직도 애니메이션을 통째로 걷어
+               되돌릴 것이 없다 — globals.css 의 조직도 주석 참고. */}
         <noscript>
-          <style>{`.reveal,.sign-ink,.org-node{opacity:1;transform:none}.org-drop::before,.org-span-l::after,.org-span-r::after{transform:none}`}</style>
+          <style>{`.reveal,.sign-ink{opacity:1;transform:none}`}</style>
         </noscript>
         <a
           href="#main"

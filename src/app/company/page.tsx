@@ -246,11 +246,19 @@ export default function CompanyPage() {
                  한 항목이 "사진 + 제목 + 글" 셋이 됐다. dl 의 자식 div 안에는
                  dt 와 dd 만 올 수 있어 접근성 검사(definition-list)가 걸린다 —
                  제품 상세 KPI 가 같은 이유로 ul 이다. */}
-          <Reveal
-            as="aside"
-            delay={80}
-            className="rounded-2xl bg-dark p-7 sm:p-8 lg:col-start-2 lg:row-start-1"
-          >
+          {/* ⚠️⚠️ **2026-10-26 판 (79) — 이 패널만 리빌이 없다.**
+                 유신: *"여기도 애니메이션 없어도 될거 같은데"*. 같은 판에서
+                 조직도 애니메이션도 함께 걷었다(OrgChart.tsx 주석).
+                 한때는 `Reveal as="aside"` 에 지연 80 이 걸려 있어서, 이
+                 섹션이 본문(0) → 패널(80) → 서명(140) **세 박자로 나뉘어**
+                 떴다. 지금 패널은 처음부터 떠 있고 나머지 둘만 페이드한다.
+              ⚠️ **래퍼를 덧대지 말고 태그만 바꿀 것.** 이 aside 가 곧 그리드
+                 칸이다 — 겉에 div 를 하나 두르면 칸이 하나 더 생겨 위 ⚠️ 의
+                 아랫변 정렬(1280 에서 차 0.3px)이 깨진다.
+              ⚠️ 왼쪽 본문과 서명의 리빌은 **그대로 두었다.** 서명의 붓글씨
+                 (.sign-ink)가 부모 Reveal 의 is-visible 을 받아 들어오는
+                 연출이라, 그쪽 Reveal 을 걷으면 서명이 영영 안 뜬다. */}
+          <aside className="rounded-2xl bg-dark p-7 sm:p-8 lg:col-start-2 lg:row-start-1">
             <p className="text-xs font-bold tracking-[0.08em] text-brand-light">
               경영이념
             </p>
@@ -377,7 +385,7 @@ export default function CompanyPage() {
                 </li>
               ))}
             </ul>
-          </Reveal>
+          </aside>
         </div>
       </Section>
 

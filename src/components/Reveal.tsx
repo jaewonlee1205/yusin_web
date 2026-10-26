@@ -20,7 +20,12 @@ export default function Reveal({
   children: ReactNode;
   delay?: number;
   className?: string;
-  /** aside 는 경영이념 패널용 — 래퍼 div 를 덧대면 그리드 칸이 바뀐다 */
+  /**
+   * 래퍼 div 를 덧대면 그리드 칸이 하나 더 생기는 자리에서 태그를 바꿔 쓴다.
+   * ⚠️ aside 는 경영이념 패널 몫이었다. 2026-10-26 판 (79) 에서 유신이
+   *    *"여기도 애니메이션 없어도 될거 같은데"* 라고 해 그 패널은 평범한
+   *    aside 가 됐다 — 지금 aside 를 쓰는 곳은 없다. 타입은 남겨 둔다.
+   */
   as?: "div" | "li" | "section" | "aside";
 }) {
   const ref = useRef<HTMLElement>(null);

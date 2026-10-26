@@ -1,5 +1,3 @@
-import type { CSSProperties } from "react";
-import Reveal from "./Reveal";
 import { organization } from "@/data/company";
 
 /**
@@ -37,82 +35,68 @@ import { organization } from "@/data/company";
  *        만드는게 아니라"*. 업무 수가 3/4/3/2/3 이라 끝선 높이는 칸마다
  *        다르다(계단) — 그것이 맞다고 고르셨다.
  *
- * 애니메이션은 차트 전체를 Reveal 로 한 번 감싸고 안쪽은 CSS(.org-*)가 맡는다.
- * 노드마다 Reveal 을 씌우면 가로선이 끊겨 보인다 — 그 선은 여러 칸의 ::after 가
- * 이어져 하나로 보이는 것이라 서로 다른 지연으로 움직이면 어긋난다.
- */
-
-/**
- * 위에서 아래로 그어지는 순서(ms).
+ * ⚠️⚠️ **2026-10-26 판 (79) — 등장 애니메이션을 통째로 걷었다. 리빌도 없다.**
+ *   유신: *"여기 애니메이션 없어도 될 거 같고"* (경영이념 패널도 같은 판에서
+ *   함께 걷었다 — company/page.tsx 의 그 aside).
  *
- * 끝나는 시각은 **가장 칸이 많은 부서**가 정한다. 지금은 설계부가 네 칸이라
- * 마지막 줄이 task + 3 × taskGap = 1000ms 에 시작하고, 0.45s 동안 올라오므로
- * 전체가 약 1.45초에 끝난다. 부서 칸을 더 늘리면 이 수치도 같이 늘어난다.
+ *   ⚠️ **새 결정이 아니라 2026-10-19 결정이 안 닿았던 자리다.** 그날 유신이
+ *      *"1개가 아니라 묶음으로 보이게"*, *"제품 7개가 한번에 보여지는거지"*
+ *      라고 해서 사이트의 모든 격자를 **격자 하나당 리빌 하나**로 바꿨는데
+ *      (PhotoLightbox · ApplicationCases · 홈 · 제품 상세 · videos),
+ *      조직도만 그 판에서 빠져 있었다. 노드 스물둘이 선과 함께 차례로 그어져
+ *      전체가 **1450ms** 걸렸다 — 사이트에 남은 **유일한 순차 연출**이었다.
+ *      판 (78) 의 모서리와 같은 모양이다(이미 정해 둔 것을 한 자리가 안 따름).
  *
- * ⚠️ 판 (74) 에서 업무 네모가 글자 목록이 되면서 taskDrop(부서 카드에서
- *    업무로 내려오던 세로선)이 사라졌다 — 그 자리를 **부서 이름 밑선**이
- *    대신한다. 숫자는 그대로 둔다. 이름(team)과 업무(task) 사이 260ms 는
- *    밑선이 그어지고 나서 글자가 뜨는 간격이다.
+ *   걷은 것 — 겉을 감싸던 Reveal, 그리고 순서를 넣던 세 가지:
+ *     · 노드가 8px 아래에서 0.45s 올라오던 것(globals.css 의 .org-node)
+ *     · 세로선이 scaleY 0→1 로 그어지던 것(.org-drop::before)
+ *     · 가로 분배선이 가운데에서 바깥으로 scaleX 0→1 하던 것(.org-span-*::after)
+ *   아래 상수들에 붙어 있던 그 훅 클래스 셋을 모두 뗐다. globals.css ·
+ *   layout.tsx 의 noscript · reduced-motion 목록에서도 함께 걷었다.
+ *
+ *   ⚠️ **선 자체는 하나도 안 없어졌다.** 세로선과 가로 분배선은 아래 상수의
+ *      Tailwind before: / after: 유틸이 그린다. 걷힌 규칙은 transform 뿐이다.
+ *      판 (79) 에서 픽셀로 맞춰 확인했다(1440 가장 긴 가로 807px · 한 덩이 ·
+ *      가장 긴 세로 48px — 걷기 전과 같은 값).
+ *
+ *   ⚠️ 되살릴 일이 생기면 필요한 것 넷 — ① 겉을 Reveal 로 되감고 ② 아래
+ *      상수에 훅 클래스를 되붙이고 ③ globals.css 에 transition 을 되살리고
+ *      ④ 순서를 인라인 CSS 변수로 넣는다. 걷기 전 값(ms)은
+ *      head 0 · headDrop 120 · plant 220 · plantDrop 340 · span 440 ·
+ *      teamDrop 540 · team 620 · teamGap 35 · task 880 · taskGap 40 이었고,
+ *      세로선·노드는 그 변수, 가로선은 두 번째 변수를 받았다.
+ *      업무는 **행 단위**로 나왔다 — 다섯 칸의 첫째 줄이 같이, 그다음 둘째가
+ *      같이. 칸마다 누적시키면 지연이 쌓여 길어지고, 세로로 쌓인 것을 세로로
+ *      또 훑는 움직임이라 읽는 방향과 싸운다.
+ *   ⚠️ 되살리더라도 **노드마다 Reveal 을 씌우지는 말 것.** 가로선은 왼쪽 칸과
+ *      오른쪽 칸의 ::after 가 가운데에서 만나 하나로 보이는 것이라, 두 칸이
+ *      서로 다른 지연으로 움직이면 선이 끊겨 보인다.
  */
-const STEP = {
-  head: 0,
-  headDrop: 120,
-  plant: 220,
-  plantDrop: 340,
-  span: 440,
-  teamDrop: 540,
-  team: 620,
-  teamGap: 35,
-  task: 880,
-  /**
-   * 업무는 **행 단위**로 나온다 — 다섯 칸의 첫째 줄이 같이, 그다음 둘째가
-   * 같이. 칸마다 누적시키면 업무 수만큼 지연이 쌓여 지나치게 길어지고,
-   * 세로로 쌓인 것을 세로로 또 훑는 움직임이라 읽는 방향과 싸운다.
-   * 부서마다 칸 수가 달라도 각자 가진 만큼만 나오고 끊기지 않는다.
-   */
-  taskGap: 40,
-} as const;
-
-/** CSS 변수를 style 로 넘기려면 캐스팅이 필요하다. */
-const delay = (d: number, d2?: number) =>
-  ({
-    "--d": `${d}ms`,
-    ...(d2 === undefined ? {} : { "--d2": `${d2}ms` }),
-  }) as CSSProperties;
 
 export default function OrgChart() {
   const { head, plant } = organization;
 
   return (
-    <Reveal className="rounded-2xl bg-surface p-6 sm:p-10">
+    <div className="rounded-2xl bg-surface p-6 sm:p-10">
       <ul>
         <li className="flex flex-wrap items-center gap-x-2.5 lg:flex-col lg:flex-nowrap lg:items-center lg:gap-0">
-          <Node label={head} tone="brand" style={delay(STEP.head)} />
+          <Node label={head} tone="brand" />
 
           {/* 대표 -> 공장장. 칸이 하나뿐이라 가로선이 없다 — ::before 를
               flex 항목으로 두면 모바일에선 가로선, lg 에선 세로선이 된다. */}
-          <ul className={LINK} style={delay(STEP.headDrop)}>
+          <ul className={LINK}>
             <li className="contents lg:flex lg:w-full lg:flex-col lg:items-center">
-              <Node label={plant.title} tone="dark" style={delay(STEP.plant)} />
+              <Node label={plant.title} tone="dark" />
 
               {/* 공장장 -> 다섯 부서 */}
-              <ul className={BRANCH} style={delay(STEP.plantDrop)}>
+              <ul className={BRANCH}>
                 {plant.teams.map((team, i) => (
-                  <li
-                    key={team.name}
-                    className={`${ITEM} ${i === plant.teams.length - 1 ? "org-span-r" : "org-span-l"}`}
-                    style={delay(STEP.teamDrop, STEP.span)}
-                  >
+                  <li key={team.name} className={ITEM}>
                     {/* 부서는 이름만 담는다. 밑선은 칸 전폭이다 — border 는
                         padding 바깥이라 좌우 10px 을 넘어 세로 칸선까지 닿는다.
                         아래 업무의 행 구분선(안쪽)과 폭이 다른 것이 맞다:
                         여는 선은 칸을 가로지르고, 가르는 선은 글자만 나눈다. */}
-                    <div
-                      className={NAME}
-                      style={delay(STEP.team + i * STEP.teamGap)}
-                    >
-                      {team.name}
-                    </div>
+                    <div className={NAME}>{team.name}</div>
 
                     {/* 부서 -> 담당 업무.
                         ⚠️ flex-1 을 주지 않는다. 주면 목록이 칸 바닥까지
@@ -123,7 +107,6 @@ export default function OrgChart() {
                         <li
                           key={task}
                           className={taskClass(j, j === team.tasks.length - 1)}
-                          style={delay(STEP.task + j * STEP.taskGap)}
                         >
                           {task}
                         </li>
@@ -136,7 +119,7 @@ export default function OrgChart() {
           </ul>
         </li>
       </ul>
-    </Reveal>
+    </div>
   );
 }
 
@@ -170,7 +153,7 @@ export default function OrgChart() {
  *    지우던 버그는 Chrome 102 · Firefox 90 · Safari 16.4 에서 고쳐졌다.
  */
 const LINK =
-  "org-drop contents " +
+  "contents " +
   "before:block before:h-px before:w-4 before:shrink-0 before:bg-line-strong " +
   "lg:flex lg:w-full lg:flex-col lg:items-center " +
   "lg:before:h-8 lg:before:w-px";
@@ -184,7 +167,7 @@ const LINK =
  * **lg:pt-12 와 before:h-6 / ITEM 의 top-[-24px] 는 항상 짝으로 움직인다.**
  */
 const BRANCH =
-  "org-drop mt-3.5 w-full " +
+  "mt-3.5 w-full " +
   "lg:relative lg:mt-0 lg:flex lg:pt-12 " +
   "lg:before:absolute lg:before:left-1/2 lg:before:top-0 lg:before:h-6 " +
   "lg:before:w-px lg:before:bg-line-strong";
@@ -232,7 +215,7 @@ const BRANCH =
  *   ⚠️ 390 에는 걸리지 않는다 — 거기엔 분배선도 내림선도 없다.
  */
 const ITEM =
-  "org-drop mt-2.5 first:mt-0 " +
+  "mt-2.5 first:mt-0 " +
   "lg:relative lg:mt-0 lg:flex lg:min-w-0 lg:flex-1 lg:flex-col lg:pt-6 " +
   "lg:before:absolute lg:before:left-1/2 lg:before:top-[-24px] lg:before:h-6 " +
   "lg:before:w-px lg:before:bg-line-strong " +
@@ -250,7 +233,7 @@ const ITEM =
  * 선으로 묶는다」, 곧 아래 목록의 괘선).
  */
 const NAME =
-  "org-node border-b-2 border-dark pb-2 text-[15px] font-bold leading-snug " +
+  "border-b-2 border-dark pb-2 text-[15px] font-bold leading-snug " +
   "tracking-[-0.01em] text-dark lg:px-2.5 lg:pb-[9px] lg:text-center lg:text-[17px]";
 
 /**
@@ -275,7 +258,7 @@ const tasksClass = (i: number) =>
  * 칸부터** 새 행이고, lg 는 1열이라 **두 번째부터** 새 행이다.
  */
 const taskClass = (j: number, last: boolean) =>
-  "org-node py-1.5 text-[13.5px] leading-normal text-ink-soft " +
+  "py-1.5 text-[13.5px] leading-normal text-ink-soft " +
   "lg:py-[7px] lg:text-center lg:text-sm " +
   (j >= 2 ? "border-t border-line " : "") +
   (j >= 1 ? "lg:border-t lg:border-line " : "") +
@@ -309,15 +292,7 @@ const taskClass = (j: number, last: boolean) =>
  *      지금도 **안쪽 넷**이다(tasksClass 참고). 다시 꺼내자는 말이 오면
  *      판 (77) 의 Ⓑ ~ Ⓔ 가 시안\77\cmp-116.png 에 있다.
  */
-function Node({
-  label,
-  tone,
-  style,
-}: {
-  label: string;
-  tone: "brand" | "dark";
-  style?: CSSProperties;
-}) {
+function Node({ label, tone }: { label: string; tone: "brand" | "dark" }) {
   const styles = {
     brand: "bg-brand text-white",
     dark: "bg-dark-soft text-white",
@@ -325,8 +300,7 @@ function Node({
 
   return (
     <div
-      style={style}
-      className={`org-node inline-block whitespace-nowrap rounded-lg px-5 py-2 text-center text-sm font-bold tracking-[-0.01em] ${styles[tone]}`}
+      className={`inline-block whitespace-nowrap rounded-lg px-5 py-2 text-center text-sm font-bold tracking-[-0.01em] ${styles[tone]}`}
     >
       {label}
     </div>
