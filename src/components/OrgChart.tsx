@@ -281,7 +281,42 @@ export default function OrgChart() {
       ⚠️ 다만 **업무 글자와는 같은 값이 됐다**(둘 다 ink-soft). 면이
          아니라 글자라 판 (89) 의 싸움과는 다른 얘기이고, 선과 말단
          글자가 한 무게로 묶이는 쪽이 오히려 체계적이다. 적어 두는 것은
-         **업무 글자색을 건드리면 선도 같이 움직인다**는 뜻이기 때문이다. */
+         **업무 글자색을 건드리면 선도 같이 움직인다**는 뜻이기 때문이다.
+
+   ⚠️⚠️ **2026-10-26 판 (95) — 1px 순검정. 그리고 선이 부서 칸에 닿는다.**
+      유신 둘 — *"지금도 선이 좀 굵게 느껴지는데 **조금 더 얇은 느낌**"* ·
+      *"선이 **영업마케팅부 여기에 붙게** … 토목팀까지 선이 연결된 것처럼"*
+
+      ■ 붙이기. 레퍼런스(brunch 조직도)를 픽셀로 읽으니 왼쪽 칸에서
+        세로선이 **부서 박스 바닥 y337 에서 팀 박스 위 y396 까지 꽉**
+        닿아 있었다(틈 0). 우리 쪽 세 이음매 중 둘은 이미 붙어 있었고
+        — 대표→공장장은 LINK 의 ::before 가 flex 항목이라, 공장장→
+        분배선은 BRANCH 의 pt-12 중 위 24px 이 선이라 — **분배선 →
+        부서 이름만 19px 떠 있었다.** 그래서 ITEM 내림선을 24 → **43px**
+        (24 + pt 19)로 늘렸다. `pt-[19px]` 는 그대로라 **칸 위치도 차트
+        높이도 안 바뀐다**(1088×494). 선만 길어진다.
+        ⚠️ 그 19px 은 판 (76) → 판 (81) 에서 *"얼마를 띄울지"* 의 답으로
+           고른 값이다. 이제 **띄우지 않는다**로 뜻이 뒤집혔다. 되살릴
+           때는 내림선 높이도 24 로 같이 되돌려야 한다.
+
+      ■ 굵기. 네 판을 돌아 1px 로 돌아왔다 —
+            판 92  1px ink      (대비 15.75)  → "조금 더 굵게"
+            판 93  2px ink      (15.75)       → "너무 굵다"
+            판 94  2px ink-soft ( 8.73)       → "지금도 좀 굵다"
+            판 95  1px 순검정   (19.59)       ← 여기
+        **원점으로 돌아온 것이 아니다.** 판 (92) 때는 선이 19px 떠
+        있었는데 지금은 닿아 있어 **같은 1px 도 연결이 또렷하다.** 전제가
+        달라졌으니 같은 굵기도 다른 그림이다. 색도 ink 에서 순검정으로
+        한 단 올려 「얇으면서 흐리지 않다」를 만들었다.
+        ⚠️ 1.5px 은 **어느 화면에서도 2px 과 같은 그림**이라 2px 아래는
+           1px 뿐이었다(판 94 에서 dpr1·dpr2 둘 다 쟀다).
+        ⚠️ **ml 보정을 -1px 에서 -0.5px 로 되돌렸다**(BRANCH · ITEM).
+           굵기의 절반이 짝이다.
+        ⚠️ 순검정은 **색 토큰에 없다.** globals.css 에 새 값을 들이는
+           대신 Tailwind 기본 유틸리티를 썼다 — VideoEmbed 가 이미 같은
+           것을 쓰고 있어 사이트에 없던 값이 아니다. 조직도 바깥의
+           「검정」은 여전히 ink(#1a1d23)이고, **여기만 레퍼런스를 따라
+           순검정**이라는 뜻이다. */
 
 /**
  * 대표 -> 공장장을 잇는 한 칸.
@@ -305,9 +340,9 @@ export default function OrgChart() {
 const LINK =
   "contents " +
   /* 모바일은 가로 tick 이라 **height 가 굵기**다 — 축이 반대다(판 87) */
-  "before:block before:h-0.5 before:w-4 before:shrink-0 before:bg-ink-soft " +
+  "before:block before:h-px before:w-4 before:shrink-0 before:bg-black " +
   "lg:flex lg:w-full lg:flex-col lg:items-center " +
-  "lg:before:h-8 lg:before:w-0.5";
+  "lg:before:h-8 lg:before:w-px";
 
 /**
  * 다섯 부서가 놓이는 단. lg 에서 가로로 펼치고 칸을 균등하게 나눈다.
@@ -316,12 +351,17 @@ const LINK =
  * 아래 24px 은 가로 분배선에서 각 칸으로 내려가는 세로선 자리(ITEM 의
  * ::before)다. 그래야 공장장 아래가 ㅗ 모양이 된다.
  * **lg:pt-12 와 before:h-6 / ITEM 의 top-[-24px] 는 항상 짝으로 움직인다.**
+ *
+ * ⚠️ **2026-10-26 판 (95) — ITEM 의 내림선만 짝에서 빠졌다.** 그쪽은
+ *    분배선에서 **부서 칸까지 닿아야** 해서 24 가 아니라 43px 이다
+ *    (24 + ITEM 의 pt 19). 여기 BRANCH 의 24px 은 공장장 바닥에서
+ *    분배선까지라 **그대로 꽉 차 있다** — 고칠 것이 없었다.
  */
 const BRANCH =
   "mt-3.5 w-full " +
   "lg:relative lg:mt-0 lg:flex lg:pt-12 " +
   "lg:before:absolute lg:before:left-1/2 lg:before:top-0 lg:before:h-6 " +
-  "lg:before:ml-[-1px] lg:before:w-0.5 lg:before:bg-ink-soft";
+  "lg:before:ml-[-0.5px] lg:before:w-px lg:before:bg-black";
 
 /**
  * 부서 한 칸.
@@ -375,9 +415,9 @@ const BRANCH =
 const ITEM =
   "mt-2.5 first:mt-0 " +
   "lg:relative lg:mt-0 lg:flex lg:min-w-0 lg:flex-1 lg:flex-col lg:pt-[19px] " +
-  "lg:before:absolute lg:before:left-1/2 lg:before:top-[-24px] lg:before:h-6 " +
-  "lg:before:ml-[-1px] lg:before:w-0.5 lg:before:bg-ink-soft " +
-  "lg:after:absolute lg:after:top-[-24px] lg:after:h-0.5 lg:after:bg-ink-soft " +
+  "lg:before:absolute lg:before:left-1/2 lg:before:top-[-24px] lg:before:h-[43px] " +
+  "lg:before:ml-[-0.5px] lg:before:w-px lg:before:bg-black " +
+  "lg:after:absolute lg:after:top-[-24px] lg:after:h-px lg:after:bg-black " +
   "lg:first:after:left-1/2 lg:first:after:right-0 " +
   "lg:last:after:left-0 lg:last:after:right-1/2 " +
   "lg:[&:not(:first-child):not(:last-child)]:after:left-0 " +
