@@ -6,7 +6,8 @@ import MapGuard from "@/components/MapGuard";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import { site, telHref } from "@/data/site";
-import { gridColumns } from "@/lib/gridColumn";
+/* ⚠️ 판 (96) 에 표가 1열이 되어 `gridColumns` import 를 걷었다 — 아래
+   cellCols 자리의 주석에 되살리는 법이 있다. */
 
 export const metadata: Metadata = {
   title: "오시는 길",
@@ -193,8 +194,25 @@ export default function LocationPage() {
         </a>
       ),
     },
-    /* 팩스는 걸 수 없어 링크가 없다(헤더.푸터.CTA와 같은 규칙). */
-    { label: "팩스", body: <span className="tabular-nums">{site.fax}</span> },
+    /* ⚠️⚠️⚠️ **2026-10-26 판 (96) — 팩스와 주차를 화면에서 뺐다.**
+       유신: *"오시는 길 B에 **주차도 빼서 4열 기준** 으로 해주고"*. 시안
+       (161) 에서 팩스를 뺀 안을 보시고, (163) 에서 주차까지 뺀 네 행을
+       고르셨다. 남는 넷은 **전화 · 이메일 · 주소 · 운영 시간**이다.
+
+       팩스는 걸 수 없어 링크가 없었다(헤더·푸터·CTA와 같은 규칙). 되살리려면
+       이 두 줄을 제자리에 —
+
+         { label: "팩스", body: <span className="tabular-nums">{site.fax}</span> },
+         { label: "주차", body: site.parking },                      ← 아래 자리
+
+       ⚠️ **팩스는 푸터에 남는다**(Footer.tsx) — 홈 구조화 데이터도 쓴다.
+          회사 개요 표에서도 같은 판에 뺐지만 사이트에서 사라지지는 않았다.
+       ⚠️⚠️ **주차는 다르다 — 쓰는 곳이 여기 하나뿐이었다.** 전수로 확인하고
+          유신께 그 사실을 말씀드린 뒤 시안으로 보여 드리고 고르셨다. 곧
+          「건물 주차장 이용」은 **지금 사이트 화면 어디에도 없다.**
+          `site.parking` 데이터는 그대로 두었으니 되살리는 것은 위 한 줄이다.
+       ⚠️ 이 표는 지도 액자 안이라 행이 줄어도 **지도 높이는 그대로**다.
+          표만 낮아진다(여섯 행 2열 183px → 네 행 1열 185px — 거의 같다). */
     {
       label: "이메일",
       body: (
@@ -206,7 +224,7 @@ export default function LocationPage() {
         </a>
       ),
     },
-    { label: "주차", body: site.parking },
+    /* ⚠️ 주차 줄의 자리다 — 위 ⚠️⚠️⚠️ 블록에 그대로 적어 두었다. */
     /* 이름은 road 지만 담긴 값은 지번이다 — 도로명으로 바꿀지는 아직 판단이
        남아 있다(site.ts TODO 1). 건물명(동우디지털파크)과 호수가 그 안에
        이미 들어 있어 이 칸 하나로 충분하다.
@@ -278,8 +296,14 @@ export default function LocationPage() {
     },
   ];
 
-  /** 연락처 표에서 칸마다의 열 번호(0부터). 아래 dl 주석 참고. */
-  const cellCols = gridColumns(cells.length, 2, (i) => !!cells[i].wide);
+  /* ⚠️⚠️⚠️ **2026-10-26 판 (96) — 표가 1열이 되어 이 한 줄을 주석으로 내렸다.**
+     유신: *"오시는 길 / 기업개요 **전부 일렬로** 나오게 하자"*. 되살리려면 —
+
+       const cellCols = gridColumns(cells.length, 2, (i) => !!cells[i].wide);
+
+     ⚠️ `gridColumns` import 도 함께 걷었다 — 회사 개요 표도 같은 판에 1열이
+        되어 **사이트에서 쓰는 곳이 0 이다.** lib 에는 그대로 남겨 둔다
+        (머리 주석에 거동과 경고가 있다 — `gridRows` 와 같은 처지다). */
   /* ⚠️ 한때 여기 cellRows(gridRows) 가 있었다 — 판 (16) 의 홀수 행 줄무늬에
      쓰던 것이고 판 (17) 에서 함께 걷었다. 되살리려면 import 에 gridRows 를
      더하고 아래 한 줄이면 된다 —
@@ -1234,8 +1258,31 @@ export default function LocationPage() {
                     **가까워진다** [[one-metric-two-motions]]
                  ⚠️ 거는 자리는 여전히 **이 dl** 이다 — 위 ⚠️ 의 「카드에는
                     지도가 함께 들어 있다」가 그대로 유효하다 */}
-              <dl className="grid border-t border-b border-t-[#b8bfca] border-b-[#d1d5db] bg-gradient-to-r from-white via-[#fdfdfe] via-88% to-[#fefefe] [&>*:last-child]:border-b-0 lg:grid-cols-2">
-                {cells.map((cell, i) => (
+              {/* ⚠️⚠️⚠️ **2026-10-26 판 (96) — 위아래가 2px 네이비, 그리고
+                     1열이다.** 회사 개요 표와 **같이** 고쳤다 — 두 표는 한
+                     식구고, 레퍼런스 문법을 읽은 내력과 색 사다리는 전부
+                     company/page.tsx 의 같은 자리에 있다. 요점만 —
+
+                       위·아래   2px #0d1b33   (시안 (159) 의 여덟 중 고르셨다)
+                       행 구분선 #9aa1ab       (레퍼런스 #999999)
+                       라벨      흰 바탕 · ink 글자 (값 글자와 같은 색)
+                       세로선    #e5e7eb       (행 구분선보다 연하게)
+
+                  ⚠️⚠️ **여기만 다른 것이 하나 있다 — 바깥 좌우 세로 테두리를
+                     걷지 않았다.** 회사 개요에서는 레퍼런스 문법대로 걷었지만,
+                     이 표에서 좌우를 쥔 겹은 **지도 액자 자체**(바로 위 div)라
+                     걷으면 지도 테두리까지 사라진다. 시안 (161)·(163) 에 그
+                     사실을 적고 좌우를 남긴 채로 보여 드렸다.
+                  ⚠️ **위아래 선의 뜻도 여기서는 다르다** — 표가 지도 바로
+                     아래로 이어져 액자의 아랫부분이다. 그래서 위 선은 **지도와
+                     표를 가르는 선**이고, 아래 선은 **액자 바닥**이다. 옛값이
+                     위아래 서로 다른 색이었던 까닭도 그것이었다(위 #b8bfca ·
+                     아래 연회색). 이제 둘이 같은 값으로 닫는다.
+                  ⚠️ 그라디언트와 멈춤(88%)은 **손대지 않았다** — 판 (62)~(67)
+                     에서 고르신 값이다. 회사 개요와 정점이 한 단 다른 것도
+                     그대로다(위 판 (67) 주석). */}
+              <dl className="grid border-t-2 border-b-2 border-[#0d1b33] bg-gradient-to-r from-white via-[#fdfdfe] via-88% to-[#fefefe] [&>*:last-child]:border-b-0">
+                {cells.map((cell) => (
                   <div
                     key={cell.label}
                     /* ⚠️ items-center 다. 이 dl 이 lg:grid-cols-2 라 같은
@@ -1254,13 +1301,17 @@ export default function LocationPage() {
                           dl 로 옮기면 선이 카드 전폭을 잃는다. */
                     /* ⚠️ 바탕을 깔지 않는다 — 값 칸은 흰색 하나다. 판 (16) 에
                        홀수 행에 깔았다가 판 (17) 에서 걷었다(위 dl 주석). */
-                    className={`flex min-w-0 items-center gap-4 border-b border-[#d1d5db] py-2.5 pr-5 sm:pr-7 ${
-                      cell.wide
-                        ? "lg:col-span-2"
-                        : cellCols[i] === 0
-                          ? ""
-                          : "lg:border-l"
-                    }`}
+                    /* ⚠️⚠️⚠️ **2026-10-26 판 (96) — 세 갈래가 걷혔다.** 1열이라
+                       전폭도 둘째 열도 없다. map 의 둘째 인자(칸 번호)도 함께
+                       걷었다 — 쓰는 데가 그 세 갈래뿐이었다.
+                       ⚠️ 바로 위 items-center 주석은 *"이 dl 이 두 열이라 같은
+                          격자 행의 두 칸이 높이를 나눠 갖는다"* 를 전제로 한다.
+                          **1열에서는 그 일이 없다.** 그래도 걷지 않는다 — 값이
+                          여러 줄인 행에서는 1열에서도 라벨이 위로 붙는다(회사
+                          개요 표의 같은 자리 주석이 그 경우를 말한다).
+                       ⚠️⚠️ **행 구분선이 한 단 진해졌다**(연회색 → #9aa1ab).
+                          회사 개요 표와 같은 값이다 — 내력은 거기에 있다. */
+                    className="flex min-w-0 items-center gap-4 border-b border-[#9aa1ab] py-2.5 pr-5 sm:pr-7"
                   >
                     {/* ⚠️⚠️ **2026-10-20 — 라벨과 값 사이에 세로 hairline.**
                            회사 개요 표와 **같이** 고쳤다 — 유신이 그쪽을 보고
@@ -1322,7 +1373,24 @@ export default function LocationPage() {
                            ⚠️ 여기는 지도가 **폭으로** 크기가 정해져서 지도는 그대로
                               이고 표만 낮아진다. 구역 702 → 654px. 회사 개요 쪽은
                               옆 사진이 표를 안 따라오는 문제가 따로 있다 */}
-                    <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-2.5 border-r border-[#d1d5db] bg-[#2d3953] px-2 py-2.5 text-13 font-bold text-white sm:w-24">
+                    {/* ⚠️⚠️⚠️⚠️ **2026-10-26 판 (96) — 네이비 채움을 걷었다.
+                           라벨 글자가 값 글자와 **같은 색**이 됐다.** 회사 개요
+                           표와 **같이** 고쳤다 — 유신이 레퍼런스를 짚으며
+                           *"회사명 텍스트 검정이고 **옆에도 검정** 이잖아 텍스트
+                           색깔은 이거하고 동일하게"* 라고 하셨고, 그 그림의
+                           라벨 열·값 열이 **둘 다 #000000** 이었다.
+                           **까닭 · 실측 · 물리친 안은 company/page.tsx 의 같은
+                           자리**에 있다. 요점만 —
+                             · 바탕을 흰색으로 **덮는다**(그라디언트 위라 투명이면
+                               라벨 색이 그라디언트에 딸려 다닌다)
+                             · 세로 구분선도 한 단 연하게(연회색 → #e5e7eb) —
+                               행 구분선보다 연한 것이 레퍼런스의 문법이다
+                             · 굵기와 가운데 정렬은 그대로 — 색이 같아진 지금
+                               라벨을 라벨로 세우는 것이 그 둘뿐이다
+                             · 글자 대비는 11.53 → **16.88** 로 올랐다
+                           ⚠️ 아래 판 (24) 주석은 **네이비 채움을 전제로** 쓰여
+                              있다. 되살릴 때 그대로 쓰라고 남긴다. */}
+                    <dt className="flex w-20 shrink-0 items-center justify-center self-stretch -my-2.5 border-r border-[#e5e7eb] bg-white px-2 py-2.5 text-13 font-bold text-ink sm:w-24">
                       {cell.label}
                     </dt>
                     {/* ⚠️ **min-w-0 은 여기와 바로 위 행, 두 곳에 다 있어야 한다.**
