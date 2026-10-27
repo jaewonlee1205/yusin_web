@@ -323,3 +323,176 @@ export function MailIcon({ className = "shrink-0" }: { className?: string }) {
     </svg>
   );
 }
+
+/* ──────────────────────────────────────────────────────────────────
+ * 아래 여섯은 **회사 개요 표의 라벨** 앞에 서는 아이콘이다(판 108).
+ * 남은 둘(사업장 소재지 · 전화번호)은 위의 MapPinIcon · PhoneIcon 을
+ * 그대로 가져다 쓴다 — 오시는 길과 같은 그림이어야 두 쪽이 한 식구로
+ * 읽힌다.
+ *
+ * ⚠️ 여섯 다 **16px 로 구워 8배로 늘려 보고** 모양을 정했다. 벡터를 크게
+ *    그리면 무엇이든 멀쩡해 보인다 — 굵기 2.5 가 16px 안에서 서로 붙는지는
+ *    실제 크기로 찍어 봐야만 안다. 첫 판에서 건물이 종처럼, 너트가
+ *    표적처럼 뭉개진 것을 그렇게 찾았다.
+ * ──────────────────────────────────────────────────────────────── */
+
+/**
+ * 회사명 앞 건물.
+ *
+ * ⚠️ 처음에 삼각 지붕을 얹었더니 16px 에서 **종처럼** 보였다 — 빗변 두 획이
+ *    굵기 2.5 로 만나면서 꼭짓점이 한 덩이로 뭉친다. 높낮이 다른 두 동을
+ *    네모로만 세워 「건물 여럿 = 회사」를 그렸고, 바닥선이 둘을 묶는다.
+ */
+export function BuildingIcon({ className = "shrink-0" }: { className?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M3 21h18" />
+      <path d="M5 21V5.5h8V21" />
+      <path d="M13 21v-8h6v8" />
+    </svg>
+  );
+}
+
+/**
+ * 대표이사 앞 사람.
+ *
+ * 머리 원과 어깨 호 **두 획뿐**이다 — 팔이나 다리를 더하면 16px 에서
+ * 어깨 호와 붙어 뭉친다.
+ */
+export function UserIcon({ className = "shrink-0" }: { className?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <circle cx="12" cy="8" r="3.5" />
+      <path d="M5 20.5c0-3.9 3.1-7 7-7s7 3.1 7 7" />
+    </svg>
+  );
+}
+
+/**
+ * 설립일 앞 달력.
+ *
+ * 몸통 · 머리줄 · 고리 둘. **날짜 칸은 그리지 않는다** — 작은 네모를 여섯
+ * 개 넣으면 16px 에서 점들이 서로 붙어 회색 띠가 된다.
+ */
+export function CalendarIcon({ className = "shrink-0" }: { className?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M3.5 5.5h17v15h-17z" />
+      <path d="M3.5 11h17" />
+      <path d="M8 3v4M16 3v4" />
+    </svg>
+  );
+}
+
+/**
+ * 주요사업(파츠피더 설계·제작) 앞 렌치.
+ *
+ * ⚠️ 처음에 육각 너트를 그렸더니 16px 에서 **표적처럼** 보였다 — 육각형
+ *    여섯 획이 굵기 2.5 로 둥글게 뭉쳐 그냥 원이 된다. 「만든다」를 한 획으로
+ *    말하는 렌치로 바꿨다. 상자나 톱니로 바꿀 여지는 남아 있다.
+ */
+export function WrenchIcon({ className = "shrink-0" }: { className?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M21.5 6.5a5.5 5.5 0 0 1-7.4 5.2L7 19a2.1 2.1 0 1 1-3-3l7.3-7.1A5.5 5.5 0 0 1 16.5 1.5l-3 3 2.5 2.5 3-3c.3.8.5 1.6.5 2.5Z" />
+    </svg>
+  );
+}
+
+/**
+ * 자본금 앞 지폐.
+ *
+ * 네모와 가운데 동그라미 둘. **원화 기호는 넣지 않는다** — 글자를 획으로
+ * 그리면 16px 에서 읽히지 않고, 라벨 「자본금」이 바로 아래에 있어 모호하지
+ * 않다(PrinterIcon 과 같은 판단이다).
+ */
+export function BanknoteIcon({ className = "shrink-0" }: { className?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M2.5 7h19v10h-19z" />
+      <circle cx="12" cy="12" r="2.5" />
+    </svg>
+  );
+}
+
+/**
+ * 사업자등록번호 앞 서류.
+ *
+ * 접힌 귀퉁이와 글줄 **하나**. 글줄을 둘 이상 그리면 16px 에서 간격이 3px
+ * 밑으로 떨어져 서로 붙는다.
+ */
+export function DocumentIcon({ className = "shrink-0" }: { className?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M6 2.5h8l4.5 4.5V21.5H6z" />
+      <path d="M14 2.5V7h4.5" />
+      <path d="M9.5 14h6" />
+    </svg>
+  );
+}
