@@ -1542,6 +1542,35 @@ export default function LocationPage() {
                      `sm:border-l` 이다. 한 줄로 쓸 수 없는 까닭이 이것이고,
                      칸을 더하거나 빼면 **이 배열도 같이 고쳐야 한다.**
 
+                  ⚠️⚠️ **2026-10-27 판 (104) — 원이 빨강이 아니라 네이비다.**
+                     유신: *"주소 / 전화 / 팩스 / 이메일 아이콘 빨간색인데
+                     **빨간색 말고 네이비로** 적용된 버전으로"* → 시안
+                     cmp-179 에서 **(바) 2px #0d1b33** 을 고르셨다.
+                     아래 판 (100) 글의 *"전부 border-brand · text-brand"* 는
+                     **그때까지의 화면**을 말한다 — 지금은 `border-dark ·
+                     text-dark` 다. 채움을 안 쓴다는 규칙은 그대로 유효하다.
+
+                     ⚠️ **이 네이비는 PageHero 와 ContactCTA 가 쓰는 바로 그
+                        색**(`--color-dark` #0d1b33)이다. 구역을 위아래로
+                        감싼 두 네이비 면과 아이콘 넷이 같은 색이 되어 쪽이
+                        한 덩어리로 묶인다. 시안의 `dark-soft`(#2a3447) 안은
+                        미묘하게 다른 색이라 그 묶임이 흐려져 물리셨다.
+                     ⚠️ **아이콘이 지금보다 진해진다 — 알고 받았다.** 흰
+                        바탕에서 빨강은 대비 5.09, 이 네이비는 **17.19** 다.
+                        라벨 글자(ink #1a1d23)가 16.88 이라 **원과 글자가 같은
+                        무게**가 된다. 전에는 원만 튀고 글자는 먹색이라 둘이
+                        따로 놀았다. 선을 얇게 한 안(1px)과 채운 안도 함께
+                        보여 드렸고, 2px 그대로를 고르셨다.
+                     ⚠️ **이 구역에 남는 빨강은 「FIND US」 한 줄뿐이다**
+                        (`page.tsx` 위쪽 `text-brand`). 그 밖에는 주소·전화·
+                        이메일 링크의 `hover:text-brand` 가 있는데 마우스를
+                        올려야 보인다. **쪽 전체로는** 헤더의 활성 링크와
+                        견적 문의 버튼, 푸터가 빨강을 쥐고 있다 — 브랜드색이
+                        사라진 것이 아니라 **이 구역에서 물러난 것**이다.
+                        시안에 그 사실을 적어 드리고 고르셨다.
+                     ⚠️ 되돌리려면 아래 두 클래스를 `border-brand text-brand`
+                        로 돌리면 된다. 원 크기도 아이콘도 안 건드렸다.
+
                   ⚠️ **빨강은 선으로만 들어간다.** 원 테두리와 아이콘 획이
                      전부 border-brand · text-brand 다. 채움(bg-brand)은
                      견적 문의 버튼 전용이라는 규칙이 여기서도 그대로다.
@@ -1631,7 +1660,7 @@ export default function LocationPage() {
                         ⚠️ mx-auto 가 원을 칸 가운데에 둔다. 시안 (174) 에서
                            왼쪽으로 옮긴 안 셋을 함께 보여 드렸는데, 유신이
                            고르신 ㈎ 는 **가운데 그대로**다. */}
-                    <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full border-2 border-brand text-brand">
+                    <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full border-2 border-dark text-dark">
                       {cell.icon}
                     </div>
                     <dt className="mb-1.5 text-13 font-bold text-ink">
