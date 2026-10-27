@@ -236,3 +236,90 @@ export function MobileIcon({ className = "shrink-0" }: { className?: string }) {
     </svg>
   );
 }
+
+/**
+ * 오시는 길 연락처 칸의 **주소(핀) · 팩스(프린터) · 이메일(봉투)** 셋.
+ * 판 (100) 에서 연락처가 표에서 **아이콘 4열**로 바뀌며 들어왔다 — 넷째인
+ * 전화는 이미 있는 PhoneIcon 을 쓴다.
+ *
+ * ⚠️ **크기는 부르는 쪽이 정한다.** 셋 다 16px 로 두고, 오시는 길에서는
+ *    넷 모두 `className="h-6 w-6"` 로 24px 를 준다(README 의 11·14·16·20·24).
+ *    PhoneIcon 과 꼴을 맞추려고 16px 를 기본으로 둔 것이고, 24 를 기본으로
+ *    박으면 한 자리에서만 맞는 아이콘이 된다.
+ * ⚠️ **굵기 2.5 는 README 규칙이다.** 이 파일에서 2.5 가 아닌 것은
+ *    MobileIcon(2.2) 하나뿐이고 그 까닭이 바로 위에 적혀 있다 — 여기 셋은
+ *    예외를 둘 이유가 없다.
+ * ⚠️ **빨강은 선으로만 들어간다.** 채움(fill)은 견적 문의 전용이다 —
+ *    셋 다 fill="none" 이고 색은 부르는 쪽의 text-brand 가 준다.
+ * ⚠️ 라벨 글자가 바로 옆에 있어 셋 다 aria-hidden 이다.
+ */
+
+/** 주소 앞 지도 핀. */
+export function MapPinIcon({ className = "shrink-0" }: { className?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M12 21.5s7-6.6 7-11.5a7 7 0 1 0-14 0c0 4.9 7 11.5 7 11.5Z" />
+      <path d="M12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+    </svg>
+  );
+}
+
+/**
+ * 팩스 앞 프린터.
+ *
+ * ⚠️ 팩스기 그대로를 그리지 않았다 — 24px 안에서 수화기까지 넣으면 선이
+ *    엉킨다. 위 급지(M7 9V3.5h10V9) · 몸통 · 아래 출력지 셋으로 **팩스가
+ *    하는 일**을 그렸고, 라벨 「팩스」가 바로 아래에 있어 모호하지 않다.
+ */
+export function PrinterIcon({ className = "shrink-0" }: { className?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M7 9V3.5h10V9" />
+      <path d="M7 16.5H5.5A2.5 2.5 0 0 1 3 14v-2.5A2.5 2.5 0 0 1 5.5 9h13a2.5 2.5 0 0 1 2.5 2.5V14a2.5 2.5 0 0 1-2.5 2.5H17" />
+      <path d="M7 14h10v6.5H7z" />
+    </svg>
+  );
+}
+
+/** 이메일 앞 봉투. 네모와 덮개 두 획뿐이다 — 24px 에서 가장 또렷하다. */
+export function MailIcon({ className = "shrink-0" }: { className?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M3.5 6.5h17v11h-17z" />
+      <path d="m4 7.5 8 5.5 8-5.5" />
+    </svg>
+  );
+}
