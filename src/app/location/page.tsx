@@ -588,7 +588,43 @@ export default function LocationPage() {
                    페이지 전체           1892 -> 1852px
                  900px 뷰포트에서 연락처 첫 줄이 **경계에 닿는다.** 세로를
                  40px 만 더 써도 다시 첫 화면 밖으로 나간다. */}
-          <div className="flex flex-col gap-10">
+          {/* ⚠️⚠️⚠️ **2026-10-27 판 (105) — lg 부터 2열이다. 지도가 왼쪽,
+                 연락처가 오른쪽.** 유신: *"여기처럼 **지도가 왼쪽에 가있고
+                 옆에 내용이 오른쪽에** 가게 하는게 나은거 같네 지금 아이콘은
+                 유지 하고"* (롯데이노베이트 오시는 길을 보여 주셨다) →
+                 시안 cmp-180 에서 **(카) 2열 · 아이콘을 왼쪽에** 를 고르셨다.
+
+              **위 「배치를 다섯 번 바꿨다」 목록에 여섯 번째를 더한다 —**
+
+                6) **2열(다시)** — 지도 왼쪽 2 : 연락처 오른쪽 1.
+                                   2번과 같은 꼴이지만 연락처가 카드 밖에 있다
+
+              ⚠️⚠️ **바로 아래 경고가 뒤집혔다.** 거기 *"표를 1열로 펴면
+                    1번으로 돌아간다"* 고 적혀 있는데, **재 보니 반대였다** —
+                    1440 에서 구역 바닥이 **856 → 679px**, **177px 올라간다.**
+                    1번이 길었던 까닭은 지도 **아래에** 연락처가 쌓여서였고,
+                    2열은 **나란히** 서므로 구역 높이가 둘 중 긴 쪽 하나다.
+                    경고의 나머지 둘(지도를 다시 세우지 말 것 · 카드를 다시
+                    쪼개지 말 것)은 **그대로 유효하다.**
+
+              ⚠️ **그래도 「굴리지 않고 다 보인다」는 아니다.** 679px 는 구역
+                 머리를 헤더 바로 아래 둔 **그 스크롤 자리**에서 잰 값이다.
+                 맨 위에서 열면 위에 PageHero 배너가 있어 구역 바닥이 화면
+                 **911px**(판 104 는 1088px)이라, 900px 짜리 화면에서는 아직
+                 11px 모자란다. 쪽 전체는 1653px. 두 수를 섞지 말 것.
+
+              ⚠️ **참고 사이트를 열어 쟀다.** 1440 에서 지도가 12칸 중 8칸
+                 (908x412, 2.20:1), 연락처가 4칸(436x412)이고 **두 칸 높이가
+                 같다.** 우리 본문 폭 1088px 에 같은 2:1 과 gap-10 을 두면
+                 **지도 697 + 연락처 349** 다 — 재서 확인했다.
+              ⚠️ **lg(1024)부터 접는다.** 거기서는 지도 611x400(1.53:1),
+                 연락처 307px 다. 1440 보다 86px 좁을 뿐 길은 보인다 —
+                 시안에 1024 를 1:1 로 실어 드리고 고르셨다. 더 넉넉히
+                 가려면 `lg:` 를 `xl:` 로 올리면 1280 부터가 된다(네 곳을
+                 함께 올려야 한다 — 여기 · 지도 Reveal · 지도 칸 · dl · 칸).
+              ⚠️ 1024 미만은 **지금 그대로 세로로 쌓인다.** 390 은 2열 4칸,
+                 그 사이는 4열 한 줄이다. */}
+          <div className="flex flex-col gap-10 lg:grid lg:grid-cols-[2fr_1fr] lg:items-stretch">
             {/* Section 컴포넌트를 쓰지 않는다. 생김새만 Section 의 제목
                 블록과 맞춘다.
 
@@ -607,7 +643,9 @@ export default function LocationPage() {
                 말한다. "오시는 길" 은 쓸 수 없다 — 바로 위 h1 이 그 말이다.
 
                 ⚠️ delay 가 없다(0). 아래 카드(90)보다 먼저 떠야 한다. */}
-            <Reveal>
+            {/* ⚠️ **판 (105) — 제목은 2열에서도 전폭이다**(`lg:col-span-2`).
+                   지도 칸 위에만 얹히면 오른쪽 연락처가 제목 없이 뜬다. */}
+            <Reveal className="lg:col-span-2">
               <p className="text-xs font-bold tracking-[0.08em] text-brand">
                 FIND US
               </p>
@@ -656,7 +694,12 @@ export default function LocationPage() {
                  카드 안에 지도뿐이라 제 밑선을 제가 그려야 한다.
                  ⚠️ 되살릴 때(연락처를 다시 카드 안으로 넣을 때)는 위
                     판 (16) 주석의 근거가 그대로 살아난다. */
-              className="overflow-hidden border border-[#d1d5db] bg-white"
+              /* ⚠️ **판 (105) — `lg:flex` 가 붙었다.** 2열에서 이 카드가
+                 grid 칸으로 늘어나면(items-stretch), 안의 지도 칸이
+                 `lg:flex-1` 로 그 높이를 받는다. **이 짜임은 새것이 아니다** —
+                 아래 지도 칸 주석이 적어 둔 옛 2열 배치의 `lg:flex +
+                 lg:min-h-[25rem]` 가 그것이고, 그대로 되살린 것이다. */
+              className="overflow-hidden border border-[#d1d5db] bg-white lg:flex"
             >
               {/* lg 부터 3:1 이다(1088x363) — 홈 PERFORMANCE 영상과 같은
                   비율로 가로로 시원하게 눕는다. 한때 칸 높이를 받는 lg:flex +
@@ -700,7 +743,26 @@ export default function LocationPage() {
                            이 색을 가져다 쓰지 말 것.**
                   ⚠️⚠️ **isolate 는 블렌드를 이 칸 안에 가둔다.** 아래 색조 겹이
                      mix-blend 라, 격리하지 않으면 카드 밖 요소와도 섞인다. */}
-              <div className="relative isolate h-[320px] overflow-hidden bg-[#e0e2e6] sm:h-[400px] lg:aspect-[3/1] lg:h-auto">
+              {/* ⚠️⚠️ **판 (105) — `lg:aspect-[3/1]` 을 걷고 위 주석이 적어
+                     둔 옛 짜임으로 돌아갔다.** 바로 위 문단의 *"한때 칸 높이를
+                     받는 lg:flex + lg:min-h-[25rem] 였는데, 그건 오른쪽에
+                     연락처가 있어 행 높이를 그쪽이 정하던 2열 배치에서 쓰던
+                     방식이다"* 가 **지금 다시 현행이 됐다.** 그 문단의
+                     「한때」를 「지금」으로 읽으면 된다.
+
+                  ⚠️ 그래서 lg 에서 지도 비율은 **고정이 아니다.** 행 높이를
+                     연락처가 정하고 지도가 받되, 연락처가 400px 보다 짧으면
+                     `lg:min-h-[25rem]`(400px)이 바닥을 깐다. 1440 에서
+                     **697x400(1.74:1)**, 1024 에서 **611x400(1.53:1)** 이다 —
+                     재서 확인했다. 아이콘을 글자 왼쪽에 눕혔기 때문에(아래
+                     칸 주석) 연락처가 372px 로 짧아져 **바닥값이 이긴다.**
+                  ⚠️ **아이콘을 글자 위로 되돌리면 이 비율이 깨진다.** 그러면
+                     연락처가 528px 가 되어 지도가 526px 까지 늘고 1.33:1,
+                     거의 정사각이 된다 — 시안 cmp-180 의 (타)가 그 모습이고
+                     「길을 가로로 보여 주는 성격이 사라진다」는 까닭으로
+                     물리셨다.
+                  ⚠️ lg 미만은 **그대로다** — h-[320px] · sm:h-[400px]. */}
+              <div className="relative isolate h-[320px] overflow-hidden bg-[#e0e2e6] sm:h-[400px] lg:h-auto lg:min-h-[25rem] lg:flex-1">
                 <div
                   aria-hidden="true"
                   /* ⚠️ text-ink-soft 다. text-muted(#6b7280)를 이 바탕
@@ -1073,7 +1135,11 @@ export default function LocationPage() {
                    시안에서 고른 간격이 그 값이라 새로 줄 것이 없다.
                 ⚠️ delay 150 은 **옛값 그대로다** — 한때 셋이었을 때 연락처가
                    쓰던 값이다(위 카드 주석에 그 셋이 적혀 있다). */}
-            <Reveal delay={150}>
+            {/* ⚠️ **판 (105) — 2열에서 연락처가 제 칸의 세로 가운데에 선다**
+                   (`lg:flex lg:flex-col lg:justify-center`). grid 칸이
+                   지도 높이만큼 늘어나는데 안의 dl 은 372px 뿐이라, 가운데를
+                   잡지 않으면 글이 위로 몰리고 아래가 비어 보인다. */}
+            <Reveal delay={150} className="lg:flex lg:flex-col lg:justify-center">
               {/* ⚠️⚠️ **아래 머리 주석부터 되살림 블록 끝까지가 옛 표의
                      것이다.** 지우지 않았다 — 한 줄도 안 바꾸고 그대로
                      두었으니, 거기 적힌 *「표」*·*「라벨 칸」*·*「행
@@ -1639,7 +1705,15 @@ export default function LocationPage() {
                      거기서는 둘째 행도 `pt-8` 을 받아 행 사이가 22 + 32 =
                      54px 가 된다. 찍어서 봤고 그대로 둔다 — 좁히면 둘째
                      행 세로선이 짧아져 첫 행과 어긋나 보인다. */}
-              <dl className="grid grid-cols-2 gap-y-[22px] sm:grid-cols-4">
+              {/* ⚠️⚠️ **판 (105) — lg 부터 1열 4행이다**(`lg:grid-cols-1
+                     lg:gap-y-6`). 2열 배치에서 연락처 칸이 349px 이라 넷을
+                     가로로 둘 자리가 없다. 행 사이는 24px 다.
+
+                  ⚠️ **폭마다 열이 셋으로 갈린다** — 390 은 2열 2행,
+                     640~1023 은 4열 한 줄, 1024 부터 1열 4행이다. 칸을
+                     더하거나 빼면 **세 가지를 다 확인할 것.**
+                  ⚠️ `gap-y-[22px]` 는 이제 **390 에서만** 쓰인다. */}
+              <dl className="grid grid-cols-2 gap-y-[22px] sm:grid-cols-4 lg:grid-cols-1 lg:gap-y-6">
                 {cells.map((cell, i) => (
                   <div
                     key={cell.label}
@@ -1653,14 +1727,37 @@ export default function LocationPage() {
                        ⚠️ 아래쪽은 `pb-1`(4px) 그대로다. 위아래를 같이
                           키우면 블록이 통째로 커지면서 세로선 **아래** 끝도
                           내려가 아이콘에서 멀어진다. */
-                    className={`min-w-0 px-5 pt-8 pb-1 text-center${columnRules[i]}`}
+                    /* ⚠️⚠️ **판 (105) — lg 부터 칸이 가로로 눕는다.**
+                          `lg:grid lg:grid-cols-[56px_1fr]` 로 왼쪽 56px 에
+                          아이콘 원, 오른쪽에 라벨과 값을 쌓는다. 래퍼 div 를
+                          만들지 않은 까닭이 이것이다 — dt·dd 가 dl 구조
+                          안에 그대로 남는다.
+
+                       ⚠️ `lg:border-l-0` 이 아래 columnRules 의 세로선을
+                          **lg 에서만 끈다.** 판 (103) 에서 지도와 연락처를
+                          가르라고 세운 선인데, 칸이 세로로 쌓이면 선이
+                          왼쪽에 서서 경계가 아니라 **들여쓰기처럼** 읽힌다.
+                          2열에서는 좌우로 갈리는 것 자체가 경계다.
+                          ⚠️ columnRules 와 거기 달린 주석은 **그대로 둔다** —
+                             1023px 아래에서는 여전히 그 규칙이 쓰인다.
+                       ⚠️ `lg:pt-0` 이 판 (103) 의 `pt-8` 을 lg 에서 되돌린다.
+                          그 28px 은 세로선을 위로 끌어올리려고 준 것인데,
+                          여기서는 선 자체를 껐으므로 쓸 자리가 없다.
+                       ⚠️ `lg:text-left` — 2열 오른쪽 칸은 왼쪽 정렬이다.
+                          참고 사이트도 그렇고, 좁은 칸에서 가운데 정렬은
+                          주소 두 줄이 들쭉날쭉해 보인다. */
+                    className={`min-w-0 px-5 pt-8 pb-1 text-center lg:grid lg:grid-cols-[56px_1fr] lg:items-center lg:gap-x-4 lg:border-l-0 lg:px-0 lg:pt-0 lg:text-left${columnRules[i]}`}
                   >
                     {/* ⚠️ 원이 아이콘보다 먼저 선다 — h-14 w-14 가 56px 이고
                            안쪽 아이콘은 cells 가 h-6 w-6(24px)로 준다.
                         ⚠️ mx-auto 가 원을 칸 가운데에 둔다. 시안 (174) 에서
                            왼쪽으로 옮긴 안 셋을 함께 보여 드렸는데, 유신이
                            고르신 ㈎ 는 **가운데 그대로**다. */}
-                    <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full border-2 border-dark text-dark">
+                    {/* ⚠️ **판 (105) — lg 에서 원이 글자 왼쪽에 선다.**
+                           `lg:row-span-2` 가 라벨·값 두 줄에 걸치게 하고,
+                           `lg:mx-0 lg:mb-0` 이 가운데 정렬과 아래 여백을
+                           되돌린다. 크기(56px)도 색(네이비, 판 104)도 그대로다. */}
+                    <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full border-2 border-dark text-dark lg:row-span-2 lg:mx-0 lg:mb-0 lg:self-center">
                       {cell.icon}
                     </div>
                     <dt className="mb-1.5 text-13 font-bold text-ink">
