@@ -179,6 +179,30 @@ export default function LocationPage() {
     " sm:border-l sm:border-[#e5e7eb]",
     " border-l border-[#e5e7eb]",
   ];
+  /* ⚠️⚠️ **판 (106) — lg(1024)부터의 가로 구분선이다.** 유신: *"여기에
+        주소 / 전화 / 팩스 / 이메일 경우도 **구분선** 있으면 좋을거 같은데"*
+        → 시안 cmp-181 의 Ⅶ.
+
+        첫 칸만 빈 문자열이다 — 선은 **칸과 칸 사이**에 서므로 맨 위에는
+        긋지 않는다. 위 columnRules 와 같은 꼴이지만 **일하는 폭이 다르다** —
+        columnRules 는 1023px 아래의 세로선, 여기는 lg 부터의 가로선이다.
+
+     ⚠️ 색이 `#d1d5db` 인 까닭 — **지도 카드의 테두리와 똑같은 값**이다
+        (`border border-[#d1d5db]`). 새 색을 들이지 않으니 지도 둘레의 선과
+        연락처의 선이 한 벌로 읽힌다.
+     ⚠️ **`--color-line`(#e5e7eb)을 쓰지 않았다.** 판 (102) 에서 지도 밑
+        가로선을 그 값으로 줬다가 *"너무 연한거 같은데"* 를 듣고 판 (103)
+        에서 걷어냈다. 같은 쪽 · 같은 흰 바탕 · 같은 1px 이라 조건이 그대로다.
+        흰 바탕 대비는 #e5e7eb 1.24 · #d1d5db 1.47 · #9aa1ab 2.61 이고,
+        시안에서 #9aa1ab(진한 쪽)도 함께 보여 드린 뒤 Ⅶ(연한 쪽)을 고르셨다.
+     ⚠️ 클래스를 문자열로 온전히 적는다 — 조립하면 Tailwind 가 긁지 못해
+        선이 조용히 사라진다. 네 칸이라는 전제도 위와 똑같이 박혀 있다. */
+  const rowRules = [
+    "",
+    " lg:border-t lg:border-[#d1d5db]",
+    " lg:border-t lg:border-[#d1d5db]",
+    " lg:border-t lg:border-[#d1d5db]",
+  ];
   const cells: {
     label: string;
     body: ReactNode;
@@ -624,7 +648,38 @@ export default function LocationPage() {
                  함께 올려야 한다 — 여기 · 지도 Reveal · 지도 칸 · dl · 칸).
               ⚠️ 1024 미만은 **지금 그대로 세로로 쌓인다.** 390 은 2열 4칸,
                  그 사이는 4열 한 줄이다. */}
-          <div className="flex flex-col gap-10 lg:grid lg:grid-cols-[2fr_1fr] lg:items-stretch">
+          {/* ⚠️⚠️⚠️ **2026-10-27 판 (106) — 지도가 가로 절반이다.**
+                 유신: *"지도 쪽 경우가 현재 더 가로가 긴거 같은데 … 지도가
+                 반정도 차지 하잖아 가로 우리는 지도가 70프로 정도 차지
+                 하는거 같은데 **가로 50프로 기준**으로 맞춰서 줘봐"*
+                 (모두다디자인 그림을 보여 주셨다 — 980px 판에 내용이 좌우
+                 반반으로 서고 오른쪽 절반 안에 지도가 있다) →
+                 시안 cmp-181 에서 **Ⅶ** 을 고르셨다.
+
+              `lg:grid-cols-[2fr_1fr]` → `lg:grid-cols-2`. 1440 에서
+              **지도 697 → 522px**(본문 1088 의 64% → 48%), 연락처
+              349 → 524px 다. **구역 바닥은 679px 그대로** — 지도 높이
+              400 이 바닥을 정하기 때문이다.
+
+           ⚠️ **절반으로 가르면 오른쪽이 빈다. 그것이 아래 구분선과 한 쌍이다.**
+              칸은 524px 인데 가장 긴 주소조차 434px 에서 끝나 **90px 이
+              늘 빈다**(판 105 에서는 12px 이었다). 세로도 마찬가지로 내용
+              312px 가 400px 자리 가운데에 몰려 위아래 80px 씩 빴다.
+              그래서 **dl 을 지도 높이에 맞춰 펴고 행 구분선을 넣었다** —
+              아래 dl 과 칸의 판 (106) 주석을 함께 읽을 것. 셋이 한 벌이라
+              하나만 되돌리면 빈 자리가 되살아난다.
+
+           ⚠️ **알고 받은 대가 — 1024 에서 지도가 458x400, 거의 정사각이다**
+              (판 105 에서는 611x400, 1.53:1). 길은 읽힌다. 시안에 1024 를
+              1:1 로 실어 드리고 고르셨다. 가로로 더 눕히려면 길이 셋이다 —
+              이 클래스를 `xl:grid-cols-2`(1280 부터)로 올리거나, 지도 칸의
+              `lg:min-h-[25rem]` 을 줄이거나, lg 에서만 비율을 따로 준다.
+              첫째를 고르면 **네 곳의 lg 를 함께 올려야 한다**(여기 · 지도
+              Reveal · 지도 칸 · dl · 칸).
+
+           ⚠️ 1023px 아래는 **한 픽셀도 바뀌지 않았다** — 거기는 2열이 아니고
+              판 (103) 의 세로 구분선도 그대로 살아 있다. */}
+          <div className="flex flex-col gap-10 lg:grid lg:grid-cols-2 lg:items-stretch">
             {/* Section 컴포넌트를 쓰지 않는다. 생김새만 Section 의 제목
                 블록과 맞춘다.
 
@@ -1139,7 +1194,13 @@ export default function LocationPage() {
                    (`lg:flex lg:flex-col lg:justify-center`). grid 칸이
                    지도 높이만큼 늘어나는데 안의 dl 은 372px 뿐이라, 가운데를
                    잡지 않으면 글이 위로 몰리고 아래가 비어 보인다. */}
-            <Reveal delay={150} className="lg:flex lg:flex-col lg:justify-center">
+            {/* ⚠️ **판 (106) — `lg:justify-center` 가 `lg:justify-stretch` 가
+                   됐다.** 판 (105) 때는 연락처가 제 칸 안에서 세로 가운데에
+                   섰는데, 지도가 절반으로 줄면서 오른쪽 칸이 524px 로 넓어지자
+                   내용 312px 가 400px 자리 가운데에 몰려 위아래로 80px 씩
+                   비어 보였다. 늘려서 지도 높이를 그대로 받게 한다 — 아래 dl
+                   의 `lg:flex-1` 과 **한 쌍**이다(둘 중 하나만 있으면 안 편다). */}
+            <Reveal delay={150} className="lg:flex lg:flex-col lg:justify-stretch">
               {/* ⚠️⚠️ **아래 머리 주석부터 되살림 블록 끝까지가 옛 표의
                      것이다.** 지우지 않았다 — 한 줄도 안 바꾸고 그대로
                      두었으니, 거기 적힌 *「표」*·*「라벨 칸」*·*「행
@@ -1713,7 +1774,21 @@ export default function LocationPage() {
                      640~1023 은 4열 한 줄, 1024 부터 1열 4행이다. 칸을
                      더하거나 빼면 **세 가지를 다 확인할 것.**
                   ⚠️ `gap-y-[22px]` 는 이제 **390 에서만** 쓰인다. */}
-              <dl className="grid grid-cols-2 gap-y-[22px] sm:grid-cols-4 lg:grid-cols-1 lg:gap-y-6">
+              {/* ⚠️⚠️ **판 (106) — lg 에서 네 칸을 지도 높이에 맞춰 편다.**
+                     `lg:gap-y-6` → `lg:gap-y-0` 으로 틈을 없애고,
+                     `lg:flex-1 lg:grid-rows-4` 로 400px 를 넷이 나눠 갖는다.
+                     한 행이 **60 → 101px** 이 되고, 지도와 연락처의 **아래
+                     끝이 같은 선**에 선다. 참고로 쟀던 롯데이노베이트도 지도
+                     412 · 연락처 412 로 높이를 맞춰 놓았다.
+                  ⚠️ 틈(gap)을 0 으로 만든 까닭은 **행 구분선 때문**이다.
+                     틈을 남겨 두면 선이 칸 위쪽에만 붙어 위아래가 어긋나
+                     보인다. 칸 높이가 선 사이 간격을 그대로 정하게 했다.
+                  ⚠️ `lg:flex-1` 은 **부모가 flex 일 때만** 듣는다 — 위
+                     Reveal 의 `lg:flex lg:flex-col lg:justify-stretch` 가
+                     그 전제다. 거기를 되돌리면 여기도 함께 되돌릴 것.
+                  ⚠️ `gap-y-[22px]` 는 **여전히 390 에서만** 쓰인다(2열 2행).
+                     sm~lg 사이의 4열 한 줄도 그대로다. */}
+              <dl className="grid grid-cols-2 gap-y-[22px] sm:grid-cols-4 lg:grid-cols-1 lg:gap-y-0 lg:flex-1 lg:grid-rows-4">
                 {cells.map((cell, i) => (
                   <div
                     key={cell.label}
@@ -1746,7 +1821,15 @@ export default function LocationPage() {
                        ⚠️ `lg:text-left` — 2열 오른쪽 칸은 왼쪽 정렬이다.
                           참고 사이트도 그렇고, 좁은 칸에서 가운데 정렬은
                           주소 두 줄이 들쭉날쭉해 보인다. */
-                    className={`min-w-0 px-5 pt-8 pb-1 text-center lg:grid lg:grid-cols-[56px_1fr] lg:items-center lg:gap-x-4 lg:border-l-0 lg:px-0 lg:pt-0 lg:text-left${columnRules[i]}`}
+                    /* ⚠️ **판 (106) — `lg:pb-0 lg:content-center` 와 행
+                          구분선(`rowRules`)이 더해졌다.** 칸이 101px 를
+                          받으면 내용이 위로 붙으므로 `content-center` 로
+                          가운데에 세운다(칸 자체가 lg 에서 grid 다).
+                       ⚠️ **`columnRules` 와 `rowRules` 는 서로 다른 폭에서
+                          일한다** — 앞은 1023px 아래의 세로선, 뒤는 lg 부터의
+                          가로선이다. lg 에서 세로선은 `lg:border-l-0` 으로
+                          꺼지므로 둘이 한 화면에 같이 나오는 일은 없다. */
+                    className={`min-w-0 px-5 pt-8 pb-1 text-center lg:grid lg:grid-cols-[56px_1fr] lg:items-center lg:gap-x-4 lg:border-l-0 lg:px-0 lg:pt-0 lg:pb-0 lg:text-left lg:content-center${columnRules[i]}${rowRules[i]}`}
                   >
                     {/* ⚠️ 원이 아이콘보다 먼저 선다 — h-14 w-14 가 56px 이고
                            안쪽 아이콘은 cells 가 h-6 w-6(24px)로 준다.
