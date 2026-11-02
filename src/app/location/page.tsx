@@ -462,6 +462,12 @@ export default function LocationPage() {
       <PageHero
         eyebrow="LOCATION"
         title="오시는 길"
+        /* 판 (114) — 배너 아래 바로가기 띠(PageNav). 이 한 줄을 빼면 **이 쪽만**
+           띠가 없어진다.
+           ⚠️ 이 쪽은 nav 에 자식이 없어 **칸이 하나만** 선다(문의하기도 같다).
+              허전해 보이면 site.ts 에 자식을 만드는 것이 아니라 띠를 안 거는
+              쪽으로 간다 — 없는 메뉴를 띠 때문에 만들면 안 된다. */
+        path="/location"
         /* 2026-10-20(3) — 배너 설명문을 일곱 쪽에서 모두 걷었다.
            까닭과 되살리는 법은 PageHero.tsx 의 lead 주석에 있다. */
         // lead="샘플을 들고 오시면 현장에서 함께 검토합니다. 방문 전 연락 바랍니다."

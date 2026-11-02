@@ -35,6 +35,12 @@ export default function VideosPage() {
       <PageHero
         eyebrow="VIDEO"
         title="영상자료"
+        /* 판 (114) — 배너 아래 바로가기 띠(PageNav). 이 한 줄을 빼면 **이 쪽만**
+           띠가 없어진다.
+           ⚠️ 띠에 찍히는 2단계 글자는 「동영상」이다 — 쪽 제목(영상자료)과
+              일부러 다르다. 까닭은 site.ts 의 nav 주석에 적혀 있다
+              (드롭다운 안에서는 부모가 맥락을 준다). */
+        path="/videos"
         /* 2026-10-20(3) — 배너 설명문을 일곱 쪽에서 모두 걷었다.
            까닭과 되살리는 법은 PageHero.tsx 의 lead 주석에 있다. */
         // lead="정렬 자세와 공급 속도는 구동 화면에서 가장 잘 드러납니다."

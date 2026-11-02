@@ -50,6 +50,9 @@ export default function ClientsPage() {
       <PageHero
         eyebrow="WORKS"
         title="제작실적"
+        /* 판 (114) — 배너 아래 바로가기 띠(PageNav). 이 한 줄을 빼면 **이 쪽만**
+           띠가 없어진다. 띠가 거는 단계는 site.ts 의 nav 에서 이 주소로 찾는다. */
+        path="/clients"
         /* 2026-10-20(3) — 배너 설명문을 일곱 쪽에서 모두 걷었다.
            까닭과 되살리는 법은 PageHero.tsx 의 lead 주석에 있다. */
         // lead="1992년 설립 이후 조립·검사 라인의 부품 공급을 자동화해 왔습니다."

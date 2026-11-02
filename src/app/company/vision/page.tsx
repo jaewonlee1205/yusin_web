@@ -20,6 +20,9 @@ export default function VisionPage() {
       <PageHero
         eyebrow="ORGANIZATION"
         title="조직도"
+        /* 판 (114) — 배너 아래 바로가기 띠(PageNav). 이 한 줄을 빼면 **이 쪽만**
+           띠가 없어진다. 띠가 거는 단계는 site.ts 의 nav 에서 이 주소로 찾는다. */
+        path="/company/vision"
         /* 2026-10-20(3) — 배너 설명문을 일곱 쪽에서 모두 걷었다.
            까닭과 되살리는 법은 PageHero.tsx 의 lead 주석에 있다. */
         // lead="영업·설계·가공·튜닝·조립, 다섯 부서가 한 공장 안에 모두 있습니다."

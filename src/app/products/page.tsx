@@ -37,6 +37,10 @@ export default function ProductsPage() {
       <PageHero
         eyebrow="PRODUCTS"
         title="제품 라인업"
+        /* 판 (114) — 배너 아래 바로가기 띠(PageNav). 이 한 줄을 빼면 **이 쪽만**
+           띠가 없어진다. 2단계는 「전체」이고, 펼치면 숨기지 않은 제품들이 선다
+           (판 113 의 listedProducts — 진동기는 저절로 빠진다). */
+        path="/products"
         /* 2026-10-20(3) — 배너 설명문을 일곱 쪽에서 모두 걷었다.
            까닭과 되살리는 법은 PageHero.tsx 의 lead 주석에 있다. */
         // lead="표준 기종을 고르는 것이 아니라, 부품에 맞춰 새로 설계합니다."

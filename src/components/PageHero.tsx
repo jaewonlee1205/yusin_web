@@ -1,8 +1,25 @@
 import Container from "./Container";
+import PageNav from "./PageNav";
 
 /**
  * 하위 페이지 공통 상단 배너. 제품 상세를 뺀 9개 페이지가 쓴다
  * (제품 상세는 Breadcrumb 이 그 자리를 맡는다).
+ *
+ * ⚠️⚠️ **2026-11-02 판 (114) — `path` 를 넘기면 배너 **바로 아래**에
+ *    바로가기 띠(PageNav)가 선다.** 유신이 ITCEN GLOBAL 을 보여 주며
+ *    *"여기 회사소개 밑에 … 홈버튼 미디어센터 언론보도 이렇게 밑에 바로
+ *    가기로 선택할 수 있게"* 라고 했다. 띠의 꼴·치수·고른 까닭은 모두
+ *    `PageNav.tsx` 머리에 적었다.
+ *
+ * ⚠️ **왜 PageHero 안에서 그리는가.** 일곱 쪽이 전부 `PageHero` 바로 뒤에
+ *    제 본문을 이어 쓰므로, 쪽마다 손으로 `<PageNav>` 를 한 줄씩 넣으면
+ *    한 쪽을 빠뜨렸을 때 **그 쪽만 띠가 없는** 꼴이 된다. 여기서 그리면
+ *    `path` 를 넘긴 쪽은 반드시 띠가 서고, 안 넘긴 쪽은 반드시 안 선다.
+ * ⚠️ **`path` 는 안 넘겨도 된다(옵션).** 안 넘기면 띠를 안 그린다 —
+ *    제품 상세(`Breadcrumb`)와 혹시 앞으로 생길 쪽이 저절로 빠진다.
+ * ⚠️ **띠는 배너 `div` 밖에 있어야 한다.** 배너에 `overflow-hidden` 이
+ *    걸려 있어(장식 가두는 용도) 안에 두면 **펼친 목록이 잘린다.**
+ *    그래서 이 부품이 조각(fragment) 둘을 돌려준다.
  *
  * 리드 문구 길이가 페이지마다 달라 배너 높이가 들쭉날쭉하면, 메뉴를 옮겨 다닐 때
  * 화면이 들썩인다. 그래서 배너 높이를 고정하고 내용을 세로 가운데로 맞춘다.
@@ -21,13 +38,19 @@ export default function PageHero({
   eyebrow,
   title,
   lead,
+  path,
 }: {
   eyebrow: string;
   title: string;
   lead?: string;
+  /** 지금 쪽의 주소(예 "/company/vision"). 넘기면 배너 아래 바로가기 띠가
+      선다. static export 에서 `usePathname` 보다 확실하다 — 쪽이 제 주소를
+      스스로 말해 주므로 라우터가 아직 안 붙은 첫 그림에서도 맞는다. */
+  path?: string;
 }) {
   return (
-    /* 네이비 한 장이다.
+    <>
+    {/* 네이비 한 장이다.
 
        ⚠️⚠️ **2026-10-14 에 surface(#f6f7f9) 에서 dark(#0d1b33) 로 뒤집었다.**
           "이쪽 색상 경우 밝은 회색처럼 보이는데 ... 문의 띠 여기 색상하고
@@ -55,7 +78,7 @@ export default function PageHero({
              active 와 전화 아이콘이 같은 이유로 brand-light 다.
           (옛 값 ink 15.9 · ink-soft 8.4 · brand 5.78 은 전부 surface 기준이다.)
 
-       ⚠️ relative 는 아래 장식 겹의 기준이다. 빼면 장식이 페이지 전체로 퍼진다. */
+       ⚠️ relative 는 아래 장식 겹의 기준이다. 빼면 장식이 페이지 전체로 퍼진다. */}
     <div className="relative overflow-hidden bg-dark">
       {/* 배경 — **문의 띠(ContactCTA)의 거울상**이다.
 
@@ -278,5 +301,8 @@ export default function PageHero({
         )}
       </Container>
     </div>
+    {/* ⚠️ 배너 div **밖**이다 — 위 주석에 적은 `overflow-hidden` 때문이다. */}
+    {path && <PageNav path={path} />}
+    </>
   );
 }
