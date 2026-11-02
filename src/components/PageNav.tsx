@@ -182,6 +182,17 @@ type Step = { label: string; items: NavChild[]; current?: string };
  *    고쳐야 한다"* 고 적어 둔 자리다. 세 번째 조건이 그 고침이다.
  *    ⚠️ `startsWith` 를 쓰므로 **`/products` 자신은 걸리지 않는다**
  *       (슬래시까지 보기 때문이다). 그 쪽은 첫 조건에서 이미 걸린다.
+ *
+ * ⚠️⚠️⚠️ **2026-11-02 판 (117) — 그 세 번째 조건을 이제 아무도 밟지 않는다.**
+ *    제품 상세 일곱 쪽에서 띠를 걷었다(cmp-201 「ㅐ」). 그러니 지금
+ *    `path` 로 `/products/<slug>` 가 들어오는 일이 없다.
+ *    ⚠️ **지우지 않았다.** 하루 만에 Breadcrumb → 띠 → 없앰 으로 세 번
+ *       바뀐 자리다. 되살리자는 말이 나오면 이 조건과 아래 숨긴 제품
+ *       블록이 **그때 바로 선다** — 다시 짤 필요가 없다
+ *       [[yusin-decisions-live-in-comments]].
+ *    ⚠️ **목록 일곱 쪽은 그대로다** — 거기는 첫 조건(`i.href === path`)과
+ *       두 번째 조건으로 걸린다. 이 판에서 이 파일의 **동작은 한 줄도
+ *       바뀌지 않았다**(주석만 더했다).
  */
 function stepsFor(path: string): Step[] {
   const top = nav.find(
