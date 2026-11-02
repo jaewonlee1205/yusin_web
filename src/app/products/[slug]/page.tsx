@@ -3,8 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
 import { notFound } from "next/navigation";
-import Breadcrumb from "@/components/Breadcrumb";
 import Container from "@/components/Container";
+import PageNav from "@/components/PageNav";
 import ContactCTA from "@/components/ContactCTA";
 import ProductGallery from "@/components/ProductGallery";
 import ProductVideo from "@/components/ProductVideo";
@@ -99,13 +99,22 @@ export default async function ProductDetailPage({
 
   return (
     <>
-      <Breadcrumb
-        trail={[
-          { href: "/", label: "홈" },
-          { href: "/products/", label: "제품" },
-        ]}
-        current={product.name}
-      />
+      {/* ⚠️⚠️ **2026-11-02 판 (116) — 글자 빵부스러기를 바로가기 띠로 바꿨다.**
+             유신: *"홈 / 제품 / 직진피더 여기 경우도 디자인이 홈 / 제품 /
+             전체 이렇게 디자인으로 변경 되어야 이쁠거 같은데 … 텍스트로
+             되어 있는거 별로 인거 같은데"*
+
+             옛 모습은 `Breadcrumb` 이었다 — `trail` 에 홈·제품을 손으로 적고
+             `current` 에 제품 이름을 넘기는 꼴이었다. 이제 **`site.ts` 의
+             `nav` 와 `products.ts` 의 목록에서 저절로 선다.** 제품이 늘거나
+             숨으면 띠도 따라간다 — 여기에 적을 것이 없어졌다.
+             ⚠️ `Breadcrumb.tsx` 는 **지우지 않았다.** 이제 쓰는 곳이 없다.
+
+             ⚠️ 색은 cmp-199 에서 **「ㅡ」**(네이비 + 목록 일곱 쪽까지 함께)를
+                고르셨다. 그래서 이 띠는 **위 헤더·아래 히어로와 같은 네이비**라
+                셋이 한 덩어리로 선다 — 바꾼 것은 **꼴**이지 색이 아니다.
+             ⚠️ 아래 히어로의 네이비는 **안 건드렸다**(2026-10-14 결정). */}
+      <PageNav path={`/products/${product.slug}`} />
 
       {/* 제품 히어로 — 사진과 "무엇인지", 그리고 문의 버튼까지 첫 화면에
 
