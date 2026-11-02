@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { products } from "@/data/products";
+import { listedProducts } from "@/data/products";
 import { site } from "@/data/site";
 import { InquiryError, submitInquiry } from "@/lib/inquiry";
 
@@ -21,8 +21,12 @@ type Status = "idle" | "submitting" | "success" | "error";
  *    같아야 같은 물건으로 읽힌다.
  * ⚠️ `/products` 사이드바는 **건드리지 않는다.** 거기 머리말이 「제품 분류」다.
  */
+/* ⚠️ 판 (113) — `products` 가 아니라 `listedProducts` 다. 진동기가
+   목록에서 숨어(products.ts 의 HIDDEN_SLUGS) 칩도 함께 빠졌다 — **팔지
+   않는다고 적어 둔 물건을 문의 분야로 내밀 수는 없다.** 진동기 교체.수리
+   문의는 아래 「기존 설비 수리 · 튜닝」이 받는다. 칩이 열 → 아홉이다. */
 const TOPICS = [
-  ...products.map((p) => p.name),
+  ...listedProducts.map((p) => p.name),
   "전용기 제작",
   "기존 설비 수리 · 튜닝",
   "기타",

@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import ProductCard from "./ProductCard";
-import { CATEGORIES, products, type ProductCategory } from "@/data/products";
+import { CATEGORIES, listedProducts, type ProductCategory } from "@/data/products";
 
 /**
  * 제품 목록 + 분류 거르개.
@@ -19,7 +19,21 @@ import { CATEGORIES, products, type ProductCategory } from "@/data/products";
  */
 type Filter = "전체" | ProductCategory;
 
-const FILTERS: Filter[] = ["전체", ...CATEGORIES];
+/* ⚠️⚠️⚠️ **2026-11-02 판 (113) — 전에는 `["전체", ...CATEGORIES]` 였다.**
+   유신의 *"여기서 구동부 / 진동기 / Vibrator 이거 없애줘"* 로 진동기가
+   목록에서 숨었는데(products.ts 의 HIDDEN_SLUGS), **구동부에 든 제품은
+   진동기 하나뿐**이라 칩을 그대로 두면 눌러도 결과가 0 인 칩이 남는다.
+
+   「구동부」를 **손으로 지우지 않았다** — 제품이 남아 있는 분류만 고른다.
+   진동기를 되살리면 칩도 저절로 돌아오고, 다른 제품을 숨겨도 같은 식으로
+   일한다. 칩이 일곱 → **여섯**이 됐다.
+
+   ⚠️ CATEGORIES 와 ProductCategory 타입은 **그대로다** — 숨은 진동기가
+      여전히 `category: "구동부"` 를 들고 있다. 거기서 빼지 말 것. */
+const FILTERS: Filter[] = [
+  "전체",
+  ...CATEGORIES.filter((c) => listedProducts.some((p) => p.category === c)),
+];
 
 /* ⚠️⚠️ **2026-10-16 — 분류마다 붙어 있던 개수를 전부 뺐다.** 유신에게서
    *"제품에서 숫자 빼자 7개 / 7 / 1 이거 등 여기에 숫자는 빠져도 될 거 같아"* 를
@@ -27,7 +41,10 @@ const FILTERS: Filter[] = ["전체", ...CATEGORIES];
    **세는 데 뜻이 없는 숫자**가 화면을 어지럽혔다.
    그래서 `countOf` 를 지웠다. 되살리려면 —
      const countOf = (f: Filter) =>
-       f === "전체" ? products.length : products.filter((p) => p.category === f).length;
+       f === "전체" ? listedProducts.length
+                    : listedProducts.filter((p) => p.category === f).length;
+   ⚠️ 판 (113) 에서 `products` → `listedProducts` 로 고쳐 적었다. 숨긴
+      제품까지 세면 칩의 수와 카드의 수가 어긋난다.
    ⚠️ 되살릴 일이 생기면 **제품이 몇 종인지부터 보라.** 분류 수와 제품 수가
       비슷하면 숫자는 전부 1 이 되어 아무것도 알려 주지 않는다. */
 
@@ -38,8 +55,12 @@ export default function ProductBrowser() {
   const [filter, setFilter] = useState<Filter>("전체");
   const resultRef = useRef<HTMLDivElement>(null);
 
+  /* ⚠️ 판 (113) — `products` 가 아니라 `listedProducts` 다. 숨긴 진동기는
+        「전체」에도, 「구동부」에도 서지 않는다(그 칩은 위에서 사라졌다). */
   const visible =
-    filter === "전체" ? products : products.filter((p) => p.category === filter);
+    filter === "전체"
+      ? listedProducts
+      : listedProducts.filter((p) => p.category === filter);
 
   /**
    * 분류를 고른다. 고르기 전에 결과 영역을 화면 안으로 끌어올린다.

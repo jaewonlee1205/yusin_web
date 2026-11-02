@@ -14,11 +14,18 @@ import Reveal from "@/components/Reveal";
 import Section from "@/components/Section";
 import {
   getProduct,
+  HIDDEN_SLUGS,
   products,
   type ApplicationCase,
   type Product,
 } from "@/data/products";
 
+/* ⚠️⚠️ **판 (113) — 여기만 `products` 를 그대로 쓴다(일부러다).**
+   목록.헤더.푸터.사이트맵은 `listedProducts` 로 갈아탔지만, 숨긴 제품의
+   상세 쪽은 **계속 구워야 한다** — 이미 색인.북마크된 /products/vibrator/
+   가 404 가 되는 것이 더 나쁘다. 어디서도 링크하지 않고 사이트맵에도 없는
+   **외톨이 쪽**이 된다.
+   완전히 접는 날 이 한 줄을 `listedProducts` 로 바꾸면 404 가 된다. */
 export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
 }
@@ -69,15 +76,26 @@ export default async function ProductDetailPage({
   //
   // 그래도 한 번도 안 나오는 제품은 없다. 18칸의 등장 횟수는 볼피더 6 ·
   // 직진피더 4 · 컨트롤러 3 · 호퍼피더 2 · 진동기 1 · 방음커버 1 · 우레탄
-  // 코팅 1 이다. 볼피더가 여섯인 것은 나머지 여섯이 전부 볼피더에 붙는
+  // 코팅 1 이다. ⚠️ 판 (113) 에서 **진동기 1 이 빠져 17칸**이 됐다(아래).
+  // 볼피더가 여섯인 것은 나머지 여섯이 전부 볼피더에 붙는
   // 물건이기 때문이라 숨길 일이 아니다(전에 고치려던 문제는 세 제품이 21칸
   // 중 0회였던 것이다).
   //
   // slug 오타는 products.ts 끝의 검사가 빌드 때 잡는다. 여기서는 타입을
   // 좁히려고 걸러 낸다.
+  //
+  // ⚠️⚠️ **판 (113) — 숨긴 제품도 함께 걸러 낸다.** 직진피더의 related 가
+  //    ["bowl-feeder", "vibrator", "controller"] 라, 안 거르면 진동기가
+  //    목록에서 사라졌는데 **직진피더 상세 「다른 제품」에는 그대로 서 있다.**
+  //    직진피더만 3 → **2칸**이 된다(방음커버.컨트롤러.우레탄 코팅이 이미
+  //    2칸이라 격자는 멀쩡하다).
+  // ⚠️ products.ts 의 related 자료는 **안 건드렸다** — 진동기를 되살리면
+  //    직진피더 아래 셋이 그대로 돌아온다.
   const related = product.related
     .map((slug) => getProduct(slug))
-    .filter((p): p is Product => p !== undefined);
+    .filter(
+      (p): p is Product => p !== undefined && !HIDDEN_SLUGS.includes(p.slug)
+    );
 
   return (
     <>

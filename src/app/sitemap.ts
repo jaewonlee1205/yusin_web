@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { products } from "@/data/products";
+import { listedProducts } from "@/data/products";
 import { site } from "@/data/site";
 
 export const dynamic = "force-static";
@@ -26,7 +26,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: path === "" ? 1 : 0.8,
     })),
-    ...products.map((p) => ({
+    /* ⚠️ 판 (113) — `products` 가 아니라 `listedProducts` 다. 숨긴
+       진동기의 상세 쪽은 **계속 구워지지만**(그 까닭은 products.ts 의
+       HIDDEN_SLUGS 주석) 사이트맵으로 **새로 알리지는 않는다**. */
+    ...listedProducts.map((p) => ({
       url: `${site.url}/products/${p.slug}/`,
       lastModified: now,
       changeFrequency: "monthly" as const,

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Container from "./Container";
 import { ListPanel } from "./NavPanel";
-import { products } from "@/data/products";
+import { listedProducts } from "@/data/products";
 import {
   headerCta,
   nav,
@@ -58,7 +58,10 @@ export default function Header() {
   const productChildren = useMemo<NavChild[]>(
     () => [
       { href: "/products", label: "전체" },
-      ...products.map((p) => ({
+      /* ⚠️ 판 (113) — `products` 가 아니라 `listedProducts` 다. 숨긴
+         진동기(products.ts 의 HIDDEN_SLUGS)가 드롭다운에만 남으면
+         /products 목록에 없는 제품으로 가는 길이 헤더에 생긴다. */
+      ...listedProducts.map((p) => ({
         href: `/products/${p.slug}`,
         label: p.name,
       })),

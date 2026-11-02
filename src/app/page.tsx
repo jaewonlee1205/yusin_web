@@ -17,7 +17,7 @@ import Reveal from "@/components/Reveal";
 import ScrollCue from "@/components/ScrollCue";
 import StatCounter from "@/components/StatCounter";
 import { featuredWorks } from "@/data/works";
-import { type Kpi, products } from "@/data/products";
+import { type Kpi, listedProducts } from "@/data/products";
 import { site } from "@/data/site";
 import VideoCard from "@/components/VideoCard";
 import { ArrowRightIcon } from "@/components/icons";
@@ -1488,10 +1488,13 @@ const STATS = [
          글자를 지우고 아이콘만 두면 **같은 모양 상자 세 개가 각각 어디로
          가는지 알 길이 없다.** 반복을 없애려다 **구별 자체를 없애는** 쪽이다.
 
-      ⚠️⚠️ **제품만 개수를 쓰지 않은 까닭.** 홈 PRODUCTS 격자가 이미
-         products.slice(0, 6) 으로 **여섯**을 걸고 전체가 **일곱**이다.
-         「제품 7종」이라고 적으면 *하나만 더 있다*는 말이 되어 **누를 이유를
-         없앤다.** 그 쪽의 값은 개수가 아니라 기종마다 딸린 사양·납기라서
+      ⚠️⚠️ **제품만 개수를 쓰지 않은 까닭.** 홈 PRODUCTS 격자가
+         listedProducts.slice(0, 6) 으로 **여섯**을 건다.
+         ⚠️ 2026-11-02 판 (113) 까지는 전체가 **일곱**이라 「제품 7종」이라고
+            적으면 *하나만 더 있다*는 말이 되어 **누를 이유를 없앴다.** 판
+            (113) 에서 진동기가 목록에서 숨어 **전체도 여섯**이 됐으니 이제는
+            *더 있다*는 말조차 못 된다 — 안 적는 까닭이 더 세졌다.
+         그 쪽의 값은 개수가 아니라 기종마다 딸린 사양·납기라서
          「기종별 상세」로 잡았다. 영상은 4 → 12, 사진은 16 → 155 라 개수가
          일을 한다.
       ⚠️ 「제작실적」을 **「사진」**으로 바꿨다. 섹션 제목이 「제품 사진」이라
@@ -3351,11 +3354,42 @@ export default function Home() {
           </Link>
         }
       >
-        {/* ⚠️⚠️⚠️ **2026-10-19 — 일곱에서 여섯으로 줄였다.** 유신이
+        {/* ⚠️⚠️⚠️⚠️ **2026-11-02 판 (113) — 격자가 보는 것이
+              `products` 에서 `listedProducts` 로 바뀌었다.** 유신의
+              *"여기서 구동부 / 진동기 / Vibrator 이거 없애줘"* 다
+              (products.ts 의 HIDDEN_SLUGS 가 전부를 설명한다).
+
+           **홈 카드 여섯의 얼굴이 바뀐다** —
+             전   볼피더 · 직진피더 · **진동기** · 호퍼피더 · 방음커버 · 컨트롤러
+             후   볼피더 · 직진피더 · 호퍼피더 · 방음커버 · 컨트롤러 · **우레탄 코팅**
+           2026-10-19 에 끝에서 잘려 나갔던 우레탄 코팅이 **한 칸 올라와
+           메운다.** 여섯이 그대로 여섯이라 격자(3+3)는 안 흔들린다.
+
+           ⚠️ **slice(0, 6) 을 그대로 둔다.** 지금은 전체가 여섯이라
+              잘라 내는 것이 없지만, 진동기를 되살리면 다시 일곱이 되어
+              **저절로 다시 일을 한다.** 지우지 말 것.
+
+           ⚠️⚠️ **「제품 더 보기」 버튼도 그대로 둔다.** 아래 2026-10-19
+              주석의 *"격자가 전부를 걸지 않으면 버튼이 할 일이 생긴다"*
+              는 전제가 **사라졌다**(홈 여섯 = /products 여섯). 그래도
+              남기는 까닭 둘 — ① 유신이 2026-10-19 에 직접 넣으라 한
+              버튼이다 ② /products 에는 **분류 거르개**가 따로 있어 목록
+              쪽이 여전히 할 일이 있다. 걷을 거면 유신에게 물을 것.
+
+           ⚠️ 홈 **히어로**는 안 건드렸다 — 진동기 도면 넷 · 「4종 진동기」 ·
+              「0.1% 에러율」이 그대로다. 거기는 카탈로그가 아니라
+              *"구동부를 네 가지로 갖춰 부품마다 골라 쓴다"* 는 말이라
+              진동기를 따로 팔지 않는 것과 어긋나지 않는다.
+
+           ── 아래는 2026-10-19 의 기록이다. 지우지 않는다 ──
+
+           ⚠️⚠️⚠️ **2026-10-19 — 일곱에서 여섯으로 줄였다.** 유신이
               *"이것도 6개만 미리보기 해놓고 밑에다가 영상 전체 보기 이거처럼
               전체보기 해놓자"* 라고 했다.
 
            **빠지는 것은 배열의 일곱째 「우레탄 코팅」**(표면처리)이다.
+           ⚠️ 판 (113) 부터는 **아니다** — 숨은 진동기 자리에 우레탄 코팅이
+              올라와 이제 빠지는 것이 없다(위 블록).
            products.ts 는 **건드리지 않는다** — 그 파일의 주석.검증이 전부
            「일곱」을 전제로 세어 둔 것이라, 배열 자체에서 빼면 /products ·
            /products/[slug] 정적 경로 · related · 파일 끝 검증까지 번진다.
@@ -3428,7 +3462,7 @@ export default function Home() {
                ProductCard 를 격자의 직접 자식으로 올리면 DOM 깊이가 바뀐다. */}
         <Reveal>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {products.slice(0, 6).map((product) => (
+          {listedProducts.slice(0, 6).map((product) => (
             <div key={product.slug}>
               <ProductCard product={product} />
             </div>
@@ -3668,7 +3702,10 @@ export default function Home() {
               postalCode: site.address.postalCode,
             },
             founder: { "@type": "Person", name: site.ceo },
-            makesOffer: products.map((p) => ({
+            /* ⚠️ 판 (113) — `products` 가 아니라 `listedProducts` 다.
+               화면에서 걷은 제품을 구조화 데이터로만 계속 내걸면 검색
+               쪽과 사이트가 다른 말을 한다. */
+            makesOffer: listedProducts.map((p) => ({
               "@type": "Offer",
               itemOffered: { "@type": "Product", name: p.name },
             })),

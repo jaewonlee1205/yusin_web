@@ -4,10 +4,17 @@ import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
 import ProductBrowser from "@/components/ProductBrowser";
 
+/* ⚠️ 판 (113) — description 에서 **「진동기, 」 다섯 글자만** 뺐다.
+   유신의 *"여기서 구동부 / 진동기 / Vibrator 이거 없애줘"* 로 카드가
+   사라졌는데 검색 설명에는 그대로 남아, 열거가 **화면과 어긋났다**
+   (products.ts 의 HIDDEN_SLUGS). 나머지 글귀는 한 글자도 안 건드렸다 —
+   문구는 유신 몫이다.
+   ⚠️ 이 줄은 **손으로 적은 열거**다. 제품을 숨기거나 더할 때마다 여기도
+      봐야 한다 — 코드가 알려 주지 않는다. */
 export const metadata: Metadata = {
   title: "제품",
   description:
-    "볼피더, 직진피더, 진동기, 호퍼피더, 방음커버, 컨트롤러, 우레탄 코팅 — 유신 F.A 시스템이 직접 제작하는 파츠피더 전 라인업입니다.",
+    "볼피더, 직진피더, 호퍼피더, 방음커버, 컨트롤러, 우레탄 코팅 — 유신 F.A 시스템이 직접 제작하는 파츠피더 전 라인업입니다.",
 };
 
 export default function ProductsPage() {

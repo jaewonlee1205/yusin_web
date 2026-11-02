@@ -1066,6 +1066,14 @@ export const products: Product[] = [
       },
     ],
   },
+  /* ⚠️⚠️⚠️ **2026-11-02 판 (113) — 이 제품은 목록에서 숨어 있다.**
+     유신의 *"여기서 구동부 / 진동기 / Vibrator 이거 없애줘"* 다.
+     **자료는 멀쩡하다** — 아래 한 덩이를 한 줄도 건드리지 않았고, 검사
+     블록도 계속 이 제품을 본다. 숨기는 장치와 되살리는 법은 **파일 끝의
+     HIDDEN_SLUGS 주석**에 다 적어 두었다. 거기를 먼저 읽을 것.
+     ⚠️ 여기 자료를 지우지 말 것 — 홈 히어로의 진동기 넷(VIBRATORS)과
+        company.ts 의 positioning 「진동기 4종」이 이 값들과 **같은 수**
+        여야 한다. */
   {
     slug: "vibrator",
     name: "진동기",
@@ -1897,4 +1905,67 @@ for (const p of products) {
 
 export function getProduct(slug: string): Product | undefined {
   return products.find((p) => p.slug === slug);
+}
+
+/**
+ * ⚠️⚠️⚠️ **2026-11-02 판 (113) — 목록에서 숨기는 제품.**
+ *
+ * 유신이 /products 쪽 글을 붙여 놓고 *"여기서 구동부 / 진동기 / Vibrator
+ * 이거 없애줘"* 라고 했다. 제품 라인업 일곱 중 **셋째 진동기**다.
+ *
+ * ⚠️⚠️ **배열에서 빼지 않고 여기서 가린다.** 진동기는 이 사이트에서
+ *    카탈로그 한 칸이 아니라 **회사가 겨루는 지점 그 자체**로 쓰인다 —
+ *      홈 히어로      진동기 도면 넷(VIBRATORS) · 지표 「4종 진동기」 ·
+ *                     「0.1% 에러율 — 부품마다 맞춰서」
+ *      홈 POSITIONING 비교표 **맨 앞 행** 「진동기 4종 / 1~2종」
+ *                     (company.ts 의 positioning — "이 회사가 겨루는 지점"
+ *                      이라 못박혀 있다. ⚠️ 이 섹션은 2026-10-15 에
+ *                      **화면에서 걷혀** 자료만 남아 있다 — 되살릴 자리라
+ *                      값은 살아 있어야 한다)
+ *      제작실적       works.ts 기종 거르개 「진동기」(사진 19장)
+ *      영상자료       videoLibrary.ts 거르개 「진동기」
+ *    배열에서 빼면 저 넷이 같이 무너지고, 위 검사 블록과 related 까지 번진다.
+ *    홈 라인업 주석(page.tsx)이 이미 같은 판단을 적어 두었다 —
+ *    *"products.ts 는 건드리지 않는다"*. 그때는 끝 하나(우레탄 코팅)라
+ *    slice 로 잘랐지만 진동기는 **가운데**라 자르기로는 안 된다.
+ *
+ * **되살리는 법 — 아래 배열에서 slug 한 줄을 지우면 끝이다.** 자료도,
+ * related 도, 분류 「구동부」도 그대로 있으니 전부 저절로 돌아온다.
+ *
+ * ⚠️ 「구동부」 거르개 칩을 **손으로 지우지 않았다.** ProductBrowser 가
+ *    「제품이 남아 있는 분류」만 칩으로 그린다 — 진동기가 유일한 구동부라
+ *    칩이 저절로 사라지고, 되살리면 저절로 돌아온다.
+ * ⚠️ 상세 경로는 **남겨 두었다.** [slug] 의 generateStaticParams 는
+ *    `products` 를 그대로 쓰므로 /products/vibrator/ 가 계속 구워진다 —
+ *    목록.헤더.푸터.사이트맵에서는 사라지지만 이미 색인.북마크된 주소가
+ *    404 가 되지는 않는다. 완전히 접는 날 그 한 줄을 listedProducts 로
+ *    바꾸면 된다.
+ * ⚠️ 글귀는 한 줄도 새로 쓰지 않았다 — 문구는 유신 몫이다.
+ */
+export const HIDDEN_SLUGS: string[] = ["vibrator"];
+
+/**
+ * 화면에 **노출되는** 제품. /products 목록과 거르개 · 헤더 드롭다운 ·
+ * 푸터 · 404 · sitemap · 문의 분야 칩 · 홈 라인업 격자 · 홈 구조화 데이터가
+ * 이것을 본다.
+ *
+ * ⚠️ `products` 를 그대로 쓰는 곳이 **둘 남아 있다.** 일부러 그랬다 —
+ *      [slug] 의 generateStaticParams   숨긴 제품의 상세도 구워야 한다
+ *      이 파일의 검사 블록               숨긴 제품의 자료도 계속 검사한다
+ *    새로 쓰는 곳이 생기면 **어느 쪽을 봐야 하는지부터** 정할 것.
+ */
+export const listedProducts = products.filter(
+  (p) => !HIDDEN_SLUGS.includes(p.slug)
+);
+
+/**
+ * 숨긴 slug 가 실제로 있는지 빌드 때 한 번 본다.
+ *
+ * 오타("vibretor")가 들어가면 **아무것도 안 숨는다** — 화면에는 진동기가
+ * 그대로 서 있고 누구도 알려 주지 않는다. 위 related 검사와 같은 까닭이다.
+ */
+for (const slug of HIDDEN_SLUGS) {
+  if (!products.some((p) => p.slug === slug)) {
+    throw new Error(`products.ts: HIDDEN_SLUGS 의 "${slug}" 가 제품에 없다`);
+  }
 }

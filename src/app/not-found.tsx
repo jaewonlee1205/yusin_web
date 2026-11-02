@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Container from "@/components/Container";
-import { products } from "@/data/products";
+import { listedProducts } from "@/data/products";
 
 /**
  * 주소를 잘못 찾아온 사람에게 보이는 화면.
@@ -50,8 +50,11 @@ export default function NotFound() {
 
       <div className="mt-12 border-t border-line pt-8">
         <p className="text-13 font-semibold text-muted">제품 바로가기</p>
+        {/* ⚠️ 판 (113) — `products` 가 아니라 `listedProducts` 다. 404 는
+            주소를 잘못 친 사람을 **지금 있는 제품**으로 보내는 자리다
+            (숨긴 제품은 products.ts 의 HIDDEN_SLUGS). */}
         <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2.5">
-          {products.map((p) => (
+          {listedProducts.map((p) => (
             <li key={p.slug}>
               <Link
                 href={`/products/${p.slug}/`}

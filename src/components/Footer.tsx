@@ -3,7 +3,7 @@ import Link from "next/link";
 import Container from "./Container";
 import HomeLogoLink from "./HomeLogoLink";
 import { MobileIcon, NaverIcon, PhoneIcon, YoutubeIcon } from "./icons";
-import { products } from "@/data/products";
+import { listedProducts } from "@/data/products";
 import { site, telHref } from "@/data/site";
 
 /**
@@ -358,8 +358,13 @@ export default function Footer() {
             <h2 className={HEADING}>제품</h2>
             {/* max-content 2열 — 1fr 2열로 두면 둘째 열이 칸 오른쪽 끝까지
                 밀려 옆 [회사] 열에 붙어 보인다. */}
+            {/* ⚠️ 판 (113) — `products` 가 아니라 `listedProducts` 다(숨긴
+                진동기는 products.ts 의 HIDDEN_SLUGS 를 본다). 칸이 일곱 +
+                「전체 보기」 여덟이라 **2열 4행이 꽉 찼던 것이 7칸 4행**이
+                되어 마지막 행 왼쪽에 한 칸만 선다. 흠이 아니라 셈이다 —
+                제품을 되살리면 저절로 여덟로 돌아간다. */}
             <ul className="mt-4 grid grid-cols-[max-content_max-content] gap-x-8 gap-y-0.5">
-              {products.map((product) => (
+              {listedProducts.map((product) => (
                 <li key={product.slug}>
                   <Link href={`/products/${product.slug}`} className={LINK}>
                     {product.name}
