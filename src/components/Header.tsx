@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Container from "./Container";
 import { ListPanel } from "./NavPanel";
-import { CATEGORIES, listedProducts } from "@/data/products";
+import { productLinks } from "@/data/products";
 import {
   headerCta,
   nav,
@@ -84,34 +84,21 @@ export default function Header() {
         넓어지고 **모바일에서 한 열로 되돌아가** 데스크톱과 모바일이 두
         모양이 된다. 「주」만 모바일에도 그대로 간다(메뉴 777 → 577px).
      ⚠️ 어제 넣은 `max-h` + 세로 스크롤은 **그대로 둔다** — 잘림을 막는
-        안전장치이지 길이를 줄이는 것이 아니다. */
-  const productChildren = useMemo<NavChild[]>(() => {
-    const out: NavChild[] = [{ href: "/products", label: "전체" }];
-    const 접을분류 = new Set(
-      CATEGORIES.filter(
-        (c) => listedProducts.filter((p) => p.category === c).length > 1
-      )
-    );
-    const 넣은분류 = new Set<string>();
-    /* ⚠️ 판 (113) — `products` 가 아니라 `listedProducts` 다. 숨긴
-       진동기(products.ts 의 HIDDEN_SLUGS)가 드롭다운에만 남으면
-       /products 목록에 없는 제품으로 가는 길이 헤더에 생긴다. */
-    for (const p of listedProducts) {
-      if (접을분류.has(p.category)) {
-        if (넣은분류.has(p.category)) continue;
-        넣은분류.add(p.category);
-        /* 목록 쪽 칩과 **같은 말**이어야 한다. 분류 이름을 그대로 쓴다 —
-           여기서 따로 지어 부르면 눌러서 간 곳의 칩과 달라 보인다. */
-        out.push({
-          href: `/products?c=${encodeURIComponent(p.category)}`,
-          label: p.category,
-        });
-        continue;
-      }
-      out.push({ href: `/products/${p.slug}`, label: p.name });
-    }
-    return out;
-  }, []);
+        안전장치이지 길이를 줄이는 것이 아니다.
+     ⚠️⚠️ **판 (214) — 접는 셈을 여기서 products.ts 로 옮겼다.** 푸터와
+        제품 쪽 2단계 띠도 같은 줄을 써야 해서, 세 곳이 `productLinks`
+        한 곳을 본다. 여기서 다시 돌려 만들지 말 것. */
+  const productChildren = useMemo<NavChild[]>(
+    () => [
+      { href: "/products", label: "전체" },
+      /* ⚠️ 판 (113) — `products` 가 아니라 `listedProducts` 다. 숨긴
+         진동기(products.ts 의 HIDDEN_SLUGS)가 드롭다운에만 남으면
+         /products 목록에 없는 제품으로 가는 길이 헤더에 생긴다.
+         `productLinks` 가 그 목록 위에서 만들어진다. */
+      ...productLinks.map((p) => ({ href: p.href, label: p.label })),
+    ],
+    []
+  );
 
   /** 드롭다운에 넣을 항목. 제품만 products.ts에서 오고 나머지는 nav가 들고 있다. */
   const childrenFor = useCallback(

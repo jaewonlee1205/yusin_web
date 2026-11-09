@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 import Container from "./Container";
-import { getProduct, listedProducts } from "@/data/products";
+import { getProduct, productLinks } from "@/data/products";
 import { nav, type NavChild } from "@/data/site";
 
 /**
@@ -238,14 +238,23 @@ function stepsFor(path: string): Step[] {
   const tops: NavChild[] = nav.map((i) => ({ href: i.href, label: i.label }));
   const steps: Step[] = [{ label: top.label, items: tops, current: top.href }];
 
+  /* ⚠️⚠️ **2026-11-09 판 (214) — 여기도 호퍼피더 여섯을 한 줄로 접는다.**
+     전에는 `listedProducts` 를 그대로 펴서 **12줄**이었고, 1440×900 에서
+     펼치면 541px 가 되어 **창을 10px 넘겼다**(시안 cmp-214 에서 실측).
+     헤더 드롭다운과 똑같은 문제가 여기 남아 있었다.
+     ⚠️ 접는 셈은 `products.ts` 의 `productLinks` 한 곳에 있다. 헤더 ·
+        푸터 · 이 띠가 **같은 줄**을 본다 — 바로 위 주석이 *"Header 와
+        같은 꼴로 푼다. 두 곳이 어긋나면 같은 메뉴가 두 이름으로 불린다"*
+        고 경계하던 것을 이제 구조로 막는다.
+     ⚠️ 아래 `kids.find((c) => c.href === path)` 는 **제품 상세에서 자기
+        자신을 못 찾게 된다**(접힌 기종은 kids 에 없다). 그래도 괜찮다 —
+        제품 상세에는 판 117(cmp-201)에서 띠를 걷어 이 함수가 거기서
+        돌지 않는다. 띠를 되살리는 날에는 이 줄부터 볼 것. */
   const kids: NavChild[] =
     top.childrenFrom === "products"
       ? [
           { href: "/products", label: "전체" },
-          ...listedProducts.map((p) => ({
-            href: `/products/${p.slug}`,
-            label: p.name,
-          })),
+          ...productLinks.map((p) => ({ href: p.href, label: p.label })),
         ]
       : (top.children ?? []);
 

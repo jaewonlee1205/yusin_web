@@ -2204,6 +2204,68 @@ export const homeProducts = listedProducts.filter(
   (p) => p.category !== "호퍼피더" || p.slug === "hf-600"
 );
 
+/** 메뉴 · 푸터가 함께 쓰는 제품 줄. 접은 줄에는 `folded` 가 붙는다. */
+export type ProductLink = {
+  href: string;
+  label: string;
+  /** 접은 줄일 때만 — 그 분류에 든 기종 이름들. 화면에 글자로 덧붙일 수 있다. */
+  folded?: string[];
+};
+
+/**
+ * **제품이 둘 이상인 분류는 한 줄로 접은** 제품 줄 목록.
+ *
+ * ⚠️⚠️ **2026-11-09 판 (213·214) — 세 곳이 이것을 같이 본다.**
+ * 헤더 드롭다운 · 제품 쪽 2단계 띠(PageNav) · 푸터 제품 칸이다. 전날
+ * 호퍼피더를 HF-600 ~ 210 **여섯 기종**으로 펼치면서(커밋 `d580263`) 그
+ * 세 곳이 한꺼번에 길어졌고, 유신에게서 두 번 지적을 받았다 —
+ *   *"제품에서 드롭박스 클릭하면 너무 길게 밑에 까지 나오는데"* (헤더)
+ *   *"HF-600 이거 경우도 호퍼피더 이렇게 하는게 나은데"* (푸터)
+ *
+ * 실측 — 헤더 드롭다운 546 → 334px(창의 61% → 37%), 푸터 503 → 437px,
+ * 2단계 띠는 **12줄 541px 로 1440×900 창을 10px 넘기고 있었다.**
+ *
+ * ⚠️ **분류 하나만 묶는 특례가 아니다.** 지금 걸리는 것은 호퍼피더
+ *    여섯뿐이고, 나머지 분류는 제품이 하나씩이라 **제품 줄 그대로** 남는다.
+ *    다른 분류가 여럿이 되어도 같은 식으로 일한다.
+ * ⚠️ **세 곳이 이 한 곳을 본다.** 전에는 Header 와 PageNav 가 각자
+ *    `listedProducts.map` 을 돌려 같은 줄을 두 번 만들었고, PageNav 주석이
+ *    *"Header 와 같은 꼴로 푼다 — 두 곳이 어긋나면 같은 메뉴가 두 이름으로
+ *    불린다"* 고 경계하고 있었다. 이제 **한 곳에서 만든다.**
+ * ⚠️ 접은 줄이 가는 곳은 `/products?c=<분류>` 다. **해시가 아니라 쿼리**인
+ *    까닭은 `ProductBrowser.tsx` 주석에 적어 두었다 — Next 의 Link 는
+ *    `history.pushState` 로 옮기는데 그때 `hashchange` 가 나지 않는다.
+ * ⚠️ 맨 앞의 「전체」는 **여기 없다.** 그 줄은 메뉴의 보루라 Header 와
+ *    PageNav 만 붙이고, 푸터는 끝에 「전체 보기」를 따로 둔다.
+ */
+export const productLinks: ProductLink[] = (() => {
+  const 접을분류 = new Set(
+    CATEGORIES.filter(
+      (c) => listedProducts.filter((p) => p.category === c).length > 1
+    )
+  );
+  const out: ProductLink[] = [];
+  const 넣은분류 = new Set<string>();
+  for (const p of listedProducts) {
+    if (!접을분류.has(p.category)) {
+      out.push({ href: `/products/${p.slug}`, label: p.name });
+      continue;
+    }
+    if (넣은분류.has(p.category)) continue;
+    넣은분류.add(p.category);
+    /* 목록 쪽 칩과 **같은 말**이어야 한다. 분류 이름을 그대로 쓴다 —
+       여기서 따로 지어 부르면 눌러서 간 곳의 칩과 달라 보인다. */
+    out.push({
+      href: `/products?c=${encodeURIComponent(p.category)}`,
+      label: p.category,
+      folded: listedProducts
+        .filter((x) => x.category === p.category)
+        .map((x) => x.name),
+    });
+  }
+  return out;
+})();
+
 /**
  * 숨긴 slug 가 실제로 있는지 빌드 때 한 번 본다.
  *

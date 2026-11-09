@@ -3,7 +3,7 @@ import Link from "next/link";
 import Container from "./Container";
 import HomeLogoLink from "./HomeLogoLink";
 import { MobileIcon, NaverIcon, PhoneIcon, YoutubeIcon } from "./icons";
-import { listedProducts } from "@/data/products";
+import { productLinks } from "@/data/products";
 import { site, telHref } from "@/data/site";
 
 /**
@@ -363,11 +363,35 @@ export default function Footer() {
                 「전체 보기」 여덟이라 **2열 4행이 꽉 찼던 것이 7칸 4행**이
                 되어 마지막 행 왼쪽에 한 칸만 선다. 흠이 아니라 셈이다 —
                 제품을 되살리면 저절로 여덟로 돌아간다. */}
+            {/* ⚠️⚠️ **2026-11-09 판 (214) — 호퍼피더 여섯을 한 줄로 접었다.**
+                유신이 푸터를 통째로 붙여 넣으시고 *"HF-600 이거 경우도
+                호퍼피더 이렇게 하는게 나은데"* 라고 하셨다. 전날 여섯 기종을
+                펼치면서(`d580263`) 이 칸이 **12칸 2열 6행**이 됐는데, 회사·
+                고객지원은 각각 3칸 3행이라 **제품 칸만 두 배**였고 그 6행이
+                푸터 바닥(503px)을 정하고 있었다. 접어서 **7칸 4행 · 437px**
+                (모바일 904 → 839px)이다.
+                ⚠️ 줄은 `products.ts` 의 `productLinks` 에서 온다 — 헤더
+                   드롭다운 · 제품 쪽 2단계 띠와 **같은 목록**이다. */}
             <ul className="mt-4 grid grid-cols-[max-content_max-content] gap-x-8 gap-y-0.5">
-              {listedProducts.map((product) => (
-                <li key={product.slug}>
-                  <Link href={`/products/${product.slug}`} className={LINK}>
-                    {product.name}
+              {productLinks.map((product) => (
+                <li key={product.href}>
+                  <Link href={product.href} className={LINK}>
+                    {product.label}
+                    {/* ⚠️ 접은 줄에만 붙는 기종 이름이다(시안 cmp-214 의
+                        「자2」). **링크가 아니라 글자**다 — 푸터에서 HF 상세로
+                        가던 링크 여섯이 사라지면서, 기종 이름마저 모든 쪽에서
+                        없어지는 것을 막는다. 상세로 가는 길은 /products 목록
+                        카드 · 홈 격자의 HF-600 · sitemap.xml 에 남아 있다.
+                        ⚠️ 칸 **맨 아래**에 한 줄로 두는 안(「자」)도 그렸는데,
+                           「전체 보기」 밑에 떨어져 **그 줄의 설명처럼** 읽혔다.
+                           라벨 바로 밑이라야 한 덩어리로 읽힌다. */}
+                    {product.folded && (
+                      <span className="mt-0.5 block text-[11px] leading-[1.5] text-white/50">
+                        {product.folded
+                          .map((n, i) => (i === 0 ? n : n.replace(/^HF-/, "")))
+                          .join(" · ")}
+                      </span>
+                    )}
                   </Link>
                 </li>
               ))}
