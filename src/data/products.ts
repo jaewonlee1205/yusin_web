@@ -2208,7 +2208,16 @@ export const homeProducts = listedProducts.filter(
 export type ProductLink = {
   href: string;
   label: string;
-  /** 접은 줄일 때만 — 그 분류에 든 기종 이름들. 화면에 글자로 덧붙일 수 있다. */
+  /**
+   * 접은 줄일 때만 — 그 분류에 든 기종 이름들.
+   *
+   * ⚠️ **지금은 아무도 쓰지 않는다.** 판 (214) 에서 푸터가 라벨 밑에 이
+   *    이름들을 작은 글씨로 달았다가, 판 (215) 에서 유신의
+   *    *"여기 호퍼피더 밑에 왜 모델명이 있어 … 호퍼피더만 해달라 했지"*
+   *    로 **뺐다.** 지우지 않고 남겨 둔다 — 되살리라는 말이 나오면
+   *    `Footer.tsx` 에 span 하나를 되돌리면 된다
+   *    [[yusin-decisions-live-in-comments]].
+   */
   folded?: string[];
 };
 
