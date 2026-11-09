@@ -48,7 +48,13 @@ export default function ProductGallery({
       )}
 
       {images.length > 1 && (
-        <ul className="mt-3 flex gap-3">
+        /* ⚠️ **flex-wrap 이 있어야 한다.** 2026-11-09 에 호퍼피더 여섯 기종의
+            상세 사진이 **셋**이 되면서(렌더 + 실물 둘) 320px 에서 12px
+            넘쳤다 — w-24(96px) 셋에 gap-3 둘이면 312px 인데 320 에서
+            쓸 수 있는 폭은 280 이다. 둘일 때는 204px 라 안 걸렸다.
+            ⚠️ `overflow-x-auto` 로 가로 스크롤을 주는 길도 있었지만, 그러면
+               셋째 장이 화면 밖에 숨어 **있는 줄도 모르게** 된다. */
+        <ul className="mt-3 flex flex-wrap gap-3">
           {images.map((img, i) => {
             const on = i === picked;
             return (

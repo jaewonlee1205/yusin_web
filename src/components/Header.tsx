@@ -369,7 +369,20 @@ export default function Header() {
                              올리면 나오는 드롭박스도" 같은 색으로 달라는 요청에
                              흰 판에서 갈았다. 테두리가 border-white/15 라
                              shadow-overlay 가 안 보여도 판의 경계가 선다. */}
-                      <div className="overflow-hidden rounded-xl border border-white/15 bg-dark-deep shadow-overlay">
+                      {/* ⚠️⚠️ **2026-11-09 — 높이 상한과 세로 스크롤을 더했다.**
+                             호퍼피더가 여섯 기종으로 펼쳐지면서 제품 드롭다운이
+                             일곱 줄에서 **열세 줄**이 됐다. 패널 맨 아래가
+                             604px 라 뷰포트가 **600px 아래면 끝줄(우레탄 코팅)이
+                             잘리고**, `overflow-hidden` 탓에 스크롤도 안 됐다 —
+                             헤더에서 갈 길이 통째로 사라진다. 재 보니 630 까지는
+                             멀쩡하고 600 에서 4px, 560 에서 44px 넘쳤다.
+                          ⚠️ 상한은 `svh` 다. 모바일 주소창이 접혔다 펴지는 폭을
+                             `vh` 는 못 따라간다(데스크톱 폭에서만 열리는 패널이라
+                             지금은 차이가 없지만, 폭 기준이 바뀌는 날을 위해).
+                          ⚠️ `overflow-hidden` 을 그냥 지우면 안 된다 — 둥근
+                             모서리가 자식 바깥으로 비어져 나온다. 가로만
+                             잘라 두고 세로를 연다. */}
+                      <div className="max-h-[calc(100svh-6.5rem)] overflow-y-auto overflow-x-hidden rounded-xl border border-white/15 bg-dark-deep shadow-overlay">
                         <ListPanel
                           items={childrenFor(item)}
                           onNavigate={() => setOpenMenu(null)}

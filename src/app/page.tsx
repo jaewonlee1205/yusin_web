@@ -17,7 +17,7 @@ import Reveal from "@/components/Reveal";
 import ScrollCue from "@/components/ScrollCue";
 import StatCounter from "@/components/StatCounter";
 import { featuredWorks } from "@/data/works";
-import { type Kpi, listedProducts } from "@/data/products";
+import { type Kpi, homeProducts, listedProducts } from "@/data/products";
 import { site } from "@/data/site";
 import VideoCard from "@/components/VideoCard";
 import { ArrowRightIcon } from "@/components/icons";
@@ -3369,6 +3369,20 @@ export default function Home() {
               잘라 내는 것이 없지만, 진동기를 되살리면 다시 일곱이 되어
               **저절로 다시 일을 한다.** 지우지 말 것.
 
+           ⚠️⚠️⚠️ **2026-11-09 — 격자가 보는 것이 `listedProducts` 에서
+              `homeProducts` 로 바뀌었다.** 호퍼피더가 **여섯 기종**
+              (HF-600 ~ HF-210)으로 펼쳐지면서 `listedProducts` 가 열하나가
+              됐다. 그대로 두면 앞 여섯이 **볼피더 · 직진피더 · HF-600 ·
+              HF-500 · HF-400 · HF-280** 이 되어 **방음커버 · 컨트롤러 ·
+              우레탄 코팅이 홈에서 사라진다.** `homeProducts` 가 호퍼피더를
+              **대표 한 기종(HF-600)만** 남긴다(products.ts 에 까닭이 있다).
+
+           **홈 카드 여섯의 얼굴이 바뀐다** —
+             전   볼피더 · 직진피더 · **호퍼피더** · 방음커버 · 컨트롤러 · 우레탄 코팅
+             후   볼피더 · 직진피더 · **HF-600** · 방음커버 · 컨트롤러 · 우레탄 코팅
+           한 칸만 다르고 격자(3+3)는 안 흔들린다. 카드 위에 분류명
+           「호퍼피더」가 그대로 붙으므로 홈에서 읽히는 말도 그대로다.
+
            ⚠️⚠️ **「제품 더 보기」 버튼도 그대로 둔다.** 아래 2026-10-19
               주석의 *"격자가 전부를 걸지 않으면 버튼이 할 일이 생긴다"*
               는 전제가 **사라졌다**(홈 여섯 = /products 여섯). 그래도
@@ -3462,7 +3476,7 @@ export default function Home() {
                ProductCard 를 격자의 직접 자식으로 올리면 DOM 깊이가 바뀐다. */}
         <Reveal>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {listedProducts.slice(0, 6).map((product) => (
+          {homeProducts.slice(0, 6).map((product) => (
             <div key={product.slug}>
               <ProductCard product={product} />
             </div>
