@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import ProductCard from "./ProductCard";
 import { CATEGORIES, listedProducts, type ProductCategory } from "@/data/products";
 
@@ -55,6 +56,34 @@ export default function ProductBrowser() {
   const [filter, setFilter] = useState<Filter>("전체");
   const resultRef = useRef<HTMLDivElement>(null);
 
+  /* ⚠️⚠️ **2026-11-09 판 (213) — 주소의 `?c=` 로 분류를 받는다.**
+     헤더 드롭다운이 호퍼피더 여섯을 한 줄로 접으면서(Header.tsx 의
+     `productChildren`) 그 줄이 `/products?c=호퍼피더` 로 오게 됐다. 접은
+     줄이 쓸모가 있으려면 **호퍼 분류가 골라진 채로** 열려야 한다.
+
+     ⚠️ 위 18줄에 *"거르기는 클라이언트 상태다. 분류별 URL 로 만들려면
+        라우트를 분류 수만큼 늘려야 한다"* 고 적어 두었는데, **그 말은
+        아직 맞다** — 여기서 하는 것은 라우트를 늘리는 것이 아니라 **쿼리
+        하나를 읽는 것**이다. 내보낸 파일은 /products 한 장 그대로다.
+     ⚠️⚠️ **해시(`#호퍼피더`)로 먼저 만들었다가 물렸다.** 이미 이 쪽에 서
+        있을 때 메뉴에서 그 줄을 누르면 주소만 바뀌고 **목록은 그대로**
+        였다. Next 의 Link 는 `history.pushState` 로 옮기는데 그때
+        `hashchange` 는 **나지 않는다** — 듣고 있어도 못 듣는다. 쿼리는
+        Next 라우터가 상태로 들고 있어 `useSearchParams` 가 값을 새로
+        주고 리렌더까지 해 준다. **해시로 되돌리지 말 것.**
+     ⚠️ `useSearchParams` 는 정적 내보내기에서 **Suspense 경계**를
+        요구한다 — /products 의 page.tsx 가 이 컴포넌트를 Suspense 로
+        감싸고 있다. 그 경계를 걷으면 빌드가 멈춘다.
+     ⚠️ **초기 state 로 읽지 않는다.** 서버가 그린 HTML 에는 쿼리가 없어
+        첫 그림이 「전체」다. 효과에서 한 프레임 뒤에 바꾼다.
+     ⚠️ **모르는 값은 무시한다.** `?c=없는분류` 로 거르개가 빈 목록이
+        되면 안 된다. FILTERS 에 있는 것만 받는다. */
+  const 받은분류 = useSearchParams().get("c");
+  useEffect(() => {
+    const c = 받은분류 ? decodeURIComponent(받은분류) : "";
+    if ((FILTERS as string[]).includes(c)) setFilter(c as Filter);
+  }, [받은분류]);
+
   /* ⚠️ 판 (113) — `products` 가 아니라 `listedProducts` 다. 숨긴 진동기는
         「전체」에도, 「구동부」에도 서지 않는다(그 칩은 위에서 사라졌다). */
   const visible =
@@ -91,6 +120,14 @@ export default function ProductBrowser() {
       // 더 나쁘다.
       if (top < STICK_TOP) window.scrollTo(0, window.scrollY + top - STICK_TOP);
     }
+    /* ⚠️ 판 (213) — 손으로 분류를 바꿨으면 주소의 `?c=` 를 **털어 낸다.**
+       `?c=호퍼피더` 를 달고 들어와 칩으로 「방음커버」를 골랐는데 주소가
+       그대로면, 새로고침하거나 그 주소를 나눠 줄 때 호퍼로 되돌아간다.
+       ⚠️ router.replace 가 아니라 history.replaceState 다 — 라우터로
+          밀면 Next 가 이 쪽을 다시 그리면서 위 효과가 한 번 더 돌아
+          **방금 고른 분류를 덮어쓴다.** 주소만 조용히 고친다. */
+    if (window.location.search)
+      history.replaceState(null, "", window.location.pathname);
     setFilter(next);
   };
 

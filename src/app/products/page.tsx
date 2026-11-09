@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Container from "@/components/Container";
 import ContactCTA from "@/components/ContactCTA";
 import PageHero from "@/components/PageHero";
@@ -71,7 +72,14 @@ export default function ProductsPage() {
                  피더가 무엇인지 설명하는 자리가 사이트에 없다. 되살린다면
                  여기가 가장 맞고, products.ts 의 feederDefinition 이 그대로
                  남아 있다. */}
-          <ProductBrowser />
+          {/* ⚠️ 판 (213) — **Suspense 를 걷지 말 것.** ProductBrowser 가
+              주소의 ?c= 를 useSearchParams 로 읽는데, 정적 내보내기에서는
+              이 경계가 없으면 빌드가 멈춘다(헤더에서 접은 「호퍼피더」 줄이
+              그 쿼리를 달고 온다). 대기 화면은 따로 두지 않는다 — 서버가
+              그린 첫 그림이 이미 「전체」 목록이라 보여 줄 것이 그대로다. */}
+          <Suspense>
+            <ProductBrowser />
+          </Suspense>
         </Container>
       </div>
 

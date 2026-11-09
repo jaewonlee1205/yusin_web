@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Container from "./Container";
 import { ListPanel } from "./NavPanel";
-import { listedProducts } from "@/data/products";
+import { CATEGORIES, listedProducts } from "@/data/products";
 import {
   headerCta,
   nav,
@@ -55,19 +55,63 @@ export default function Header() {
    * 자체가 링크라 그 역할은 끝났지만, 펼쳐 놓고 고르는 사람에게는 여전히
    * 필요한 칸이라 남긴다(참고한 신창에프에이도 부모를 다시 가리키는 줄을 둔다).
    */
-  const productChildren = useMemo<NavChild[]>(
-    () => [
-      { href: "/products", label: "전체" },
-      /* ⚠️ 판 (113) — `products` 가 아니라 `listedProducts` 다. 숨긴
-         진동기(products.ts 의 HIDDEN_SLUGS)가 드롭다운에만 남으면
-         /products 목록에 없는 제품으로 가는 길이 헤더에 생긴다. */
-      ...listedProducts.map((p) => ({
-        href: `/products/${p.slug}`,
-        label: p.name,
-      })),
-    ],
-    []
-  );
+  /* ⚠️⚠️ **2026-11-09 판 (213) — 호퍼피더 여섯을 한 줄로 접는다.**
+     전날 호퍼피더를 HF-600 · 500 · 400 · 280 · 250 · 210 여섯 기종으로
+     펼치면서(커밋 d580263) 이 드롭다운이 **7줄에서 12줄**이 됐고,
+     유신에게서 *"제품에서 드롭박스 클릭하면 너무 길게 밑에 까지 나오는데
+     이거 별로인데"* 를 받았다.
+
+     1440×900 에서 실측 — 회사소개 106px · **제품 546px** · 제작실적 106px.
+     가운데 하나만 **다섯 배**였고 창의 61% 를 덮었다. 1440×600 에서는
+     83% 라 패널 안에서 또 스크롤해야 했다. 접은 뒤 326px(36% · 54%)다.
+
+     ⚠️ **분류 하나만 묶는 특례가 아니다** — `category` 가 같은 제품이
+        둘 이상이면 그 분류를 한 줄로 접는다. 지금 걸리는 것은 호퍼피더
+        여섯뿐이고, 나머지 분류는 제품이 하나씩이라 **제품 줄 그대로**
+        남는다. 다른 분류가 여럿이 되어도 같은 식으로 일한다.
+     ⚠️ 접은 줄은 **제품 상세가 아니라 목록의 그 분류**로 간다
+        (`/products?c=호퍼피더`). ProductBrowser 가 이 `c` 를 읽어 분류를
+        골라 놓는다 — 거기 주석도 같이 볼 것. 읽는 쪽을 지우면 이 줄은
+        **거르개가 「전체」인 목록**으로 떨어진다.
+     ⚠️⚠️ **해시(`#호퍼피더`)로 먼저 만들었다가 물렸다.** 이미 /products
+        에 서 있을 때 이 줄을 누르면 주소는 바뀌는데 **목록이 안 걸러졌다**.
+        Next 의 Link 는 `history.pushState` 로 옮기는데 그때는
+        `hashchange` 이벤트가 **나지 않는다** — 듣고 있어도 못 듣는다.
+        쿼리는 Next 라우터가 상태로 들고 있어 `useSearchParams` 가
+        리렌더까지 해 준다. **해시로 되돌리지 말 것.**
+     ⚠️ 시안 cmp-213 의 네 안(주 · 추 · 투 · 푸) 중 **「주」**다. 2열로
+        나누는 안(추 · 투, 282px)이 더 짧았지만 폭이 224 → 432px 로
+        넓어지고 **모바일에서 한 열로 되돌아가** 데스크톱과 모바일이 두
+        모양이 된다. 「주」만 모바일에도 그대로 간다(메뉴 777 → 577px).
+     ⚠️ 어제 넣은 `max-h` + 세로 스크롤은 **그대로 둔다** — 잘림을 막는
+        안전장치이지 길이를 줄이는 것이 아니다. */
+  const productChildren = useMemo<NavChild[]>(() => {
+    const out: NavChild[] = [{ href: "/products", label: "전체" }];
+    const 접을분류 = new Set(
+      CATEGORIES.filter(
+        (c) => listedProducts.filter((p) => p.category === c).length > 1
+      )
+    );
+    const 넣은분류 = new Set<string>();
+    /* ⚠️ 판 (113) — `products` 가 아니라 `listedProducts` 다. 숨긴
+       진동기(products.ts 의 HIDDEN_SLUGS)가 드롭다운에만 남으면
+       /products 목록에 없는 제품으로 가는 길이 헤더에 생긴다. */
+    for (const p of listedProducts) {
+      if (접을분류.has(p.category)) {
+        if (넣은분류.has(p.category)) continue;
+        넣은분류.add(p.category);
+        /* 목록 쪽 칩과 **같은 말**이어야 한다. 분류 이름을 그대로 쓴다 —
+           여기서 따로 지어 부르면 눌러서 간 곳의 칩과 달라 보인다. */
+        out.push({
+          href: `/products?c=${encodeURIComponent(p.category)}`,
+          label: p.category,
+        });
+        continue;
+      }
+      out.push({ href: `/products/${p.slug}`, label: p.name });
+    }
+    return out;
+  }, []);
 
   /** 드롭다운에 넣을 항목. 제품만 products.ts에서 오고 나머지는 nav가 들고 있다. */
   const childrenFor = useCallback(
