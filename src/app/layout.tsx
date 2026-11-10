@@ -44,17 +44,20 @@ const notoSansKr = Noto_Sans_KR({
   display: "swap",
 });
 
+/* ⚠️ 판 (217) — title · keywords · og · twitter 넷에서 「직진피더」가
+   「리니어피더」가 됐다. 검색에 걸리는 글자다. products.ts 의 CATEGORIES
+   위 주석을 볼 것. */
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} | 파츠피더 · 볼피더 · 직진피더 제작`,
+    default: `${site.name} | 파츠피더 · 볼피더 · 리니어피더 제작`,
     template: `%s | ${site.name}`,
   },
   description: site.description,
   keywords: [
     "파츠피더",
     "볼피더",
-    "직진피더",
+    "리니어피더",
     "호퍼피더",
     "방음커버",
     "부품 자동정렬 공급기",
@@ -65,7 +68,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ko_KR",
     siteName: site.name,
-    title: `${site.name} | 파츠피더 · 볼피더 · 직진피더 제작`,
+    title: `${site.name} | 파츠피더 · 볼피더 · 리니어피더 제작`,
     description: site.description,
     images: [{ url: "/images/og-image.png", width: 1200, height: 630 }],
   },
@@ -76,7 +79,7 @@ export const metadata: Metadata = {
      카카오톡·슬랙 같은 데는 og: 를 읽으므로 이 블록과 무관하다. */
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} | 파츠피더 · 볼피더 · 직진피더 제작`,
+    title: `${site.name} | 파츠피더 · 볼피더 · 리니어피더 제작`,
     description: site.description,
     images: ["/images/og-image.png"],
   },

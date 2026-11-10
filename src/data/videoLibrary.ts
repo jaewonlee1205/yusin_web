@@ -173,9 +173,12 @@ export const videoLibrary: Video[] = videos.map((v) => ({
  *    개수를 걷었다(분류 수와 항목 수가 비슷하면 숫자가 전부 1 이 되어
  *    아무것도 알려 주지 않는다).
  */
+/* ⚠️ 판 (217) — 「직진피더」 → 「리니어피더」. 이 글자는 works.ts 의
+   workKinds 와 **같은 꼴이어야 한다**(갤러리와 영상 거르개가 같은 이름으로
+   서야 하기 때문). 까닭은 products.ts 의 CATEGORIES 위 주석에 있다. */
 export const videoKinds: string[] = [
   "볼피더",
-  "직진피더",
+  "리니어피더",
   "진동기",
   "호퍼피더",
   "방음커버",

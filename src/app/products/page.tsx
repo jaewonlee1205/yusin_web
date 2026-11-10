@@ -11,11 +11,12 @@ import ProductBrowser from "@/components/ProductBrowser";
    (products.ts 의 HIDDEN_SLUGS). 나머지 글귀는 한 글자도 안 건드렸다 —
    문구는 유신 몫이다.
    ⚠️ 이 줄은 **손으로 적은 열거**다. 제품을 숨기거나 더할 때마다 여기도
-      봐야 한다 — 코드가 알려 주지 않는다. */
+      봐야 한다 — 코드가 알려 주지 않는다.
+   ⚠️ 판 (217) — 그 열거의 「직진피더」가 「리니어피더」가 됐다. */
 export const metadata: Metadata = {
   title: "제품",
   description:
-    "볼피더, 직진피더, 호퍼피더, 방음커버, 컨트롤러, 우레탄 코팅 — 유신 F.A 시스템이 직접 제작하는 파츠피더 전 라인업입니다.",
+    "볼피더, 리니어피더, 호퍼피더, 방음커버, 컨트롤러, 우레탄 코팅 — 유신 F.A 시스템이 직접 제작하는 파츠피더 전 라인업입니다.",
 };
 
 export default function ProductsPage() {

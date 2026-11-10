@@ -23,9 +23,27 @@
  * 순서는 피더 한 벌이 서는 차례다 — 본체(파츠피더) → 이송(직진피더) →
  * 구동부 → 주변기기(호퍼피더.방음커버.컨트롤러) → 표면처리.
  */
+/* ⚠️⚠️⚠️ **2026-11-10 판 (217) — 「직진피더」를 「리니어피더」로 바꿨다.**
+   유신: *"이거 직진피더 리니어피더 인데 직진피더 말고 리니어 피더로 변경
+   해주고"* (STP 여덟을 함께 주셨다 — 전부 「N호기 리니어…」로 적힌 CAD 다).
+
+   **바꾼 것은 화면에 뜨는 글자뿐이다** — 문자열 리터럴 안만 바꿨다.
+   다섯 파일 114곳: products.ts 24 · works.ts 83 · videoLibrary.ts 1 ·
+   site.ts 1 · layout.tsx 4 · products/page.tsx 1.
+
+   ⚠️ **주석 속 옛 이름은 일부러 그대로 두었다.** 유신이 그때 하신 말
+      (*"홈 / 제품 / 직진피더 여기 경우도…"*)과 그때의 판단 기록이라,
+      고쳐 쓰면 없던 말을 지어낸 것이 된다. 읽을 때 걸리면 **그 글이
+      쓰인 날**을 보면 된다.
+   ⚠️ **주소는 안 바뀌었다** — slug 는 본디 `linear-feeder` 다. 사진·영상
+      파일명도 그대로다(`linear-feeder-01.webp` 등). 바꿀 까닭이 없고,
+      바꾸면 바깥에서 걸어 둔 링크가 끊긴다.
+   ⚠️ 띄어쓰기는 **붙여 쓴다** — 볼피더 · 호퍼피더 · 방음커버가 전부 그
+      꼴이고, 카드 글상자와 2단계 띠가 그 길이로 재어져 있다. 「리니어
+      피더」로 띄우려면 같은 다섯 파일을 한 번 더 훑으면 된다. */
 export const CATEGORIES = [
   "파츠피더",
-  "직진피더",
+  "리니어피더",
   "구동부",
   "호퍼피더",
   "방음커버",
@@ -1060,7 +1078,7 @@ export const products: Product[] = [
       { label: "표면 처리", value: "우레탄 코팅(UN-1~UN-3), 무처리 중 선택" },
       { label: "회전 방향", value: "시계 방향 / 반시계 방향" },
       { label: "구동", value: "전자석 진동기 + 전용 컨트롤러" },
-      { label: "옵션", value: "방음커버, 호퍼피더, 직진피더 연결" },
+      { label: "옵션", value: "방음커버, 호퍼피더, 리니어피더 연결" },
     ],
     specTable: {
       caption: "\"함\" 치수도 도면 값입니다.",
@@ -1140,13 +1158,13 @@ export const products: Product[] = [
   },
   {
     slug: "linear-feeder",
-    name: "직진피더",
+    name: "리니어피더",
     nameEn: "Linear Feeder",
-    category: "직진피더",
+    category: "리니어피더",
     tagline:
       "볼피더에서 나온 부품을 자세를 유지한 채 다음 공정까지 이송합니다.",
     summary: "정렬 상태를 흐트러뜨리지 않는 직선 이송 전용 장치입니다.",
-    lead: "직진피더는 볼피더에서 나온 부품을 일정한 방향과 자세로 보내는 공급 장치입니다. 볼피더와 조립 설비 사이를 이어 주며, 부품 폭에 맞춘 슈트(chute)를 얹어 이송합니다.",
+    lead: "리니어피더는 볼피더에서 나온 부품을 일정한 방향과 자세로 보내는 공급 장치입니다. 볼피더와 조립 설비 사이를 이어 주며, 부품 폭에 맞춘 슈트(chute)를 얹어 이송합니다.",
     features: [
       {
         title: "부품 폭에 맞춘 슈트",
@@ -1155,7 +1173,7 @@ export const products: Product[] = [
           "조립기가 받는 자세까지 보고 슈트 모양을 결정",
         ],
         photo: "/images/features/linear-feeder-1-thumb.webp",
-        photoAlt: "직진피더 전체",
+        photoAlt: "리니어피더 전체",
       },
       {
         title: "독립 진동 제어",
@@ -1251,12 +1269,12 @@ export const products: Product[] = [
       {
         name: "볼피더 – 조립기 사이 부품 이송",
         src: "/images/applications/linear-transfer.webp",
-        alt: "본체와 판스프링 다리가 보이는 직진피더",
+        alt: "본체와 판스프링 다리가 보이는 리니어피더",
       },
       {
         name: "센서 검사 구간 통과 이송",
         src: "/images/applications/linear-inspect.webp",
-        alt: "직진피더를 위에서 비스듬히 본 모습",
+        alt: "리니어피더를 위에서 비스듬히 본 모습",
       },
     ],
     // specs 의 "설치 = 볼피더 배출구 직결", "구동 = 전자석 진동기 + 전용 컨트롤러".
@@ -1264,16 +1282,16 @@ export const products: Product[] = [
     /* 출처 — 대-리니어/리니어조립.iam */
     cover: {
       src: "/images/cards/linear-feeder.webp",
-      alt: "본체 위에 트랙 받침판이 얹힌 직진피더 3D 도면",
+      alt: "본체 위에 트랙 받침판이 얹힌 리니어피더 3D 도면",
     },
     images: [
       {
         src: "/images/products/linear-feeder-01.webp",
-        alt: "본체와 판스프링 다리가 보이는 직진피더",
+        alt: "본체와 판스프링 다리가 보이는 리니어피더",
       },
       {
         src: "/images/products/linear-feeder-02.webp",
-        alt: "직진피더를 반대쪽에서 본 모습. 트랙 받침판과 스프링",
+        alt: "리니어피더를 반대쪽에서 본 모습. 트랙 받침판과 스프링",
       },
     ],
   },
@@ -1357,7 +1375,7 @@ export const products: Product[] = [
         value: "200~600",
         unit: "mm",
         label: "적용 볼 외경",
-        note: "직진피더 하부도 대응",
+        note: "리니어피더 하부도 대응",
       },
       {
         value: "3~22",
@@ -1369,7 +1387,7 @@ export const products: Product[] = [
     specs: [
       { label: "방식", value: "전자석 + 판스프링 진동" },
       { label: "조정 요소", value: "스프링 매수 · 각도 · 전압" },
-      { label: "적용", value: "볼피더 하부, 직진피더 하부" },
+      { label: "적용", value: "볼피더 하부, 리니어피더 하부" },
       { label: "제어", value: "파츠피더 컨트롤러 연결" },
       { label: "교체", value: "기존 피더의 진동부만 교체 가능" },
       { label: "튜닝", value: "실제 부품으로 이송 속도와 방향을 맞춘 뒤 납품" },
@@ -1405,9 +1423,9 @@ export const products: Product[] = [
         alt: "낮은 눈높이에서 본 볼피더. 볼 아래 진동부가 보인다",
       },
       {
-        name: "직진피더 구동부",
+        name: "리니어피더 구동부",
         src: "/images/applications/vibrator-linear.webp",
-        alt: "직진피더 측면. 판스프링과 진동부",
+        alt: "리니어피더 측면. 판스프링과 진동부",
       },
       {
         name: "기존 피더 진동부 교체",
@@ -1777,9 +1795,9 @@ export const products: Product[] = [
     name: "컨트롤러",
     nameEn: "Parts Feeder Controller",
     category: "컨트롤러",
-    tagline: "볼피더와 직진피더의 진동 세기를 각각 따로 조절합니다.",
+    tagline: "볼피더와 리니어피더의 진동 세기를 각각 따로 조절합니다.",
     summary: "라인에 맞는 공급 속도를 잡아 주는 피더 전용 제어기입니다.",
-    lead: "파츠피더 컨트롤러는 진동기에 공급되는 전압을 조절해 부품 이송 속도를 제어합니다. 볼피더와 직진피더의 속도를 따로 맞춰야 부품이 밀리거나 끊기지 않고 균일하게 공급됩니다.",
+    lead: "파츠피더 컨트롤러는 진동기에 공급되는 전압을 조절해 부품 이송 속도를 제어합니다. 볼피더와 리니어피더의 속도를 따로 맞춰야 부품이 밀리거나 끊기지 않고 균일하게 공급됩니다.",
     features: [
       {
         title: "진동 세기 무단 조절",
@@ -1793,7 +1811,7 @@ export const products: Product[] = [
       {
         title: "볼 · 직진 개별 제어",
         points: [
-          "볼피더와 직진피더를 각각의 컨트롤러로 따로 제어",
+          "볼피더와 리니어피더를 각각의 컨트롤러로 따로 제어",
           "한쪽만 빨라 부품이 밀리거나 끊기는 일을 막음",
         ],
         photo: "/images/features/controller-2-thumb.webp",
@@ -1863,7 +1881,7 @@ export const products: Product[] = [
       { label: "조작", value: "운전·정지, 진동 세기 다이얼" },
       { label: "연동", value: "레벨 센서 · 후공정 센서 입력" },
       { label: "설치", value: "피더 본체 일체형 / 별치형" },
-      { label: "출력", value: "볼피더 · 직진피더를 각각의 컨트롤러로" },
+      { label: "출력", value: "볼피더 · 리니어피더를 각각의 컨트롤러로" },
       { label: "조절 범위", value: "다이얼 무단 조절" },
     ],
     specTable: {
@@ -1883,7 +1901,7 @@ export const products: Product[] = [
     video: {
       src: "/videos/product-controller.mp4",
       poster: "/images/videos/product-controller.webp",
-      note: "컨트롤러가 직진피더 진동 세기를 잡아 주고 있습니다.",
+      note: "컨트롤러가 리니어피더 진동 세기를 잡아 주고 있습니다.",
     },
     applications: [
       {
@@ -1892,9 +1910,9 @@ export const products: Product[] = [
         alt: "컨트롤러가 속도를 맡는 볼피더",
       },
       {
-        name: "직진피더 속도 제어",
+        name: "리니어피더 속도 제어",
         src: "/images/applications/controller-linear.webp",
-        alt: "컨트롤러가 속도를 맡는 직진피더",
+        alt: "컨트롤러가 속도를 맡는 리니어피더",
       },
       {
         name: "호퍼피더 자동 공급 제어",
@@ -1973,7 +1991,7 @@ export const products: Product[] = [
       {
         title: "트랙 · 슈트에도 입힌다",
         points: [
-          "볼 내면뿐 아니라 트랙과 직진피더 슈트에도 적용",
+          "볼 내면뿐 아니라 트랙과 리니어피더 슈트에도 적용",
           "한 곳만 입히면 그쪽만 조용해지기 때문",
         ],
         photo: "/images/features/urethane-coating-4-thumb.webp",
@@ -2014,7 +2032,7 @@ export const products: Product[] = [
     specs: [
       { label: "거칠기 등급", value: "UN-1 · UN-2 · UN-3" },
       { label: "첨가재", value: "철분 · 플라스틱 · 세라믹 등" },
-      { label: "적용 부위", value: "볼 내면, 트랙, 직진피더 슈트" },
+      { label: "적용 부위", value: "볼 내면, 트랙, 리니어피더 슈트" },
       { label: "효과", value: "충격 흡수, 진동·소음 저감, 부품 표면 보호" },
       { label: "보호 대상", value: "도금 · 수지 등 흠집에 민감한 부품" },
       { label: "선택", value: "무처리 / 코팅 중 선택" },
