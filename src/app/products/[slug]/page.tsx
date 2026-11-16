@@ -1111,9 +1111,14 @@ export default async function ProductDetailPage({
               {/* ⚠️ **한 줄로 끝나야 한다.** 두 문장이던 때 1280 에서 두 줄이
                      되어 줄여 달라는 말을 들었다. caption 을 늘리면 다시
                      두 줄이 된다 — products.ts 쪽을 짧게 유지할 것. */}
+              {/* ⚠️⚠️ **2026-11-16 — 뒷문장이 제품마다 다를 수 있게 됐다.**
+                     컨트롤러(DF-10C)의 표는 **제품 패널 각인에서 읽은 값**이라
+                     "수치는 예시" 가 거짓이 된다. 그 한 제품만 `tail` 을
+                     적는다 — 나머지 여섯은 아래 기본 문장 그대로다.
+                     까닭은 products.ts 의 specTable.tail 주석에 있다. */}
               <b className="font-bold text-ink">형식명은 실제 기종명</b>
-              &nbsp;&nbsp;&nbsp;&nbsp;{product.specTable.caption} · 수치는 예시이며
-              부품에 따라 산출합니다.
+              &nbsp;&nbsp;&nbsp;&nbsp;{product.specTable.caption} ·{" "}
+              {product.specTable.tail ?? "수치는 예시이며 부품에 따라 산출합니다."}
             </p>
           </div>
           </div>
