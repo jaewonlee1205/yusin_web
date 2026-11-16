@@ -3161,12 +3161,45 @@ export type ProductLink = {
  * ⚠️ 맨 앞의 「전체」는 **여기 없다.** 그 줄은 메뉴의 보루라 Header 와
  *    PageNav 만 붙이고, 푸터는 끝에 「전체 보기」를 따로 둔다.
  */
+/**
+ * **기종이 둘 이상인 분류.** 이 분류는 한 제품으로 보내면 안 된다 —
+ * 메뉴 줄이 접히고, 홈 카드가 모델 목록으로 간다.
+ *
+ * ⚠️⚠️ **2026-11-16 판 (222) — `productLinks` 안에 갇혀 있던 셈을 꺼냈다.**
+ *    유신 — *"메인 페이지에서 컨트롤러 누르면 바로 컨트롤러 제품이 보여지는게
+ *    아니라 컨트롤러 경우도 3개 모델이 있으니깐 이렇게 모델별로 보여지게
+ *    하는게 맞는거 같은데 리니어피더 / 호퍼피더도 마찬가지고"*
+ *
+ *    홈 PRODUCTS 격자(`page.tsx`)가 이것을 본다. **같은 셈을 거기에 복사해
+ *    적지 않는다** — 두 곳에 두면 기종이 늘거나 줄 때 한쪽만 따라가고,
+ *    메뉴는 접혔는데 홈은 안 접힌 꼴이 된다.
+ *
+ * ⚠️ 보는 것은 `products` 가 아니라 `listedProducts` 다. 숨긴 기종은 눌러서
+ *    간 목록에도 안 나오므로 세면 안 된다 — 호퍼 여섯 중 넷이 그렇다.
+ */
+export const 접을분류: ReadonlySet<string> = new Set(
+  CATEGORIES.filter(
+    (c) => listedProducts.filter((p) => p.category === c).length > 1
+  )
+);
+
+/**
+ * 분류로 거른 목록 주소. **해시가 아니라 쿼리**인 까닭은
+ * `ProductBrowser.tsx` 주석에 있다 — Next 의 Link 는 `history.pushState` 로
+ * 옮기는데 그때 `hashchange` 가 나지 않는다 [[next-link-pushstate-no-hashchange]].
+ *
+ * ⚠️ 메뉴 · 푸터 · 좌측 띠 · 홈 카드가 **이 한 곳**에서 주소를 받는다.
+ *    손으로 적지 말 것 — `encodeURIComponent` 를 한 군데서 빠뜨리면 한글
+ *    분류가 그 자리에서만 안 걸린다.
+ */
+export const 분류주소 = (c: string) =>
+  `/products?c=${encodeURIComponent(c)}`;
+
+/** 분류에 든 기종 수 — 홈 카드가 「3기종」을 적는 데 쓴다. */
+export const 분류기종수 = (c: string) =>
+  listedProducts.filter((p) => p.category === c).length;
+
 export const productLinks: ProductLink[] = (() => {
-  const 접을분류 = new Set(
-    CATEGORIES.filter(
-      (c) => listedProducts.filter((p) => p.category === c).length > 1
-    )
-  );
   const out: ProductLink[] = [];
   const 넣은분류 = new Set<string>();
   for (const p of listedProducts) {
@@ -3182,7 +3215,7 @@ export const productLinks: ProductLink[] = (() => {
     /* 목록 쪽 칩과 **같은 말**이어야 한다. 분류 이름을 그대로 쓴다 —
        여기서 따로 지어 부르면 눌러서 간 곳의 칩과 달라 보인다. */
     out.push({
-      href: `/products?c=${encodeURIComponent(p.category)}`,
+      href: 분류주소(p.category),
       label: p.category,
       folded: listedProducts
         .filter((x) => x.category === p.category)

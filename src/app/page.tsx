@@ -17,7 +17,14 @@ import Reveal from "@/components/Reveal";
 import ScrollCue from "@/components/ScrollCue";
 import StatCounter from "@/components/StatCounter";
 import { featuredWorks } from "@/data/works";
-import { type Kpi, homeProducts, listedProducts } from "@/data/products";
+import {
+  type Kpi,
+  homeProducts,
+  listedProducts,
+  분류기종수,
+  분류주소,
+  접을분류,
+} from "@/data/products";
 import { site } from "@/data/site";
 import VideoCard from "@/components/VideoCard";
 import { ArrowRightIcon } from "@/components/icons";
@@ -3474,13 +3481,53 @@ export default function Home() {
             ⚠️ 칸은 **평범한 div 로 남겨 둔다** — Reveal 이 격자 항목이라
                stretch 로 늘어나던 자리다(ProductCard 의 h-full 주석 참고).
                ProductCard 를 격자의 직접 자식으로 올리면 DOM 깊이가 바뀐다. */}
+        {/* ⚠️⚠️⚠️ **2026-11-16 판 (222) — 기종이 여럿인 분류는 카드가
+              「모델 목록」으로 간다.** 유신 — *"메인페이지에서 리니어피더 /
+              호퍼피더 / 컨트롤러 등 클릭하면 바로 제품 상세페이지로 가지는데
+              제품라인업에 컨트롤러 하면 3개 나오잖아? … 컨트롤러 경우도 3개
+              모델이 있으니깐 이렇게 모델별로 보여지게 하는게 맞는거 같은데
+              리니어피더 / 호퍼피더도 마찬가지고"*
+
+           **무엇이 어긋나 있었나.** 홈 격자는 `homeProducts` 가 분류마다
+           **대표 한 기종**만 남긴 것을 건다. 그래서 카드는 분류를 대표하는데
+           큰 글씨는 한 기종의 형식명(DF-10C)이고 가는 곳도 그 한 기종이었다.
+           헤더 · 푸터 · 좌측 띠는 이미 「컨트롤러」 한 줄로 접혀 목록으로
+           가고 있었다 — **홈만 다르게 굴고 있었다.**
+
+           ⚠️ **접는 규칙을 여기서 다시 세지 않는다.** `products.ts` 의
+              `접을분류` 를 그대로 본다. 같은 셈을 두 곳에 두면 기종이 늘거나
+              줄 때 한쪽만 따라가 메뉴와 홈이 어긋난다.
+
+           ⚠️ **그림은 대표 기종 렌더 그대로다**(DF-10C · LF-140B · HF-600).
+              분류를 대표하는 얼굴이고, 바꾸면 분류마다 그림을 새로 그려야
+              한다. 분류 줄(작은 빨강)과 영문 줄도 그대로다.
+
+           ⚠️ **기종이 하나뿐인 카드는 한 글자도 안 바뀐다** — 볼피더 ·
+              방음커버 · 우레탄 코팅은 지금처럼 그 제품 상세로 간다.
+
+           ⚠️ 큰 글씨를 「컨트롤러 3기종」으로 적는다. 시안 세 안
+              (「3기종」 · 분류명만 · 「DF-10C 외 2기종」)을 실제 격자에 얹어
+              1440 에서 찍어 보고 고른 것이다 —
+              `시안/101/홈분류카드/홈-분류카드시안.png`.
+              ⚠️ 두 줄이 되면 그 칸만 길어진다(ProductCard 의 h-full 주석).
+                 1440 · 1024 · 768 · 390 에서 여섯 칸 높이 편차가 0 인 것을
+                 재어 확인했다. 글을 늘릴 때 다시 잴 것. */}
         <Reveal>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {homeProducts.slice(0, 6).map((product) => (
-            <div key={product.slug}>
-              <ProductCard product={product} />
-            </div>
-          ))}
+          {homeProducts.slice(0, 6).map((product) => {
+            const 여럿 = 접을분류.has(product.category);
+            const 수 = 여럿 ? 분류기종수(product.category) : 0;
+            return (
+              <div key={product.slug}>
+                <ProductCard
+                  product={product}
+                  href={여럿 ? 분류주소(product.category) : undefined}
+                  name={여럿 ? `${product.category} ${수}기종` : undefined}
+                  action={여럿 ? `${수}기종 보기` : undefined}
+                />
+              </div>
+            );
+          })}
         </div>
         </Reveal>
       </Section>

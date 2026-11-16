@@ -30,7 +30,33 @@ import type { Product } from "@/data/products";
  * 그려져 좌우에 53px 씩 흰 띠가 남았다. 띠를 없애려면 칸이 원본과 같은 비율
  * 이어야 하므로 4:3 하나로 되돌리고, 크기는 그쪽 격자가 간격으로 잡는다.
  */
-export default function ProductCard({ product }: { product: Product }) {
+export default function ProductCard({
+  product,
+  href,
+  name,
+  action,
+}: {
+  product: Product;
+  /**
+   * 가는 곳을 바꾼다. **없으면 지금까지와 똑같이** 그 제품 상세로 간다.
+   *
+   * ⚠️⚠️ **2026-11-16 판 (222) — 홈 격자 때문에 열었다.** 유신 — *"메인
+   *    페이지에서 컨트롤러 누르면 바로 컨트롤러 제품이 보여지는게 아니라
+   *    … 모델별로 보여지게 하는게 맞는거 같은데"*. 기종이 둘 이상인 분류
+   *    (컨트롤러 3 · 리니어피더 3 · 호퍼피더 2)는 홈에서 **분류로 거른
+   *    목록**으로 보낸다.
+   *
+   * ⚠️ 이 카드는 **세 자리가 함께 쓴다** — /products 격자 · 홈 라인업 ·
+   *    상세 「다른 제품」. 셋 다 안 주면 세 자리가 한 글자도 안 바뀐다.
+   *    앞의 둘은 모델을 고르는 자리라 제품으로 가는 것이 맞고, 바꾸는
+   *    것은 홈뿐이다.
+   */
+  href?: string;
+  /** 큰 글씨를 바꾼다(홈 분류 카드의 「컨트롤러 3기종」). 없으면 제품명. */
+  name?: string;
+  /** 호버 겹의 말을 바꾼다(「3기종 보기」). 없으면 「상세보기」. */
+  action?: string;
+}) {
   /* ⚠️ cover 가 있으면 그것을, 없으면 images[0] 을 쓴다.
      2026-10-15 에 일곱 제품 카드를 **3D 렌더**로 바꾸면서 갈랐다 — 상세
      갤러리는 images 를 그대로 쓰므로 **거기는 실물 사진**이다. 까닭은
@@ -39,7 +65,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
   return (
     <Link
-      href={`/products/${product.slug}`}
+      href={href ?? `/products/${product.slug}`}
       /* 이제 그림자가 카드의 유일한 윤곽이다. 카드가 놓이는 바닥
          (bg-surface #f6f7f9)과 카드(#ffffff)의 대비가 1.04 밖에 안 되는데
          테두리까지 걷었으므로, shadow-card 가 빠지면 카드가 판에 녹는다.
@@ -101,7 +127,7 @@ export default function ProductCard({ product }: { product: Product }) {
           className="pointer-events-none absolute inset-0 flex items-center justify-center bg-dark/65 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         >
           <span className="flex translate-y-1 items-center gap-1.5 text-sm font-bold text-white transition-transform duration-300 group-hover:translate-y-0">
-            상세보기
+            {action ?? "상세보기"}
             <svg
               width="16"
               height="16"
@@ -125,7 +151,7 @@ export default function ProductCard({ product }: { product: Product }) {
           {product.category}
         </p>
         <h3 className="mt-2 text-lg font-bold text-ink transition-colors duration-300 group-hover:text-brand">
-          {product.name}
+          {name ?? product.name}
         </h3>
         {/* ⚠️ flex-1 이 여기 있다. 글 칸(flex flex-1 flex-col)에서 늘어나는
                자식이 이것뿐이라, 빼면 글 칸이 내용 높이로 줄고 카드 아래에 빈
